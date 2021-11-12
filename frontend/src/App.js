@@ -15,7 +15,7 @@ function App() {
    
     <BrowserRouter>
     <Routes>
-      <Route path="/add" element={<AddStudent/>} />
+      <Route path="/" element={<AddStudent/>} />
      
     </Routes>
   </BrowserRouter>
