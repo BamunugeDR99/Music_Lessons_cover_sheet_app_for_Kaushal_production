@@ -7,6 +7,7 @@ import {
 import AddStudent from "./components/addstudent";
 import "./App.css";
 import React, { Component } from "react";
+import DataTableTest from "./components/dataTableTest";
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
     <BrowserRouter>
     <Routes>
       <Route path="/" element={<AddStudent/>} />
+      <Route path="/table" element={<DataTableTest/>}/>
      
     </Routes>
   </BrowserRouter>
