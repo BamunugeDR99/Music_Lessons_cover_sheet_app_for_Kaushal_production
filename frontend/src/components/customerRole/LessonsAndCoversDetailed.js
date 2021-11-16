@@ -226,13 +226,19 @@ export default function LessonsAndCoversDetailed(props) {
                   </div>
                   <br />
 
-                  <button type="button" class="btn btn-success btn-block">
+                  <button
+                    type="button"
+                    class="btn btn-success btn-block rounded"
+                  >
                     Add to cart
                   </button>
                   <br />
                   <br />
                   <div className="container-sm">
-                    <button type="button" class="btn btn-success btn-block">
+                    <button
+                      type="button"
+                      class="btn btn-success btn-block rounded"
+                    >
                       Buy it now
                     </button>
                   </div>
@@ -243,7 +249,7 @@ export default function LessonsAndCoversDetailed(props) {
         </div>
       </div>
       {/* discover more */}
-      <DiscoverMoreCovers/>
+      <DiscoverMoreCovers />
     </div>
   );
 }
