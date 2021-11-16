@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import CurrencySelect from "./CurrencySelect";
 
 export default function LessonsAndCoversDetailed(props) {
   return (
@@ -193,6 +194,35 @@ export default function LessonsAndCoversDetailed(props) {
                   No of pages :{" "}
                 </h5>{" "}
                 <h5 style={{ display: "inline", letterSpacing: "5px" }}>5</h5>
+                <br />
+                <br />
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      <CurrencySelect />
+                    </div>
+                    <div class="col-sm">
+                      <h1
+                        style={{
+                          display: "inline",
+                          letterSpacing: "5px",
+                          color: "#764A34",
+                        }}
+                      >
+                        $
+                      </h1>
+                      <h1
+                        style={{
+                          display: "inline",
+                          letterSpacing: "5px",
+                          color: "#764A34",
+                        }}
+                      >
+                        5.99
+                      </h1>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

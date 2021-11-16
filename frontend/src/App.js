@@ -19,6 +19,8 @@ function App() {
     <BrowserRouter>
     <Routes>
       <Route path="/" element={<LessonsAndCoversDetailed/>} />
+      <Route path="/a" element={<CustomerRegistration/>} />
+
       <Route path="/table" element={<DataTableTest/>}/>
      
     </Routes>
