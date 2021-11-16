@@ -6,7 +6,7 @@ export default function LessonsAndCoversDetailed(props) {
   return (
     <div>
       <br />
-      <div class="card" style={{ border: "solid #764A34" }}>
+      <div class="card container-xxl" style={{ border: "solid #764A34" }}>
         <div class="card-body">
           <div class="container">
             <div class="row">
@@ -200,6 +200,7 @@ export default function LessonsAndCoversDetailed(props) {
                   <div class="row">
                     <div class="col-sm">
                       <CurrencySelect />
+                      <br />
                     </div>
                     <div class="col-sm">
                       <h1
@@ -221,6 +222,18 @@ export default function LessonsAndCoversDetailed(props) {
                         5.99
                       </h1>
                     </div>
+                  </div>
+                  <br />
+
+                  <button type="button" class="btn btn-success btn-block">
+                    Add to cart
+                  </button>
+                  <br />
+                  <br />
+                  <div className="container-sm">
+                    <button type="button" class="btn btn-success btn-block">
+                      Buy it now
+                    </button>
                   </div>
                 </div>
               </div>
