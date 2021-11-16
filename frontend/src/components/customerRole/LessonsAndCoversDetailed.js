@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import CurrencySelect from "./CurrencySelect";
+import DiscoverMoreCovers from "./DicoverMoreCovers";
 
 export default function LessonsAndCoversDetailed(props) {
   return (
@@ -241,6 +242,8 @@ export default function LessonsAndCoversDetailed(props) {
           </div>
         </div>
       </div>
+      {/* discover more */}
+      <DiscoverMoreCovers/>
     </div>
   );
 }
