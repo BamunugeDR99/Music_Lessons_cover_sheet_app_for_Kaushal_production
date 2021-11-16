@@ -116,7 +116,11 @@ export default function LessonsAndCoversDetailed(props) {
                   ></iframe>
                 </div>
               </div>
-              <div class="col-sm">One of three columns</div>
+              <div class="col-sm">
+                  <h3 style={{ color: "#764A34", letterSpacing : "10px"}}>We Wish You a Merry Christmas</h3><br/>
+                  <h5 style={{color: "#764A34", float : "right"}}>Santa Claus</h5>
+
+              </div>
             </div>
           </div>
         </div>
