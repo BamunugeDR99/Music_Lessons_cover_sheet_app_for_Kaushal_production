@@ -8,7 +8,7 @@ import AddStudent from "./components/addstudent";
 import "./App.css";
 import React, { Component } from "react";
 import DataTableTest from "./components/dataTableTest";
-
+import CustomerRegistration from "./components/customerRole/CustomerRegistration";
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
    
     <BrowserRouter>
     <Routes>
-      <Route path="/" element={<AddStudent/>} />
+      <Route path="/" element={<CustomerRegistration/>} />
       <Route path="/table" element={<DataTableTest/>}/>
      
     </Routes>
