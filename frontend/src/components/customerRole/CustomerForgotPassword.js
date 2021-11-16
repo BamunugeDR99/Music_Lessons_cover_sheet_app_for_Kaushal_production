@@ -27,7 +27,7 @@ export default function CustomerForgotPassword(props) {
                   <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z" />
                 </svg>
               </div>
-              <div hidden = {unlockKeyImage}>
+              <div hidden={unlockKeyImage}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="100"
@@ -136,13 +136,13 @@ export default function CustomerForgotPassword(props) {
                     color: "#ffffff",
                     borderRadius: "8px",
                   }}
-                  onClick = {() => {
-                      if(stageTwoStatus == false){
-                          setStageThreeStatus(false);
-                          setStageTwoStatus(true);
-                          setLockKeyImage(true);
-                          setUnLockKeyImage(false);
-                      }
+                  onClick={() => {
+                    if (stageTwoStatus == false) {
+                      setStageThreeStatus(false);
+                      setStageTwoStatus(true);
+                      setLockKeyImage(true);
+                      setUnLockKeyImage(false);
+                    }
                   }}
                 >
                   Verify Code
