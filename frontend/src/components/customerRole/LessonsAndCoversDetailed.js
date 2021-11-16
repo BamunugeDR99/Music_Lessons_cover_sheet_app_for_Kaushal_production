@@ -115,11 +115,84 @@ export default function LessonsAndCoversDetailed(props) {
                     allowfullscreen
                   ></iframe>
                 </div>
+                <br />
               </div>
               <div class="col-sm">
-                  <h3 style={{ color: "#764A34", letterSpacing : "10px"}}>We Wish You a Merry Christmas</h3><br/>
-                  <h5 style={{color: "#764A34", float : "right"}}>Santa Claus</h5>
-
+                <h3 style={{ color: "#764A34", letterSpacing: "10px" }}>
+                  We Wish You a Merry Christmas
+                </h3>
+                <br />
+                <h4 style={{ color: "#764A34", float: "right" }}>
+                  Santa Claus
+                </h4>
+                <br />
+                <br />
+                <h5
+                  style={{
+                    display: "inline",
+                    color: "#764A34",
+                    letterSpacing: "5px",
+                  }}
+                >
+                  Arrange by :{" "}
+                </h5>{" "}
+                <h5 style={{ display: "inline", letterSpacing: "5px" }}>
+                  Niki Minaj
+                </h5>
+                <br />
+                <br />
+                <h5
+                  style={{
+                    display: "inline",
+                    color: "#764A34",
+                    letterSpacing: "5px",
+                  }}
+                >
+                  Instruments played on :{" "}
+                </h5>{" "}
+                <h5 style={{ display: "inline", letterSpacing: "5px" }}>
+                  Guitar
+                </h5>
+                <br />
+                <br />
+                <h5
+                  style={{
+                    display: "inline",
+                    color: "#764A34",
+                    letterSpacing: "5px",
+                  }}
+                >
+                  Main Category :{" "}
+                </h5>{" "}
+                <h5 style={{ display: "inline", letterSpacing: "5px" }}>
+                  Classical Guitar
+                </h5>
+                <br />
+                <br />
+                <h5
+                  style={{
+                    display: "inline",
+                    color: "#764A34",
+                    letterSpacing: "5px",
+                  }}
+                >
+                  Sub-category :{" "}
+                </h5>{" "}
+                <h5 style={{ display: "inline", letterSpacing: "5px" }}>
+                  English
+                </h5>
+                <br />
+                <br />
+                <h5
+                  style={{
+                    display: "inline",
+                    color: "#764A34",
+                    letterSpacing: "5px",
+                  }}
+                >
+                  No of pages :{" "}
+                </h5>{" "}
+                <h5 style={{ display: "inline", letterSpacing: "5px" }}>5</h5>
               </div>
             </div>
           </div>
