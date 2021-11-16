@@ -133,12 +133,12 @@ export default function LessonsAndCoversDetailed(props) {
                   style={{
                     display: "inline",
                     color: "#764A34",
-                    letterSpacing: "5px",
+                    letterSpacing: "2px",
                   }}
                 >
                   Arrange by :{" "}
                 </h5>{" "}
-                <h5 style={{ display: "inline", letterSpacing: "5px" }}>
+                <h5 style={{ display: "inline", letterSpacing: "2px" }}>
                   Niki Minaj
                 </h5>
                 <br />
@@ -147,12 +147,12 @@ export default function LessonsAndCoversDetailed(props) {
                   style={{
                     display: "inline",
                     color: "#764A34",
-                    letterSpacing: "5px",
+                    letterSpacing: "2px",
                   }}
                 >
                   Instruments played on :{" "}
                 </h5>{" "}
-                <h5 style={{ display: "inline", letterSpacing: "5px" }}>
+                <h5 style={{ display: "inline", letterSpacing: "2px" }}>
                   Guitar
                 </h5>
                 <br />
@@ -161,12 +161,12 @@ export default function LessonsAndCoversDetailed(props) {
                   style={{
                     display: "inline",
                     color: "#764A34",
-                    letterSpacing: "5px",
+                    letterSpacing: "2px",
                   }}
                 >
                   Main Category :{" "}
                 </h5>{" "}
-                <h5 style={{ display: "inline", letterSpacing: "5px" }}>
+                <h5 style={{ display: "inline", letterSpacing: "2px" }}>
                   Classical Guitar
                 </h5>
                 <br />
@@ -175,12 +175,12 @@ export default function LessonsAndCoversDetailed(props) {
                   style={{
                     display: "inline",
                     color: "#764A34",
-                    letterSpacing: "5px",
+                    letterSpacing: "2px",
                   }}
                 >
                   Sub-category :{" "}
                 </h5>{" "}
-                <h5 style={{ display: "inline", letterSpacing: "5px" }}>
+                <h5 style={{ display: "inline", letterSpacing: "2px" }}>
                   English
                 </h5>
                 <br />
@@ -189,12 +189,12 @@ export default function LessonsAndCoversDetailed(props) {
                   style={{
                     display: "inline",
                     color: "#764A34",
-                    letterSpacing: "5px",
+                    letterSpacing: "2px",
                   }}
                 >
                   No of pages :{" "}
                 </h5>{" "}
-                <h5 style={{ display: "inline", letterSpacing: "5px" }}>5</h5>
+                <h5 style={{ display: "inline", letterSpacing: "2px" }}>5</h5>
                 <br />
                 <br />
                 <div class="container">
@@ -207,7 +207,7 @@ export default function LessonsAndCoversDetailed(props) {
                       <h1
                         style={{
                           display: "inline",
-                          letterSpacing: "5px",
+                          letterSpacing: "2px",
                           color: "#764A34",
                         }}
                       >
@@ -216,7 +216,7 @@ export default function LessonsAndCoversDetailed(props) {
                       <h1
                         style={{
                           display: "inline",
-                          letterSpacing: "5px",
+                          letterSpacing: "2px",
                           color: "#764A34",
                         }}
                       >
