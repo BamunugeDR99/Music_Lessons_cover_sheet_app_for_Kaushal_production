@@ -176,6 +176,140 @@ export default function CustomerRegistration(props) {
                 </div>
               </div>
             </div>
+            {/* first name and last name  */}
+
+            <div class="row">
+              <div class="col-sm">
+                <div class="text-center">
+                  <div class="container-fluid">
+                    <div class="form-group row">
+                      <div class="input-group">
+                        <span
+                          class="input-group-addon"
+                          style={{ marginRight: "5px" }}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="30"
+                            height="30"
+                            fill="currentColor"
+                            class="bi bi-person-fill"
+                            viewBox="0 0 16 16"
+                          >
+                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                          </svg>
+                        </span>
+                        <input
+                          type="text"
+                          class="form-control rounded"
+                          id="inputFirstname"
+                          placeholder="First Name"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm">
+                <div class="text-center">
+                  <div class="container-fluid">
+                    <div class="form-group row">
+                      <div class="input-group">
+                        <span
+                          class="input-group-addon"
+                          style={{ marginRight: "5px" }}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="30"
+                            height="30"
+                            fill="currentColor"
+                            class="bi bi-person-fill"
+                            viewBox="0 0 16 16"
+                          >
+                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                          </svg>
+                        </span>
+                        <input
+                          type="text"
+                          class="form-control rounded"
+                          id="inputLastname"
+                          placeholder="Last Name"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* gender */}
+            <div className="text-center">
+              <div
+                class="form-check form-check-inline"
+                style={{ marginRight: "100px" }}
+              >
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="inlineRadioOptions"
+                  id="RadioMale"
+                  value="Male"
+                />
+                <label class="form-check-label" for="inlineRadio1">
+                  Male
+                </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="inlineRadioOptions"
+                  id="RadioFemale"
+                  value="Female"
+                />
+                <label class="form-check-label" for="inlineRadio2">
+                  Female
+                </label>
+              </div>
+            </div>
+            <br />
+            {/* country */}
+            <div class="text-center">
+              <select class="selectpicker countrypicker" id = "selectedCountry"></select>
+            </div>
+            <br />
+            {/* terms and condition */}
+            <div class="text-center">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="termsCheckbox"
+                />
+                <label class="form-check-label" for="defaultCheck1">
+                  Agree to terms and conditions.{" "}
+                  <a href="#" className="text-decoration">
+                    Click Here
+                  </a>
+                </label>
+              </div>
+            </div>
+            <br />
+            {/* submit button */}
+            <div class="text-center">
+              <button
+                type="submit"
+                class="btn"
+                style={{
+                  backgroundColor: "#764A34",
+                  color: "#ffffff",
+                  borderRadius: "8px",
+                }}
+              >
+                Submit
+              </button>
+            </div>
           </form>
         </div>
       </div>
