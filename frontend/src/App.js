@@ -9,6 +9,7 @@ import "./App.css";
 import React, { Component } from "react";
 import DataTableTest from "./components/dataTableTest";
 import CustomerRegistration from "./components/customerRole/CustomerRegistration";
+import CustomerForgotPassword from "./components/customerRole/CustomerForgotPassword";
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
    
     <BrowserRouter>
     <Routes>
-      <Route path="/" element={<CustomerRegistration/>} />
+      <Route path="/" element={<CustomerForgotPassword/>} />
       <Route path="/table" element={<DataTableTest/>}/>
      
     </Routes>

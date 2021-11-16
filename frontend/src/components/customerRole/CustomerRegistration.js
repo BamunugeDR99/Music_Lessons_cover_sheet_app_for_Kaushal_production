@@ -5,7 +5,6 @@ export default function CustomerRegistration(props) {
   return (
     <div >
       <br />
-      <br />
       <div className = "d-flex justify-content-center">
       <div class="card" style={{ border: "solid #764A34"}}>
         <div class="card-body">
@@ -319,6 +318,7 @@ export default function CustomerRegistration(props) {
         </div>
       </div>
       </div>
+      <br/>
     </div>
   );
 }
