@@ -34,7 +34,7 @@ router.route("/add").post((req, res) => {
 // retrive
 
 // route("/") this can use for fetching all the data from the DB
-router.route("/getStudents").get((reg, res) => {
+router.route("/getStudents").get((req, res) => {
   Student.find()
     .then((students) => {
       res.json(students);
