@@ -20,6 +20,7 @@ function App() {
     <Routes>
       <Route path="/" element={<LessonsAndCoversDetailed/>} />
       <Route path="/a" element={<CustomerRegistration/>} />
+      <Route path="/b" element={<CustomerForgotPassword/>} />
 
       <Route path="/table" element={<DataTableTest/>}/>
      
