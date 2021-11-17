@@ -72,10 +72,13 @@ router.route("/add").post(async(req,res)=>{
 
 //Get one customer
 router.route("/get/:id").get(async (req,res) =>{
+
     let userID = req.params.id;
+
     const user = await Customer.findById(userID).then((cutomerss) =>{
         // res.status(200).send({status:"User fetched"});
         res.json(cutomerss);
+        
     }).catch((err) =>{
         console.log(err.message);
         res.status(500).send({status : "Error with get user", error : err.message});
@@ -148,6 +151,39 @@ router.route("/delete/:id").delete(async (req,res) =>{
             res.status(500).send({status : "Error with delete", error : err.message});
         })
     });
+
+//Update One
+
+    router.route("/updateCus/:id").put(async (req, res) => {
+        let userID = req.params.id;
+
+        const{
+              FeedBackIDs,
+              OrderIDs,
+              LoginStatus,
+              DeleteStatus
+
+             } = req.body;
+      
+        const updateC = await Customer.updateOne(
+      
+          {_id : userID},
+          {$set : {FeedBackIDs :FeedBackIDs ,  OrderIDs: OrderIDs, LoginStatus : LoginStatus,  DeleteStatus :  DeleteStatus }},
+      
+      
+        ).then(() => {
+      
+          res.status(200).send({ status: "Updated" });
+        })
+        .catch((err) => {
+          console.log(err);
+          res
+            .status(500)
+            .send({ status: "Error with updating data", error: err.message });
+        });
+      
+      
+        })
 
 
 //Login route
