@@ -52,7 +52,7 @@ export default function PurchaseHistory(props) {
             <div className="row" style={{width: "100%",padding: "0px 0px 20px 0px",margin: "0px 10px 0px 2px"}}>
               <div className="col-sm text-center">
                 <img class="rounded"
-                style={{ width: "90%" ,alignItems:'center'}} 
+                style={{ width: "80%" ,alignItems:'center'}} 
                 src={"Images/test2.jpg"}/>
                 </div>
 
@@ -86,16 +86,16 @@ export default function PurchaseHistory(props) {
                 </div>
               </div>
               <br/>
-              <div className="col-sm" style={{backgroundColor:'white', fontSize: "16px", lineHeight:'2em'}}>
+              <div className="col-sm" style={{backgroundColor:'white', fontSize: "14px", lineHeight:'2em'}}>
                 <span class="text-right" style={{ fontSize: "15px"}}>11/11/2021</span>
                       <br/>
-                      <span style={{ fontSize: "15px", color:' #764A34' }}>Original Artist &ensp;&ensp;:</span>
+                      <span style={{ fontSize: "14px", color:' #764A34' }}>Original Artist &ensp;&ensp;:</span>
                       <span> &ensp;&ensp; Kaushal Rashmika</span>
                       <br/>
-                      <span style={{ fontSize: "15px",color:' #764A34'  }}>Arranged By &ensp;&ensp;:</span>
+                      <span style={{ fontSize: "14px",color:' #764A34'  }}>Arranged By &ensp;&ensp;:</span>
                       <span> &ensp;&ensp; Kaushal Rashmika</span>
                       <br/>
-                      <span style={{ fontSize: "15px",color:' #764A34'  }}>Instrument Played On &ensp;&ensp;:</span>
+                      <span style={{ fontSize: "14px",color:' #764A34'  }}>Instrument Played On &ensp;&ensp;:</span>
                       <span> &ensp;&ensp; Guitar</span>
                       <br/>
                     </div>
