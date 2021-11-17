@@ -6,15 +6,16 @@ export default function CoverTemplate() {
       <div
         className="card"
         style={{
-          width: "col-md-4",
+          width: "col-md-3",
           lineHeight: "1em",
-          border: "solid #764A34",
+          borderRadius: "10px",
         }}
       >
         <img
           className="card-img-top"
           src="images/mike.jpeg"
           alt="Card image cap"
+          style={{ borderTopLeftRadius: "10px", borderTopRightRadius: "10px" }}
         />
         <div>
           <center>
