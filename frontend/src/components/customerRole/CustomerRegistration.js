@@ -2,6 +2,12 @@ import React, { useState } from "react";
 import axios from "axios";
 
 export default function CustomerRegistration(props) {
+  const [passwordShown, setPasswordShown] = useState(false);
+  const [CpasswordShown, setCPasswordShown] = useState(false);
+  const [eyeSlashIcon, setEyeSlashIcon] = useState(false);
+  const [eyeIcon, setEyeIcon] = useState(true);
+  const [CeyeSlashIcon, setCEyeSlashIcon] = useState(false);
+  const [CeyeIcon, setCEyeIcon] = useState(true);
   return (
     <div>
       <br />
@@ -137,11 +143,56 @@ export default function CustomerRegistration(props) {
                         </svg>
                       </span>
                       <input
-                        type="password"
-                        class="form-control rounded"
+                        type={passwordShown ? "text" : "password"}
+                        style={{
+                          borderTopLeftRadius: "5px",
+                          borderBottomLeftRadius: "5px",
+                        }}
+                        class="form-control  border-right-0"
                         id="inputpassword"
                         placeholder="Password"
                       />
+
+                      <span class="input-group-append bg-white border-left-0">
+                        <span class="input-group-text bg-transparent">
+                          <div hidden={eyeSlashIcon}>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="20"
+                              height="20"
+                              fill="currentColor"
+                              class="bi bi-eye-slash-fill"
+                              viewBox="0 0 16 16"
+                              onClick={() => {
+                                setPasswordShown(true);
+                                setEyeSlashIcon(true);
+                                setEyeIcon(false);
+                              }}
+                            >
+                              <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z" />
+                              <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z" />
+                            </svg>
+                          </div>
+                          <div hidden={eyeIcon}>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="20"
+                              height="20"
+                              fill="currentColor"
+                              class="bi bi-eye-fill"
+                              viewBox="0 0 16 16"
+                              onClick={() => {
+                                setPasswordShown(false);
+                                setEyeSlashIcon(false);
+                                setEyeIcon(true);
+                              }}
+                            >
+                              <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
+                              <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
+                            </svg>
+                          </div>
+                        </span>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -162,16 +213,62 @@ export default function CustomerRegistration(props) {
                           fill="currentColor"
                           class="bi bi-lock-fill"
                           viewBox="0 0 16 16"
+                    
                         >
                           <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z" />
                         </svg>
                       </span>
                       <input
-                        type="password"
-                        class="form-control rounded"
+                        type={CpasswordShown ? "text" : "password"}
+                        style={{
+                          borderTopLeftRadius: "5px",
+                          borderBottomLeftRadius: "5px",
+                        }}
+                        class="form-control border-right-0"
                         id="inputConfirmPassword"
                         placeholder="Re-type Password"
                       />
+                      <span class="input-group-append bg-white border-left-0">
+                        <span class="input-group-text bg-transparent">
+                          <div hidden = {CeyeSlashIcon}>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="20"
+                              height="20"
+                              fill="currentColor"
+                              class="bi bi-eye-slash-fill"
+                              viewBox="0 0 16 16"
+                              onClick={() => {
+                                setCPasswordShown(true);
+                                setCEyeSlashIcon(true);
+                                setCEyeIcon(false);
+                              }}
+                          
+                            >
+                              <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z" />
+                              <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z" />
+                            </svg>
+                          </div>
+                          <div hidden = {CeyeIcon}>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="20"
+                              height="20"
+                              fill="currentColor"
+                              class="bi bi-eye-fill"
+                              viewBox="0 0 16 16"
+                              onClick={() => {
+                                setCPasswordShown(false);
+                                setCEyeSlashIcon(false);
+                                setCEyeIcon(true);
+                              }}
+                            >
+                              <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
+                              <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
+                            </svg>
+                          </div>
+                        </span>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -244,10 +341,7 @@ export default function CustomerRegistration(props) {
               </div>
               {/* gender */}
               <div className="text-center">
-                <div
-                  class="form-check form-check-inline"
-                  style={{ marginRight: "100px" }}
-                >
+                <div class="form-check form-check-inline">
                   <input
                     class="form-check-input"
                     type="radio"
@@ -271,6 +365,18 @@ export default function CustomerRegistration(props) {
                     Female
                   </label>
                 </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="inlineRadioOptions"
+                    id="RadioOther"
+                    value="Other"
+                  />
+                  <label class="form-check-label" for="inlineRadio3">
+                    Other
+                  </label>
+                </div>
               </div>
               <br />
               {/* country */}
@@ -290,7 +396,12 @@ export default function CustomerRegistration(props) {
                 <select
                   class="selectpicker countrypicker"
                   id="selectedCountry"
-                  style={{ width: "10rem" }}
+                  style={{
+                    width: "10rem",
+                    background: "#764A34",
+                    color: "#ffffff",
+                    borderRadius: "2px",
+                  }}
                 ></select>
               </div>
               <br />
