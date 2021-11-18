@@ -12,6 +12,7 @@ import ViewCategories from "./components/adminRole/ViewCategories";
 import BootstrapDataTable from "./components/adminRole/BootstrapDataTable";
 import MainCategoriesDataTable from "./components/adminRole/MainCategoriesDataTable";
 import ViewStudentDetails from "./components/testingComponents/ViewStudentdetails";
+import CurrencyExchange from "./components/customerRole/CurrencyExchange";
 function App() {
   return (
     <BrowserRouter>
@@ -26,7 +27,7 @@ function App() {
         {/* <Route path="/e" element={<BootstrapDataTable />} /> */}
         {/* <Route path="/f" element={<AddStudent/>} /> */}
         {/* <Route path="/g" element={<ViewStudentDetails/>} /> */}
-
+        <Route path = "/h" element = {<CurrencyExchange/>}/>
 
       </Routes>
     </BrowserRouter>

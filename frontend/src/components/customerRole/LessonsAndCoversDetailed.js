@@ -202,6 +202,7 @@ export default function LessonsAndCoversDetailed(props) {
                     <div class="col-sm">
                       <CurrencySelect />
                       <br />
+                      <h3 id = "changedValue" style = {{color : "#764A34"}}></h3>
                     </div>
                     <div class="col-sm">
                       <h1
