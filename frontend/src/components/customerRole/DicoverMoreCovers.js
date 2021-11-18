@@ -9,7 +9,7 @@ export default function DiscoverMoreCovers(props) {
       </h1>
       <br />
       <h3 style={{ textAlign: "left", color: "#000000" }}>
-        <b>Our Reccomandations -</b>
+        <b>Our Reccomandations</b>
       </h3>
       <div className="discoverBody">
         <div
@@ -199,7 +199,9 @@ export default function DiscoverMoreCovers(props) {
             role="button"
             data-slide="next"
           >
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span  class="carousel-control-next-icon"  aria-hidden="true" >
+     
+            </span>
             <span class="sr-only">Next</span>
           </a>
         </div>
