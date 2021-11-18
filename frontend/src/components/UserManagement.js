@@ -53,6 +53,8 @@ export default function UserManagement() {
         email: 'dulan@gmail.com',
         added_date: '11/11/2021',
         updated_date:'-',
+      },
+      {
 
         name: 'Kaveen Wijeesuriya',
         status: 'true',

@@ -15,6 +15,7 @@ export default function PurchaseHistory(props) {
                 Purchase History
                 </center>
             </h3>
+            <br/>
         </div>
         <div className="col-sm">
             <div className="row">
@@ -35,117 +36,158 @@ export default function PurchaseHistory(props) {
                 </div>
                 <div className="col-md-1"></div>
             </div>
+            <br/>
         </div>
-        <div className="col-sm text-center">
+        <div className="col-sm text-right">
            
                 
-               <h6><b>No of downloads: 10</b></h6>
-               <h6><b>Total: Rs. 1000/-</b></h6>
+               <h6><b>No of downloads : 10</b></h6>
+               <h6><b>Total : Rs. 1000/-</b></h6>
         </div>
      
     </div>
-    <br/><br/>
+    <br/>
     
-    <div className="card shadow p-3 mb-5 bg-white rounded-lg border border-light" 
-     style={{boxShadow: "10px 10px 6px -6px #777",borderRadius: "15px"}}>
+    <div className="card p-3" 
+     style={{boxShadow: "10px 10px 6px -6px #aaaaaa",borderRadius: "10px", width:'90%', margin: 'auto', border:'2px solid sienna'}}>
            
-            <div className="row" style={{width: "100%",padding: "0px 0px 20px 0px",margin: "0px 10px 0px 2px"}}>
+            <div className="row" style={{width: "100%", margin:'auto'}}>
               <div className="col-sm text-center">
-                <img class="rounded"
-                style={{ width: "80%" ,alignItems:'center'}} 
+                <img class="rounded "
+                style={{ width: "90%" , margin:'auto'}} 
                 src={"Images/test2.jpg"}/>
-                </div>
-
-              <div className="col-sm" style={{ fontSize: "20px" , backgroundColor:'white'}}>
                 
+                </div>
+              
 
+              <div className="col-sm">
+                
+              <br/>
+                
                 <div className="row" >
-                    <div className="col">
-                      <span style={{ fontSize: "18px"}}><b> &ensp;&ensp;Song Name</b></span>
+               
+                
+                    <div className="col" style={{ lineHeight:'2em'}}>
+                 
+                      <span><b> &ensp;&ensp;Song Name</b></span>
                     <br/>
-                      <span style={{ fontSize: "15px"}}> &ensp;&ensp;&ensp;Category</span>
+                      <span> &ensp;&ensp;&ensp;Category</span>
                     <br/>
-                      <span style={{ fontSize: "15px"}}> &ensp;&ensp;&ensp;Sub Category</span>
+                      <span> &ensp;&ensp;&ensp;Sub Category</span>
                   </div>
                 </div>
 <br/>
+<br/>
                 <div className="row">
+               
                   <div className="col-sm">
-                   
-                    <button style={{ fontSize: "12px", borderRadius:'25px', backgroundColor:'#D0193A', color:'white'}}className="btn btn-sm btn-block" type="button">
+                  
+                    <button style={{borderRadius:'25px', backgroundColor:'#D0193A', color:'white'}}className="btn btn-sm btn-block" type="button">
                       Download
                     </button>
                     <br/>
                   </div>
                   <div className="col-sm">
-                      <button style={{ fontSize: "12px" ,borderRadius:'25px',backgroundColor:'#279B14', color:'white'}} className="btn btn-sm btn-block" type="button" >
+                  
+                      <button style={{borderRadius:'25px',backgroundColor:'#279B14', color:'white'}} className="btn btn-sm btn-block" type="button" >
                       View
                       {/* ,position:'absolute', bottom:'1',alignItems:'center' */}
                     </button>
+                    <br/>
                   </div>
+                 
                 </div>
               </div>
               <br/>
-              <div className="col-sm" style={{backgroundColor:'white', fontSize: "14px", lineHeight:'2em'}}>
-                <span class="text-right" style={{ fontSize: "15px"}}>11/11/2021</span>
-                      <br/>
-                      <span style={{ fontSize: "14px", color:' #764A34' }}>Original Artist &ensp;&ensp;:</span>
+              <div className="col-sm " style={{backgroundColor:'white', lineHeight:'2em'}}>
+                <div className="text-right">
+                <span class="text-center">11/11/2021</span>
+                </div>
+                     
+                      <span style={{  color:' #764A34'}}>Original Artist &ensp;&ensp;:</span>
                       <span> &ensp;&ensp; Kaushal Rashmika</span>
                       <br/>
-                      <span style={{ fontSize: "14px",color:' #764A34'  }}>Arranged By &ensp;&ensp;:</span>
+                      <span style={{ color:' #764A34'  }}>Arranged By &ensp;&ensp;:</span>
                       <span> &ensp;&ensp; Kaushal Rashmika</span>
                       <br/>
-                      <span style={{ fontSize: "14px",color:' #764A34'  }}>Instrument Played On &ensp;&ensp;:</span>
+                      <span style={{color:' #764A34'  }}>Instrument Played On &ensp;&ensp;:</span>
                       <span> &ensp;&ensp; Guitar</span>
                       <br/>
                     </div>
             </div>
           </div>
+          <br/><br/>
 
           <div className="card shadow p-3 mb-5 bg-white rounded-lg border border-light" 
      style={{boxShadow: "10px 10px 6px -6px #777",borderRadius: "15px"}}>
            
-            <div className="row" style={{width: "100%",padding: "0px 0px 20px 0px",margin: "0px 10px 0px 2px"}}>
+            <div className="row" style={{width: "100%", margin:'auto'}}>
               <div className="col-sm  text-center">
                 <img class="rounded"
                 style={{ width: "90%" }} 
                 src={"Images/test2.jpg"}/>
                 </div>
 
-              <div className="col-sm" style={{ fontSize: "20px" , backgroundColor:'white'}}>
+              <div className="col-sm" style={{ backgroundColor:'white'}}>
                 
 
                 <div className="row" >
                     <div className="col">
-                      <span style={{ fontSize: "18px"}}><b>Song Name</b></span>
+                      <span><b>Song Name</b></span>
                     <br/>
-                      <span style={{ fontSize: "15px"}}>Category</span>
+                      <span>Category</span>
                     <br/>
-                      <span style={{ fontSize: "15px"}}>Sub Category</span>
+                      <span>Sub Category</span>
                   </div>
                 </div>
 <br/>
 
                 <div className="row">
                   <div className="col-sm">
-                    <button style={{ fontSize: "12px", borderRadius:'25px', backgroundColor:'#D0193A', color:'white'}}className="btn btn-sm btn-block" type="button">
+                    <button style={{borderRadius:'25px', backgroundColor:'#D0193A', color:'white'}}className="btn btn-sm btn-block" type="button">
                       Download
                     </button>
                   </div>
                   <br/>
                   <br/>
                   <div className="col-sm">
-                      <button style={{ fontSize: "12px" ,borderRadius:'25px',backgroundColor:'#279B14', color:'white'}} className="btn btn-sm btn-block" type="button" >
+                      <button style={{borderRadius:'25px',backgroundColor:'#279B14', color:'white'}} className="btn btn-sm btn-block" type="button" >
                       View
                       {/* ,position:'absolute', bottom:'1',alignItems:'center' */}
                     </button>
                   </div>
                 </div>
               </div>
-              <div className="col-sm" style={{backgroundColor:'white', fontSize: "16px", lineHeight:'2em'}}>
+              <div className="col-sm" style={{backgroundColor:'white',lineHeight:'2em'}}>
                 <span class="text-right" style={{ fontSize: "15px"}}>11/11/2021</span>
                       <br/>
-                      <span style={{ fontSize: "15px", color:' #764A34' }}>Original Artist &ensp;&ensp;:</span>
+                      <div className="row">
+                        <div className="col">
+                        <span style={{color:' #764A34' }}>Original Artist &ensp;&ensp;:</span>
+                        </div>
+                        <div className="col-7">
+                        <span>  Kaushal Rashmika</span>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-5">
+                        <span style={{color:' #764A34'  }}>Arranged By &ensp;&ensp;:</span>
+                        </div>
+                        <div className="col-7">
+                        <span>  Kaushal Rashmika</span>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-6">
+                        <span style={{color:' #764A34'  }}>Instrument Played On &ensp;:</span>
+                        </div>
+                        <div className="col-6">
+                        <span>  Kaushal Rashmika</span>
+                        </div>
+                      </div>
+
+
+                      {/* <span style={{ fontSize: "15px", color:' #764A34' }}>Original Artist &ensp;&ensp;:</span>
                       <span> &ensp;&ensp; Kaushal Rashmika</span>
                       <br/>
                       <span style={{ fontSize: "15px",color:' #764A34'  }}>Arranged By &ensp;&ensp;:</span>
@@ -153,7 +195,7 @@ export default function PurchaseHistory(props) {
                       <br/>
                       <span style={{ fontSize: "15px",color:' #764A34'  }}>Instrument Played On &ensp;&ensp;:</span>
                       <span> &ensp;&ensp; Guitar</span>
-                      <br/>
+                      <br/> */}
                     </div>
             </div>
           </div>
