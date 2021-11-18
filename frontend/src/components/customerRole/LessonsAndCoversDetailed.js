@@ -250,7 +250,9 @@ export default function LessonsAndCoversDetailed(props) {
         </div>
       </div>
       {/* discover more */}
-      <DiscoverMoreCovers />
+      {/* <DiscoverMoreCovers message = "sonal"/> */}
+      <DiscoverMoreCovers/>
+
     </div>
   );
 }

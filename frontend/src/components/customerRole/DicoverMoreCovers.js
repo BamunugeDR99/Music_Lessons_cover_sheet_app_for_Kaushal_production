@@ -4,6 +4,7 @@ export default function DiscoverMoreCovers(props) {
   return (
     <div className="container-lg">
       <br />
+      {/* <h1>{props.message}</h1> */}
       <h1 style={{ textAlign: "center", color: "#764A34" }}>
         <b>Dicover more!</b>
       </h1>
