@@ -7,6 +7,7 @@ import React, { Component } from "react";
 import DataTableTest from "./components/dataTableTest";
 import MusicCoverPage from "./components/customerRole/musiccoverpage";
 import AdminHeader from "./components/adminRole/adminheader";
+import AdminHeader2 from "./components/adminRole/adminHeader2";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Routes>
         {/* <Route path="/" element={<AddStudent />} /> */}
         <Route path="/customer" element={<AddCustomerStudent />} />
+        <Route path="/header" element={<AdminHeader2 />} />
         <Route path="/adminheader" element={<AdminHeader />} />
         <Route path="/musiccoverpage" element={<MusicCoverPage />} />
         <Route path="/table" element={<DataTableTest />} />

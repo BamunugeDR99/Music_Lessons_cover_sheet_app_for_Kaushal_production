@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MusicCoverPage from "./../customerRole/musiccoverpage";
 
+//Default admin dashboard card
 export default function DashBoard(props) {
   return (
     <div>

@@ -66,6 +66,7 @@ export default function MusicCoverPage() {
       <br />
       <div class="container">
         <div className="row ">
+          {/* left side of the page */}
           <div className="col-md-4">
             <div className="container">
               <ul class="list-group">
@@ -118,6 +119,7 @@ export default function MusicCoverPage() {
               </div>
             </div>
           </div>
+          {/* right side of the page */}
           <div className="col-md-8">
             <h4 style={{ color: "#764A34" }}>
               <strong>Classical Guitar Covers</strong>
@@ -136,6 +138,7 @@ export default function MusicCoverPage() {
           {console.log(component)}
         </div>
       </div>
+      {/* user details update model */}
       <Modal show={modelOpen} size="lg">
         <Modal.Header>
           <button

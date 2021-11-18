@@ -3,6 +3,7 @@ import MusicCoverPage from "./../customerRole/musiccoverpage";
 import AdminCard from "./../adminRole/admincard";
 import Modal from "react-bootstrap/Modal";
 
+// Admin dashboard
 export default function DashBoard() {
   const [modelOpen, setmodelOpen] = useState(false);
   const [modelOpen1, setmodelOpen1] = useState(false);
@@ -45,6 +46,7 @@ export default function DashBoard() {
           <br />
         </div>
       </div>
+      {/* Cover add model  */}
       <Modal show={modelOpen} size="lg">
         <Modal.Header>
           <h4>Add Cover/Excercise</h4>
@@ -159,6 +161,7 @@ export default function DashBoard() {
         </Modal.Footer>
       </Modal>
 
+      {/* Category model */}
       <Modal show={modelOpen1} size="lg">
         <Modal.Header>
           <h4>Add Main Category</h4>
