@@ -6,12 +6,13 @@ import {
 } from "react-router-dom";
 import AddStudent from "./components/addstudent";
 import "./App.css";
+import "./css/DiscoverMoreCoversStyles.css";
 import React, { Component } from "react";
 import DataTableTest from "./components/dataTableTest";
 import CustomerRegistration from "./components/customerRole/CustomerRegistration";
 import CustomerForgotPassword from "./components/customerRole/CustomerForgotPassword";
 import LessonsAndCoversDetailed from "./components/customerRole/LessonsAndCoversDetailed";
-
+import DiscoverMoreCovers from "./components/customerRole/DicoverMoreCovers";
 function App() {
   return (
 
@@ -21,7 +22,7 @@ function App() {
       <Route path="/" element={<LessonsAndCoversDetailed/>} />
       <Route path="/a" element={<CustomerRegistration/>} />
       <Route path="/b" element={<CustomerForgotPassword/>} />
-
+      {/* <Route path = "/c" element = {<DiscoverMoreCovers/>}/> */}
       <Route path="/table" element={<DataTableTest/>}/>
      
     </Routes>
