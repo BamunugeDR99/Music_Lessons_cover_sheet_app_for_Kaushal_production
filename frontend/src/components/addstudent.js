@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState,radix } from "react";
 import axios from "axios";
+import ViewStudentDetails from "./testingComponents/ViewStudentdetails";
 
 export default function AddStudent(props) {
   let [name, setName] = useState("");
@@ -19,15 +20,21 @@ export default function AddStudent(props) {
 
     console.log(newStudent);
 
-    axios
-      .post("http://localhost:8070/student/add", newStudent)
-      .then(() => {
-        alert("Student Added");
+    // axios
+    //   .post("http://localhost:8070/student/add", newStudent)
+    //   .then(() => {
+    //     alert("Student Added");
        
-      })
-      .catch((err) => {
-        alert(err);
-      });
+    //   })
+    //   .catch((err) => {
+    //     alert(err);
+    //   });
+   
+    // return(
+    // <ViewStudentDetails name= {"name"}/>
+    // );
+
+
   }
 
   return (

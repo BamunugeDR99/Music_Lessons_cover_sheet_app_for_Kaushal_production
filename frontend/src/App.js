@@ -11,6 +11,7 @@ import LessonsAndCoversDetailed from "./components/customerRole/LessonsAndCovers
 import ViewCategories from "./components/adminRole/ViewCategories";
 import BootstrapDataTable from "./components/adminRole/BootstrapDataTable";
 import MainCategoriesDataTable from "./components/adminRole/MainCategoriesDataTable";
+import ViewStudentDetails from "./components/testingComponents/ViewStudentdetails";
 function App() {
   return (
     <BrowserRouter>
@@ -23,6 +24,9 @@ function App() {
         <Route path="/d" element={<ViewCategories />} />
         <Route path="/e" element={<MainCategoriesDataTable />} />
         {/* <Route path="/e" element={<BootstrapDataTable />} /> */}
+        {/* <Route path="/f" element={<AddStudent/>} /> */}
+        {/* <Route path="/g" element={<ViewStudentDetails/>} /> */}
+
 
       </Routes>
     </BrowserRouter>
