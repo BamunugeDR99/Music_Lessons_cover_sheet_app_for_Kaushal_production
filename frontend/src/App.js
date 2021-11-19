@@ -1,6 +1,6 @@
 import { render } from "react-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AddStudent from "./components/addstudent";
+import AddStudent from "./components/customerRole/addstudent";
 import "./App.css";
 import "./css/DiscoverMoreCoversStyles.css";
 import React, { Component } from "react";
@@ -25,7 +25,7 @@ function App() {
         <Route path="/d" element={<ViewCategories />} />
         <Route path="/e" element={<MainCategoriesDataTable />} />
         {/* <Route path="/e" element={<BootstrapDataTable />} /> */}
-        {/* <Route path="/f" element={<AddStudent/>} /> */}
+        <Route path="/f" element={<AddStudent/>} />
         {/* <Route path="/g" element={<ViewStudentDetails/>} /> */}
         <Route path = "/h" element = {<CurrencyExchange/>}/>
 
