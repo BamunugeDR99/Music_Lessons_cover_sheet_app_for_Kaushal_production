@@ -1,0 +1,25 @@
+#searchBar:focus{
+    outline: none !important;
+    border:1px solid #764A34;
+    box-shadow: 0 0 10px #764A34;
+}
+
+#classicalHeader{
+
+        font-family: Abel;
+        font-size: 18px;
+        color: #764A34;
+  
+}
+#classicalHeader:hover{
+    opacity: 20%;
+}
+
+#SearchBtn{
+    outline: solid #764A34;
+    color: #764A34;
+}
+
+#SearchBtn:hover{
+   box-shadow: inset;
+}

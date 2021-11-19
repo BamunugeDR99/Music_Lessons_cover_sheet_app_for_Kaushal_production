@@ -3,6 +3,7 @@ import axios from "axios";
 
 export default function CurrencySelect(props) {
   function getCurrencies() {
+    document.getElementById("loadingBar").hidden = false;
     const api = "https://api.exchangerate-api.com/v4/latest/USD";
     fetch(`${api}`)
       .then((currency) => {
@@ -16,6 +17,7 @@ export default function CurrencySelect(props) {
     const currencyRate = currency.rates[selectedCurrency];
     const musicCoverValue = 5;
     const newValue = (musicCoverValue * currencyRate).toFixed(2);
+    document.getElementById("loadingBar").hidden = true;
     document.getElementById("changedValue").innerHTML =
       selectedCurrency + " " + newValue;
   }

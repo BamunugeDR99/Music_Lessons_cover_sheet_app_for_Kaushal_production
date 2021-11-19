@@ -202,7 +202,10 @@ export default function LessonsAndCoversDetailed(props) {
                     <div class="col-sm">
                       <CurrencySelect />
                       <br />
-                      <h3 id = "changedValue" style = {{color : "#764A34"}}></h3>
+                      <h3 id="changedValue" style={{ color: "#764A34" }}></h3>
+                      <div class="spinner-border text-dark" id = "loadingBar" hidden role="status">
+                        <span class="sr-only">Loading...</span>
+                      </div>
                     </div>
                     <div class="col-sm">
                       <h1
@@ -251,8 +254,7 @@ export default function LessonsAndCoversDetailed(props) {
       </div>
       {/* discover more */}
       {/* <DiscoverMoreCovers message = "sonal"/> */}
-      <DiscoverMoreCovers/>
-
+      <DiscoverMoreCovers />
     </div>
   );
 }

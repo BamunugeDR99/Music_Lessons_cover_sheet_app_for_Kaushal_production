@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import "../../css/CustomerHeaderStyles.css";
 export default function CustomerHeader(props) {
   return (
     <div>
@@ -59,20 +60,18 @@ export default function CustomerHeader(props) {
               </a>
             </li> */}
             <li class="nav-item">
-              <a class="nav-link" href="#">
-                <font
-                  style={{
-                    fontFamily: "Abel",
-                    fontSize: "18px",
-                    color: "#764A34",
-                  }}
-                >
-                  Classical Guitar Covers{" "}
-                </font>
+              <a class="nav-link" href="#" id="classicalHeader">
+                <font>Classical Guitar Covers </font>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">
+              <a
+                class="nav-link"
+                href="#"
+                tabindex="-1"
+                aria-disabled="true"
+                id="classicalHeader"
+              >
                 <font
                   style={{
                     fontFamily: "Abel",
@@ -87,18 +86,53 @@ export default function CustomerHeader(props) {
           </ul>
           <form class="form-inline my-2 my-lg-0">
             <input
+              id="searchBar"
               class="form-control mr-sm-2"
               type="search"
               placeholder="Search"
               aria-label="Search"
             />
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+            <button
+            id = "SearchBtn"
+              class="btn  my-2 my-sm-0 btn-sm"
+              type="submit"
+              
+            >
               Search
             </button>
           </form>
           <div>
-            <h6>d</h6>
-            <h6>34</h6>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="30"
+              height="30"
+              fill="#764A34"
+              class="bi bi-person-fill"
+              viewBox="0 0 16 16"
+            >
+              <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+            </svg>
+            <font
+              style={{
+                fontFamily: "Abel",
+                fontSize: "18px",
+                color: "#764A34",
+                marginRight: "10px",
+                marginLeft : "5px"
+              }}
+            >
+              My Account{" "}
+            </font>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="30"
+              height="30"
+              fill="#764A34"
+              class="bi bi-bag-fill"
+              viewBox="0 0 16 16"
+            >
+              <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5z" />
+            </svg>
           </div>
         </div>
       </nav>
