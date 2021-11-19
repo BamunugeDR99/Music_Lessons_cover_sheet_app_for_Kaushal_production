@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 export default function DiscoverMoreCovers(props) {
   return (
+    // 3 cards will be shown  so there needs to be 2 maps
     <div className="container-lg">
       <br />
       {/* <h1>{props.message}</h1> */}
@@ -19,8 +20,10 @@ export default function DiscoverMoreCovers(props) {
           data-ride="carousel"
         >
           <div class="carousel-inner">
+            {/* one row */}
             <div class="carousel-item active">
               <div class="cards-wrapper">
+                {/* Single card */}
                 <div class="card">
                   <img
                     src={"/images/istockphoto-1127565686-170667a.jpg"}
@@ -185,6 +188,7 @@ export default function DiscoverMoreCovers(props) {
               </div>
             </div>
           </div>
+          {/* controls  */}
           <a
             class="carousel-control-prev"
             href="#carouselExampleControls"

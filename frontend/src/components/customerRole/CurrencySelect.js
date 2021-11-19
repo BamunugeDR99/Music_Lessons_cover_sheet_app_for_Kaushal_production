@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 
 export default function CurrencySelect(props) {
+  // getting all the currency rates
   function getCurrencies() {
     document.getElementById("loadingBar").hidden = false;
     const api = "https://api.exchangerate-api.com/v4/latest/USD";
@@ -11,7 +12,7 @@ export default function CurrencySelect(props) {
       })
       .then(calculateCurrency);
   }
-
+  // calculating and displaying the calculate value
   function calculateCurrency(currency) {
     const selectedCurrency = document.getElementById("selectedCurrency").value;
     const currencyRate = currency.rates[selectedCurrency];
@@ -23,10 +24,12 @@ export default function CurrencySelect(props) {
   }
   return (
     <div>
+      {/* currency select box  */}
       <select
         name="currency"
         id="selectedCurrency"
         onChange={() => {
+          // calling the function
           getCurrencies();
         }}
         style={{

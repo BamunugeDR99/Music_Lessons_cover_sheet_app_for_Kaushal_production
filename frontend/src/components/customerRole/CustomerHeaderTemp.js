@@ -4,10 +4,9 @@ import "../../css/CustomerHeaderStyles.css";
 export default function CustomerHeader(props) {
   return (
     <div>
-      <br />
-      <br />
+     
       <nav
-        class="navbar fixed-top navbar-expand-lg navbar-light"
+        class="navbar sticky-top navbar-expand-lg navbar-light"
         style={{ background: "#ffffff" }}
       >
         <button

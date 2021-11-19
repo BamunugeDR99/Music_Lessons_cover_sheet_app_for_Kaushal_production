@@ -12,6 +12,7 @@ export default function LessonsAndCoversDetailed(props) {
           <div class="container">
             <div class="row">
               <div class="col-sm">
+                {/* image carousel */}
                 <div
                   id="carouselExampleIndicators"
                   class="carousel slide"
@@ -32,6 +33,7 @@ export default function LessonsAndCoversDetailed(props) {
                       data-slide-to="2"
                     ></li>
                   </ol>
+                  {/* loop images  */}
                   <div class="carousel-inner">
                     <div class="carousel-item active">
                       <img
@@ -55,6 +57,7 @@ export default function LessonsAndCoversDetailed(props) {
                       />
                     </div>
                   </div>
+                  {/* controls  */}
                   <a
                     class="carousel-control-prev"
                     href="#carouselExampleIndicators"
@@ -107,6 +110,7 @@ export default function LessonsAndCoversDetailed(props) {
                 <h6 style={{ display: "inline" }}>3</h6>
                 <br />
                 <br />
+                {/* youtube video  */}
                 <div class="embed-responsive embed-responsive-16by9">
                   <iframe
                     class="embed-responsive-item"
@@ -120,10 +124,12 @@ export default function LessonsAndCoversDetailed(props) {
                 <br />
               </div>
               <div class="col-sm">
+                {/* main title */}
                 <h3 style={{ color: "#764A34", letterSpacing: "10px" }}>
                   We Wish You a Merry Christmas
                 </h3>
                 <br />
+                {/* original artis name  */}
                 <h4 style={{ color: "#764A34", float: "right" }}>
                   Santa Claus
                 </h4>
@@ -136,6 +142,7 @@ export default function LessonsAndCoversDetailed(props) {
                     letterSpacing: "2px",
                   }}
                 >
+                  {/* arrange by  */}
                   Arrange by :{" "}
                 </h5>{" "}
                 <h5 style={{ display: "inline", letterSpacing: "2px" }}>
@@ -150,6 +157,7 @@ export default function LessonsAndCoversDetailed(props) {
                     letterSpacing: "2px",
                   }}
                 >
+                  {/* instruments played on array  */}
                   Instruments played on :{" "}
                 </h5>{" "}
                 <h5 style={{ display: "inline", letterSpacing: "2px" }}>
@@ -164,6 +172,7 @@ export default function LessonsAndCoversDetailed(props) {
                     letterSpacing: "2px",
                   }}
                 >
+                  {/* main category */}
                   Main Category :{" "}
                 </h5>{" "}
                 <h5 style={{ display: "inline", letterSpacing: "2px" }}>
@@ -178,6 +187,7 @@ export default function LessonsAndCoversDetailed(props) {
                     letterSpacing: "2px",
                   }}
                 >
+                  {/* subcategory  */}
                   Sub-category :{" "}
                 </h5>{" "}
                 <h5 style={{ display: "inline", letterSpacing: "2px" }}>
@@ -192,6 +202,7 @@ export default function LessonsAndCoversDetailed(props) {
                     letterSpacing: "2px",
                   }}
                 >
+                  {/* no of pages  */}
                   No of pages :{" "}
                 </h5>{" "}
                 <h5 style={{ display: "inline", letterSpacing: "2px" }}>5</h5>
@@ -200,9 +211,11 @@ export default function LessonsAndCoversDetailed(props) {
                 <div class="container">
                   <div class="row">
                     <div class="col-sm">
+                      {/* calling a another Component */}
                       <CurrencySelect />
                       <br />
                       <h3 id="changedValue" style={{ color: "#764A34" }}></h3>
+                      {/* spinner  */}
                       <div
                         class="spinner-border text-dark"
                         id="loadingBar"
@@ -213,6 +226,7 @@ export default function LessonsAndCoversDetailed(props) {
                       </div>
                     </div>
                     <div class="col-sm">
+                      {/* price  */}
                       <h1
                         style={{
                           display: "inline",
