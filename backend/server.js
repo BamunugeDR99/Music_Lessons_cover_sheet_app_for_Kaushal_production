@@ -40,6 +40,21 @@ app.use("/mainCategory", MainCategoryRouter);
 const SubCategoryRouter = require("./routes/subCategory.js");
 app.use("/subCategory", SubCategoryRouter);
 
+const adminRouter = require("./routes/admins.js");
+app.use("/admin", adminRouter);
+
+const feedbackRouter = require("./routes/feedbacks.js");
+app.use("/feedback", feedbackRouter);
+
+const orderRouter = require("./routes/orders.js");
+app.use("/order", orderRouter);
+
+const customerRouter = require("./routes/customers.js");
+app.use("/customer", customerRouter);
+
+
 app.listen(PORT, () => {
   console.log(`Server is up and running on PORT ${PORT}`);
 });
+
+
