@@ -15,6 +15,7 @@ import Login from "./components/customerRole/loginpage";
 import MainHeader from "./components/customerRole/header";
 import Header2 from "./components/customerRole/header2";
 import InitialPage from "./components/customerRole/initialpage";
+import Test from "./components/customerRole/test";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
       
     
       <Route path="/table" element={<DataTableTest/>}/>
+      <Route path="/test" element={<Test/>}/>
       <Route path="/cart" element={<MusicCart/>}/>
       <Route path="/cart2" element={<MusicCart2/>}/>
       <Route path="/login" element={<Login/>}/>
