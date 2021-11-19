@@ -40,7 +40,7 @@ router.route("/addFeedback").post(async(req,res)=>{
 
 
 //Get one feedback
-router.route("/getFeedback/:id").get(async (req,res) =>{
+router.route("/getFeedback").get(async (req,res) =>{
 
     const userID = req.body.CustomerID;
     const coverID = req.body.CoverID;
