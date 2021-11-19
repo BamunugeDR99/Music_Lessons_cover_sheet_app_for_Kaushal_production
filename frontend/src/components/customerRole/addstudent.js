@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import CoverTemplate from "./covercardtemplate";
+import TopDownloadTemplate from "./topdownloadtemplate";
 
 export default function AddStudent(props) {
   let [name, setName] = useState("");
@@ -78,6 +80,14 @@ export default function AddStudent(props) {
           Submit
         </button>
       </form>
+      <div className="row">
+        <div className="col-md-3">
+          <CoverTemplate />
+        </div>
+        <div className="col-md-3">
+          <TopDownloadTemplate />
+        </div>
+      </div>
     </div>
   );
 }
