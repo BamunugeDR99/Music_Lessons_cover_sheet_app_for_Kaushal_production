@@ -7,35 +7,7 @@ export default function MainHeader(props) {
 
 const [username, setUsername] = useState("");
 const [userImage,setUserImage] = useState("");
-//   useEffect(() =>{
 
-// 		let objectID = "";
-// 		function getCustomer(){
-
-// 			objectID = localStorage.getItem("CustomerID");
-// 			axios.get("https://tech-scope-online.herokuapp.com/Customer/get/"+ objectID).then((res) =>
-// 			{
-				
-//         setUsername(res.data.username);
-//         setUserImage(res.data.userImage);
-				
-
-				
-				
-// 			}).catch((err) =>{
-// 				alert(err);
-// 			})
-// 		}
-	   
-// 		getCustomer();
-
-
-// 	}, []);
-
-//   function Logout(){
-//     localStorage.removeItem("CustomerID");
-//     props.history.push("/CustomerLogin");
-//   }
 
 
   return (
@@ -70,11 +42,9 @@ const [userImage,setUserImage] = useState("");
     </form>
 
     <form class="form-inline my-2 my-lg-0">
-     {/*Custoemr Profile picture */}
-     {/* <img className="card-img-top" src = {'/Images/shopping-cart.png'} style = {{width: "30px", borderRadius : "0px",marginLeft : "10px",marginRight : "20px"}}alt="Card image cap"/> */}
+    
      <b>{username}</b>
-      {/* <img className="card-img-top" src = {'/Images/'+userImage} style = {{width: "50px", borderRadius : "30px",marginLeft : "10px",marginRight : "10px"}}alt="Card image cap"/> */}
-      {/* <button class="btn btn-outline-danger my-2 my-sm-0" type="submit"   >Logout</button> */}
+     
     
     </form>
   </div>
