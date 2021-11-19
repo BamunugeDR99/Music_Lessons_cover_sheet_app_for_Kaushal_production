@@ -23,3 +23,21 @@
 #SearchBtn:hover{
    box-shadow: inset;
 }
+
+#Sicons:hover{
+    opacity: 20%;
+}
+
+#myAccount{
+
+        font-family: Abel;
+        font-size: 18px;
+        color: #764A34;
+        margin-right: 10px;
+        margin-left: 5px;
+}
+
+.userProfileSpan:hover{
+    opacity: 20%;
+}
+
