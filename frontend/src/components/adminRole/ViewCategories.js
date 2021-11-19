@@ -5,14 +5,12 @@ import SubCategoriesDataTable from "./SubCategoriesDataTable";
 
 export default function ViewCategories(props) {
   return (
-    <div style = {{overflow : "auto"}}>
-      <div >
-      <MainCategoriesDataTable />
-
+    <div style={{ overflow: "auto" }}>
+      <div>
+        <MainCategoriesDataTable />
       </div>
       <div>
-      <SubCategoriesDataTable />
-
+        <SubCategoriesDataTable />
       </div>
     </div>
   );

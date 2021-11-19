@@ -12,7 +12,10 @@ export default function CustomerRegistration(props) {
     <div>
       <br />
       <div className="d-flex justify-content-center">
-        <div class="card shadow p-3 mb-5 bg-white rounded" style={{ border: "solid #764A34" }}>
+        <div
+          class="card shadow p-3 mb-5 bg-white rounded"
+          style={{ border: "solid #764A34" }}
+        >
           <div class="card-body">
             <div class="text-center">
               <img

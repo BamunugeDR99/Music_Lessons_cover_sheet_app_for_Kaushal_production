@@ -203,7 +203,12 @@ export default function LessonsAndCoversDetailed(props) {
                       <CurrencySelect />
                       <br />
                       <h3 id="changedValue" style={{ color: "#764A34" }}></h3>
-                      <div class="spinner-border text-dark" id = "loadingBar" hidden role="status">
+                      <div
+                        class="spinner-border text-dark"
+                        id="loadingBar"
+                        hidden
+                        role="status"
+                      >
                         <span class="sr-only">Loading...</span>
                       </div>
                     </div>
