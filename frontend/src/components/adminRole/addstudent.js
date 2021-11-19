@@ -7,7 +7,6 @@ export default function AddStudent(props) {
   let [gender, setGender] = useState("");
 
   function sendData(e) {
- 
     e.preventDefault();
 
     const newStudent = {
@@ -16,14 +15,12 @@ export default function AddStudent(props) {
       gender,
     };
 
-
     console.log(newStudent);
 
     axios
       .post("http://localhost:8070/student/add", newStudent)
       .then(() => {
         alert("Student Added");
-       
       })
       .catch((err) => {
         alert(err);

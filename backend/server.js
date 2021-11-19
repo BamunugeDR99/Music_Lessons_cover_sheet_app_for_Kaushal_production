@@ -31,6 +31,14 @@ connection.once("open", () => {
 const studentRouter = require("./routes/students.js");
 app.use("/student", studentRouter);
 
+const CoversRouter = require("./routes/covers.js");
+app.use("/covers", CoversRouter);
+
+const MainCategoryRouter = require("./routes/mainCategory.js");
+app.use("/mainCategory", MainCategoryRouter);
+
+const SubCategoryRouter = require("./routes/subCategory.js");
+app.use("/subCategory", SubCategoryRouter);
 
 const adminRouter = require("./routes/admins.js");
 app.use("/admin", adminRouter);
