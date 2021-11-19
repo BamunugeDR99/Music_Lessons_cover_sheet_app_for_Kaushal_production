@@ -14,6 +14,7 @@ import MainCategoriesDataTable from "./components/adminRole/MainCategoriesDataTa
 import ViewStudentDetails from "./components/testingComponents/ViewStudentdetails";
 import CurrencyExchange from "./components/customerRole/CurrencyExchange";
 import CustomerHeader from "./components/customerRole/CustomerHeader";
+import CustomerFooter from "./components/customerRole/CustomerFooter";
 function App() {
   return (
     <BrowserRouter>
@@ -32,6 +33,7 @@ function App() {
         <Route path = "/h" element = {<CurrencyExchange/>}/>
 
       </Routes>
+      <CustomerFooter/>
     </BrowserRouter>
 
     //Commit1

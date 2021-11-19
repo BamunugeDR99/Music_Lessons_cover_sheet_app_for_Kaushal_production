@@ -20,9 +20,9 @@ export default function CustomerHeader(props) {
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
+            width="40"
+            height="40"
+            fill="#764A34"
             class="bi bi-list"
             viewBox="0 0 16 16"
           >
@@ -46,31 +46,42 @@ export default function CustomerHeader(props) {
             <path d="M8 2.82a1 1 0 0 1 .804-.98l3-.6A1 1 0 0 1 13 2.22V4L8 5V2.82z" />
           </svg>
           <span> </span>
-          <font style={{ fontFamily: "Old Standard TT" }}>
+          <font style={{ fontFamily: "Old Standard TT", fontSize: "20px" }}>
             Rashmika Productions
           </font>
         </a>
 
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
           <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li class="nav-item active">
+            {/* <li class="nav-item active">
               <a class="nav-link" href="#">
                 Home <span class="sr-only">(current)</span>
               </a>
-            </li>
+            </li> */}
             <li class="nav-item">
               <a class="nav-link" href="#">
-                Link
+                <font
+                  style={{
+                    fontFamily: "Abel",
+                    fontSize: "18px",
+                    color: "#764A34",
+                  }}
+                >
+                  Classical Guitar Covers{" "}
+                </font>
               </a>
             </li>
             <li class="nav-item">
-              <a
-                class="nav-link disabled"
-                href="#"
-                tabindex="-1"
-                aria-disabled="true"
-              >
-                Disabled
+              <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">
+                <font
+                  style={{
+                    fontFamily: "Abel",
+                    fontSize: "18px",
+                    color: "#764A34",
+                  }}
+                >
+                  Guitar Technics & Lessons
+                </font>
               </a>
             </li>
           </ul>
@@ -85,6 +96,10 @@ export default function CustomerHeader(props) {
               Search
             </button>
           </form>
+          <div>
+            <h6>d</h6>
+            <h6>34</h6>
+          </div>
         </div>
       </nav>
     </div>
