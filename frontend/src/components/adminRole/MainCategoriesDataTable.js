@@ -1,7 +1,20 @@
 import React from "react";
 import { MDBDataTableV5 } from "mdbreact";
 
-export default function DataTableTest() {
+export default function MainCategoriesDataTable() {
+  const student1 = {
+    name: "Michael Bruce",
+    age: "29",
+    gender: "Male",
+  };
+  const student2 = {
+    name: "Donna Snider",
+    age: "27",
+    gender: "Female",
+  };
+  let students = [];
+  students.push(student1);
+  students.push(student2);
   const [datatable, setDatatable] = React.useState({
     columns: [
       {
@@ -25,19 +38,20 @@ export default function DataTableTest() {
         sort: "disabled",
         width: 150,
       },
-    ],
-    rows: [
       {
-        name: "Michael Bruce",
-        age: "29",
-        gender: "Male",
+        label: "Gender",
+        field: "gender",
+        sort: "disabled",
+        width: 150,
       },
       {
-        name: "Donna Snider",
-        age: "27",
-        gender: "Female",
+        label: "Gender",
+        field: "gender",
+        sort: "disabled",
+        width: 150,
       },
     ],
+    rows: students,
   });
 
   return (
