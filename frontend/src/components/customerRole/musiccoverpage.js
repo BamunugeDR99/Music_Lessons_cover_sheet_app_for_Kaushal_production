@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import CoverTemplate from "./covercardtemplate";
 import TopDownloadTemplate from "./topdownloadtemplate";
@@ -7,19 +7,22 @@ import InputRange from "react-input-range";
 
 export default function MusicCoverPage() {
   const [modelOpen, setmodelOpen] = useState(false);
-  const [value1, setValue1] = useState("");
-  const [value2, setValue2] = useState("");
+  const [pricerange, setPriceRange] = useState("0");
+  const [downloadrange, setDownloadRange] = useState("0");
+  const [covers, setCovers] = useState([]);
+  const [categorytext, setCategoryText] = useState("All");
 
-  let [component, setName] = useState([
-    <CoverTemplate />,
-    <CoverTemplate />,
-    <CoverTemplate />,
-    <CoverTemplate />,
-    <CoverTemplate />,
-    <CoverTemplate />,
-    <CoverTemplate />,
-    <CoverTemplate />,
-  ]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:8070/covers/getcovers")
+      .then((res) => {
+        setCovers(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
+  }, []);
 
   function modalopen() {
     // alert("This is alert");
@@ -28,81 +31,175 @@ export default function MusicCoverPage() {
   function modalClose() {
     setmodelOpen(false);
   }
-  function handleValue1(v) {
-    setValue1(v);
+  function sortByPrice(v) {
+    setPriceRange(v);
+    setDownloadRange(0);
   }
-  function handleValue2(v) {
-    setValue2(v);
+
+  function sortByDownloads(v) {
+    setDownloadRange(v);
+    setPriceRange(0);
+  }
+
+  function fetchAll() {
+    setCategoryText("All");
+    axios
+      .get("http://localhost:8070/covers/getcovers")
+      .then((res) => {
+        setCovers(res.data);
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
+  }
+  function fetchEnglishSongs() {
+    setCategoryText("English");
+
+    axios
+      .get("http://localhost:8070/covers/getcoverbysubcategory/English")
+      .then((res) => {
+        setCovers(res.data);
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
+  }
+  function fetchHindi() {
+    setCategoryText("Hindi");
+
+    axios
+      .get("http://localhost:8070/covers/getcoverbysubcategory/Hindi")
+      .then((res) => {
+        setCovers(res.data);
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
+  }
+  function fetchSinhala() {
+    setCategoryText("Sinhala");
+
+    axios
+      .get("http://localhost:8070/covers/getcoverbysubcategory/Sinhala")
+      .then((res) => {
+        setCovers(res.data);
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
+  }
+  function fetchOther() {
+    setCategoryText("Other");
+
+    axios
+      .get("http://localhost:8070/covers/getcoverbysubcategory/Other")
+      .then((res) => {
+        setCovers(res.data);
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
   }
 
   return (
     <div>
       <br />
-      <div className="row">
-        <div className="col-md-1"></div>
-        <div className="col-md-10 input-group">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Search Music Covers"
-          />
-          <div class="input-group-append">
-            <button className="input-group-text">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-search"
-                viewBox="0 0 16 16"
-              >
-                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-              </svg>
-            </button>
+      <div className="container">
+        <center>
+          <div className="col-md-11 input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search Music Covers"
+            />
+            <div class="input-group-append">
+              <button className="input-group-text">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-search"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                </svg>
+              </button>
+            </div>
           </div>
-        </div>
-        <div className="col-md-1"></div>
+        </center>
       </div>
       <br />
       <div class="container">
         <div className="row ">
           {/* left side of the page */}
           <div className="col-md-4">
-            <div className="container">
-              <ul class="list-group">
-                <li class="list-group-item">Cras justo odio</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Morbi leo risus</li>
-                <li class="list-group-item">Porta ac consectetur ac</li>
-                <li class="list-group-item">Vestibulum at eros</li>
-              </ul>
-
+            <div className="list-group">
+              <a
+                href="#"
+                onClick={fetchAll}
+                className="list-group-item list-group-item-action"
+              >
+                <i className="fa fa-music"></i>&emsp; All
+              </a>
+              <a
+                href="#"
+                onClick={fetchEnglishSongs}
+                className="list-group-item list-group-item-action"
+              >
+                <i className="fa fa-headphones"></i>&emsp; English
+              </a>
+              <a
+                href="#"
+                onClick={fetchHindi}
+                className="list-group-item list-group-item-action"
+              >
+                <i className="fa fa-microphone"></i>&emsp; Hindi
+              </a>
+              <a
+                href="#"
+                onClick={fetchSinhala}
+                className="list-group-item list-group-item-action"
+              >
+                <i className="fa fa-volume-up"></i>&emsp; Sinhala
+              </a>
+              <a
+                href="#"
+                onClick={fetchOther}
+                className="list-group-item list-group-item-action"
+              >
+                <i className="fa fa-headphones"></i>&emsp; Other
+              </a>
+            </div>
+            <div>
               <br />
               <div className="row">
                 <div className="col-md-6">
                   <label>Price Range</label>
-                  <div class="slidecontainer">
+                  <label>({pricerange} - 200+) </label>
+                  <div class="sadecontainer">
                     <input
                       id="typeinp"
                       type="range"
                       min="0"
-                      max="5"
-                      value={value1}
-                      onChange={(e) => handleValue1(e.target.value)}
+                      max="200"
+                      value={pricerange}
+                      onChange={(e) => sortByPrice(e.target.value)}
                       step="1"
                     />
                   </div>
                 </div>
                 <div className="col-md-6">
                   <label>Downloads</label>
+                  <label>({downloadrange} - 200+) </label>
                   <div class="slidecontainer">
                     <input
                       id="typeinp"
                       type="range"
                       min="0"
-                      max="5"
-                      value={value2}
-                      onChange={(e) => handleValue2(e.target.value)}
+                      max="200"
+                      value={downloadrange}
+                      onChange={(e) => sortByDownloads(e.target.value)}
                       step="1"
                     />
                   </div>
@@ -118,16 +215,21 @@ export default function MusicCoverPage() {
                 <TopDownloadTemplate />
               </div>
             </div>
+            <br />
           </div>
           {/* right side of the page */}
           <div className="col-md-8">
             <h4 style={{ color: "#764A34" }}>
-              <strong>Classical Guitar Covers</strong>
+              <strong>Classical Guitar Covers - {categorytext}</strong>
             </h4>
             <div className="row">
-              {component.map((post) => (
+              {covers.map((post) => (
                 <div className="col-md-3" onClick={() => modalopen()}>
-                  {post}
+                  <CoverTemplate
+                    name={post.Title}
+                    artist={post.OriginalArtistName}
+                    price={post.Price}
+                  />
                   <br />
                 </div>
               ))}
@@ -135,7 +237,6 @@ export default function MusicCoverPage() {
               <br />
             </div>
           </div>
-          {console.log(component)}
         </div>
       </div>
       {/* user details update model */}

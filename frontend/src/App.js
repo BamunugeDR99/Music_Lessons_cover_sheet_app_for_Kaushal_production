@@ -14,10 +14,15 @@ import MainCategoriesDataTable from "./components/adminRole/MainCategoriesDataTa
 import ViewStudentDetails from "./components/testingComponents/ViewStudentdetails";
 import CustomerHeader from "./components/customerRole/CustomerHeaderTemp";
 import CustomerFooter from "./components/customerRole/CustomerFooterTemp";
+
+import DataTableTest3 from "./components/dataTableTest";
+import MusicCoverPage from "./components/customerRole/musiccoverpage";
+import AdminHeader from "./components/adminRole/adminheader";
+import AdminHeader2 from "./components/adminRole/adminHeader2";
 function App() {
   return (
     <BrowserRouter>
-      <CustomerHeader />
+      {/* <CustomerHeader /> */}
       <Routes>
         <Route path="/" element={<LessonsAndCoversDetailed />} />
         <Route path="/a" element={<CustomerRegistration />} />
@@ -29,6 +34,12 @@ function App() {
         {/* <Route path="/e" element={<BootstrapDataTable />} /> */}
         <Route path="/f" element={<AddStudent />} />
         {/* <Route path="/g" element={<ViewStudentDetails/>} /> */}
+
+        <Route path="/header" element={<AdminHeader2 />} />
+        <Route path="/adminheader" element={<AdminHeader />} />
+        <Route path="/musiccoverpage" element={<MusicCoverPage />} />
+        <Route path="/table" element={<DataTableTest />} />
+        <Route path="/table3" element={<DataTableTest3 />} />
       </Routes>
       <CustomerFooter />
     </BrowserRouter>

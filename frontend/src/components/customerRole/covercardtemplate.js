@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function CoverTemplate() {
+export default function CoverTemplate(props) {
   return (
     <div>
       <div
@@ -27,19 +27,19 @@ export default function CoverTemplate() {
               }}
               className="card-title col-xs-12"
             >
-              Hall of Fame
+              {props.name}
             </p>
             <p
               style={{ paddingLeft: "8px", fontSize: "14px" }}
               className="card-title  col-xs-12"
             >
-              Ryan Teddar
+              {props.artist}
             </p>
             <h6
               style={{ addingLeft: "8px", color: "#764A34" }}
               className="card-title col-xs-12"
             >
-              Rs.150.00
+              ${props.price}
             </h6>
           </center>
         </div>
