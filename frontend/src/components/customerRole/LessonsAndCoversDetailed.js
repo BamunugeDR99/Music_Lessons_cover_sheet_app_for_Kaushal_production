@@ -1,9 +1,45 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import axios from "axios";
 import CurrencySelect from "./CurrencySelect";
 import DiscoverMoreCovers from "./DicoverMoreCovers";
 
 export default function LessonsAndCoversDetailed(props) {
+
+  const [covers, setCovers] = useState([]);
+  let preview = [];
+  let coverDeatils = [];
+  let instrumentsTxt = "";
+  let instruments = [];
+  useEffect(() => {
+    function getCovers() {
+      //const CoverID = props.match.params.id;
+      const CoverTempID = "61936caa6027859b76b2ddbc";
+      axios
+        .get("http://localhost:8070/covers/get/"+ CoverTempID)
+        .then((res) => {
+
+        
+          setCovers(res.data);
+          preview = res.data.PreviewPages;
+          instruments = res.data.InstrumentsPlayedOn;
+          for(let i = 0; i < instruments.length; i++){
+            if(instruments.length == 1){
+              instrumentsTxt += instruments[i];
+            }else{
+              instrumentsTxt += instruments[i] + ", ";
+
+            }
+          }
+          document.getElementById("instruments").innerHTML = instrumentsTxt;
+
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    }
+
+    getCovers();
+  }, []);
   return (
     <div>
       <br />
@@ -35,27 +71,23 @@ export default function LessonsAndCoversDetailed(props) {
                   </ol>
                   {/* loop images  */}
                   <div class="carousel-inner">
-                    <div class="carousel-item active">
-                      <img
-                        class="d-block w-100"
-                        src={"/images/923d10247b982186a4ebb24b7ba6fba8.jpg"}
-                        alt="First slide"
-                      />
-                    </div>
-                    <div class="carousel-item">
-                      <img
-                        class="d-block w-100"
-                        src={"/images/923d10247b982186a4ebb24b7ba6fba8.jpg"}
-                        alt="Second slide"
-                      />
-                    </div>
-                    <div class="carousel-item">
-                      <img
-                        class="d-block w-100"
-                        src={"/images/923d10247b982186a4ebb24b7ba6fba8.jpg"}
-                        alt="Third slide"
-                      />
-                    </div>
+                  <div class="carousel-item active">
+                        <img
+                          class="d-block w-100"
+                          src={"/images/test2.jpg"}
+                          alt="slide"
+                        /></div>
+                    {/* {preview.map((coverPreview,index)=> {
+                      return (
+                        <div class="carousel-item">
+                        <img
+                          class="d-block w-100"
+                          src={"/images/test2.jpg"}
+                          alt="slide"
+                        /></div>
+                      );
+                    })} */}
+                  
                   </div>
                   {/* controls  */}
                   <a
@@ -107,16 +139,17 @@ export default function LessonsAndCoversDetailed(props) {
                 <h6 style={{ display: "inline", color: "#764A34" }}>
                   No of pages to preview (free):{" "}
                 </h6>{" "}
-                <h6 style={{ display: "inline" }}>3</h6><br/>
+                <h6 style={{ display: "inline" }}>{covers.NoOfPreviewPages}</h6><br/>
                 {/* add a facebook icon  */}
-                <h6  style={{ display: "inline", color: "#764A34" }} ><a href = "https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_social_media_buttons">Facebook Link</a></h6>
+                <h6  style={{ display: "inline", color: "#764A34" }} ><a href = {covers.FacebookLink}>Facebook Link</a></h6>
                 <br />
                 <br />
                 {/* youtube video  */}
                 <div class="embed-responsive embed-responsive-16by9">
                   <iframe
                     class="embed-responsive-item"
-                    src="https://www.youtube.com/embed/CM4CkVFmTds"
+                    // need to use embeded youtube link 
+                    src={covers.YoutubeLink}               
                     title="YouTube video player"
                     frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -128,12 +161,12 @@ export default function LessonsAndCoversDetailed(props) {
               <div class="col-sm">
                 {/* main title */}
                 <h3 style={{ color: "#764A34", letterSpacing: "10px" }}>
-                  We Wish You a Merry Christmas
+                {covers.Title}
                 </h3>
                 <br />
                 {/* original artis name  */}
                 <h4 style={{ color: "#764A34", float: "right" }}>
-                  Santa Claus
+                  {covers.OriginalArtistName}
                 </h4>
                 <br />
                 <br />
@@ -148,7 +181,7 @@ export default function LessonsAndCoversDetailed(props) {
                   Arrange by :{" "}
                 </h5>{" "}
                 <h5 style={{ display: "inline", letterSpacing: "2px" }}>
-                  Niki Minaj
+                {covers.ArrangedBy}
                 </h5>
                 <br />
                 <br />
@@ -162,8 +195,8 @@ export default function LessonsAndCoversDetailed(props) {
                   {/* instruments played on array  */}
                   Instruments played on :{" "}
                 </h5>{" "}
-                <h5 style={{ display: "inline", letterSpacing: "2px" }}>
-                  Guitar
+                <h5 id = "instruments" style={{ display: "inline", letterSpacing: "2px" }}>
+                  
                 </h5>
                 <br />
                 <br />
@@ -178,7 +211,7 @@ export default function LessonsAndCoversDetailed(props) {
                   Main Category :{" "}
                 </h5>{" "}
                 <h5 style={{ display: "inline", letterSpacing: "2px" }}>
-                  Classical Guitar
+                  {covers.MainCategory}
                 </h5>
                 <br />
                 <br />
@@ -193,7 +226,7 @@ export default function LessonsAndCoversDetailed(props) {
                   Sub-category :{" "}
                 </h5>{" "}
                 <h5 style={{ display: "inline", letterSpacing: "2px" }}>
-                  English
+                  {covers.SubCategory}
                 </h5>
                 <br />
                 <br />
@@ -207,14 +240,14 @@ export default function LessonsAndCoversDetailed(props) {
                   {/* no of pages  */}
                   No of pages :{" "}
                 </h5>{" "}
-                <h5 style={{ display: "inline", letterSpacing: "2px" }}>5</h5>
+                <h5 style={{ display: "inline", letterSpacing: "2px" }}>{covers.NoOfPages}</h5>
                 <br />
                 <br />
                 <div class="container">
                   <div class="row">
                     <div class="col-sm">
                       {/* calling a another Component */}
-                      <CurrencySelect />
+                      <CurrencySelect  coverPrice = {covers.Price}/>
                       <br />
                       <h3 id="changedValue" style={{ color: "#764A34" }}></h3>
                       {/* spinner  */}
@@ -245,7 +278,7 @@ export default function LessonsAndCoversDetailed(props) {
                           color: "#764A34",
                         }}
                       >
-                        5.99
+                        {covers.Price}
                       </h1>
                     </div>
                   </div>
