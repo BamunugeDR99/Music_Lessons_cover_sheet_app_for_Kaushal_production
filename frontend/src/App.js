@@ -14,23 +14,24 @@ import MainCategoriesDataTable from "./components/adminRole/MainCategoriesDataTa
 import ViewStudentDetails from "./components/testingComponents/ViewStudentdetails";
 import CustomerHeader from "./components/customerRole/CustomerHeaderTemp";
 import CustomerFooter from "./components/customerRole/CustomerFooterTemp";
+import Footer from "./components/customerRole/footer";
 function App() {
   return (
     <BrowserRouter>
       <CustomerHeader />
       <Routes>
         <Route path="/" element={<LessonsAndCoversDetailed />} />
-        <Route path="/a" element={<CustomerRegistration />} />
+        {/* <Route path="/a" element={<CustomerRegistration />} /> */}
         <Route path="/b" element={<CustomerForgotPassword />} />
         {/* <Route path = "/c" element = {<DiscoverMoreCovers/>}/> */}
-        <Route path="/table" element={<DataTableTest />} />
-        <Route path="/d" element={<ViewCategories />} />
-        <Route path="/e" element={<MainCategoriesDataTable />} />
+        {/* <Route path="/table" element={<DataTableTest />} /> */}
+        {/* <Route path="/d" element={<ViewCategories />} /> */}
+        {/* <Route path="/e" element={<MainCategoriesDataTable />} /> */}
         {/* <Route path="/e" element={<BootstrapDataTable />} /> */}
-        <Route path="/f" element={<AddStudent />} />
+        {/* <Route path="/f" element={<AddStudent />} /> */}
         {/* <Route path="/g" element={<ViewStudentDetails/>} /> */}
       </Routes>
-      <CustomerFooter />
+      <Footer/>
     </BrowserRouter>
 
     //Commit1
