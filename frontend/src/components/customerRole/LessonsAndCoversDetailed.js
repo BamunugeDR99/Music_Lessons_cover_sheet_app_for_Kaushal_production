@@ -17,7 +17,7 @@ export default function LessonsAndCoversDetailed(props) {
           setCovers(res.data);
           preview = res.data.PreviewPages;
           printInstruments(res.data.InstrumentsPlayedOn);
-          displayPreviewImageSlider(res.data.PreviewPages)
+          displayPreviewImageSlider(res.data.PreviewPages);
         })
         .catch((err) => {
           alert(err);
@@ -41,28 +41,26 @@ export default function LessonsAndCoversDetailed(props) {
   function displayPreviewImageSlider(previewImages) {
     let imageSlider = '<div class="carousel-inner">';
     for (let i = 0; i < previewImages.length; i++) {
-      if(i == 0){
-        let a ='src={"/images/test2.jpg"}';
-        imageSlider += '<div class="carousel-item active"><img id = "img1" class="d-block w-100" alt="slide"/></div>';
-
-        // imageSlider += '<div class="carousel-item active"><img id = "'+"img" +i +'class="d-block w-100" alt="slide"/></div>';
-      }else{
-        //imageSlider += '<div class="carousel-item"><img  id = "'+"img" +i + 'class="d-block w-100" alt="slide"/></div>'; 
+      if (i == 0) {
+        imageSlider +=
+          '<div class="carousel-item active"><img id = "' +
+          "img" +
+          i +
+          '" class="d-block w-100" alt="slide"/></div>';
+      } else {
+        imageSlider +=
+          '<div class="carousel-item"><img  id = "' +
+          "img" +
+          i +
+          '" class="d-block w-100" alt="slide"/></div>';
       }
     }
-    imageSlider += '</div>';
+    imageSlider += "</div>";
     document.getElementById("img").innerHTML = imageSlider;
-    for(let i = 0; i < 1;i++){
-      // src={"/images/test2.jpg"}
-      //  let ImagePath = '{"/images/'+ previewImages[i]+ '"}';
-      let ImagePath = "/images/test2.jpg";
-      document.getElementById("img"+(i+1)).src = ImagePath;
+    for (let i = 0; i < previewImages.length; i++) {
+      let ImagePath = "/images/" + previewImages[i];
+      document.getElementById("img" + i).src = ImagePath;
     }
-    
-  
-
-   
-
   }
   return (
     <div>
@@ -78,7 +76,7 @@ export default function LessonsAndCoversDetailed(props) {
                   class="carousel slide"
                   data-ride="carousel"
                 >
-                  <ol class="carousel-indicators">
+                  {/* <ol class="carousel-indicators">
                     <li
                       data-target="#carouselExampleIndicators"
                       data-slide-to="0"
@@ -92,34 +90,8 @@ export default function LessonsAndCoversDetailed(props) {
                       data-target="#carouselExampleIndicators"
                       data-slide-to="2"
                     ></li>
-                  </ol>
-                  <div id = "img"></div>
-                  {/* loop images 
-                  {() => {
-                    return (
-                      <div class="carousel-inner">
-                        <div class="carousel-item active">
-                          <img
-                            class="d-block w-100"
-                            src={"/images/test2.jpg"}
-                            alt="slide"
-                          />
-                        </div>
-                        {/* {preview.map((coverPreview, index) => {
-                          return (
-                            <div class="carousel-item">
-                              <img
-                                class="d-block w-100"
-                                src={"/images/test2.jpg"}
-                                alt="slide"
-                              />
-                            </div>
-                          );
-                        })} */}
-                      {/* </div>
-                    ); */}
-                  
-
+                  </ol> */}
+                  <div id="img"></div>
                   {/* controls  */}
                   <a
                     class="carousel-control-prev"
