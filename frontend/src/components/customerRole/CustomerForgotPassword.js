@@ -19,11 +19,14 @@ export default function CustomerForgotPassword(props) {
   const [customerID, setCustomerID] = useState([]);
 
   const [usernotFoundError, setUserNotFoundError] = useState("");
-  let code = "";
-  let UserEmail = "";
+  const [codeVerification, setCodeVerification] = useState("");
+  const [resendEmailBtn,setResendEmailBtn]= useState(true); 
+  const [genCode,setCode] = useState("");
+  let UserEmail = "";  
 
   function sendEmail(e) {
     e.preventDefault();
+    setResendEmailBtn(true);
     setLoading(false);
     UserEmail = document.getElementById("userEmail").value;
 
@@ -56,13 +59,12 @@ export default function CustomerForgotPassword(props) {
   }
 
   function emailConfiguration() {
-    code = generateCode(8);
+    const generatedCode = generateCode(8);
+    setCode(generatedCode);
     const emailContent = {
       email: UserEmail,
-      code: code,
+      code: generatedCode,
     };
-    console.log(emailContent);
-
     emailjs
       .send(
         "service_d2vcq28", //your service id
@@ -121,11 +123,39 @@ export default function CustomerForgotPassword(props) {
 
   function verifyCode(){
     setLoading(false);
-    const UserCode = document.getElementById("userCode").value;
-    if(UserCode === code){
+    setCodeVerification("");
 
-    }else if(UserCode != code){
-      
+    const UserCode = document.getElementById("userCode").value;
+    if(UserCode == genCode){
+      setLoading(true);
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "center",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: false,
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
+
+      Toast.fire({
+        icon: "success",
+        title: "Code verified successfully",
+      });
+
+      setLockKeyImage(true);
+      setUnLockKeyImage(false);
+      setStageOneStatus(true);
+      setStageTwoStatus(true);
+      setStageThreeStatus(false);
+
+    }else if(UserCode != genCode){
+      setLoading(true);
+      setCodeVerification("Code verification unsuccessful! ( Please try again! )");
+      setResendEmailBtn(false);
+
     }
   }
   return (
@@ -228,7 +258,10 @@ export default function CustomerForgotPassword(props) {
 
             {/* stage 2 */}
             <div hidden={stageTwoStatus}>
-              <h6 style = {{textAlign : "center",color : "#279B14"}}>Enter the code that has been sent to {UserEmail}</h6>
+              <h6 style = {{textAlign : "center",color : "#279B14"}}>Enter the code which was in the email</h6>
+              <h6 style={{ textAlign: "center", color: "#D0193A" }}>
+                {codeVerification}
+              </h6>
               <div class="input-group">
                 {" "}
                 <span class="input-group-append bg-white border-right-10">
@@ -266,6 +299,24 @@ export default function CustomerForgotPassword(props) {
                   onClick={() => verifyCode()}
                 >
                   Verify Code
+                </button>
+                <br/>
+                <button
+                  type="button"
+                  class="btn btn-block"
+                  hidden = {resendEmailBtn}
+                  style={{
+                    backgroundColor: "#764A34",
+                    color: "#ffffff",
+                    borderRadius: "8px",
+                  }}
+                  onClick={() => {
+                    setStageOneStatus(false);
+                    setStageTwoStatus(true);
+                    setStageThreeStatus(true);
+                  }}
+                >
+                  Resend Email
                 </button>
               </div>
             </div>
