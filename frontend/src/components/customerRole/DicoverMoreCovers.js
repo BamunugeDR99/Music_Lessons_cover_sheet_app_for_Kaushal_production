@@ -1,6 +1,31 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import axios from "axios";
 export default function DiscoverMoreCovers(props) {
+  const [recommenedCovers,setRecommendedCovers] = useState([]);
+  useEffect(() => {
+    function getRecommendCovers() {
+      // const content = {
+      //   MainCategory : props.MainCategory,
+      //   SubCategory : props.SubCategory
+      // }
+      const contents = {
+        MainCategory : "Classical Guitar Covers",
+        SubCategory : "English"
+      } 
+      console.log(contents);
+      axios
+        .get("http://localhost:8070/covers/getRecommendations",contents)
+        .then((res) => {
+          setRecommendedCovers(res.data);
+          console.log(res.data);
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    }
+
+    getRecommendCovers();
+  }, []);
   return (
     // 3 cards will be shown  so there needs to be 2 maps
     <div className="container-lg">
