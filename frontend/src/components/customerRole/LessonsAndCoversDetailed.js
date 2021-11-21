@@ -108,7 +108,8 @@ export default function LessonsAndCoversDetailed(props) {
                   No of pages to preview (free):{" "}
                 </h6>{" "}
                 <h6 style={{ display: "inline" }}>3</h6><br/>
-                {/* <h6  style={{ display: "inline", color: "#764A34" }} >Facebook link : </h6> <h6 style={{ display: "inline" }}><a>https://stackoverflow.com/questions/38518278/how-to-use-jquery-with-reactjs</a></h6> */}
+                {/* add a facebook icon  */}
+                <h6  style={{ display: "inline", color: "#764A34" }} ><a href = "https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_social_media_buttons">Facebook Link</a></h6>
                 <br />
                 <br />
                 {/* youtube video  */}
