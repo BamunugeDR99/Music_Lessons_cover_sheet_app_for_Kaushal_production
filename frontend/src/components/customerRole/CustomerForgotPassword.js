@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import emailjs from "emailjs-com";
 import Swal from "sweetalert2";
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 
 // import $ from "jquery";
 
@@ -24,8 +24,8 @@ export default function CustomerForgotPassword(props) {
   const [usernotFoundError, setUserNotFoundError] = useState("");
   const [codeVerification, setCodeVerification] = useState("");
   const [changePStatus, setChangePStatus] = useState("");
-  const [passwordMatchDiv,setPasswordMatchDiv] = useState(true);
-  const [passwordMisMatchDiv,setPasswordMisMatchDiv] = useState(true);
+  const [passwordMatchDiv, setPasswordMatchDiv] = useState(true);
+  const [passwordMisMatchDiv, setPasswordMisMatchDiv] = useState(true);
   const [resendEmailBtn, setResendEmailBtn] = useState(true);
   const [genCode, setCode] = useState("");
   let UserEmail = "";
@@ -209,24 +209,28 @@ export default function CustomerForgotPassword(props) {
         }).then((result) => {
           if (result.isConfirmed) {
             const newPasswordObject = {
-              Password :  bcrypt.hashSync(newPassword, bcrypt.genSaltSync(12))
-            }
+              Password: bcrypt.hashSync(newPassword, bcrypt.genSaltSync(12)),
+            };
 
             axios
-            .put("http://localhost:8070/customer/updatePassword/"+customerID,newPasswordObject)
-            .then((res) => {
-              Swal.fire("Password Updated!", "You can log back in ", "success");
-              setLoading(true);
-               // navigate to the login page
-            })
-            .catch((err) => {
-              // alert(err);
-              Swal.fire("Error has been occured please try again!", "error");
-            });
-
-          
-           
-          }else{
+              .put(
+                "http://localhost:8070/customer/updatePassword/" + customerID,
+                newPasswordObject
+              )
+              .then((res) => {
+                Swal.fire(
+                  "Password Updated!",
+                  "You can log back in ",
+                  "success"
+                );
+                setLoading(true);
+                // navigate to the login page
+              })
+              .catch((err) => {
+                // alert(err);
+                Swal.fire("Error has been occured please try again!", "error");
+              });
+          } else {
             setLoading(true);
           }
         });
@@ -403,7 +407,7 @@ export default function CustomerForgotPassword(props) {
 
             {/* stage 3 */}
             <div hidden={stageThreeStatus}>
-              <div className="text-center" hidden = {passwordMatchDiv}>
+              <div className="text-center" hidden={passwordMatchDiv}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="40"
@@ -414,9 +418,11 @@ export default function CustomerForgotPassword(props) {
                 >
                   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
                 </svg>
-                <p style = {{color : "#279B14"}}><b>Password Match</b></p>
+                <p style={{ color: "#279B14" }}>
+                  <b>Password Match</b>
+                </p>
               </div>
-              <div className = "text-center" hidden = {passwordMisMatchDiv}>
+              <div className="text-center" hidden={passwordMisMatchDiv}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="40"
@@ -427,7 +433,9 @@ export default function CustomerForgotPassword(props) {
                 >
                   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
                 </svg>
-                <p style = {{color : "#D0193A"}}><b>Password MisMatch</b></p>
+                <p style={{ color: "#D0193A" }}>
+                  <b>Password MisMatch</b>
+                </p>
               </div>
 
               <form onSubmit={changePassword}>
@@ -518,9 +526,10 @@ export default function CustomerForgotPassword(props) {
                     id="confirmPassword"
                     required
                     onChange={(e) => {
-                      if(document.getElementById("newPassword").value === ""){
-
-                      }else if(document.getElementById("newPassword").value != ""){
+                      if (document.getElementById("newPassword").value === "") {
+                      } else if (
+                        document.getElementById("newPassword").value != ""
+                      ) {
                         if (
                           e.target.value ===
                           document.getElementById("newPassword").value
@@ -534,9 +543,7 @@ export default function CustomerForgotPassword(props) {
                           setChangePStatus(true);
                         }
                       }
-                
-                    }
-                  }
+                    }}
                     placeholder="Confirm Password"
                   />
                   <span class="input-group-append bg-white border-left-0">
