@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import emailjs from "emailjs-com";
+
 
 export default function CustomerForgotPassword(props) {
   const [stageOneStatus, setStageOneStatus] = useState(false);
@@ -14,30 +16,74 @@ export default function CustomerForgotPassword(props) {
   const [CeyeSlashIcon, setCEyeSlashIcon] = useState(false);
   const [CeyeIcon, setCEyeIcon] = useState(true);
 
-  const [customer,setCustomer] = useState([]);
+  const [customerID, setCustomerID] = useState([]);
 
-  function sendEmail(){
-   const UserEmail = document.getElementById("userEmail").value;
-   
+  const [usernotFoundError, setUserNotFoundError] = useState("");
+  let code = "";
+
+  function sendEmail(e) {
+    e.preventDefault();
+    const UserEmail = document.getElementById("userEmail").value;
+
     axios
-      .get("http://localhost:8070/customer/getEmail/"+ UserEmail)
+      .get("http://localhost:8070/customer/getEmail/" + UserEmail)
       .then((res) => {
-        if(res.data === null){
-          console.log("customer not exisit");
-        }else if(res.data != null){
-          setCustomer(res.data);
-          console.log(res.data);
-        }
+        if (res.data === null) {
+          setUserNotFoundError("User not found!");
+        } else if (res.data != null) {
+          setCustomerID(res.data);
+          setUserNotFoundError("");
+          emailConfiguration();
 
+   
+        }
       })
       .catch((err) => {
         alert(err);
       });
 
-    // if (stageOneStatus == false) {
+  }
+
+  function generateCode(length) {
+    var result = "";
+    var characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
+
+
+  function emailConfiguration(){
+    emailContent = {
+      email,
+      Code,
+    };
+    console.log(emailContent);
+
+    emailjs
+      .send(
+        "service_f2jwhyr", //your service id
+        "template_25xzkan", // template id
+        emailContent,
+        "user_twU9MTlC54wOOrtS498AM" //
+      )
+      .then(
+        (result) => {
+
+          // document.getElementById("verifyBtn").disabled = false;
+ // if (stageOneStatus == false) {
     //   setStageTwoStatus(false);
     //   setStageOneStatus(true);
     // }
+
+        },
+        (error) => {
+    
+        }
+      );
   }
   return (
     <div>
@@ -88,45 +134,49 @@ export default function CustomerForgotPassword(props) {
             {/* enter email field */}
             {/* stage 1 */}
             <div hidden={stageOneStatus}>
-              <div class="input-group">
-                {" "}
-                <span class="input-group-append bg-white border-right-10">
-                  <span class="input-group-text bg-transparent">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      fill="#764A34"
-                      class="bi bi-envelope-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z" />
-                    </svg>
+              <h6 style={{ textAlign: "center", color: "#D0193A" }}>
+                {usernotFoundError}
+              </h6>
+              <form onSubmit={sendEmail}>
+                <div class="input-group">
+                  {" "}
+                  <span class="input-group-append bg-white border-right-10">
+                    <span class="input-group-text bg-transparent">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        fill="#764A34"
+                        class="bi bi-envelope-fill"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z" />
+                      </svg>
+                    </span>
                   </span>
-                </span>
-                <input
-                  class="form-control border-left-0"
-                  type="email"
-                  id="userEmail"
-                  placeholder="Enter Email"
-                />
-              </div>
-              <br />
-              {/* get code btn  */}
-              <div class="text-center">
-                <button
-                  type="button"
-                  class="btn btn-block"
-                  style={{
-                    backgroundColor: "#764A34",
-                    color: "#ffffff",
-                    borderRadius: "8px",
-                  }}
-                  onClick={() => sendEmail()}
-                >
-                  Get Code
-                </button>
-              </div>
+                  <input
+                    class="form-control border-left-0"
+                    type="email"
+                    id="userEmail"
+                    placeholder="Enter Email"
+                  />
+                </div>
+                <br />
+                {/* get code btn  */}
+                <div class="text-center">
+                  <button
+                    type="submit"
+                    class="btn btn-block"
+                    style={{
+                      backgroundColor: "#764A34",
+                      color: "#ffffff",
+                      borderRadius: "8px",
+                    }}
+                  >
+                    Get Code
+                  </button>
+                </div>
+              </form>
             </div>
 
             {/* stage 2 */}
