@@ -14,6 +14,8 @@ import MainCategoriesDataTable from "./components/adminRole/MainCategoriesDataTa
 import ViewStudentDetails from "./components/testingComponents/ViewStudentdetails";
 import CustomerHeader from "./components/customerRole/CustomerHeaderTemp";
 import CustomerFooter from "./components/customerRole/CustomerFooterTemp";
+import PurchaseHistory from "./components/purchaseHistory";
+
 function App() {
   return (
     <BrowserRouter>
@@ -28,6 +30,7 @@ function App() {
         <Route path="/e" element={<MainCategoriesDataTable />} />
         {/* <Route path="/e" element={<BootstrapDataTable />} /> */}
         <Route path="/f" element={<AddStudent />} />
+        <Route path="/history" element={<PurchaseHistory/>} />
         {/* <Route path="/g" element={<ViewStudentDetails/>} /> */}
       </Routes>
       <CustomerFooter />
