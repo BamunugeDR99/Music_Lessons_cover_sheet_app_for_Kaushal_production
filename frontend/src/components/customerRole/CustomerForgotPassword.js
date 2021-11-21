@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import emailjs from "emailjs-com";
-
+import Swal from "sweetalert2";
 
 export default function CustomerForgotPassword(props) {
   const [stageOneStatus, setStageOneStatus] = useState(false);
@@ -15,33 +15,33 @@ export default function CustomerForgotPassword(props) {
   const [eyeIcon, setEyeIcon] = useState(true);
   const [CeyeSlashIcon, setCEyeSlashIcon] = useState(false);
   const [CeyeIcon, setCEyeIcon] = useState(true);
-
+  const [loading, setLoading] = useState(true);
   const [customerID, setCustomerID] = useState([]);
 
   const [usernotFoundError, setUserNotFoundError] = useState("");
   let code = "";
+  let UserEmail = "";
 
   function sendEmail(e) {
     e.preventDefault();
-    const UserEmail = document.getElementById("userEmail").value;
+    setLoading(false);
+    UserEmail = document.getElementById("userEmail").value;
 
     axios
       .get("http://localhost:8070/customer/getEmail/" + UserEmail)
       .then((res) => {
         if (res.data === null) {
+          setLoading(true);
           setUserNotFoundError("User not found!");
         } else if (res.data != null) {
           setCustomerID(res.data);
           setUserNotFoundError("");
           emailConfiguration();
-
-   
         }
       })
       .catch((err) => {
         alert(err);
       });
-
   }
 
   function generateCode(length) {
@@ -55,35 +55,78 @@ export default function CustomerForgotPassword(props) {
     return result;
   }
 
-
-  function emailConfiguration(){
-    emailContent = {
-      email,
-      Code,
+  function emailConfiguration() {
+    code = generateCode(8);
+    const emailContent = {
+      email: UserEmail,
+      code: code,
     };
     console.log(emailContent);
 
     emailjs
       .send(
-        "service_f2jwhyr", //your service id
-        "template_25xzkan", // template id
+        "service_d2vcq28", //your service id
+        "template_pcwlvj6", // template id
         emailContent,
-        "user_twU9MTlC54wOOrtS498AM" //
+        "user_TGhnW7M8Z4dNu0PzvbuZ9" //
       )
       .then(
         (result) => {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "center",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: false,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
 
-          // document.getElementById("verifyBtn").disabled = false;
- // if (stageOneStatus == false) {
-    //   setStageTwoStatus(false);
-    //   setStageOneStatus(true);
-    // }
+          Toast.fire({
+            icon: "success",
+            title: "Email sent to " + UserEmail,
+          });
 
+          setLoading(true);
+          if (stageOneStatus == false) {
+            setStageTwoStatus(false);
+            setStageOneStatus(true);
+          }
         },
         (error) => {
-    
+          setLoading(true);
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "center",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: false,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+
+          Toast.fire({
+            icon: "error",
+            title: "Error has been occured please try again!",
+          });
         }
       );
+  }
+
+  function hideEmail() {}
+
+  function verifyCode(){
+    setLoading(false);
+    const UserCode = document.getElementById("userCode").value;
+    if(UserCode === code){
+
+    }else if(UserCode != code){
+      
+    }
   }
   return (
     <div>
@@ -129,7 +172,11 @@ export default function CustomerForgotPassword(props) {
               <h5 style={{ color: "#000000" }}>
                 You can reset your password from here.
               </h5>
+              <div class="spinner-border" role="status" hidden={loading}>
+                <span class="sr-only">Loading...</span>
+              </div>
             </div>
+
             <br />
             {/* enter email field */}
             {/* stage 1 */}
@@ -181,6 +228,7 @@ export default function CustomerForgotPassword(props) {
 
             {/* stage 2 */}
             <div hidden={stageTwoStatus}>
+              <h6 style = {{textAlign : "center",color : "#279B14"}}>Enter the code that has been sent to {UserEmail}</h6>
               <div class="input-group">
                 {" "}
                 <span class="input-group-append bg-white border-right-10">
@@ -215,14 +263,7 @@ export default function CustomerForgotPassword(props) {
                     color: "#ffffff",
                     borderRadius: "8px",
                   }}
-                  onClick={() => {
-                    if (stageTwoStatus == false) {
-                      setStageThreeStatus(false);
-                      setStageTwoStatus(true);
-                      setLockKeyImage(true);
-                      setUnLockKeyImage(false);
-                    }
-                  }}
+                  onClick={() => verifyCode()}
                 >
                   Verify Code
                 </button>
