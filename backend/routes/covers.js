@@ -63,11 +63,10 @@ router.route("/add").post((req, res) => {
           FacebookLink: newCovers.FacebookLink,
           CoverPdf: newCovers.CoverPdf,
           FeedBackIDs: newCovers.FeedBackIDs,
-          Status : newCovers.Status,
+          Status: newCovers.Status,
           // UpdatedDateAndTime : newCovers.UpdatedDateAndTime,
-          UpdatedUser : newCovers.UpdatedUser,
+          UpdatedUser: newCovers.UpdatedUser,
           // AddedDateAndTime : newCovers.AddedDateAndTime,
-          
         },
       });
     })
@@ -97,7 +96,7 @@ router.route("/getcovers").get((reg, res) => {
 //     })
 //     .catch((err) => {
 //       console.log(err);
-      
+
 //     });
 // });
 
@@ -123,10 +122,9 @@ router.route("/update/:id").put(async (req, res) => {
     // UpdatedDateAndTime ,
     UpdatedUser,
     // AddedDateAndTime,
-   
   } = req.body;
 
-  const updateCovers= {
+  const updateCovers = {
     Title,
     OriginalArtistName,
     ArrangedBy,
@@ -142,10 +140,9 @@ router.route("/update/:id").put(async (req, res) => {
     CoverPdf,
     FeedBackIDs,
     Status,
-    UpdatedDateAndTime : new Date(),
+    UpdatedDateAndTime: new Date(),
     UpdatedUser,
     // AddedDateAndTime,
-   
   };
 
   const update = await Covers.findByIdAndUpdate(coverID, updateCovers)
@@ -190,55 +187,42 @@ router.route("/get/:id").get(async (req, res) => {
     });
 });
 
-
-
 //Update Discount
 router.route("/StatusUpdate/:id").put(async (req, res) => {
   let coverID = req.params.id;
-  const{
-        Status
-       } = req.body;
+  const { Status } = req.body;
 
-  const StatusUpdate  = {
-    Status
-  }
+  const StatusUpdate = {
+    Status,
+  };
 
   const update = await Covers.updateOne(
-
-    {_id : coverID},
-    {$set : {Status :Status}},
-
-
-  ).then(() => {
-
-    res.status(200).send({ status: "Status updated" });
-  })
-  .catch((err) => {
-    console.log(err);
-    res
-      .status(500)
-      .send({ status: "Error with updating data", error: err.message });
-  });
-
-
-  });
-
-  router.route("/getRecommendations").get(async (req,res) =>{
-
-    const mainCategory = req.body.MainCategory;
-    const subCategory = req.body.SubCategory;
-
-    try{
-        
-    const covers = await Covers.find({MainCategory:mainCategory, SubCategory:subCategory})
-        res.json(covers);
-
-    }catch(err){
-
-        console.log(err.message);
-        res.status(500).send({status : "Error with get user", error : err.message});
-    }
+    { _id: coverID },
+    { $set: { Status: Status } }
+  )
+    .then(() => {
+      res.status(200).send({ status: "Status updated" });
+    })
+    .catch((err) => {
+      console.log(err);
+      res
+        .status(500)
+        .send({ status: "Error with updating data", error: err.message });
+    });
 });
 
+router.route("/getRecommendations").get(async (req, res) => {
+  const { MainCategory, SubCategory } = req.body;
+
+  await Covers.find({ MainCategory: MainCategory, SubCategory: SubCategory })
+    .then((covers) => {
+      res.json(covers);
+    })
+    .catch((err) => {
+      res
+        .status(500)
+        .send({ status: "Error with get user", error: err.message });
+    });
+});
 
 module.exports = router;

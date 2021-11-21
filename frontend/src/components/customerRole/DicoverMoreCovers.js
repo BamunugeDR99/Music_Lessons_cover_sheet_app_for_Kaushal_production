@@ -4,17 +4,9 @@ export default function DiscoverMoreCovers(props) {
   const [recommenedCovers,setRecommendedCovers] = useState([]);
   useEffect(() => {
     function getRecommendCovers() {
-      // const content = {
-      //   MainCategory : props.MainCategory,
-      //   SubCategory : props.SubCategory
-      // }
-      const contents = {
-        MainCategory : "Classical Guitar Covers",
-        SubCategory : "English"
-      } 
-      console.log(contents);
+   
       axios
-        .get("http://localhost:8070/covers/getRecommendations",contents)
+        .get("http://localhost:8070/covers/getCovers")
         .then((res) => {
           setRecommendedCovers(res.data);
           console.log(res.data);
