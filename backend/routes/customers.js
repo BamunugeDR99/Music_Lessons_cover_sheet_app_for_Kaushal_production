@@ -235,7 +235,11 @@ router.route("/getEmail/:email").get(async (req, res) => {
   const user = await Customer.findOne({ Email: email })
     .then((customer) => {
       // res.status(200).send({status:"User fetched"});
-      res.json(customer._id);
+      if(customer != null){
+        res.json(customer._id);
+      }else if(customer == null){
+          res.json(null);
+      }
     })
     .catch((err) => {
       console.log(err.message);
