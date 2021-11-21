@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import CurrencySelect from "./CurrencySelect";
 import DiscoverMoreCovers from "./DicoverMoreCovers";
+import Swal from "sweetalert2";
 
 export default function LessonsAndCoversDetailed(props) {
   const [covers, setCovers] = useState([]);
@@ -62,6 +63,62 @@ export default function LessonsAndCoversDetailed(props) {
       document.getElementById("img" + i).src = ImagePath;
     }
   }
+
+  function addToCart(id) {
+    //alert(id);
+
+    //let customerID = localStorage.getItem("CustomerID");
+    let newItems = []; /// Change this later
+    const customerID = "6199d490bfd483038f7067bf";
+    let coverIDs = [];
+    let shoppingcartId = "";
+    axios
+      .get("http://localhost:8070/shoppingCart/getOneCart/" + customerID)
+      .then((res) => {
+        console.log(res.data.CoverIDs);
+        coverIDs = res.data.CoverIDs;
+        shoppingcartId = res.data._id;
+        let falgs = 0;
+        for (let i = 0; i < coverIDs.length; i++) {
+          if (coverIDs[i] === id) {
+            falgs = 1;
+          }
+        }
+        coverIDs.push(id);
+        console.log(coverIDs);
+        const newcoverList = {
+          CustomerID : customerID,
+           CoverIDs: coverIDs,
+        };
+        console.log(newcoverList);
+        if (falgs === 0) {
+          axios
+            .put(
+              "http://localhost:8070/shoppingCart/updateSItem/" +
+                shoppingcartId,
+              newcoverList
+            )
+            .then(() => {
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Cover has been added to your shopping cart!",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            })
+            .catch((err) => {
+              alert(err);
+            });
+        } else if (falgs === 1) {
+          Swal.fire("Cover Already in Your shopping cart.");
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }
+
   return (
     <div>
       <br />
@@ -295,15 +352,31 @@ export default function LessonsAndCoversDetailed(props) {
                   <button
                     type="button"
                     class="btn btn-success btn-block rounded"
+                    onClick={() => addToCart(covers._id)}
                   >
                     Add to cart
                   </button>
                   <br />
                   <br />
                   <div className="container-sm">
+                    {/* directly going to the payment gateway */}
                     <button
                       type="button"
                       class="btn btn-success btn-block rounded"
+                      onClick={() => {
+                        Swal.fire({
+                          title: "Are you sure?",
+                          icon: "warning",
+                          showCancelButton: true,
+                          confirmButtonColor: "#764A34",
+                          cancelButtonColor: "#D0193A",
+                          confirmButtonText: "Yes",
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            alert("Bought");
+                          }
+                        });
+                      }}
                     >
                       Buy it now
                     </button>

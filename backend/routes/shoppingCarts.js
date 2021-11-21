@@ -124,32 +124,31 @@ router.route("/updateCartCovers/:id").put(async (req, res) => {
     
 
 
-    // router.route("/updateSItem/:id").put(async (req, res) => {
-    //     let CartID = req.params.id;
-    //     const {
-    //       customerID,
-    //       ItemIDs,PackageIDs
+    router.route("/updateSItem/:id").put(async (req, res) => {
+        let shoppingID = req.params.id;
+        const {
+          CustomerID,
+          CoverIDs,
         
-    //     } = req.body;
+        } = req.body;
       
-    //     const updateItem = {
-    //       customerID,
-    //       ItemIDs,
-    //       PackageIDs
+        const updateItem = {
+         CustomerID,
+         CoverIDs
       
-    //     };
+        };
       
-    //     const update = await Cart.findByIdAndUpdate(CartID, updateItem)
-    //       .then(() => {
-    //         res.status(200).send({ status: "cart updated" });
-    //       })
-    //       .catch((err) => {
-    //         console.log(err);
-    //         res
-    //           .status(500)
-    //           .send({ status: "Error with updating data", error: err.message });
-    //       });
-    //   });
+        const update = await Cart.findByIdAndUpdate(shoppingID, updateItem)
+          .then(() => {
+            res.status(200).send({ status: "cart updated" });
+          })
+          .catch((err) => {
+            console.log(err);
+            res
+              .status(500)
+              .send({ status: "Error with updating data", error: err.message });
+          });
+      });
     
 
 
