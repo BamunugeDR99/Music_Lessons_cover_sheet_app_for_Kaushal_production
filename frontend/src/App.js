@@ -15,6 +15,7 @@ import ViewStudentDetails from "./components/testingComponents/ViewStudentdetail
 import CustomerHeader from "./components/customerRole/CustomerHeaderTemp";
 import CustomerFooter from "./components/customerRole/CustomerFooterTemp";
 import Footer from "./components/customerRole/footer";
+import ViewCovers from "./components/adminRole/ViewCovers";
 function App() {
   return (
     <BrowserRouter>
@@ -23,6 +24,7 @@ function App() {
         <Route path="/" element={<LessonsAndCoversDetailed />} />
         {/* <Route path="/a" element={<CustomerRegistration />} /> */}
         <Route path="/b" element={<CustomerForgotPassword />} />
+        <Route path="/c" element={<ViewCovers/>} />
         {/* <Route path = "/c" element = {<DiscoverMoreCovers/>}/> */}
         {/* <Route path="/table" element={<DataTableTest />} /> */}
         {/* <Route path="/d" element={<ViewCategories />} /> */}
