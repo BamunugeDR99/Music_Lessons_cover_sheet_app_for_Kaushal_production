@@ -221,7 +221,24 @@ router.route("/StatusUpdate/:id").put(async (req, res) => {
   });
 
 
-  })
+  });
+
+  router.route("/getRecommendations").get(async (req,res) =>{
+
+    const mainCategory = req.body.MainCategory;
+    const subCategory = req.body.SubCategory;
+
+    try{
+        
+    const covers = await Covers.find({MainCategory:mainCategory, SubCategory:subCategory})
+        res.json(covers);
+
+    }catch(err){
+
+        console.log(err.message);
+        res.status(500).send({status : "Error with get user", error : err.message});
+    }
+});
 
 
 module.exports = router;
