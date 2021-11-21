@@ -14,6 +14,31 @@ export default function CustomerForgotPassword(props) {
   const [CeyeSlashIcon, setCEyeSlashIcon] = useState(false);
   const [CeyeIcon, setCEyeIcon] = useState(true);
 
+  const [customer,setCustomer] = useState([]);
+
+  function sendEmail(){
+   const UserEmail = document.getElementById("userEmail").value;
+   
+    axios
+      .get("http://localhost:8070/customer/getEmail/"+ UserEmail)
+      .then((res) => {
+        if(res.data === null){
+          console.log("customer not exisit");
+        }else if(res.data != null){
+          setCustomer(res.data);
+          console.log(res.data);
+        }
+
+      })
+      .catch((err) => {
+        alert(err);
+      });
+
+    // if (stageOneStatus == false) {
+    //   setStageTwoStatus(false);
+    //   setStageOneStatus(true);
+    // }
+  }
   return (
     <div>
       <br />
@@ -56,7 +81,7 @@ export default function CustomerForgotPassword(props) {
             <br />
             <div class="text-center">
               <h5 style={{ color: "#000000" }}>
-                You can reset your password here.
+                You can reset your password from here.
               </h5>
             </div>
             <br />
@@ -97,12 +122,7 @@ export default function CustomerForgotPassword(props) {
                     color: "#ffffff",
                     borderRadius: "8px",
                   }}
-                  onClick={() => {
-                    if (stageOneStatus == false) {
-                      setStageTwoStatus(false);
-                      setStageOneStatus(true);
-                    }
-                  }}
+                  onClick={() => sendEmail()}
                 >
                   Get Code
                 </button>
