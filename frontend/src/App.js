@@ -16,6 +16,7 @@ import CustomerHeader from "./components/customerRole/CustomerHeaderTemp";
 import CustomerFooter from "./components/customerRole/CustomerFooterTemp";
 import Footer from "./components/customerRole/footer";
 import ViewCovers from "./components/adminRole/ViewCovers";
+import CoverManagementPage from "./components/adminRole/CoverManagementPage";
 function App() {
   return (
     <BrowserRouter>
@@ -25,6 +26,7 @@ function App() {
         {/* <Route path="/a" element={<CustomerRegistration />} /> */}
         <Route path="/b" element={<CustomerForgotPassword />} />
         <Route path="/c" element={<ViewCovers/>} />
+        <Route path="/d" element={<CoverManagementPage/>} />
         {/* <Route path = "/c" element = {<DiscoverMoreCovers/>}/> */}
         {/* <Route path="/table" element={<DataTableTest />} /> */}
         {/* <Route path="/d" element={<ViewCategories />} /> */}
