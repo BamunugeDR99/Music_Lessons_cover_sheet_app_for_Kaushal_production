@@ -14,12 +14,16 @@ import MainCategoriesDataTable from "./components/adminRole/MainCategoriesDataTa
 import ViewStudentDetails from "./components/testingComponents/ViewStudentdetails";
 import CustomerHeader from "./components/customerRole/CustomerHeaderTemp";
 import CustomerFooter from "./components/customerRole/CustomerFooterTemp";
+import Login from "./components/customerRole/loginpage";
+import MusicCart from "./components/customerRole/music_cart";
 function App() {
   return (
     <BrowserRouter>
       <CustomerHeader />
       <Routes>
         <Route path="/" element={<LessonsAndCoversDetailed />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/cart" element={<MusicCart />} />
         <Route path="/a" element={<CustomerRegistration />} />
         <Route path="/b" element={<CustomerForgotPassword />} />
         {/* <Route path = "/c" element = {<DiscoverMoreCovers/>}/> */}

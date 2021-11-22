@@ -15,11 +15,6 @@ router.route("/add").post(async(req,res)=>{
     const Country = req.body.Country;
     const Username = req.body.Username;
     const Password = req.body.Password;
-    // const FeedBackIDs = req.body.FeedBackIDs;
-    // const OrderIDs = req.body.OrderIDs;
-    // const LoginStatus = req.body.LoginStatus;
-    // const DeleteStatus = req.body.DeleteStatus;
-    // const UpdatedUser = req.body.UpdatedUser;
     
     
  try{

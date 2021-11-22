@@ -105,7 +105,7 @@ export default function MusicCart(props) {
                                     <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                                         Temporary Amount
                                         <input
-                                            class="border-0"
+                                            class="border-0 border-none"
                                             type="text"
                                             id="GrandTotal"
                                             value="750.00"
@@ -121,7 +121,7 @@ export default function MusicCart(props) {
 
                                         </div>
                                         <input
-                                            class="border-0"
+                                            class="border-0 border-none"
                                             type="text"
                                             id="GrandTotal2"
                                             value="750.00"
