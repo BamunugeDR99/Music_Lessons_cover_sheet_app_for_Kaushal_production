@@ -18,6 +18,7 @@ import Footer from "./components/customerRole/footer";
 import ViewCovers from "./components/adminRole/ViewCovers";
 import CoverManagementPage from "./components/adminRole/CoverManagementPage";
 import ViewLessons from "./components/adminRole/ViewLessons";
+import AdminHeader from "./components/adminRole/adminheader";
 function App() {
   return (
     <BrowserRouter>
@@ -29,9 +30,9 @@ function App() {
         <Route path="/CoverManagement" element={<CoverManagementPage />} />
         <Route path="/c" element={<ViewCovers />} />
         <Route path="/d" element={<ViewLessons />} />
-        
+        <Route path = "/e" element = {<AdminHeader/>}/>
 
-        {/* <Route path="/a" element={<CustomerRegistration />} /> */}
+        <Route path="/a" element={<CustomerRegistration />} />
         {/* <Route path = "/c" element = {<DiscoverMoreCovers/>}/> */}
         {/* <Route path="/table" element={<DataTableTest />} /> */}
         {/* <Route path="/d" element={<ViewCategories />} /> */}
