@@ -5,17 +5,14 @@ import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 export default function ViewCovers(props) {
   $(document).ready(function () {
-    $("#example").DataTable();
-  });
-  $(document).ready(function () {
-    $("#Covers").DataTable();
+    $("#LessonsAndExcercises").DataTable();
   });
 
   return (
     <div>
       <div className="container" style={{ overflowX: "auto" }}>
         <table
-          id="Covers"
+          id="LessonsAndExcercises"
           class="table table-striped table-bordered table-hover"
           style={{ width: "100%" }}
         >
