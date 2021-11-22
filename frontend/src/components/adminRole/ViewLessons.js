@@ -3,7 +3,7 @@ import axios from "axios";
 import $ from "jquery";
 import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
-export default function ViewCovers(props) {
+export default function ViewLessons(props) {
   $(document).ready(function () {
     $("#LessonsAndExcercises").DataTable();
   });
