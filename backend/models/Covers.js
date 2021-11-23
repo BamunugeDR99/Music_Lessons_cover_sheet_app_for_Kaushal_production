@@ -83,7 +83,7 @@ const CoversSchema = new Schema({
     Status : {
         type : String,
         required : false,
-        default : "0"
+        default : "1"
     },
 
     UpdatedDateAndTime : {

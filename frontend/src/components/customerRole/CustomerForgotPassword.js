@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PasswordStrengthIndicator from "./passwordStrength";
 import axios from "axios";
 import emailjs from "emailjs-com";
 import Swal from "sweetalert2";
@@ -23,41 +24,25 @@ export default function CustomerForgotPassword(props) {
 
   const [usernotFoundError, setUserNotFoundError] = useState("");
   const [codeVerification, setCodeVerification] = useState("");
-  const [changePStatus, setChangePStatus] = useState("");
+  const [changePStatus, setChangePStatus] = useState(true);
   const [passwordMatchDiv, setPasswordMatchDiv] = useState(true);
   const [passwordMisMatchDiv, setPasswordMisMatchDiv] = useState(true);
   const [resendEmailBtn, setResendEmailBtn] = useState(true);
   const [genCode, setCode] = useState("");
   let UserEmail = "";
 
-  // $('#newPassword').password({
-  //   enterPass: 'Type your password',
-  //   shortPass: 'The password is too short',
-  //   containsField: 'The password contains your username',
-  //   steps: {
-  //     // Easily change the steps' expected score here
-  //     13: 'Really insecure password',
-  //     33: 'Weak; try combining letters & numbers',
-  //     67: 'Medium; try using special characters',
-  //     94: 'Strong password',
-  //   },
-  //   showPercent: false,
-  //   showText: true, // shows the text tips
-  //   animate: true, // whether or not to animate the progress bar on input blur/focus
-  //   animateSpeed: 'fast', // the above animation speed
-  //   field: false, // select the match field (selector or jQuery instance) for better password checks
-  //   fieldPartialMatch: true, // whether to check for partials in field
-  //   minimumLength: 4, // minimum password length (below this threshold, the score is 0)
-  //   useColorBarImage: true, // use the (old) colorbar image
-  //   customColorBarRGB: {
-  //     red: [0, 240],
-  //     green: [0, 240],
-  //     blue: 10,
-  //   } // set custom rgb color ranges for colorbar.
-  // });
+  const [passwordFocused, setPasswordFocused] = useState(false);
+  const [passwordValidity, setPasswordValidity] = useState({
+    minChar: null,
+    number: null,
+    specialChar: null,
+  });
+  const isNumberRegx = /\d/;
+  const specialCharacterRegx = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
 
   function sendEmail(e) {
     e.preventDefault();
+    setCodeVerification("");
     setResendEmailBtn(true);
     setLoading(false);
     UserEmail = document.getElementById("userEmail").value;
@@ -91,8 +76,11 @@ export default function CustomerForgotPassword(props) {
   }
 
   function emailConfiguration() {
+
+    const hidEmail = hideEmail(UserEmail);
     const generatedCode = generateCode(8);
     setCode(generatedCode);
+    console.log(generateCode);
     const emailContent = {
       email: UserEmail,
       code: generatedCode,
@@ -120,7 +108,7 @@ export default function CustomerForgotPassword(props) {
 
           Toast.fire({
             icon: "success",
-            title: "Email sent to " + UserEmail,
+            title: "Email sent to " + hidEmail,
           });
 
           setLoading(true);
@@ -151,7 +139,14 @@ export default function CustomerForgotPassword(props) {
       );
   }
 
-  function hideEmail() {}
+function hideEmail (email) {
+    return email.replace(/(.{2})(.*)(?=@)/,
+      function(gp1, gp2, gp3) { 
+        for(let i = gp3.length; i > 0; i--) { 
+          gp2+= "*"; 
+        } return gp2; 
+      });
+  };
 
   function verifyCode() {
     setLoading(false);
@@ -331,6 +326,7 @@ export default function CustomerForgotPassword(props) {
                       color: "#ffffff",
                       borderRadius: "8px",
                     }}
+
                   >
                     Get Code
                   </button>
@@ -460,6 +456,28 @@ export default function CustomerForgotPassword(props) {
                     type={passwordShown ? "text" : "password"}
                     id="newPassword"
                     placeholder="Create New Password"
+                    onFocus={() => setPasswordFocused(true)}
+                    onBlur={() => setPasswordFocused(false)}
+                    onChange={(e) => {
+                      setPasswordValidity({
+                        minChar: e.target.value.length >= 8 ? true : false,
+                        number: isNumberRegx.test(e.target.value)
+                          ? true
+                          : false,
+                        specialChar: specialCharacterRegx.test(e.target.value)
+                          ? true
+                          : false,
+                      });
+                      if (
+                        e.target.value.length >= 8 &&
+                        isNumberRegx.test(e.target.value) &&
+                        specialCharacterRegx.test(e.target.value)
+                      ) {
+                        setChangePStatus(false);
+                      } else {
+                        setChangePStatus(true);
+                      }
+                    }}
                     required
                   />
                   <span class="input-group-append bg-white border-left-0">
@@ -503,6 +521,10 @@ export default function CustomerForgotPassword(props) {
                     </span>
                   </span>
                 </div>
+                {passwordFocused && (
+                  <PasswordStrengthIndicator validity={passwordValidity} />
+                )}
+
                 <br />
                 <div class="input-group">
                   {" "}

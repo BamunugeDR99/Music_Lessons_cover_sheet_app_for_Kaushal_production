@@ -14,7 +14,10 @@ export default function ViewCovers(props) {
       axios
         .get("http://localhost:8070/covers/getcovers")
         .then((res) => {
-          setCovers(res.data);
+
+          setCovers(res.data.filter((covers) => 
+            covers.Status != "3"
+          ));
 
           $(document).ready(function () {
             $("#Covers").DataTable();
@@ -43,7 +46,7 @@ export default function ViewCovers(props) {
         </h2>
         <button
           type="button"
-          class="btn btn-success btn-rounded rounded"
+          class="btn btn-rounded rounded" style = {{backgroundColor : "#279B14",color : "#ffffff"}}
           onClick={() => {
             setModalOpen(true);
           }}
@@ -79,7 +82,9 @@ export default function ViewCovers(props) {
                   <td>{covers.Title}</td>
                   <td>{covers.OriginalArtistName}</td>
                   <td>{covers.ArrangedBy}</td>
-                  <td>61</td>
+                  <td>{covers.InstrumentsPlayedOn.map((instruments,index) => {
+                    return (<div>{instruments}</div>)
+                  })}</td>
                   <td>{covers.MainCategory}</td>
                   <td>{covers.SubCategory}</td>
                   <td>{covers.Price}</td>
