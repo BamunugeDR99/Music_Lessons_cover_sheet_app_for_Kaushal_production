@@ -22,6 +22,8 @@ export default function ViewCovers(props) {
   const [price,setPrices] = useState("");
   const [previewPages,setPreviewPages] = useState("");
   const [coverPDF,setCoverPDF] = useState("");
+  const [originalArtist,setOriginalArtist] = useState("");
+  const [arrangedBy,setArranngedBy] = useState("kaushal Rashmika");
   
   useEffect(() => { 
     function getAllClassicalGuitarCovers() {
@@ -58,13 +60,51 @@ export default function ViewCovers(props) {
         alert(err);
       });
   }
-  function changeCoverStatus(id) {}
+  function changeCoverStatus(id) {
+   // if()
+    const content = {
+      Status : "2"
+    }
+    axios
+    .put("http://localhost:8070/covers/StatusUpdate/"+id,content)
+    .then((res) => {
+    alert("status updated");
+    })
+    .catch((err) => {
+      alert(err);
+    });
+  }
 
   function updateCover(id) {}
 
-  function deleteCover(id) {}
+  function deleteCover(id) {
+    const content = {
+      Status : "3"
+    }
+    axios
+    .put("http://localhost:8070/covers/StatusUpdate/"+id,content)
+    .then((res) => {
+    alert("cover deleted");
+    getAllClassicalGuitarCovers();
+
+    })
+    .catch((err) => {
+      alert(err);
+    });
+  }
   function viewMoreCover(id) {}
 
+  function getAllClassicalGuitarCovers() {
+    axios
+      .get("http://localhost:8070/covers/getcovers")
+      .then((res) => {
+        tempCovers = res.data;
+        getAllClassicalGutarMainCategories();
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }
 
 
   // add cover / exercise
@@ -74,10 +114,12 @@ export default function ViewCovers(props) {
    for(let i = 0; i < previewPages.length;i++){
       previewPageList.push(previewPages[i].name);
    }
+  
     const newCover = {
       Title : songName,
-     // OriginalArtistName : "gg",
+      OriginalArtistName : originalArtist,
       InstrumentsPlayedOn : instruments,
+      ArrangedBy : arrangedBy,
       SubCategory : document.getElementById("subCategory").value,
       MainCategory : document.getElementById("MainCategory").value,
       NoOfPages : noOfPages,
@@ -95,6 +137,8 @@ export default function ViewCovers(props) {
       .post("http://localhost:8070/covers/add", newCover)
       .then(() => {
        alert("cover added");
+       getAllClassicalGuitarCovers();
+
 
       })
       .catch((err) => {
@@ -330,6 +374,27 @@ export default function ViewCovers(props) {
                     }}
                     required
                   /><br/>
+                    
+                    <label for="exampleInputEmail1">Arranged By</label>
+                  <input
+                    type="text"
+                    name="arranged"
+                    id="arrangedByx"
+                    class="form-control form-control-sm"
+                    id="exampleInputArranged"
+                    aria-describedby="priceHelp"
+                    placeholder="Default : Kaushal Rashmika"
+                    onChange = {
+                      (e) => {
+                        if(e.target.value.length == 0){
+                          setArranngedBy("Kaushal Rashmika");
+                        }else{
+                          setArranngedBy(e.target.value);
+                        }
+                      }
+                    }
+                    
+                  />
                 </div>
               </div>
               <div className="col-sm-6">
@@ -395,6 +460,21 @@ export default function ViewCovers(props) {
                       setPrices(e.target.value);
                     }}
                     placeholder="Cover price"
+                    required
+                  />
+                     <br/>
+                    <label for="exampleInputEmail1">Original Artist *</label>
+                  <input
+                    type="text"
+                    name="originalArtis"
+                    id="originalArtist"
+                    class="form-control form-control-sm"
+                    id="exampleInputOArtist"
+                    aria-describedby="priceHelp"
+                    onChange = {(e)=> {
+                      setOriginalArtist(e.target.value);
+                    }}
+                    placeholder="Original Artist name"
                     required
                   />
                 </div>

@@ -5,7 +5,7 @@ let Covers = require("../models/Covers");
 router.route("/add").post((req, res) => {
   const Title = req.body.Title;
   const OriginalArtistName = req.body.OriginalArtistName;
-  const ArrangedBy = parseInt(req.body.ArrangedBy);
+  const ArrangedBy = req.body.ArrangedBy;
   const InstrumentsPlayedOn = req.body.InstrumentsPlayedOn;
   const SubCategory = req.body.SubCategory;
   const MainCategory = req.body.MainCategory;
@@ -32,6 +32,7 @@ router.route("/add").post((req, res) => {
     NoOfPages,
     NoOfPreviewPages,
     Price,
+    ArrangedBy,
     YoutubeLink,
     FacebookLink,
     PreviewPages,
@@ -181,7 +182,6 @@ router.route("/get/:id").get(async (req, res) => {
     });
 });
 
-//Update Discount
 router.route("/StatusUpdate/:id").put(async (req, res) => {
   let coverID = req.params.id;
   const { Status } = req.body;
