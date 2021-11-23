@@ -24,7 +24,7 @@ router.route("/add").post(async(req,res)=>{
     
  try{
 
-    const emailExist = await Customer.findOne({ Email: Email});
+    const emailExist = await Customer.findOne({Email: Email});
  
     if(emailExist){
  
@@ -218,6 +218,7 @@ router.post('/loginCustomer', async(req,res) => {
                 }});
 
             }
+            
         }else{
 
             res.status(400).json({error: "Customer does not exists"});
