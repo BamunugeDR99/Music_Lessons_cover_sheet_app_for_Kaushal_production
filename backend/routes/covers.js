@@ -11,14 +11,14 @@ router.route("/add").post((req, res) => {
   const MainCategory = req.body.MainCategory;
   const NoOfPages = req.body.NoOfPages;
   const NoOfPreviewPages = req.body.NoOfPreviewPages;
-  const NoOfDownloads = req.body.NoOfDownloads;
+  //const NoOfDownloads = req.body.NoOfDownloads;
   const Price = req.body.Price;
   const YoutubeLink = req.body.YoutubeLink;
   const FacebookLink = req.body.FacebookLink;
   const PreviewPages = req.body.PreviewPages;
   const CoverPdf = req.body.CoverPdf;
-  const FeedBackIDs = req.body.FeedBackIDs;
-  const Status = req.body.Status;
+  //const FeedBackIDs = req.body.FeedBackIDs;
+ // const Status = req.body.Status;
   // const UpdatedDateAndTime = req.body.UpdatedDateAndTime;
   const UpdatedUser = req.body.UpdatedUser;
   // const AddedDateAndTime = req.body.AddedDateAndTime;
@@ -26,22 +26,16 @@ router.route("/add").post((req, res) => {
   const newCovers = new Covers({
     Title,
     OriginalArtistName,
-    ArrangedBy,
     InstrumentsPlayedOn,
     SubCategory,
     MainCategory,
     NoOfPages,
     NoOfPreviewPages,
-    NoOfDownloads,
     Price,
     YoutubeLink,
     FacebookLink,
     PreviewPages,
     CoverPdf,
-    FeedBackIDs,
-    Status,
-    UpdatedDateAndTime,
-    UpdatedUser,
   });
 
   newCovers
@@ -64,9 +58,9 @@ router.route("/add").post((req, res) => {
           CoverPdf: newCovers.CoverPdf,
           FeedBackIDs: newCovers.FeedBackIDs,
           Status: newCovers.Status,
-          // UpdatedDateAndTime : newCovers.UpdatedDateAndTime,
+          UpdatedDateAndTime : newCovers.UpdatedDateAndTime,
           UpdatedUser: newCovers.UpdatedUser,
-          // AddedDateAndTime : newCovers.AddedDateAndTime,
+          AddedDateAndTime : newCovers.AddedDateAndTime,
         },
       });
     })

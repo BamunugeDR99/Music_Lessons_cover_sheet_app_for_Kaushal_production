@@ -7,13 +7,11 @@ export default function DiscoverMoreCovers(props) {
 
   const MainCategory = props.MainCategory;
   const SubCategory = props.SubCategory;
-  let mapNumber = [];
   useEffect(() => {
     function getRecommendCovers() {
       axios
         .get("http://localhost:8070/covers/getCovers")
         .then((res) => {
-
           setRecommendedCovers(
             res.data.filter(
               (covers) =>
@@ -50,37 +48,39 @@ export default function DiscoverMoreCovers(props) {
     },
   };
 
-  const numbers = [1, 2, 3, 4, 5, 67, 84];
+
   return (
     <div>
       <br />
       <Carousel responsive={responsive}>
-        {recommenedCovers.map((num) => {
-          return (
-            <div className="container">
-              <div class="card" style={{ width: "18rem" }}>
+        {/* <div className="container"> */}
+          {recommenedCovers.map((covers) => {
+            return (
+              <div
+                class="card"
+                style={{
+                  boxShadow: "rgba(0, 0, 0, 0.25) 0px 25px 50px -12px",
+                  borderRadius: "15px",
+                  marginRight : "15px",
+                  marginLeft : "15px"
+                }}
+              >
+                <img
+                 src={"/images/"+covers.PreviewPages[0]}
+                  class="card-img-top"
+                  alt="..."
+                  style={{ borderRadius: "15px 15px 0px 0px" }}
+                />
                 <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
-                  </p>
-                  <a href="#" class="card-link">
-                    Card link
-                  </a>
-                  <a href="#" class="card-link">
-                    Another link
-                  </a>
+                  <h4 class="card-title" style={{ fontWeight: "bold" }}>
+                    {covers.Title}
+                  </h4>
+                  <h5>{covers.OriginalArtistName}</h5>
                 </div>
               </div>
-            </div>
-          );
-        })}
-
-        {/* <div>Item 2</div>
-  <div>Item 3</div>
-  <div>Item 4</div> */}
+            );
+          })}
+        {/* </div> */}
       </Carousel>
     </div>
   );

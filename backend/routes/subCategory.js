@@ -96,7 +96,6 @@ router.route("/delete/:id").delete(async (req, res) => {
     });
 });
 
-// // get one student details (Specific)
 router.route("/get/:id").get(async (req, res) => {
   let subCategoryID = req.params.id;
   const subCategory = await SubCategory.findById(subCategoryID)

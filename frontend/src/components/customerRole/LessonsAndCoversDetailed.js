@@ -121,7 +121,6 @@ export default function LessonsAndCoversDetailed(props) {
 
   return (
     <div>
-      <br />
       <div class="card container-xxl" style={{ border: "solid #764A34" }}>
         <div class="card-body">
           <div class="container">
@@ -389,10 +388,16 @@ export default function LessonsAndCoversDetailed(props) {
       </div>
       {/* discover more */}
       {/* <DiscoverMoreCovers message = "sonal"/> */}
+      <br/>
+      <h2 style = {{textAlign : "center",color : "#764A34"}}><b>Discover more!</b></h2>
+      <div className = "container-xl">
+        <h3><b>Our Recommendations </b></h3>
       <DiscoverMoreCovers
         MainCategory={covers.MainCategory}
         SubCategory={covers.SubCategory}
       />
+      </div>
+    
     </div>
   );
 }

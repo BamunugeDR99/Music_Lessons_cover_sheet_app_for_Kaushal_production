@@ -101,12 +101,10 @@ router.route("/delete/:id").delete(async (req, res) => {
     });
 });
 
-// // get one student details (Specific)
 router.route("/get/:id").get(async (req, res) => {
   let mainCategoryID = req.params.id;
   const mainCategory = await MainCategory.findById(mainCategoryID)
     .then((mainCategorys) => {
-      // res.status(200).send({status:"User fetched"});
       res.json(mainCategorys);
     })
     .catch((err) => {
@@ -119,7 +117,7 @@ router.route("/get/:id").get(async (req, res) => {
 
 
 
-//Update Discount
+
 router.route("/StatusUpdate/:id").put(async (req, res) => {
   let mainCategoryID = req.params.id;
   const{
