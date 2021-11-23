@@ -25,6 +25,7 @@ export default function ViewCovers(props) {
   const [originalArtist, setOriginalArtist] = useState("");
   const [arrangedBy, setArranngedBy] = useState("kaushal Rashmika");
 
+  const [youtubeLivePreview,setYoutubeLivePriview] = useState(true);
   useEffect(() => {
     function getAllClassicalGuitarCovers() {
       axios
@@ -173,6 +174,16 @@ export default function ViewCovers(props) {
       return false;
     }
   }
+  // function validate(evt) {
+  //   var theEvent = evt || window.event;
+  //   var key = theEvent.keyCode || theEvent.which;
+  //   key = String.fromCharCode(key);
+  //  var regex = /[]|./;
+  //   if(!regex.test(key)) {
+  //    theEvent.returnValue = false;
+  //    if(theEvent.preventDefault) theEvent.preventDefault();
+  //  }
+  // }
   return (
     <div>
       <div className="container-xxl">
@@ -406,14 +417,32 @@ export default function ViewCovers(props) {
                       type="text"
                       class="form-control"
                       placeholder="YouTube Link"
+                      //onkeypress='validate(event)' 
                       onChange={(e) => {
                         setYoutubeLink(e.target.value);
+                        setYoutubeLivePriview(false);
+                        if(e.target.value == ""){
+                          setYoutubeLivePriview(true);
+                        }
                       }}
                       required
                     />
                     <p style={{ color: "#ffba01" }}>
                       Enter the youtube embed url link
                     </p>
+                      {/* youtube video  */}
+                <div class="embed-responsive embed-responsive-16by9" hidden = {youtubeLivePreview}>
+                  <iframe 
+                    class="embed-responsive-item"
+                    // need to use embeded youtube link
+                    src={youtubeLink}
+                    title="YouTube video player"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                  <br/>
+                </div>
                     <label for="exampleInputEmail1">PDF File*</label>
                     <input
                       type="file"
