@@ -12,20 +12,20 @@ export default function ViewCovers(props) {
   let tempCovers = [];
   let tempMainCategory = "";
   let tempSubCategory = [];
-  
+
   // user inputs
-  const [songName,setSongName] = useState("");
-  const [instruments,setInstrument] = useState("");
-  const [youtubeLink,setYoutubeLink] = useState("");
-  const [facebookLink,setFacebookLink] = useState("");
-  const [noOfPages,setNoOfPages] = useState("");
-  const [price,setPrices] = useState("");
-  const [previewPages,setPreviewPages] = useState("");
-  const [coverPDF,setCoverPDF] = useState("");
-  const [originalArtist,setOriginalArtist] = useState("");
-  const [arrangedBy,setArranngedBy] = useState("kaushal Rashmika");
-  
-  useEffect(() => { 
+  const [songName, setSongName] = useState("");
+  const [instruments, setInstrument] = useState("");
+  const [youtubeLink, setYoutubeLink] = useState("");
+  const [facebookLink, setFacebookLink] = useState("");
+  const [noOfPages, setNoOfPages] = useState("");
+  const [price, setPrices] = useState("");
+  const [previewPages, setPreviewPages] = useState("");
+  const [coverPDF, setCoverPDF] = useState("");
+  const [originalArtist, setOriginalArtist] = useState("");
+  const [arrangedBy, setArranngedBy] = useState("kaushal Rashmika");
+
+  useEffect(() => {
     function getAllClassicalGuitarCovers() {
       axios
         .get("http://localhost:8070/covers/getcovers")
@@ -60,37 +60,61 @@ export default function ViewCovers(props) {
         alert(err);
       });
   }
-  function changeCoverStatus(id) {
-   // if()
-    const content = {
-      Status : "2"
-    }
+  function changeCoverStatus(id,index) {
+    let status = "";
     axios
-    .put("http://localhost:8070/covers/StatusUpdate/"+id,content)
+    .get("http://localhost:8070/covers/get/" + id)
     .then((res) => {
-    alert("status updated");
+      let content = "";
+      status = res.data.Status;
+      if(status == "1"){
+        // deactivating
+         content = {
+          Status: "2",
+        };
+      }else if(status == "2"){
+        // activating
+         content = {
+          Status: "1",
+        };
+      }
+      
+      axios
+        .put("http://localhost:8070/covers/StatusUpdate/" + id, content)
+        .then((res) => {
+          alert("status updated");
+          if(content.Status == "1"){
+            document.getElementById("toggle"+index).checked = true;
+          }else{
+            document.getElementById("toggle"+index).checked = false;
+          }
+
+        })
+        .catch((err) => {
+          alert(err);
+        });
     })
     .catch((err) => {
       alert(err);
     });
+   
   }
 
   function updateCover(id) {}
 
   function deleteCover(id) {
     const content = {
-      Status : "3"
-    }
+      Status: "3",
+    };
     axios
-    .put("http://localhost:8070/covers/StatusUpdate/"+id,content)
-    .then((res) => {
-    alert("cover deleted");
-    getAllClassicalGuitarCovers();
-
-    })
-    .catch((err) => {
-      alert(err);
-    });
+      .put("http://localhost:8070/covers/StatusUpdate/" + id, content)
+      .then((res) => {
+        alert("cover deleted");
+        getAllClassicalGuitarCovers();
+      })
+      .catch((err) => {
+        alert(err);
+      });
   }
   function viewMoreCover(id) {}
 
@@ -106,63 +130,108 @@ export default function ViewCovers(props) {
       });
   }
 
-
   // add cover / exercise
-  function addCover(e){
+  function addCover(e) {
     e.preventDefault();
     let previewPageList = [];
-   for(let i = 0; i < previewPages.length;i++){
+    for (let i = 0; i < previewPages.length; i++) {
       previewPageList.push(previewPages[i].name);
-   }
-  
-    const newCover = {
-      Title : songName,
-      OriginalArtistName : originalArtist,
-      InstrumentsPlayedOn : instruments,
-      ArrangedBy : arrangedBy,
-      SubCategory : document.getElementById("subCategory").value,
-      MainCategory : document.getElementById("MainCategory").value,
-      NoOfPages : noOfPages,
-      NoOfPreviewPages : previewPages.length,
-      Price : price,
-      YoutubeLink : youtubeLink,
-      FacebookLink : facebookLink, 
-      PreviewPages : previewPageList,
-      CoverPdf : coverPDF[0].name,
-      
     }
+
+    const newCover = {
+      Title: songName,
+      OriginalArtistName: originalArtist,
+      InstrumentsPlayedOn: instruments,
+      ArrangedBy: arrangedBy,
+      SubCategory: document.getElementById("subCategory").value,
+      MainCategory: document.getElementById("MainCategory").value,
+      NoOfPages: noOfPages,
+      NoOfPreviewPages: previewPages.length,
+      Price: price,
+      YoutubeLink: youtubeLink,
+      FacebookLink: facebookLink,
+      PreviewPages: previewPageList,
+      CoverPdf: coverPDF[0].name,
+    };
     console.log(newCover);
 
-     axios
+    axios
       .post("http://localhost:8070/covers/add", newCover)
       .then(() => {
-       alert("cover added");
-       getAllClassicalGuitarCovers();
-
-
+        alert("cover added");
+        getAllClassicalGuitarCovers();
       })
       .catch((err) => {
         alert(err);
       });
-    
+  }
+
+  function checkStatus(status){
+    if(status == "1"){
+      return true;
+    }else if(status == "2"){
+      return false;
+    }
   }
   return (
     <div>
-      <br />
       <div className="container-xxl">
-        <h2 style={{ color: "#764A34" }}>
-          <b>Classical Guitar Covers</b>
-        </h2>
-        <button
-          type="button"
-          class="btn btn-rounded rounded"
-          style={{ backgroundColor: "#279B14", color: "#ffffff" }}
-          onClick={() => {
-            setModalOpen(true);
-          }}
-        >
-          Add new cover
-        </button>
+        <h1 style={{ color: "#764A34", textAlign: "center" }}>
+          <b>Covers Details</b>
+        </h1>
+        <div className="text-center">
+          <button
+            type="button"
+            class="btn btn-rounded rounded"
+            style={{ backgroundColor: "#279B14", color: "#ffffff" }}
+            onClick={() => {
+              setModalOpen(true);
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="30"
+              height="30"
+              fill="currentColor"
+              class="bi bi-plus-circle"
+              viewBox="0 0 16 16"
+            >
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+            </svg>
+            
+          </button>{" "}
+          <button
+            type="button"
+            class="btn btn-rounded rounded"
+            style={{ backgroundColor: "#59bfff", color: "#ffffff" }}
+            onClick={() => {
+              getAllClassicalGuitarCovers();
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="30"
+              height="30"
+              fill="currentColor"
+              class="bi bi-arrow-clockwise"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"
+              />
+              <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z" />
+            </svg>
+          </button>
+        </div>
+
+        <br />
+        <h3 style={{ color: "#764A34", marginTop: "20px" }}>
+          <b>
+            <ul>Classical Guitar Covers</ul>
+          </b>
+        </h3>
       </div>
       <div className="container-xxl" style={{ overflowX: "auto" }}>
         <br />
@@ -206,7 +275,9 @@ export default function ViewCovers(props) {
                     <label class="switch">
                       <input
                         type="checkbox"
-                        onChange={() => changeCoverStatus(covers._id)}
+                        id = {"toggle" + index}
+                        checked = {checkStatus(covers.Status)}
+                        onChange={() => changeCoverStatus(covers._id,index)}
                       />
                       <span class="slider round"></span>
                     </label>
@@ -288,220 +359,217 @@ export default function ViewCovers(props) {
         </table>
       </div>
       <Modal show={modalOpen} size="lg">
-      <form onSubmit = {addCover}>
-        <Modal.Header>
-          <h4>Add Cover/Excercise</h4>
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
-            onClick={() => {
-              setModalOpen(false);
-            }}
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </Modal.Header>
-        
-        <Modal.Body>
-          <div className="container">
-           
-            <div className="row">
-              <div className="col-sm-6">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Song Name*</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    placeholder="Song Name"
-                    onChange = {(e)=> {
-                      setSongName(e.target.value);
-                    }}
-                    required
-                  /><br/>
-                  <label for="exampleInputMainCategory">Main Category</label>
-                  <select
-                    className="form-control"
-                    id="MainCategory"
-                    name="category"
-                    disabled
-                  >
-                    <option>Classical Guitar Covers</option>
-                  </select>
-                  <br/>
-                  <label for="exampleInputEmail1">YouTube Link*</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    placeholder="YouTube Link"
-                    onChange = {(e)=> {
-                      setYoutubeLink(e.target.value);
-                    }}
-                    required
-                  />
-                  <p style = {{color : "#ffe800"}}>Enter the youtube embed url link</p>
-                  <label for="exampleInputEmail1">PDF File*</label>
-                  <input
-                    type="file"
-                    name="pdffile"
-                    id="pdffile"
-                    style = {{height : "35px"}}
-                    class="form-control form-control-sm"
-                    id="exampleInputPDF"
-                    aria-describedby="emailHelp"
-                    accept = "application/pdf"
-                    onChange = {(e) => {
-                      setCoverPDF(e.target.files);
-                    }}
-                    required
-                  /><br/>
+        <form onSubmit={addCover}>
+          <Modal.Header>
+            <h4>Add Cover/Excercise</h4>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+              onClick={() => {
+                setModalOpen(false);
+              }}
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </Modal.Header>
+
+          <Modal.Body>
+            <div className="container">
+              <div className="row">
+                <div className="col-sm-6">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Song Name*</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Song Name"
+                      onChange={(e) => {
+                        setSongName(e.target.value);
+                      }}
+                      required
+                    />
+                    <br />
+                    <label for="exampleInputMainCategory">Main Category</label>
+                    <select
+                      className="form-control"
+                      id="MainCategory"
+                      name="category"
+                      disabled
+                    >
+                      <option>Classical Guitar Covers</option>
+                    </select>
+                    <br />
+                    <label for="exampleInputEmail1">YouTube Link*</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="YouTube Link"
+                      onChange={(e) => {
+                        setYoutubeLink(e.target.value);
+                      }}
+                      required
+                    />
+                    <p style={{ color: "#ffba01" }}>
+                      Enter the youtube embed url link
+                    </p>
+                    <label for="exampleInputEmail1">PDF File*</label>
+                    <input
+                      type="file"
+                      name="pdffile"
+                      id="pdffile"
+                      style={{ height: "35px" }}
+                      class="form-control form-control-sm"
+                      id="exampleInputPDF"
+                      aria-describedby="emailHelp"
+                      accept="application/pdf"
+                      onChange={(e) => {
+                        setCoverPDF(e.target.files);
+                      }}
+                      required
+                    />
+                    <br />
                     <label for="exampleInputEmail1">No of Pages*</label>
-                  <input
-                    type="number"
-                    name="noOfPages"
-                    id="noOfPages"
-                    class="form-control form-control-sm"
-                    id="exampleInputNoOfPages"
-                    aria-describedby="emailHelp"
-                    placeholder="(PDF) no of original pages"
-                    onChange = {(e)=> {
-                      setNoOfPages(e.target.value);
-                    }}
-                    required
-                  /><br/>
-                    
+                    <input
+                      type="number"
+                      name="noOfPages"
+                      id="noOfPages"
+                      class="form-control form-control-sm"
+                      id="exampleInputNoOfPages"
+                      placeholder="(PDF) no of original pages"
+                      onChange={(e) => {
+                        setNoOfPages(e.target.value);
+                      }}
+                      required
+                    />
+                    <br />
+
                     <label for="exampleInputEmail1">Arranged By</label>
-                  <input
-                    type="text"
-                    name="arranged"
-                    id="arrangedByx"
-                    class="form-control form-control-sm"
-                    id="exampleInputArranged"
-                    aria-describedby="priceHelp"
-                    placeholder="Default : Kaushal Rashmika"
-                    onChange = {
-                      (e) => {
-                        if(e.target.value.length == 0){
+                    <input
+                      type="text"
+                      name="arranged"
+                      id="arrangedByx"
+                      class="form-control form-control-sm"
+                      id="exampleInputArranged"
+                      aria-describedby="priceHelp"
+                      placeholder="Default : Kaushal Rashmika"
+                      onChange={(e) => {
+                        if (e.target.value.length == 0) {
                           setArranngedBy("Kaushal Rashmika");
-                        }else{
+                        } else {
                           setArranngedBy(e.target.value);
                         }
-                      }
-                    }
-                    
-                  />
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="col-sm-6">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Instruments*</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    placeholder="Instrument"
-                    onChange = {(e)=> {
-                      setInstrument(e.target.value);
-                    }}
-                    required
-                  /><br/>
-                  <label for="exampleInputEmail1">Sub Category</label>
-                  <select className="form-control" id="subCategory" name="subCategory" required>
-                    <option>Select</option>
-                    {SubCategories.map((sub) => {
-                      return <option>{sub}</option>;
-                    })}
-                  </select><br/>
-                  <label for="exampleInputEmail1">Facebook Link*</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    onChange = {(e)=> {
-                      setFacebookLink(e.target.value);
-                    }}
-                    placeholder="Facebook Link*"
-                  />
-                    <p style = {{color : "#ffe800"}}>Enter the facebook embed page link</p>
-                  <label for="exampleInputEmail1">Preview Images*</label>
-                  <input
-                    type="file"
-                    style = {{height : "35px"}}
-                    name="sampleimages[]"
-                    id="sampleimages"
-                    class="form-control form-control-sm"
-                    multiple="true"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    accept="image/png, image/jpeg"
-                    onChange = {(e) => {
-                      setPreviewPages(e.target.files)
-                    }}
-                    placeholder="Facebook Link*"
-                    multiple
-                  />
-                  <br/>
+                <div className="col-sm-6">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Instruments*</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Instrument"
+                      onChange={(e) => {
+                        setInstrument(e.target.value);
+                      }}
+                      required
+                    />
+                    <br />
+                    <label for="exampleInputEmail1">Sub Category</label>
+                    <select
+                      className="form-control"
+                      id="subCategory"
+                      name="subCategory"
+                      required
+                    >
+                      <option>Select</option>
+                      {SubCategories.map((sub) => {
+                        return <option>{sub}</option>;
+                      })}
+                    </select>
+                    <br />
+                    <label for="exampleInputEmail1">Facebook Link*</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      onChange={(e) => {
+                        setFacebookLink(e.target.value);
+                      }}
+                      placeholder="Facebook Link*"
+                    />
+                    <p style={{ color: "#ffba01" }}>
+                      Enter the facebook embed page link
+                    </p>
+                    <label for="exampleInputEmail1">Preview Images*</label>
+                    <input
+                      type="file"
+                      style={{ height: "35px" }}
+                      name="sampleimages[]"
+                      id="sampleimages"
+                      class="form-control form-control-sm"
+                      accept="image/png, image/jpeg"
+                      onChange={(e) => {
+                        setPreviewPages(e.target.files);
+                      }}
+                      placeholder="Facebook Link*"
+                      multiple
+                    />
+                    <br />
                     <label for="exampleInputEmail1">Price*</label>
-                  <input
-                    type="number"
-                    name="price"
-                    id="price"
-                    class="form-control form-control-sm"
-                    id="exampleInputprice"
-                    aria-describedby="priceHelp"
-                    onChange = {(e)=> {
-                      setPrices(e.target.value);
-                    }}
-                    placeholder="Cover price"
-                    required
-                  />
-                     <br/>
+                    <input
+                      type="number"
+                      name="price"
+                      id="price"
+                      class="form-control form-control-sm"
+                      id="exampleInputprice"
+                      aria-describedby="priceHelp"
+                      onChange={(e) => {
+                        setPrices(e.target.value);
+                      }}
+                      placeholder="Cover price"
+                      required
+                    />
+                    <br />
                     <label for="exampleInputEmail1">Original Artist *</label>
-                  <input
-                    type="text"
-                    name="originalArtis"
-                    id="originalArtist"
-                    class="form-control form-control-sm"
-                    id="exampleInputOArtist"
-                    aria-describedby="priceHelp"
-                    onChange = {(e)=> {
-                      setOriginalArtist(e.target.value);
-                    }}
-                    placeholder="Original Artist name"
-                    required
-                  />
+                    <input
+                      type="text"
+                      name="originalArtis"
+                      id="originalArtist"
+                      class="form-control form-control-sm"
+                      id="exampleInputOArtist"
+                      aria-describedby="priceHelp"
+                      onChange={(e) => {
+                        setOriginalArtist(e.target.value);
+                      }}
+                      placeholder="Original Artist name"
+                      required
+                    />
+                  </div>
                 </div>
               </div>
             </div>
-            
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <div className="row">
-            <div className="col-md-6">
-              <center>
-                <button
-                  type="submit"
-                  class="btn btn"
-                  style={{
-                    borderRadius: "10px",
-                    backgroundColor: "#28A745",
-                    color: "white",
-                  }}
-                >
-                  <strong>Submit</strong>
-                </button>
-              </center>
+          </Modal.Body>
+          <Modal.Footer>
+            <div className="row">
+              <div className="col-md-6">
+                <center>
+                  <button
+                    type="submit"
+                    class="btn btn"
+                    style={{
+                      borderRadius: "10px",
+                      backgroundColor: "#28A745",
+                      color: "white",
+                    }}
+                  >
+                    <strong>Submit</strong>
+                  </button>
+                </center>
+              </div>
             </div>
-          </div>
-        </Modal.Footer>
+          </Modal.Footer>
         </form>
       </Modal>
     </div>
