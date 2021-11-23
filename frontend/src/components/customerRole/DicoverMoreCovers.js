@@ -3,7 +3,6 @@ import axios from "axios";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 export default function DiscoverMoreCovers(props) {
-  const [Covers, setCovers] = useState([]);
   const [recommenedCovers, setRecommendedCovers] = useState([]);
 
   const MainCategory = props.MainCategory;
@@ -14,13 +13,7 @@ export default function DiscoverMoreCovers(props) {
       axios
         .get("http://localhost:8070/covers/getCovers")
         .then((res) => {
-          setCovers(res.data);
-          // let a =  res.data.filter(
-          //   (covers) =>
-          //     covers.MainCategory === MainCategory &&
-          //     covers.SubCategory === SubCategory
-          // );
-          // console.log(a)
+
           setRecommendedCovers(
             res.data.filter(
               (covers) =>
@@ -28,8 +21,6 @@ export default function DiscoverMoreCovers(props) {
                 covers.SubCategory === SubCategory
             )
           );
-          calculateRows();
-          //console.log(recommenedCovers)
         })
         .catch((err) => {
           alert(err);
@@ -38,15 +29,6 @@ export default function DiscoverMoreCovers(props) {
 
     getRecommendCovers();
   }, []);
-
-  function calculateRows() {
-    let numberOfRows = Math.round(recommenedCovers.length / 3);
-    // console.log(numberOfRows)
-    for (let i = 0; i < numberOfRows; i++) {
-      mapNumber.push(i);
-    }
-    // console.log(mapNumber)
-  }
 
   const responsive = {
     superLargeDesktop: {
@@ -71,11 +53,12 @@ export default function DiscoverMoreCovers(props) {
   const numbers = [1, 2, 3, 4, 5, 67, 84];
   return (
     <div>
+      <br />
       <Carousel responsive={responsive}>
-        {numbers.map((num) => {
+        {recommenedCovers.map((num) => {
           return (
-            <div>
-              <div class="card" >
+            <div className="container">
+              <div class="card" style={{ width: "18rem" }}>
                 <div class="card-body">
                   <h5 class="card-title">Card title</h5>
                   <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>

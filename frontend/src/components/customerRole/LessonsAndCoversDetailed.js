@@ -87,8 +87,8 @@ export default function LessonsAndCoversDetailed(props) {
         coverIDs.push(id);
         console.log(coverIDs);
         const newcoverList = {
-          CustomerID : customerID,
-           CoverIDs: coverIDs,
+          CustomerID: customerID,
+          CoverIDs: coverIDs,
         };
         console.log(newcoverList);
         if (falgs === 0) {
