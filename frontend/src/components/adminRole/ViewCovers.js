@@ -153,9 +153,9 @@ export default function ViewCovers(props) {
     for (let i = 0; i < previewPages.length; i++) {
       previewPageList.push(previewPages[i].name);
     }
-    if (subCategoryPreview == false) {
+    if (document.getElementById("MainCategory").value == "Guitar Technics & Lessons") {
       dynamicSubCategory = document.getElementById("subCategory2").value;
-    } else {
+    } else if(document.getElementById("MainCategory").value ==	"Classical Guitar Covers"){
       dynamicSubCategory = document.getElementById("subCategory1").value;
     }
     const InstrumntArray = instruments.split(",");
@@ -435,10 +435,12 @@ export default function ViewCovers(props) {
                     <br />
                     <label for="exampleInputMainCategory">Main Category</label>
                     <select
+                    required
                       className="form-control"
                       onChange={() => {
-                        setSubCategoryPreview(false);
-                        if (subCategoryPreview == false) {
+                        if (subCategoryPreview == true) {
+                          setSubCategoryPreview(false);
+                        }else{
                           setSubCategoryPreview(true);
                         }
                       }}
@@ -549,25 +551,23 @@ export default function ViewCovers(props) {
                     <br />
                     <label for="exampleInputEmail1">Sub Category</label>
                     <select
-                      hidden={!subCategoryPreview}
+                      hidden={subCategoryPreview}
                       className="form-control"
                       id="subCategory1"
                       name="subCategory"
                       required
                     >
-                      <option>Select</option>
                       {SubCategories.map((sub) => {
                         return <option>{sub}</option>;
                       })}
                     </select>
                     <select
-                      hidden={subCategoryPreview}
+                      hidden={!subCategoryPreview}
                       className="form-control"
                       id="subCategory2"
                       name="subCategory"
                       required
                     >
-                      <option>Select</option>
                       {lessonSubCategories.map((sub) => {
                         return <option>{sub}</option>;
                       })}
