@@ -26,9 +26,9 @@ export default function ViewCovers(props) {
   const [originalArtist, setOriginalArtist] = useState("");
   const [arrangedBy, setArranngedBy] = useState("kaushal Rashmika");
 
-  const [youtubeLivePreview,setYoutubeLivePriview] = useState(true);
-  const [lessonSubCategories,setLessonSubCategories] = useState([]);
-  const [subCategoryPreview,setSubCategoryPreview] = useState(true);
+  const [youtubeLivePreview, setYoutubeLivePriview] = useState(true);
+  const [lessonSubCategories, setLessonSubCategories] = useState([]);
+  const [subCategoryPreview, setSubCategoryPreview] = useState(true);
 
   useEffect(() => {
     function getAllClassicalGuitarCovers() {
@@ -55,16 +55,16 @@ export default function ViewCovers(props) {
     });
   }
 
-  function GetLessonSubCategories(){
+  function GetLessonSubCategories() {
     axios
-    .get("http://localhost:8070/mainCategory/get/619deb0ca35d670b4e68ec3e")
-    .then((res) => {
-      tempSubCategory2 = res.data.SubCategories;
-      setContent();
-    })
-    .catch((err) => {
-      alert(err);
-    });
+      .get("http://localhost:8070/mainCategory/get/619deb0ca35d670b4e68ec3e")
+      .then((res) => {
+        tempSubCategory2 = res.data.SubCategories;
+        setContent();
+      })
+      .catch((err) => {
+        alert(err);
+      });
   }
   function getAllClassicalGutarMainCategories() {
     axios
@@ -77,44 +77,42 @@ export default function ViewCovers(props) {
         alert(err);
       });
   }
-  function changeCoverStatus(id,index) {
+  function changeCoverStatus(id, index) {
     let status = "";
     axios
-    .get("http://localhost:8070/covers/get/" + id)
-    .then((res) => {
-      let content = "";
-      status = res.data.Status;
-      if(status == "1"){
-        // deactivating
-         content = {
-          Status: "2",
-        };
-      }else if(status == "2"){
-        // activating
-         content = {
-          Status: "1",
-        };
-      }
-      
-      axios
-        .put("http://localhost:8070/covers/StatusUpdate/" + id, content)
-        .then((res) => {
-          alert("status updated");
-          if(content.Status == "1"){
-            document.getElementById("toggle"+index).checked = true;
-          }else{
-            document.getElementById("toggle"+index).checked = false;
-          }
+      .get("http://localhost:8070/covers/get/" + id)
+      .then((res) => {
+        let content = "";
+        status = res.data.Status;
+        if (status == "1") {
+          // deactivating
+          content = {
+            Status: "2",
+          };
+        } else if (status == "2") {
+          // activating
+          content = {
+            Status: "1",
+          };
+        }
 
-        })
-        .catch((err) => {
-          alert(err);
-        });
-    })
-    .catch((err) => {
-      alert(err);
-    });
-   
+        axios
+          .put("http://localhost:8070/covers/StatusUpdate/" + id, content)
+          .then((res) => {
+            alert("status updated");
+            if (content.Status == "1") {
+              document.getElementById("toggle" + index).checked = true;
+            } else {
+              document.getElementById("toggle" + index).checked = false;
+            }
+          })
+          .catch((err) => {
+            alert(err);
+          });
+      })
+      .catch((err) => {
+        alert(err);
+      });
   }
 
   function updateCover(id) {}
@@ -155,17 +153,16 @@ export default function ViewCovers(props) {
     for (let i = 0; i < previewPages.length; i++) {
       previewPageList.push(previewPages[i].name);
     }
-    if(subCategoryPreview == false){
-      dynamicSubCategory =  document.getElementById("subCategory2").value;
-    }else{
-      dynamicSubCategory =  document.getElementById("subCategory1").value;
-
+    if (subCategoryPreview == false) {
+      dynamicSubCategory = document.getElementById("subCategory2").value;
+    } else {
+      dynamicSubCategory = document.getElementById("subCategory1").value;
     }
     const InstrumntArray = instruments.split(",");
     const newCover = {
       Title: songName,
       OriginalArtistName: originalArtist,
-      InstrumentsPlayedOn:InstrumntArray,
+      InstrumentsPlayedOn: InstrumntArray,
       ArrangedBy: arrangedBy,
       SubCategory: dynamicSubCategory,
       MainCategory: document.getElementById("MainCategory").value,
@@ -184,22 +181,19 @@ export default function ViewCovers(props) {
       .then(() => {
         alert("cover added");
         getAllClassicalGuitarCovers();
-        $("input[type=text]").val('');
-        $("input[type=number]").val('');
-        $("input[type=file]").val('');
-
-
-
+        $("input[type=text]").val("");
+        $("input[type=number]").val("");
+        $("input[type=file]").val("");
       })
       .catch((err) => {
         alert(err);
       });
   }
 
-  function checkStatus(status){
-    if(status == "1"){
+  function checkStatus(status) {
+    if (status == "1") {
       return true;
-    }else if(status == "2"){
+    } else if (status == "2") {
       return false;
     }
   }
@@ -213,6 +207,14 @@ export default function ViewCovers(props) {
   //    if(theEvent.preventDefault) theEvent.preventDefault();
   //  }
   // }
+
+  function youtubeLinkDefaultPreview() {
+    if (youtubeLink.toLowerCase().includes("https://www.youtube.com/embed/")) {
+      return youtubeLink;
+    } else {
+      return "https://www.youtube.com/embed/";
+    }
+  }
   return (
     <div>
       <div className="container-xxl">
@@ -240,7 +242,6 @@ export default function ViewCovers(props) {
               <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
               <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
             </svg>
-            
           </button>{" "}
           <button
             type="button"
@@ -316,9 +317,9 @@ export default function ViewCovers(props) {
                     <label class="switch">
                       <input
                         type="checkbox"
-                        id = {"toggle" + index}
-                        checked = {checkStatus(covers.Status)}
-                        onChange={() => changeCoverStatus(covers._id,index)}
+                        id={"toggle" + index}
+                        checked={checkStatus(covers.Status)}
+                        onChange={() => changeCoverStatus(covers._id, index)}
                       />
                       <span class="slider round"></span>
                     </label>
@@ -435,19 +436,17 @@ export default function ViewCovers(props) {
                     <label for="exampleInputMainCategory">Main Category</label>
                     <select
                       className="form-control"
-                      onChange = {()=> {
+                      onChange={() => {
                         setSubCategoryPreview(false);
-                        if(subCategoryPreview == false){
+                        if (subCategoryPreview == false) {
                           setSubCategoryPreview(true);
                         }
                       }}
                       id="MainCategory"
                       name="category"
-                     
                     >
                       <option>Classical Guitar Covers</option>
                       <option>Guitar Technics & Lessons</option>
-
                     </select>
                     <br />
                     <label for="exampleInputEmail1">YouTube Link*</label>
@@ -455,11 +454,12 @@ export default function ViewCovers(props) {
                       type="text"
                       class="form-control"
                       placeholder="YouTube Link"
-                      //onkeypress='validate(event)' 
+                      //onkeypress='validate(event)'
+                      onBlur = {() => setYoutubeLivePriview(true)}
                       onChange={(e) => {
                         setYoutubeLink(e.target.value);
                         setYoutubeLivePriview(false);
-                        if(e.target.value == ""){
+                        if (e.target.value == "") {
                           setYoutubeLivePriview(true);
                         }
                       }}
@@ -468,19 +468,22 @@ export default function ViewCovers(props) {
                     <p style={{ color: "#ffba01" }}>
                       Enter the youtube embed url link
                     </p>
-                      {/* youtube video  */}
-                <div class="embed-responsive embed-responsive-16by9" hidden = {youtubeLivePreview}>
-                  <iframe 
-                    class="embed-responsive-item"
-                    // need to use embeded youtube link
-                    src={youtubeLink}
-                    title="YouTube video player"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                  <br/>
-                </div>
+                    {/* youtube video  */}
+                    <div
+                      class="embed-responsive embed-responsive-16by9"
+                      hidden={youtubeLivePreview}
+                    >
+                      <iframe
+                        class="embed-responsive-item"
+                        // need to use embeded youtube link
+                        src={youtubeLinkDefaultPreview()}
+                        title="YouTube video player"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                      <br />
+                    </div>
                     <label for="exampleInputEmail1">PDF File*</label>
                     <input
                       type="file"
@@ -542,11 +545,11 @@ export default function ViewCovers(props) {
                       }}
                       required
                     />
- 
+
                     <br />
                     <label for="exampleInputEmail1">Sub Category</label>
                     <select
-                    hidden = {!subCategoryPreview}
+                      hidden={!subCategoryPreview}
                       className="form-control"
                       id="subCategory1"
                       name="subCategory"
@@ -558,7 +561,7 @@ export default function ViewCovers(props) {
                       })}
                     </select>
                     <select
-                      hidden = {subCategoryPreview}
+                      hidden={subCategoryPreview}
                       className="form-control"
                       id="subCategory2"
                       name="subCategory"
@@ -580,8 +583,8 @@ export default function ViewCovers(props) {
                       placeholder="Facebook Link*"
                     />
                     <p style={{ color: "#ffba01" }}>
-                      Enter the facebook embed page link
-                    </p>
+                      Enter the facebook page link
+                    </p>                
                     <label for="exampleInputEmail1">Preview Images*</label>
                     <input
                       type="file"
