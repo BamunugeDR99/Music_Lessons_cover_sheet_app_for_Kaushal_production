@@ -21,6 +21,7 @@ import ViewLessons from "./components/adminRole/ViewLessons";
 import AdminHeader from "./components/adminRole/adminheader";
 import Login from "./components/customerRole/loginpage";
 import DiscoverMoreCovers from "./components/customerRole/DicoverMoreCovers";
+import CoverUpdate from "./components/adminRole/CoverUpdate";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
         <Route path="/login" element={<Login />} />
 
         <Route path = "/g" element = {<DiscoverMoreCovers/>}/>
+        <Route path = "/h" element = {<CoverUpdate/>}/>
         {/* <Route path="/table" element={<DataTableTest />} /> */}
         {/* <Route path="/d" element={<ViewCategories />} /> */}
         {/* <Route path="/e" element={<MainCategoriesDataTable />} /> */}

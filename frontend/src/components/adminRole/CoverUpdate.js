@@ -5,10 +5,9 @@ import Modal from "react-bootstrap/Modal";
 import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import "../../css/toogle.css";
-import CoverUpdate from "./CoverUpdate";
-export default function ViewCovers(props) {
+export default function CoverUpdate(props) {
   const [covers, setCovers] = useState([]);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen2, setModalOpen2] = useState(true);
   const [SubCategories, setSubCategories] = useState([]);
   let tempCovers = [];
   let tempMainCategory = "";
@@ -30,13 +29,18 @@ export default function ViewCovers(props) {
   const [youtubeLivePreview, setYoutubeLivePriview] = useState(true);
   const [lessonSubCategories, setLessonSubCategories] = useState([]);
   const [subCategoryPreview, setSubCategoryPreview] = useState(false);
-
+  const [cover, setCover] = useState([]);
+  let tempMainCategoryStore = "";
+  let tempSubCategoryStore = "";
   useEffect(() => {
-    function getAllClassicalGuitarCovers() {
+    function getSpecificCover() {
+      const coverID = "619a570da9008d29faffec33";
       axios
-        .get("http://localhost:8070/covers/getcovers")
+        .get("http://localhost:8070/covers/get/" + coverID)
         .then((res) => {
-          tempCovers = res.data;
+          setCover(res.data);
+          tempMainCategoryStore = res.data.MainCategory;
+          tempSubCategoryStore = res.data.SubCategory;
           getAllClassicalGutarMainCategories();
         })
         .catch((err) => {
@@ -44,16 +48,21 @@ export default function ViewCovers(props) {
         });
     }
 
-    getAllClassicalGuitarCovers();
+    getSpecificCover();
   }, []);
 
   function setContent() {
     setSubCategories(tempSubCategory);
     setLessonSubCategories(tempSubCategory2);
-    setCovers(tempCovers.filter((covers) => covers.Status != "3"));
-    $(document).ready(function () {
-      $("#Covers").DataTable();
-    });
+
+    document.getElementById("MainCategory").value = tempMainCategoryStore;
+    if (tempMainCategoryStore == "Classical Guitar Covers") {
+      document.getElementById("subCategory1").value = tempSubCategoryStore;
+      setSubCategoryPreview(false);
+    } else if (tempMainCategoryStore == "Guitar Technics & Lessons") {
+      document.getElementById("subCategory2").value = tempSubCategoryStore;
+      setSubCategoryPreview(true);
+    }
   }
 
   function GetLessonSubCategories() {
@@ -78,72 +87,6 @@ export default function ViewCovers(props) {
         alert(err);
       });
   }
-  function changeCoverStatus(id, index) {
-    let status = "";
-    axios
-      .get("http://localhost:8070/covers/get/" + id)
-      .then((res) => {
-        let content = "";
-        status = res.data.Status;
-        if (status == "1") {
-          // deactivating
-          content = {
-            Status: "2",
-          };
-        } else if (status == "2") {
-          // activating
-          content = {
-            Status: "1",
-          };
-        }
-
-        axios
-          .put("http://localhost:8070/covers/StatusUpdate/" + id, content)
-          .then((res) => {
-            alert("status updated");
-            if (content.Status == "1") {
-              document.getElementById("toggle" + index).checked = true;
-            } else {
-              document.getElementById("toggle" + index).checked = false;
-            }
-          })
-          .catch((err) => {
-            alert(err);
-          });
-      })
-      .catch((err) => {
-        alert(err);
-      });
-  }
-
-
-
-
-  function updateCover(id) {
- 
-  };
-
-
-
-
-
-
-
-  function deleteCover(id) {
-    const content = {
-      Status: "3",
-    };
-    axios
-      .put("http://localhost:8070/covers/StatusUpdate/" + id, content)
-      .then((res) => {
-        alert("cover deleted");
-        getAllClassicalGuitarCovers();
-      })
-      .catch((err) => {
-        alert(err);
-      });
-  }
-  function viewMoreCover(id) {}
 
   function getAllClassicalGuitarCovers() {
     axios
@@ -157,73 +100,9 @@ export default function ViewCovers(props) {
       });
   }
 
-  // add cover / exercise
-  function addCover(e) {
+  function updateCover(e) {
     e.preventDefault();
-    let dynamicSubCategory = "";
-    let previewPageList = [];
-    for (let i = 0; i < previewPages.length; i++) {
-      previewPageList.push(previewPages[i].name);
-    }
-    if (
-      document.getElementById("MainCategory").value ==
-      "Guitar Technics & Lessons"
-    ) {
-      dynamicSubCategory = document.getElementById("subCategory2").value;
-    } else if (
-      document.getElementById("MainCategory").value == "Classical Guitar Covers"
-    ) {
-      dynamicSubCategory = document.getElementById("subCategory1").value;
-    }
-    const InstrumntArray = instruments.split(",");
-    const newCover = {
-      Title: songName,
-      OriginalArtistName: originalArtist,
-      InstrumentsPlayedOn: InstrumntArray,
-      ArrangedBy: arrangedBy,
-      SubCategory: dynamicSubCategory,
-      MainCategory: document.getElementById("MainCategory").value,
-      NoOfPages: noOfPages,
-      NoOfPreviewPages: previewPages.length,
-      Price: price,
-      YoutubeLink: youtubeLink,
-      FacebookLink: facebookLink,
-      PreviewPages: previewPageList,
-      CoverPdf: coverPDF[0].name,
-    };
-    console.log(newCover);
-
-    axios
-      .post("http://localhost:8070/covers/add", newCover)
-      .then(() => {
-        alert("cover added");
-        getAllClassicalGuitarCovers();
-        $("input[type=text]").val("");
-        $("input[type=number]").val("");
-        $("input[type=file]").val("");
-      })
-      .catch((err) => {
-        alert(err);
-      });
   }
-
-  function checkStatus(status) {
-    if (status == "1") {
-      return true;
-    } else if (status == "2") {
-      return false;
-    }
-  }
-  // function validate(evt) {
-  //   var theEvent = evt || window.event;
-  //   var key = theEvent.keyCode || theEvent.which;
-  //   key = String.fromCharCode(key);
-  //  var regex = /[]|./;
-  //   if(!regex.test(key)) {
-  //    theEvent.returnValue = false;
-  //    if(theEvent.preventDefault) theEvent.preventDefault();
-  //  }
-  // }
 
   function youtubeLinkDefaultPreview() {
     if (youtubeLink.toLowerCase().includes("https://www.youtube.com/embed/")) {
@@ -234,201 +113,17 @@ export default function ViewCovers(props) {
   }
   return (
     <div>
-      <div className="container-xxl">
-        <h1 style={{ color: "#764A34", textAlign: "center" }}>
-          <b>Covers Details</b>
-        </h1>
-        <div className="text-center">
-          <button
-            type="button"
-            class="btn btn-rounded rounded"
-            style={{ backgroundColor: "#279B14", color: "#ffffff" }}
-            onClick={() => {
-              setModalOpen(true);
-              setYoutubeLivePriview(true);
-            }}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="30"
-              height="30"
-              fill="currentColor"
-              class="bi bi-plus-circle"
-              viewBox="0 0 16 16"
-            >
-              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-            </svg>
-          </button>{" "}
-          <button
-            type="button"
-            class="btn btn-rounded rounded"
-            style={{ backgroundColor: "#59bfff", color: "#ffffff" }}
-            onClick={() => {
-              getAllClassicalGuitarCovers();
-            }}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="30"
-              height="30"
-              fill="currentColor"
-              class="bi bi-arrow-clockwise"
-              viewBox="0 0 16 16"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"
-              />
-              <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z" />
-            </svg>
-          </button>
-        </div>
-
-        <br />
-        <h3 style={{ color: "#764A34", marginTop: "20px" }}>
-          <b>
-            <ul>Classical Guitar Covers</ul>
-          </b>
-        </h3>
-      </div>
-      <div className="container-xxl" style={{ overflowX: "auto" }}>
-        <br />
-        <table
-          id="Covers"
-          class="table table-striped table-bordered table-hover"
-          style={{ width: "100%" }}
-        >
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Original Artist Name</th>
-              <th>Arranged By</th>
-              <th>Instuments Played On </th>
-              <th>Main Category</th>
-              <th>Sub Category</th>
-              <th>Price</th>
-              <th>Added Date And Time</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {covers.map((covers, index) => {
-              return (
-                <tr>
-                  <td>{covers.Title}</td>
-                  <td>{covers.OriginalArtistName}</td>
-                  <td>{covers.ArrangedBy}</td>
-                  <td>
-                    {covers.InstrumentsPlayedOn.map((instruments, index) => {
-                      return <div>{instruments}</div>;
-                    })}
-                  </td>
-                  <td>{covers.MainCategory}</td>
-                  <td>{covers.SubCategory}</td>
-                  <td>{covers.Price}</td>
-                  <td>{covers.AddedDateAndTime}</td>
-                  <td>
-                    {" "}
-                    <label class="switch">
-                      <input
-                        type="checkbox"
-                        id={"toggle" + index}
-                        checked={checkStatus(covers.Status)}
-                        onChange={() => changeCoverStatus(covers._id, index)}
-                      />
-                      <span class="slider round"></span>
-                    </label>
-                  </td>
-                  <td>
-                    <button
-                      className="btn-sm"
-                      style={{ display: "inline" }}
-                      onClick={() => updateCover(covers._id)}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="#279B14"
-                        class="bi bi-pencil-square"
-                        viewBox="0 0 16 16"
-                      >
-                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                        <path
-                          fill-rule="evenodd"
-                          d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
-                        />
-                      </svg>
-                    </button>
-                    <span> </span>
-                    <button
-                      className="btn-sm"
-                      style={{ display: "inline" }}
-                      onClick={() => deleteCover(covers._id)}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="#D0193A"
-                        class="bi bi-trash-fill"
-                        viewBox="0 0 16 16"
-                      >
-                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
-                      </svg>
-                    </button>
-                    <span> </span>
-                    <button
-                      className="btn-sm"
-                      style={{ display: "inline" }}
-                      onClick={() => viewMoreCover(covers._id)}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="#764A34"
-                        class="bi bi-three-dots-vertical"
-                        viewBox="0 0 16 16"
-                      >
-                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
-                      </svg>
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-          <tfoot>
-            <tr>
-              <th>Title</th>
-              <th>Original Artist Name</th>
-              <th>Arranged By</th>
-              <th>Instuments Played On </th>
-              <th>Main Category</th>
-              <th>Sub Category</th>
-              <th>Price</th>
-              <th>Added Date And Time</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-      
-      <Modal show={modalOpen} size="lg">
-        <form onSubmit={addCover}>
+      <Modal show={modalOpen2} size="lg">
+        <form onSubmit={updateCover}>
           <Modal.Header>
-            <h4>Add Cover/Excercise</h4>
+            <h4>Edit Cover/Excercise</h4>
             <button
               type="button"
               class="close"
               data-dismiss="modal"
               aria-label="Close"
               onClick={() => {
-                setModalOpen(false);
+                setModalOpen2(false);
               }}
             >
               <span aria-hidden="true">&times;</span>
@@ -445,6 +140,7 @@ export default function ViewCovers(props) {
                       type="text"
                       class="form-control"
                       placeholder="Song Name"
+                      Value={cover.Title}
                       onChange={(e) => {
                         setSongName(e.target.value);
                       }}
@@ -474,7 +170,7 @@ export default function ViewCovers(props) {
                       type="text"
                       class="form-control"
                       placeholder="YouTube Link"
-                      //onkeypress='validate(event)'
+                      Value = {cover.YoutubeLink}
                       onBlur={() => setYoutubeLivePriview(true)}
                       onChange={(e) => {
                         setYoutubeLink(e.target.value);
@@ -524,6 +220,7 @@ export default function ViewCovers(props) {
                       type="number"
                       name="noOfPages"
                       id="noOfPages"
+                      Value = {cover.NoOfPages}
                       class="form-control form-control-sm"
                       id="exampleInputNoOfPages"
                       placeholder="(PDF) no of original pages"
@@ -539,6 +236,7 @@ export default function ViewCovers(props) {
                       type="text"
                       name="arranged"
                       id="arrangedByx"
+                      Value = {cover.ArrangedBy}
                       class="form-control form-control-sm"
                       id="exampleInputArranged"
                       aria-describedby="priceHelp"
@@ -594,6 +292,7 @@ export default function ViewCovers(props) {
                     <label for="exampleInputEmail1">Facebook Link*</label>
                     <input
                       type="text"
+                      Value = {cover.FacebookLink}
                       class="form-control"
                       onChange={(e) => {
                         setFacebookLink(e.target.value);
@@ -622,6 +321,7 @@ export default function ViewCovers(props) {
                       type="number"
                       name="price"
                       id="price"
+                      Value = {cover.Price}
                       class="form-control form-control-sm"
                       id="exampleInputprice"
                       aria-describedby="priceHelp"
@@ -637,6 +337,7 @@ export default function ViewCovers(props) {
                       type="text"
                       name="originalArtis"
                       id="originalArtist"
+                      Value = {cover.OriginalArtistName}
                       class="form-control form-control-sm"
                       id="exampleInputOArtist"
                       aria-describedby="priceHelp"
@@ -664,7 +365,7 @@ export default function ViewCovers(props) {
                       color: "white",
                     }}
                   >
-                    <strong>Submit</strong>
+                    <strong>Update</strong>
                   </button>
                 </center>
               </div>
@@ -672,7 +373,7 @@ export default function ViewCovers(props) {
           </Modal.Footer>
         </form>
       </Modal>
-      {/* <CoverUpdate/> */}
+      
     </div>
   );
 }

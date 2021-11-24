@@ -8,6 +8,8 @@ export default function LessonsAndCoversDetailed(props) {
   const [covers, setCovers] = useState([]);
   let preview = [];
   let instrumentsTxt = "";
+  let MainCategoryForRec = "";
+  let SubCategoryForRec = "";
   useEffect(() => {
     function getCovers() {
       //const CoverID = props.match.params.id;
@@ -19,6 +21,9 @@ export default function LessonsAndCoversDetailed(props) {
           preview = res.data.PreviewPages;
           printInstruments(res.data.InstrumentsPlayedOn);
           displayPreviewImageSlider(res.data.PreviewPages);
+          MainCategoryForRec = res.data.MainCategory;
+          SubCategoryForRec = res.data.SubCategory;
+
         })
         .catch((err) => {
           alert(err);
@@ -392,10 +397,9 @@ export default function LessonsAndCoversDetailed(props) {
       <h2 style = {{textAlign : "center",color : "#764A34"}}><b>Discover more!</b></h2>
       <div className = "container-xl">
         <h3><b>Our Recommendations </b></h3>
-      <DiscoverMoreCovers
-        MainCategory={covers.MainCategory}
-        SubCategory={covers.SubCategory}
-      />
+      {/* <DiscoverMoreCovers subCategory = "Exercises" mainCategory = "Guitar Technics & Lessons"/> */}
+      <DiscoverMoreCovers subCategory = {SubCategoryForRec} mainCategory = {MainCategoryForRec}/>
+
       </div>
     
     </div>

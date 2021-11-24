@@ -166,12 +166,10 @@ router.route("/delete/:id").delete(async (req, res) => {
     });
 });
 
-// // get one student details (Specific)
 router.route("/get/:id").get(async (req, res) => {
   let coverID = req.params.id;
   const covers = await Covers.findById(coverID)
     .then((coverss) => {
-      // res.status(200).send({status:"User fetched"});
       res.json(coverss);
     })
     .catch((err) => {
