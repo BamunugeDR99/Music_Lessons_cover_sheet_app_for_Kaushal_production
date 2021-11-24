@@ -153,9 +153,14 @@ export default function ViewCovers(props) {
     for (let i = 0; i < previewPages.length; i++) {
       previewPageList.push(previewPages[i].name);
     }
-    if (document.getElementById("MainCategory").value == "Guitar Technics & Lessons") {
+    if (
+      document.getElementById("MainCategory").value ==
+      "Guitar Technics & Lessons"
+    ) {
       dynamicSubCategory = document.getElementById("subCategory2").value;
-    } else if(document.getElementById("MainCategory").value ==	"Classical Guitar Covers"){
+    } else if (
+      document.getElementById("MainCategory").value == "Classical Guitar Covers"
+    ) {
       dynamicSubCategory = document.getElementById("subCategory1").value;
     }
     const InstrumntArray = instruments.split(",");
@@ -435,12 +440,12 @@ export default function ViewCovers(props) {
                     <br />
                     <label for="exampleInputMainCategory">Main Category</label>
                     <select
-                    required
+                      required
                       className="form-control"
                       onChange={() => {
                         if (subCategoryPreview == true) {
                           setSubCategoryPreview(false);
-                        }else{
+                        } else {
                           setSubCategoryPreview(true);
                         }
                       }}
@@ -457,7 +462,7 @@ export default function ViewCovers(props) {
                       class="form-control"
                       placeholder="YouTube Link"
                       //onkeypress='validate(event)'
-                      onBlur = {() => setYoutubeLivePriview(true)}
+                      onBlur={() => setYoutubeLivePriview(true)}
                       onChange={(e) => {
                         setYoutubeLink(e.target.value);
                         setYoutubeLivePriview(false);
@@ -584,7 +589,7 @@ export default function ViewCovers(props) {
                     />
                     <p style={{ color: "#ffba01" }}>
                       Enter the facebook page link
-                    </p>                
+                    </p>
                     <label for="exampleInputEmail1">Preview Images*</label>
                     <input
                       type="file"

@@ -5,8 +5,11 @@ import "react-multi-carousel/lib/styles.css";
 export default function DiscoverMoreCovers(props) {
   const [recommenedCovers, setRecommendedCovers] = useState([]);
 
-  const MainCategory = props.MainCategory;
-  const SubCategory = props.SubCategory;
+  //const MainCategory = props.MainCategory;
+  //const SubCategory = props.SubCategory;
+
+  const MainCategory = "Guitar Technics & Lessons";
+  const SubCategory = "Exercises";
   useEffect(() => {
     function getRecommendCovers() {
       axios
