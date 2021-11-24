@@ -12,6 +12,7 @@ export default function ViewCovers(props) {
   let tempCovers = [];
   let tempMainCategory = "";
   let tempSubCategory = [];
+  let tempSubCategory2 = [];
 
   // user inputs
   const [songName, setSongName] = useState("");
@@ -26,6 +27,9 @@ export default function ViewCovers(props) {
   const [arrangedBy, setArranngedBy] = useState("kaushal Rashmika");
 
   const [youtubeLivePreview,setYoutubeLivePriview] = useState(true);
+  const [lessonSubCategories,setLessonSubCategories] = useState([]);
+  const [subCategoryPreview,setSubCategoryPreview] = useState(true);
+
   useEffect(() => {
     function getAllClassicalGuitarCovers() {
       axios
@@ -44,18 +48,30 @@ export default function ViewCovers(props) {
 
   function setContent() {
     setSubCategories(tempSubCategory);
+    setLessonSubCategories(tempSubCategory2);
     setCovers(tempCovers.filter((covers) => covers.Status != "3"));
     $(document).ready(function () {
       $("#Covers").DataTable();
     });
   }
 
+  function GetLessonSubCategories(){
+    axios
+    .get("http://localhost:8070/mainCategory/get/619deb0ca35d670b4e68ec3e")
+    .then((res) => {
+      tempSubCategory2 = res.data.SubCategories;
+      setContent();
+    })
+    .catch((err) => {
+      alert(err);
+    });
+  }
   function getAllClassicalGutarMainCategories() {
     axios
       .get("http://localhost:8070/mainCategory/get/61936e9d9ea7c21aebd01113")
       .then((res) => {
         tempSubCategory = res.data.SubCategories;
-        setContent();
+        GetLessonSubCategories();
       })
       .catch((err) => {
         alert(err);
@@ -134,17 +150,24 @@ export default function ViewCovers(props) {
   // add cover / exercise
   function addCover(e) {
     e.preventDefault();
+    let dynamicSubCategory = "";
     let previewPageList = [];
     for (let i = 0; i < previewPages.length; i++) {
       previewPageList.push(previewPages[i].name);
     }
+    if(subCategoryPreview == false){
+      dynamicSubCategory =  document.getElementById("subCategory2").value;
+    }else{
+      dynamicSubCategory =  document.getElementById("subCategory1").value;
 
+    }
+    const InstrumntArray = instruments.split(",");
     const newCover = {
       Title: songName,
       OriginalArtistName: originalArtist,
-      InstrumentsPlayedOn: instruments,
+      InstrumentsPlayedOn:InstrumntArray,
       ArrangedBy: arrangedBy,
-      SubCategory: document.getElementById("subCategory").value,
+      SubCategory: dynamicSubCategory,
       MainCategory: document.getElementById("MainCategory").value,
       NoOfPages: noOfPages,
       NoOfPreviewPages: previewPages.length,
@@ -161,6 +184,12 @@ export default function ViewCovers(props) {
       .then(() => {
         alert("cover added");
         getAllClassicalGuitarCovers();
+        $("input[type=text]").val('');
+        $("input[type=number]").val('');
+        $("input[type=file]").val('');
+
+
+
       })
       .catch((err) => {
         alert(err);
@@ -197,6 +226,7 @@ export default function ViewCovers(props) {
             style={{ backgroundColor: "#279B14", color: "#ffffff" }}
             onClick={() => {
               setModalOpen(true);
+              setYoutubeLivePriview(true);
             }}
           >
             <svg
@@ -405,11 +435,19 @@ export default function ViewCovers(props) {
                     <label for="exampleInputMainCategory">Main Category</label>
                     <select
                       className="form-control"
+                      onChange = {()=> {
+                        setSubCategoryPreview(false);
+                        if(subCategoryPreview == false){
+                          setSubCategoryPreview(true);
+                        }
+                      }}
                       id="MainCategory"
                       name="category"
-                      disabled
+                     
                     >
                       <option>Classical Guitar Covers</option>
+                      <option>Guitar Technics & Lessons</option>
+
                     </select>
                     <br />
                     <label for="exampleInputEmail1">YouTube Link*</label>
@@ -451,7 +489,6 @@ export default function ViewCovers(props) {
                       style={{ height: "35px" }}
                       class="form-control form-control-sm"
                       id="exampleInputPDF"
-                      aria-describedby="emailHelp"
                       accept="application/pdf"
                       onChange={(e) => {
                         setCoverPDF(e.target.files);
@@ -499,22 +536,36 @@ export default function ViewCovers(props) {
                     <input
                       type="text"
                       class="form-control"
-                      placeholder="Instrument"
+                      placeholder="Instrument Exp : (Guitar,Piano)"
                       onChange={(e) => {
                         setInstrument(e.target.value);
                       }}
                       required
                     />
+ 
                     <br />
                     <label for="exampleInputEmail1">Sub Category</label>
                     <select
+                    hidden = {!subCategoryPreview}
                       className="form-control"
-                      id="subCategory"
+                      id="subCategory1"
                       name="subCategory"
                       required
                     >
                       <option>Select</option>
                       {SubCategories.map((sub) => {
+                        return <option>{sub}</option>;
+                      })}
+                    </select>
+                    <select
+                      hidden = {subCategoryPreview}
+                      className="form-control"
+                      id="subCategory2"
+                      name="subCategory"
+                      required
+                    >
+                      <option>Select</option>
+                      {lessonSubCategories.map((sub) => {
                         return <option>{sub}</option>;
                       })}
                     </select>
