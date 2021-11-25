@@ -162,16 +162,14 @@ export default function ViewDetailedCoverPage(props) {
     //console.log(document.getElementById("PSampleImages").value);
 
     if (document.getElementById("sampleimages").files.length === 0) {
-        previewPageList = document.getElementById("PSampleImages").value.split(",");
-  
-    }else{
-        for (let i = 0; i < previewPages.length; i++) {
-            previewPageList.push(previewPages[i].name);
-          }
+      previewPageList = document
+        .getElementById("PSampleImages")
+        .value.split(",");
+    } else {
+      for (let i = 0; i < previewPages.length; i++) {
+        previewPageList.push(previewPages[i].name);
+      }
     }
-
-
-  
 
     if (
       document.getElementById("MainCategory").value ==
@@ -184,7 +182,6 @@ export default function ViewDetailedCoverPage(props) {
       dynamicSubCategory = document.getElementById("subCategory1").value;
     }
 
-
     let InstrumentArray = [];
     if (instruments == "") {
       InstrumentArray = document.getElementById("Instruments").value.split(",");
@@ -192,14 +189,11 @@ export default function ViewDetailedCoverPage(props) {
       InstrumentArray = instruments.split(",");
     }
 
-
-
-
     let updateCoverPdf = "";
-    if(document.getElementById("pdffile").files.length === 0){
-        updateCoverPdf = document.getElementById("tPdfFile").value;
-    }else{
-        updateCoverPdf = coverPDF[0].name;
+    if (document.getElementById("pdffile").files.length === 0) {
+      updateCoverPdf = document.getElementById("tPdfFile").value;
+    } else {
+      updateCoverPdf = coverPDF[0].name;
     }
 
     const updatedCover = {
@@ -220,7 +214,7 @@ export default function ViewDetailedCoverPage(props) {
     };
 
     axios
-      .put("http://localhost:8070/covers/update/"+ CoverTempID, updatedCover)
+      .put("http://localhost:8070/covers/update/" + CoverTempID, updatedCover)
       .then(() => {
         alert("cover updated");
         getCovers();
@@ -649,7 +643,12 @@ export default function ViewDetailedCoverPage(props) {
                         setCoverPDF(e.target.files);
                       }}
                     />
-                    <input type = "text" id = "tPdfFile" Value = {covers.CoverPdf}  hidden/>
+                    <input
+                      type="text"
+                      id="tPdfFile"
+                      Value={covers.CoverPdf}
+                      hidden
+                    />
 
                     <p style={{ color: "#D0193A " }}>
                       <b>Previous Pdf file will remain if you didn't update</b>
@@ -756,7 +755,12 @@ export default function ViewDetailedCoverPage(props) {
                       }}
                       multiple
                     />
-                    <input type = "text" Value = {covers.PreviewPages} id = "PSampleImages" hidden/>
+                    <input
+                      type="text"
+                      Value={covers.PreviewPages}
+                      id="PSampleImages"
+                      hidden
+                    />
                     <p style={{ color: "#D0193A " }}>
                       <b>Previous images will remain if you didn't update</b>
                     </p>
