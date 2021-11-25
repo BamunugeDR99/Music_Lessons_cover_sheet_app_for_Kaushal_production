@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 export default function ViewDetailedCoverPage(props) {
   const [covers, setCovers] = useState([]);
   const [modalOpen3, setModalOpen3] = useState(false);
+  const [modalOpen2, setModalOpen2] = useState(true);
   let preview = [];
   let instrumentsTxt = "";
   let MainCategoryForRec = "";
@@ -16,7 +17,6 @@ export default function ViewDetailedCoverPage(props) {
 
   //   for update
   //const [covers, setCovers] = useState([]);
-  const [modalOpen2, setModalOpen2] = useState(true);
   const [SubCategories, setSubCategories] = useState([]);
   let tempCovers = [];
   let tempMainCategory = "";
@@ -41,21 +41,23 @@ export default function ViewDetailedCoverPage(props) {
   const [cover, setCover] = useState([]);
   let tempMainCategoryStore = "";
   let tempSubCategoryStore = "";
-
+  let tempPdf = "";
+  let tempCoverImages = [];
+  let CoverTempID = location.pathname.substring(10);
   useEffect(() => {
     function getCovers() {
-      const CoverTempID = location.pathname.substring(10);
-      // const CoverTempID = "";
       axios
         .get("http://localhost:8070/covers/get/" + CoverTempID)
         .then((res) => {
           setCovers(res.data);
+          setPreviousContent(res.data);
           preview = res.data.PreviewPages;
           printInstruments(res.data.InstrumentsPlayedOn);
           displayPreviewImageSlider(res.data.PreviewPages);
           MainCategoryForRec = res.data.MainCategory;
           SubCategoryForRec = res.data.SubCategory;
-          setYoutubeLink(res.data.YoutubeLink)
+          setYoutubeLink(res.data.YoutubeLink);
+
           getAllClassicalGutarMainCategories();
         })
         .catch((err) => {
@@ -66,6 +68,13 @@ export default function ViewDetailedCoverPage(props) {
     getCovers();
   }, []);
 
+  function setPreviousContent(content) {
+    console.log(content);
+    tempCoverImages = content.PreviewPages;
+    tempPdf = content.CoverPdf;
+
+    //console.log(tempCoverImages,tempPdf,tempInstruments)
+  }
   function printInstruments(instruments) {
     for (let i = 0; i < instruments.length; i++) {
       if (instruments.length == i + 1) {
@@ -102,12 +111,6 @@ export default function ViewDetailedCoverPage(props) {
     }
   }
 
- 
-
-  function updateCover(e) {
-    e.preventDefault();
-  }
-
   function youtubeLinkDefaultPreview() {
     if (youtubeLink.toLowerCase().includes("https://www.youtube.com/embed/")) {
       return youtubeLink;
@@ -119,7 +122,7 @@ export default function ViewDetailedCoverPage(props) {
     setSubCategories(tempSubCategory);
     setLessonSubCategories(tempSubCategory2);
 
-   document.getElementById("MainCategory").value = MainCategoryForRec;
+    document.getElementById("MainCategory").value = MainCategoryForRec;
     if (MainCategoryForRec == "Classical Guitar Covers") {
       document.getElementById("subCategory1").value = SubCategoryForRec;
       setSubCategoryPreview(false);
@@ -128,7 +131,6 @@ export default function ViewDetailedCoverPage(props) {
       setSubCategoryPreview(true);
     }
   }
-
 
   function GetLessonSubCategories() {
     axios
@@ -151,6 +153,76 @@ export default function ViewDetailedCoverPage(props) {
       .catch((err) => {
         alert(err);
       });
+  }
+
+  function update(e) {
+    e.preventDefault();
+    let dynamicSubCategory = "";
+    let previewPageList = [];
+
+    if (document.getElementById("sampleimages").files.length === 0) {
+      setPreviewPages(tempCoverImages);
+      console.log(tempCoverImages);
+      console.log("a");
+    }
+    for (let i = 0; i < previewPages.length; i++) {
+      previewPageList.push(previewPages[i].name);
+    }
+
+    if (
+      document.getElementById("MainCategory").value ==
+      "Guitar Technics & Lessons"
+    ) {
+      dynamicSubCategory = document.getElementById("subCategory2").value;
+    } else if (
+      document.getElementById("MainCategory").value == "Classical Guitar Covers"
+    ) {
+      dynamicSubCategory = document.getElementById("subCategory1").value;
+    }
+    let InstrumentArray = [];
+    if (instruments == "") {
+      InstrumentArray = document.getElementById("Instruments").value.split(",");
+    } else {
+      InstrumentArray = instruments.split(",");
+    }
+    let updateCoverPdf = "";
+    // if(coverPDF == covers.CoverPdf){
+    //     updateCoverPdf = covers.CoverPDF;
+    //     console.log("a")
+    // }else if(coverPDF.length != 0){
+    //     updateCoverPdf = coverPDF[0].name;
+    //     console.log("b")
+    // }
+
+    const newCover = {
+      Title: document.getElementById("songName").value,
+      OriginalArtistName: document.getElementById("originalArtist").value,
+      InstrumentsPlayedOn: InstrumentArray,
+      ArrangedBy: arrangedBy,
+      SubCategory: dynamicSubCategory,
+      MainCategory: document.getElementById("MainCategory").value,
+      NoOfPages: document.getElementById("noOfPages").value,
+      NoOfPreviewPages: previewPages.length,
+      Price: document.getElementById("price").value,
+      YoutubeLink: document.getElementById("youtubeLink").value,
+      FacebookLink: document.getElementById("facebookLink").value,
+      PreviewPages: previewPageList,
+      CoverPdf: updateCoverPdf,
+    };
+    console.log(newCover);
+
+    // axios
+    //   .post("http://localhost:8070/covers/add", newCover)
+    //   .then(() => {
+    //     alert("cover added");
+    //     getAllClassicalGuitarCovers();
+    //     $("input[type=text]").val("");
+    //     $("input[type=number]").val("");
+    //     $("input[type=file]").val("");
+    //   })
+    //   .catch((err) => {
+    //     alert(err);
+    //   });
   }
   return (
     <div>
@@ -357,7 +429,7 @@ export default function ViewDetailedCoverPage(props) {
                     <button
                       type="button"
                       class="btn btn-success rounded"
-                      //onClick={() => addToCart(covers._id)}
+                      onClick={() => setModalOpen2(true)}
                     >
                       Edit Cover
                     </button>
@@ -440,7 +512,7 @@ export default function ViewDetailedCoverPage(props) {
 
       {/* update form modal */}
       <Modal show={modalOpen2} size="lg">
-        <form onSubmit={updateCover}>
+        <form onSubmit={update}>
           <Modal.Header>
             <h4>Edit Cover/Excercise</h4>
             <button
@@ -466,6 +538,7 @@ export default function ViewDetailedCoverPage(props) {
                       type="text"
                       class="form-control"
                       placeholder="Song Name"
+                      id="songName"
                       Value={covers.Title}
                       onChange={(e) => {
                         setSongName(e.target.value);
@@ -497,8 +570,8 @@ export default function ViewDetailedCoverPage(props) {
                       class="form-control"
                       placeholder="YouTube Link"
                       Value={covers.YoutubeLink}
-                      //onBlur={() => setYoutubeLivePriview(true)}
-                      onFocus = {() => setYoutubeLivePriview(false) }
+                      id="youtubeLink"
+                      onFocus={() => setYoutubeLivePriview(false)}
                       onChange={(e) => {
                         setYoutubeLink(e.target.value);
                         setYoutubeLivePriview(false);
@@ -509,7 +582,7 @@ export default function ViewDetailedCoverPage(props) {
                       required
                     />
                     <p style={{ color: "#ffba01" }}>
-                      Enter the youtube embed url link
+                      <b>Enter the youtube embed url link</b>
                     </p>
                     {/* youtube video  */}
                     <div
@@ -539,9 +612,11 @@ export default function ViewDetailedCoverPage(props) {
                       onChange={(e) => {
                         setCoverPDF(e.target.files);
                       }}
-                      required
                     />
-                    <br />
+                    <p style={{ color: "#D0193A " }}>
+                      <b>Previous Pdf file will remain if you didn't update</b>
+                    </p>
+
                     <label for="exampleInputEmail1">No of Pages*</label>
                     <input
                       type="number"
@@ -549,7 +624,6 @@ export default function ViewDetailedCoverPage(props) {
                       id="noOfPages"
                       Value={covers.NoOfPages}
                       class="form-control form-control-sm"
-                      id="exampleInputNoOfPages"
                       placeholder="(PDF) no of original pages"
                       onChange={(e) => {
                         setNoOfPages(e.target.value);
@@ -565,7 +639,6 @@ export default function ViewDetailedCoverPage(props) {
                       id="arrangedByx"
                       Value={covers.ArrangedBy}
                       class="form-control form-control-sm"
-                      id="exampleInputArranged"
                       aria-describedby="priceHelp"
                       placeholder="Default : Kaushal Rashmika"
                       onChange={(e) => {
@@ -584,6 +657,8 @@ export default function ViewDetailedCoverPage(props) {
                     <input
                       type="text"
                       class="form-control"
+                      id="Instruments"
+                      Value={covers.InstrumentsPlayedOn}
                       placeholder="Instrument Exp : (Guitar,Piano)"
                       onChange={(e) => {
                         setInstrument(e.target.value);
@@ -621,13 +696,14 @@ export default function ViewDetailedCoverPage(props) {
                       type="text"
                       Value={covers.FacebookLink}
                       class="form-control"
+                      id="facebookLink"
                       onChange={(e) => {
                         setFacebookLink(e.target.value);
                       }}
                       placeholder="Facebook Link*"
                     />
                     <p style={{ color: "#ffba01" }}>
-                      Enter the facebook page link
+                      <b>Enter the facebook page link</b>
                     </p>
                     <label for="exampleInputEmail1">Preview Images*</label>
                     <input
@@ -636,13 +712,16 @@ export default function ViewDetailedCoverPage(props) {
                       name="sampleimages[]"
                       id="sampleimages"
                       class="form-control form-control-sm"
-                      accept="image/png, image/jpeg"
+                      accept="image/png, image/jpeg, image/jpg"
                       onChange={(e) => {
                         setPreviewPages(e.target.files);
                       }}
                       multiple
                     />
-                    <br />
+                    <p style={{ color: "#D0193A " }}>
+                      <b>Previous images will remain if you didn't update</b>
+                    </p>
+
                     <label for="exampleInputEmail1">Price*</label>
                     <input
                       type="number"
@@ -650,7 +729,6 @@ export default function ViewDetailedCoverPage(props) {
                       id="price"
                       Value={covers.Price}
                       class="form-control form-control-sm"
-                      id="exampleInputprice"
                       aria-describedby="priceHelp"
                       onChange={(e) => {
                         setPrices(e.target.value);
@@ -666,7 +744,6 @@ export default function ViewDetailedCoverPage(props) {
                       id="originalArtist"
                       Value={covers.OriginalArtistName}
                       class="form-control form-control-sm"
-                      id="exampleInputOArtist"
                       aria-describedby="priceHelp"
                       onChange={(e) => {
                         setOriginalArtist(e.target.value);

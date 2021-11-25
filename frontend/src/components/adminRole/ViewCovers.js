@@ -592,11 +592,12 @@ export default function ViewCovers(props) {
                       name="sampleimages[]"
                       id="sampleimages"
                       class="form-control form-control-sm"
-                      accept="image/png, image/jpeg"
+                      accept="image/png, image/jpeg, image/jpg"
                       onChange={(e) => {
                         setPreviewPages(e.target.files);
                       }}
                       multiple
+                      required
                     />
                     <br />
                     <label for="exampleInputEmail1">Price*</label>
