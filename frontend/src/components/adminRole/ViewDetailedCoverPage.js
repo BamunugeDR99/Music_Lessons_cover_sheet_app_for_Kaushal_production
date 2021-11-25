@@ -7,12 +7,40 @@ import { useLocation } from "react-router-dom";
 
 export default function ViewDetailedCoverPage(props) {
   const [covers, setCovers] = useState([]);
-  const [modalOpen3,setModalOpen3] = useState([]);
+  const [modalOpen3, setModalOpen3] = useState(false);
   let preview = [];
   let instrumentsTxt = "";
   let MainCategoryForRec = "";
   let SubCategoryForRec = "";
   let location = useLocation();
+
+  //   for update
+  //const [covers, setCovers] = useState([]);
+  const [modalOpen2, setModalOpen2] = useState(true);
+  const [SubCategories, setSubCategories] = useState([]);
+  let tempCovers = [];
+  let tempMainCategory = "";
+  let tempSubCategory = [];
+  let tempSubCategory2 = [];
+
+  // user inputs
+  const [songName, setSongName] = useState("");
+  const [instruments, setInstrument] = useState("");
+  const [youtubeLink, setYoutubeLink] = useState("");
+  const [facebookLink, setFacebookLink] = useState("");
+  const [noOfPages, setNoOfPages] = useState("");
+  const [price, setPrices] = useState("");
+  const [previewPages, setPreviewPages] = useState("");
+  const [coverPDF, setCoverPDF] = useState("");
+  const [originalArtist, setOriginalArtist] = useState("");
+  const [arrangedBy, setArranngedBy] = useState("kaushal Rashmika");
+
+  const [youtubeLivePreview, setYoutubeLivePriview] = useState(true);
+  const [lessonSubCategories, setLessonSubCategories] = useState([]);
+  const [subCategoryPreview, setSubCategoryPreview] = useState(false);
+  const [cover, setCover] = useState([]);
+  let tempMainCategoryStore = "";
+  let tempSubCategoryStore = "";
 
   useEffect(() => {
     function getCovers() {
@@ -27,6 +55,8 @@ export default function ViewDetailedCoverPage(props) {
           displayPreviewImageSlider(res.data.PreviewPages);
           MainCategoryForRec = res.data.MainCategory;
           SubCategoryForRec = res.data.SubCategory;
+          setYoutubeLink(res.data.YoutubeLink)
+          getAllClassicalGutarMainCategories();
         })
         .catch((err) => {
           alert(err);
@@ -72,61 +102,56 @@ export default function ViewDetailedCoverPage(props) {
     }
   }
 
-  function addToCart(id) {
-    //alert(id);
+ 
 
-    //let customerID = localStorage.getItem("CustomerID");
-    let newItems = []; /// Change this later
-    const customerID = "6199d490bfd483038f7067bf";
-    let coverIDs = [];
-    let shoppingcartId = "";
+  function updateCover(e) {
+    e.preventDefault();
+  }
+
+  function youtubeLinkDefaultPreview() {
+    if (youtubeLink.toLowerCase().includes("https://www.youtube.com/embed/")) {
+      return youtubeLink;
+    } else {
+      return "https://www.youtube.com/embed/";
+    }
+  }
+  function setContent() {
+    setSubCategories(tempSubCategory);
+    setLessonSubCategories(tempSubCategory2);
+
+   document.getElementById("MainCategory").value = MainCategoryForRec;
+    if (MainCategoryForRec == "Classical Guitar Covers") {
+      document.getElementById("subCategory1").value = SubCategoryForRec;
+      setSubCategoryPreview(false);
+    } else if (MainCategoryForRec == "Guitar Technics & Lessons") {
+      document.getElementById("subCategory2").value = SubCategoryForRec;
+      setSubCategoryPreview(true);
+    }
+  }
+
+
+  function GetLessonSubCategories() {
     axios
-      .get("http://localhost:8070/shoppingCart/getOneCart/" + customerID)
+      .get("http://localhost:8070/mainCategory/get/619deb0ca35d670b4e68ec3e")
       .then((res) => {
-        console.log(res.data.CoverIDs);
-        coverIDs = res.data.CoverIDs;
-        shoppingcartId = res.data._id;
-        let falgs = 0;
-        for (let i = 0; i < coverIDs.length; i++) {
-          if (coverIDs[i] === id) {
-            falgs = 1;
-          }
-        }
-        coverIDs.push(id);
-        console.log(coverIDs);
-        const newcoverList = {
-          CustomerID: customerID,
-          CoverIDs: coverIDs,
-        };
-        console.log(newcoverList);
-        if (falgs === 0) {
-          axios
-            .put(
-              "http://localhost:8070/shoppingCart/updateSItem/" +
-                shoppingcartId,
-              newcoverList
-            )
-            .then(() => {
-              Swal.fire({
-                position: "center",
-                icon: "success",
-                title: "Cover has been added to your shopping cart!",
-                showConfirmButton: false,
-                timer: 1500,
-              });
-            })
-            .catch((err) => {
-              alert(err);
-            });
-        } else if (falgs === 1) {
-          Swal.fire("Cover Already in Your shopping cart.");
-        }
+        tempSubCategory2 = res.data.SubCategories;
+        setContent();
       })
       .catch((err) => {
         alert(err);
       });
   }
-
+  function getAllClassicalGutarMainCategories() {
+    axios
+      .get("http://localhost:8070/mainCategory/get/61936e9d9ea7c21aebd01113")
+      .then((res) => {
+        tempSubCategory = res.data.SubCategories;
+        GetLessonSubCategories();
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }
   return (
     <div>
       <div class="card container-xxl" style={{ border: "solid #764A34" }}>
@@ -332,7 +357,7 @@ export default function ViewDetailedCoverPage(props) {
                     <button
                       type="button"
                       class="btn btn-success rounded"
-                      onClick={() => addToCart(covers._id)}
+                      //onClick={() => addToCart(covers._id)}
                     >
                       Edit Cover
                     </button>
@@ -350,8 +375,8 @@ export default function ViewDetailedCoverPage(props) {
                     {/* <!-- Youtube --> */}
                     <button
                       class="btn"
-                      onClick = {()=> {
-                          setModalOpen3(true);
+                      onClick={() => {
+                        setModalOpen3(true);
                       }}
                       style={{ backgroundColor: "#ed302f" }}
                       //href="#!"
@@ -379,16 +404,52 @@ export default function ViewDetailedCoverPage(props) {
         </div>
       </div>
       <br />
-
+      {/* youtube video modal  */}
       <Modal show={modalOpen3} size="lg">
+        <Modal.Header>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+            onClick={() => {
+              setModalOpen3(false);
+            }}
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </Modal.Header>
+
+        <Modal.Body>
+          <div className="container">
+            {/* youtube video  */}
+            <div class="embed-responsive embed-responsive-16by9">
+              <iframe
+                class="embed-responsive-item"
+                // need to use embeded youtube link
+                src={covers.YoutubeLink}
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
+
+      {/* update form modal */}
+      <Modal show={modalOpen2} size="lg">
+        <form onSubmit={updateCover}>
           <Modal.Header>
+            <h4>Edit Cover/Excercise</h4>
             <button
               type="button"
               class="close"
               data-dismiss="modal"
               aria-label="Close"
               onClick={() => {
-                setModalOpen3(false);
+                setModalOpen2(false);
               }}
             >
               <span aria-hidden="true">&times;</span>
@@ -397,20 +458,247 @@ export default function ViewDetailedCoverPage(props) {
 
           <Modal.Body>
             <div className="container">
-                {/* youtube video  */}
-                <div class="embed-responsive embed-responsive-16by9">
-                  <iframe
-                    class="embed-responsive-item"
-                    // need to use embeded youtube link
-                    src={covers.YoutubeLink}
-                    title="YouTube video player"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
+              <div className="row">
+                <div className="col-sm-6">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Song Name*</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Song Name"
+                      Value={covers.Title}
+                      onChange={(e) => {
+                        setSongName(e.target.value);
+                      }}
+                      required
+                    />
+                    <br />
+                    <label for="exampleInputMainCategory">Main Category</label>
+                    <select
+                      required
+                      className="form-control"
+                      onChange={() => {
+                        if (subCategoryPreview == true) {
+                          setSubCategoryPreview(false);
+                        } else {
+                          setSubCategoryPreview(true);
+                        }
+                      }}
+                      id="MainCategory"
+                      name="category"
+                    >
+                      <option>Classical Guitar Covers</option>
+                      <option>Guitar Technics & Lessons</option>
+                    </select>
+                    <br />
+                    <label for="exampleInputEmail1">YouTube Link*</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="YouTube Link"
+                      Value={covers.YoutubeLink}
+                      //onBlur={() => setYoutubeLivePriview(true)}
+                      onFocus = {() => setYoutubeLivePriview(false) }
+                      onChange={(e) => {
+                        setYoutubeLink(e.target.value);
+                        setYoutubeLivePriview(false);
+                        if (e.target.value == "") {
+                          setYoutubeLivePriview(true);
+                        }
+                      }}
+                      required
+                    />
+                    <p style={{ color: "#ffba01" }}>
+                      Enter the youtube embed url link
+                    </p>
+                    {/* youtube video  */}
+                    <div
+                      class="embed-responsive embed-responsive-16by9"
+                      hidden={youtubeLivePreview}
+                    >
+                      <iframe
+                        class="embed-responsive-item"
+                        // need to use embeded youtube link
+                        src={youtubeLinkDefaultPreview()}
+                        title="YouTube video player"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                      <br />
+                    </div>
+                    <label for="exampleInputEmail1">PDF File*</label>
+                    <input
+                      type="file"
+                      name="pdffile"
+                      id="pdffile"
+                      style={{ height: "35px" }}
+                      class="form-control form-control-sm"
+                      id="exampleInputPDF"
+                      accept="application/pdf"
+                      onChange={(e) => {
+                        setCoverPDF(e.target.files);
+                      }}
+                      required
+                    />
+                    <br />
+                    <label for="exampleInputEmail1">No of Pages*</label>
+                    <input
+                      type="number"
+                      name="noOfPages"
+                      id="noOfPages"
+                      Value={covers.NoOfPages}
+                      class="form-control form-control-sm"
+                      id="exampleInputNoOfPages"
+                      placeholder="(PDF) no of original pages"
+                      onChange={(e) => {
+                        setNoOfPages(e.target.value);
+                      }}
+                      required
+                    />
+                    <br />
+
+                    <label for="exampleInputEmail1">Arranged By</label>
+                    <input
+                      type="text"
+                      name="arranged"
+                      id="arrangedByx"
+                      Value={covers.ArrangedBy}
+                      class="form-control form-control-sm"
+                      id="exampleInputArranged"
+                      aria-describedby="priceHelp"
+                      placeholder="Default : Kaushal Rashmika"
+                      onChange={(e) => {
+                        if (e.target.value.length == 0) {
+                          setArranngedBy("Kaushal Rashmika");
+                        } else {
+                          setArranngedBy(e.target.value);
+                        }
+                      }}
+                    />
+                  </div>
                 </div>
+                <div className="col-sm-6">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Instruments*</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Instrument Exp : (Guitar,Piano)"
+                      onChange={(e) => {
+                        setInstrument(e.target.value);
+                      }}
+                      required
+                    />
+
+                    <br />
+                    <label for="exampleInputEmail1">Sub Category</label>
+                    <select
+                      hidden={subCategoryPreview}
+                      className="form-control"
+                      id="subCategory1"
+                      name="subCategory"
+                      required
+                    >
+                      {SubCategories.map((sub) => {
+                        return <option>{sub}</option>;
+                      })}
+                    </select>
+                    <select
+                      hidden={!subCategoryPreview}
+                      className="form-control"
+                      id="subCategory2"
+                      name="subCategory"
+                      required
+                    >
+                      {lessonSubCategories.map((sub) => {
+                        return <option>{sub}</option>;
+                      })}
+                    </select>
+                    <br />
+                    <label for="exampleInputEmail1">Facebook Link*</label>
+                    <input
+                      type="text"
+                      Value={covers.FacebookLink}
+                      class="form-control"
+                      onChange={(e) => {
+                        setFacebookLink(e.target.value);
+                      }}
+                      placeholder="Facebook Link*"
+                    />
+                    <p style={{ color: "#ffba01" }}>
+                      Enter the facebook page link
+                    </p>
+                    <label for="exampleInputEmail1">Preview Images*</label>
+                    <input
+                      type="file"
+                      style={{ height: "35px" }}
+                      name="sampleimages[]"
+                      id="sampleimages"
+                      class="form-control form-control-sm"
+                      accept="image/png, image/jpeg"
+                      onChange={(e) => {
+                        setPreviewPages(e.target.files);
+                      }}
+                      multiple
+                    />
+                    <br />
+                    <label for="exampleInputEmail1">Price*</label>
+                    <input
+                      type="number"
+                      name="price"
+                      id="price"
+                      Value={covers.Price}
+                      class="form-control form-control-sm"
+                      id="exampleInputprice"
+                      aria-describedby="priceHelp"
+                      onChange={(e) => {
+                        setPrices(e.target.value);
+                      }}
+                      placeholder="Cover price"
+                      required
+                    />
+                    <br />
+                    <label for="exampleInputEmail1">Original Artist *</label>
+                    <input
+                      type="text"
+                      name="originalArtis"
+                      id="originalArtist"
+                      Value={covers.OriginalArtistName}
+                      class="form-control form-control-sm"
+                      id="exampleInputOArtist"
+                      aria-describedby="priceHelp"
+                      onChange={(e) => {
+                        setOriginalArtist(e.target.value);
+                      }}
+                      placeholder="Original Artist name"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           </Modal.Body>
+          <Modal.Footer>
+            <div className="row">
+              <div className="col-md-6">
+                <center>
+                  <button
+                    type="submit"
+                    class="btn btn"
+                    style={{
+                      borderRadius: "10px",
+                      backgroundColor: "#28A745",
+                      color: "white",
+                    }}
+                  >
+                    <strong>Update</strong>
+                  </button>
+                </center>
+              </div>
+            </div>
+          </Modal.Footer>
+        </form>
       </Modal>
     </div>
   );

@@ -456,7 +456,8 @@ export default function ViewCovers(props) {
                       class="form-control"
                       placeholder="YouTube Link"
                       //onkeypress='validate(event)'
-                      onBlur={() => setYoutubeLivePriview(true)}
+                      // onBlur={() => setYoutubeLivePriview(true)}
+                      onFocus = {()=> setYoutubeLivePriview(false)}
                       onChange={(e) => {
                         setYoutubeLink(e.target.value);
                         setYoutubeLivePriview(false);
