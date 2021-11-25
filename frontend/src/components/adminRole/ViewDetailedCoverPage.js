@@ -410,6 +410,18 @@ export default function ViewDetailedCoverPage(props) {
                 <h5 style={{ display: "inline" }}>{covers.NoOfPreviewPages}</h5>
                 <br />
                 <br />
+                <h5
+                  style={{
+                    display: "inline",
+                    color: "#764A34",
+                    letterSpacing: "2px",
+                  }}
+                >
+                  No of downloads:{" "}
+                </h5>{" "}
+                <h5 style={{ display: "inline" }}>{covers.NoOfDownloads}</h5>
+                <br />
+                <br />
                 <div class="container">
                   <div class="row">
                     <div class="col-sm">

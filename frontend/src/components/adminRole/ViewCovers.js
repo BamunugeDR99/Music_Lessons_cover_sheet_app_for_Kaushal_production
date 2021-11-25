@@ -309,9 +309,13 @@ export default function ViewCovers(props) {
                   <td>{covers.MainCategory}</td>
                   <td>{covers.SubCategory}</td>
                   <td>{covers.Price}</td>
-                  <td>{covers.AddedDateAndTime}</td>
+                  <td>
+                    Date : {covers.AddedDateAndTime.substring(0, 10)} <br />{" "}
+                    Time : {covers.AddedDateAndTime.substring(12, 19)}
+                  </td>
                   <td>
                     {" "}
+                    {/* change cover status  */}
                     <label class="switch">
                       <input
                         type="checkbox"
@@ -323,16 +327,58 @@ export default function ViewCovers(props) {
                     </label>
                   </td>
                   <td>
-                    {/* <button
+                    {/* pdf viewer  */}
+                    <button
                       className="btn-sm"
-                      style={{ display: "inline" }}
-                      onClick={() => redirectToCoverPage(covers._id)}
+                      style={{ display: "inline", border: "1px solid #D0193A" }}
+                      onClick={() => viewMoreCover(covers._id)}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="#D0193A"
+                        class="bi bi-file-earmark-pdf-fill"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M5.523 12.424c.14-.082.293-.162.459-.238a7.878 7.878 0 0 1-.45.606c-.28.337-.498.516-.635.572a.266.266 0 0 1-.035.012.282.282 0 0 1-.026-.044c-.056-.11-.054-.216.04-.36.106-.165.319-.354.647-.548zm2.455-1.647c-.119.025-.237.05-.356.078a21.148 21.148 0 0 0 .5-1.05 12.045 12.045 0 0 0 .51.858c-.217.032-.436.07-.654.114zm2.525.939a3.881 3.881 0 0 1-.435-.41c.228.005.434.022.612.054.317.057.466.147.518.209a.095.095 0 0 1 .026.064.436.436 0 0 1-.06.2.307.307 0 0 1-.094.124.107.107 0 0 1-.069.015c-.09-.003-.258-.066-.498-.256zM8.278 6.97c-.04.244-.108.524-.2.829a4.86 4.86 0 0 1-.089-.346c-.076-.353-.087-.63-.046-.822.038-.177.11-.248.196-.283a.517.517 0 0 1 .145-.04c.013.03.028.092.032.198.005.122-.007.277-.038.465z" />
+                        <path
+                          fill-rule="evenodd"
+                          d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3zM4.165 13.668c.09.18.23.343.438.419.207.075.412.04.58-.03.318-.13.635-.436.926-.786.333-.401.683-.927 1.021-1.51a11.651 11.651 0 0 1 1.997-.406c.3.383.61.713.91.95.28.22.603.403.934.417a.856.856 0 0 0 .51-.138c.155-.101.27-.247.354-.416.09-.181.145-.37.138-.563a.844.844 0 0 0-.2-.518c-.226-.27-.596-.4-.96-.465a5.76 5.76 0 0 0-1.335-.05 10.954 10.954 0 0 1-.98-1.686c.25-.66.437-1.284.52-1.794.036-.218.055-.426.048-.614a1.238 1.238 0 0 0-.127-.538.7.7 0 0 0-.477-.365c-.202-.043-.41 0-.601.077-.377.15-.576.47-.651.823-.073.34-.04.736.046 1.136.088.406.238.848.43 1.295a19.697 19.697 0 0 1-1.062 2.227 7.662 7.662 0 0 0-1.482.645c-.37.22-.699.48-.897.787-.21.326-.275.714-.08 1.103z"
+                        />
+                      </svg>
+                    </button>{" "}
+                    <span> </span>
+                    {/* cover feedback */}
+                    <button
+                      className="btn-sm"
+                      style={{ display: "inline", border: "1px solid #279B14" }}
+                      onClick={() => viewMoreCover(covers._id)}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="16"
                         height="16"
                         fill="#279B14"
+                        class="bi bi-chat-dots"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
+                        <path d="m2.165 15.803.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125zm.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2z" />
+                      </svg>
+                    </button>
+                    <span> </span>
+                    {/* viewmore  */}
+                    <button
+                      className="btn-sm"
+                      style={{ display: "inline", border: "1px solid #764A34" }}
+                      onClick={() => viewMoreCover(covers._id)}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="#764A34"
                         class="bi bi-pencil-square"
                         viewBox="0 0 16 16"
                       >
@@ -343,10 +389,14 @@ export default function ViewCovers(props) {
                         />
                       </svg>
                     </button>
-                    <span> </span> */}
+                    {/* delete cover  */}
                     <button
                       className="btn-sm"
-                      style={{ display: "inline", border: "1px solid #D0193A" }}
+                      style={{
+                        display: "inline",
+                        border: "1px solid #D0193A",
+                        marginTop: "2px",
+                      }}
                       onClick={() => deleteCover(covers._id)}
                     >
                       <svg
@@ -361,22 +411,6 @@ export default function ViewCovers(props) {
                       </svg>
                     </button>
                     <span> </span>
-                    <button
-                      className="btn-sm"
-                      style={{ display: "inline", border: "1px solid #764A34" }}
-                      onClick={() => viewMoreCover(covers._id)}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="#764A34"
-                        class="bi bi-three-dots-vertical"
-                        viewBox="0 0 16 16"
-                      >
-                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
-                      </svg>
-                    </button>
                   </td>
                 </tr>
               );
@@ -457,7 +491,7 @@ export default function ViewCovers(props) {
                       placeholder="YouTube Link"
                       //onkeypress='validate(event)'
                       // onBlur={() => setYoutubeLivePriview(true)}
-                      onFocus = {()=> setYoutubeLivePriview(false)}
+                      onFocus={() => setYoutubeLivePriview(false)}
                       onChange={(e) => {
                         setYoutubeLink(e.target.value);
                         setYoutubeLivePriview(false);
