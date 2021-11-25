@@ -166,7 +166,7 @@ export default function PurchaseHistory(props) {
                       type="button"
                     >
                       View
-                      {/* ,position:'absolute', bottom:'1',alignItems:'center' */}
+                      
                     </button>
                     <br />
                   </div>
