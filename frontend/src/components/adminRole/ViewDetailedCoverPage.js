@@ -212,6 +212,7 @@ export default function ViewDetailedCoverPage(props) {
       NoOfPages: document.getElementById("noOfPages").value,
       NoOfPreviewPages: previewPageList.length,
       Price: document.getElementById("price").value,
+
       YoutubeLink: document.getElementById("youtubeLink").value,
       FacebookLink: document.getElementById("facebookLink").value,
       PreviewPages: previewPageList,
@@ -219,7 +220,7 @@ export default function ViewDetailedCoverPage(props) {
     };
 
     axios
-      .put("http://localhost:8070/covers/add", updatedCover)
+      .put("http://localhost:8070/covers/update/"+ CoverTempID, updatedCover)
       .then(() => {
         alert("cover updated");
         getCovers();
