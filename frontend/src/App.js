@@ -15,6 +15,8 @@ import ViewStudentDetails from "./components/testingComponents/ViewStudentdetail
 import CustomerHeader from "./components/customerRole/CustomerHeaderTemp";
 import CustomerFooter from "./components/customerRole/CustomerFooterTemp";
 import PurchaseHistory from "./components/purchaseHistory";
+import AdminVwCustomer from "./components/AdminVwCustomer";
+import EditCategories from "./components/EditCategories";
 
 function App() {
   return (
@@ -30,8 +32,11 @@ function App() {
         <Route path="/e" element={<MainCategoriesDataTable />} />
         {/* <Route path="/e" element={<BootstrapDataTable />} /> */}
         <Route path="/f" element={<AddStudent />} />
-        <Route path="/history" element={<PurchaseHistory/>} />
         {/* <Route path="/g" element={<ViewStudentDetails/>} /> */}
+        <Route path="/history" element={<PurchaseHistory/>} />
+        <Route path="/acus" element={<AdminVwCustomer/>} />
+        <Route path="/edit" element={<EditCategories/>} />
+        
       </Routes>
       <CustomerFooter />
     </BrowserRouter>

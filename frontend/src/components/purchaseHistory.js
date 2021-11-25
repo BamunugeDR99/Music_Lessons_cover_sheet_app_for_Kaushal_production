@@ -20,18 +20,15 @@ useEffect(()=>{
       const filter = res.data.filter(
         (cus)=>cus.CustomerID == "6199d490bfd483038f7067bf"
         // objectId
-      );
-      
+      ); 
         setOrder(filter)
         console.log(covers)
         console.log(filter)
 
         filter.map((post) => {
           covers.push(post.CoverIDs)
-
         });
     
-
         console.log(covers)
 // let covers2 = covers.split(',')
           for(let i=0;i<covers[0].length;i++){
@@ -40,35 +37,19 @@ useEffect(()=>{
           .then((res)=>{
 
            array2.push(res.data)
-         
-            
-             
-          })
-          }
-
-          console.log(array2[1])
+      
+          })}
+          console.log(array2)
           //array.push eke awla 
           setcover2(array2)     
-       
-
     })
     .catch((err) => {
       alert(err);
     });
   }
-  getCovers();
-  
+  getCovers(); 
 }, []);
-
-
-  // let i=0;
-  // let Total=0;
-  // for(i=0;i>-1;i++){
-  //   Total = Total + cover.price;
-  //   console.log(Total)
-  // }
  
-
 
   return (
  
@@ -115,9 +96,10 @@ useEffect(()=>{
     <br/>
     
     {/* {cover2.map((post) => ( */}
-      {array2.map((post) => {
+
+      {/* {array2.map((post) => {
         // alert("asd")
-        return (
+        return ( */}
     <div className="card p-3" 
      style={{boxShadow: "10px 10px 6px -6px #aaaaaa",borderRadius: "10px", width:'90%', margin: 'auto', border:'2px solid sienna'}}>
            
@@ -139,11 +121,11 @@ useEffect(()=>{
                 
                     <div className="col" style={{ lineHeight:'2em'}}>
                  
-                      <span><b> &ensp;&ensp;{post.Title}</b></span>
+                      <span><b> &ensp;&ensp;{covers.Title}</b></span>
                     <br/>
-                      <span> &ensp;&ensp;{post.MainCategory}</span>
+                      <span> &ensp;&ensp;{covers.MainCategory}</span>
                     <br/>
-                      <span> &ensp;&ensp;{post.SubCategory}</span>
+                      <span> &ensp;&ensp;{covers.SubCategory}</span>
                   </div>
                 </div>
 <br/>
@@ -175,20 +157,21 @@ useEffect(()=>{
                 </div>
                      
                       <span style={{  color:' #764A34'}}>Original Artist &ensp;&ensp;:</span>
-                      <span> &ensp;&ensp; {post.OriginalArtistName}</span>
+                      <span> &ensp;&ensp; {covers.OriginalArtistName}</span>
                       <br/>
                       <span style={{ color:' #764A34'  }}>Arranged By &ensp;&ensp;:</span>
-                      <span> &ensp;&ensp; {post.ArrangedBy}</span>
+                      <span> &ensp;&ensp; {covers.ArrangedBy}</span>
                       <br/>
                       <span style={{color:' #764A34'  }}>Instrument Played On &ensp;&ensp;:</span>
-                      <span> &ensp;&ensp; {post.InstrumentsPlayedOn}</span>
+                      <span> &ensp;&ensp; {covers.InstrumentsPlayedOn}</span>
                       <br/>
                     </div>
             </div>
     </div>
+    <br/><br/>
     
-      );
-    })}
+      {/* );
+    })} */}
   
       
 </div>
