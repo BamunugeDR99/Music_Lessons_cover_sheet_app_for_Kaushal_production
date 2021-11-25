@@ -159,15 +159,19 @@ export default function ViewDetailedCoverPage(props) {
     e.preventDefault();
     let dynamicSubCategory = "";
     let previewPageList = [];
+    //console.log(document.getElementById("PSampleImages").value);
 
     if (document.getElementById("sampleimages").files.length === 0) {
-      setPreviewPages(tempCoverImages);
-      console.log(tempCoverImages);
-      console.log("a");
+        previewPageList = document.getElementById("PSampleImages").value.split(",");
+  
+    }else{
+        for (let i = 0; i < previewPages.length; i++) {
+            previewPageList.push(previewPages[i].name);
+          }
     }
-    for (let i = 0; i < previewPages.length; i++) {
-      previewPageList.push(previewPages[i].name);
-    }
+
+
+  
 
     if (
       document.getElementById("MainCategory").value ==
@@ -179,22 +183,26 @@ export default function ViewDetailedCoverPage(props) {
     ) {
       dynamicSubCategory = document.getElementById("subCategory1").value;
     }
+
+
     let InstrumentArray = [];
     if (instruments == "") {
       InstrumentArray = document.getElementById("Instruments").value.split(",");
     } else {
       InstrumentArray = instruments.split(",");
     }
-    let updateCoverPdf = "";
-    // if(coverPDF == covers.CoverPdf){
-    //     updateCoverPdf = covers.CoverPDF;
-    //     console.log("a")
-    // }else if(coverPDF.length != 0){
-    //     updateCoverPdf = coverPDF[0].name;
-    //     console.log("b")
-    // }
 
-    const newCover = {
+
+
+
+    let updateCoverPdf = "";
+    if(document.getElementById("pdffile").files.length === 0){
+        updateCoverPdf = document.getElementById("tPdfFile").value;
+    }else{
+        updateCoverPdf = coverPDF[0].name;
+    }
+
+    const updatedCover = {
       Title: document.getElementById("songName").value,
       OriginalArtistName: document.getElementById("originalArtist").value,
       InstrumentsPlayedOn: InstrumentArray,
@@ -202,27 +210,43 @@ export default function ViewDetailedCoverPage(props) {
       SubCategory: dynamicSubCategory,
       MainCategory: document.getElementById("MainCategory").value,
       NoOfPages: document.getElementById("noOfPages").value,
-      NoOfPreviewPages: previewPages.length,
+      NoOfPreviewPages: previewPageList.length,
       Price: document.getElementById("price").value,
       YoutubeLink: document.getElementById("youtubeLink").value,
       FacebookLink: document.getElementById("facebookLink").value,
       PreviewPages: previewPageList,
       CoverPdf: updateCoverPdf,
     };
-    console.log(newCover);
 
-    // axios
-    //   .post("http://localhost:8070/covers/add", newCover)
-    //   .then(() => {
-    //     alert("cover added");
-    //     getAllClassicalGuitarCovers();
-    //     $("input[type=text]").val("");
-    //     $("input[type=number]").val("");
-    //     $("input[type=file]").val("");
-    //   })
-    //   .catch((err) => {
-    //     alert(err);
-    //   });
+    axios
+      .put("http://localhost:8070/covers/add", updatedCover)
+      .then(() => {
+        alert("cover updated");
+        getCovers();
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }
+
+  function getCovers() {
+    axios
+      .get("http://localhost:8070/covers/get/" + CoverTempID)
+      .then((res) => {
+        setCovers(res.data);
+        setPreviousContent(res.data);
+        preview = res.data.PreviewPages;
+        printInstruments(res.data.InstrumentsPlayedOn);
+        displayPreviewImageSlider(res.data.PreviewPages);
+        MainCategoryForRec = res.data.MainCategory;
+        SubCategoryForRec = res.data.SubCategory;
+        setYoutubeLink(res.data.YoutubeLink);
+
+        getAllClassicalGutarMainCategories();
+      })
+      .catch((err) => {
+        alert(err);
+      });
   }
   return (
     <div>
@@ -607,12 +631,13 @@ export default function ViewDetailedCoverPage(props) {
                       id="pdffile"
                       style={{ height: "35px" }}
                       class="form-control form-control-sm"
-                      id="exampleInputPDF"
                       accept="application/pdf"
                       onChange={(e) => {
                         setCoverPDF(e.target.files);
                       }}
                     />
+                    <input type = "text" id = "tPdfFile" Value = {covers.CoverPdf}  hidden/>
+
                     <p style={{ color: "#D0193A " }}>
                       <b>Previous Pdf file will remain if you didn't update</b>
                     </p>
@@ -718,6 +743,7 @@ export default function ViewDetailedCoverPage(props) {
                       }}
                       multiple
                     />
+                    <input type = "text" Value = {covers.PreviewPages} id = "PSampleImages" hidden/>
                     <p style={{ color: "#D0193A " }}>
                       <b>Previous images will remain if you didn't update</b>
                     </p>
