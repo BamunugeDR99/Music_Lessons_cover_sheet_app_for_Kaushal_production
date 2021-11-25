@@ -5,7 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import "../../css/toogle.css";
-import CoverUpdate from "./CoverUpdate";
+import { useNavigate } from "react-router-dom";
 export default function ViewCovers(props) {
   const [covers, setCovers] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -30,6 +30,8 @@ export default function ViewCovers(props) {
   const [youtubeLivePreview, setYoutubeLivePriview] = useState(true);
   const [lessonSubCategories, setLessonSubCategories] = useState([]);
   const [subCategoryPreview, setSubCategoryPreview] = useState(false);
+
+  let navigate = useNavigate();
 
   useEffect(() => {
     function getAllClassicalGuitarCovers() {
@@ -116,19 +118,6 @@ export default function ViewCovers(props) {
       });
   }
 
-
-
-
-  function updateCover(id) {
- 
-  };
-
-
-
-
-
-
-
   function deleteCover(id) {
     const content = {
       Status: "3",
@@ -143,7 +132,9 @@ export default function ViewCovers(props) {
         alert(err);
       });
   }
-  function viewMoreCover(id) {}
+  function viewMoreCover(id) {
+    navigate("/detailed/" + id);
+  }
 
   function getAllClassicalGuitarCovers() {
     axios
@@ -214,16 +205,6 @@ export default function ViewCovers(props) {
       return false;
     }
   }
-  // function validate(evt) {
-  //   var theEvent = evt || window.event;
-  //   var key = theEvent.keyCode || theEvent.which;
-  //   key = String.fromCharCode(key);
-  //  var regex = /[]|./;
-  //   if(!regex.test(key)) {
-  //    theEvent.returnValue = false;
-  //    if(theEvent.preventDefault) theEvent.preventDefault();
-  //  }
-  // }
 
   function youtubeLinkDefaultPreview() {
     if (youtubeLink.toLowerCase().includes("https://www.youtube.com/embed/")) {
@@ -342,10 +323,10 @@ export default function ViewCovers(props) {
                     </label>
                   </td>
                   <td>
-                    <button
+                    {/* <button
                       className="btn-sm"
                       style={{ display: "inline" }}
-                      onClick={() => updateCover(covers._id)}
+                      onClick={() => redirectToCoverPage(covers._id)}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -362,10 +343,10 @@ export default function ViewCovers(props) {
                         />
                       </svg>
                     </button>
-                    <span> </span>
+                    <span> </span> */}
                     <button
                       className="btn-sm"
-                      style={{ display: "inline" }}
+                      style={{ display: "inline", border: "1px solid #D0193A" }}
                       onClick={() => deleteCover(covers._id)}
                     >
                       <svg
@@ -382,7 +363,7 @@ export default function ViewCovers(props) {
                     <span> </span>
                     <button
                       className="btn-sm"
-                      style={{ display: "inline" }}
+                      style={{ display: "inline", border: "1px solid #764A34" }}
                       onClick={() => viewMoreCover(covers._id)}
                     >
                       <svg
@@ -417,7 +398,7 @@ export default function ViewCovers(props) {
           </tfoot>
         </table>
       </div>
-      
+
       <Modal show={modalOpen} size="lg">
         <form onSubmit={addCover}>
           <Modal.Header>

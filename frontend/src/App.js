@@ -22,6 +22,7 @@ import AdminHeader from "./components/adminRole/adminheader";
 import Login from "./components/customerRole/loginpage";
 import DiscoverMoreCovers from "./components/customerRole/DicoverMoreCovers";
 import CoverUpdate from "./components/adminRole/CoverUpdate";
+import ViewDetailedCoverPage from "./components/adminRole/ViewDetailedCoverPage";
 
 function App() {
   return (
@@ -33,6 +34,8 @@ function App() {
 
         <Route path="/CoverManagement" element={<CoverManagementPage />} />
         <Route path="/c" element={<ViewCovers />} />
+        <Route path = "/h" element = {<CoverUpdate/>}/>
+        <Route path = "/detailed/:id" element = {<ViewDetailedCoverPage/>}/>
         <Route path="/d" element={<ViewLessons />} />
         <Route path = "/e" element = {<AdminHeader/>}/>
 
@@ -40,7 +43,6 @@ function App() {
         <Route path="/login" element={<Login />} />
 
         <Route path = "/g" element = {<DiscoverMoreCovers/>}/>
-        <Route path = "/h" element = {<CoverUpdate/>}/>
         {/* <Route path="/table" element={<DataTableTest />} /> */}
         {/* <Route path="/d" element={<ViewCategories />} /> */}
         {/* <Route path="/e" element={<MainCategoriesDataTable />} /> */}

@@ -32,9 +32,11 @@ export default function CoverUpdate(props) {
   const [cover, setCover] = useState([]);
   let tempMainCategoryStore = "";
   let tempSubCategoryStore = "";
+  // let location = useLocation();
   useEffect(() => {
     function getSpecificCover() {
-      const coverID = "619a570da9008d29faffec33";
+     // const coverID = location.pathname.substring(3);
+     const coverID = "";
       axios
         .get("http://localhost:8070/covers/get/" + coverID)
         .then((res) => {
