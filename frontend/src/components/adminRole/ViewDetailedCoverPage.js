@@ -4,11 +4,16 @@ import CurrencySelect from "./CurrencySelect";
 import Swal from "sweetalert2";
 import Modal from "react-bootstrap/Modal";
 import { useLocation } from "react-router-dom";
+import { storage } from "../../Configurations/firebaseConfigurations";
+import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 
 export default function ViewDetailedCoverPage(props) {
   const [covers, setCovers] = useState([]);
   const [modalOpen3, setModalOpen3] = useState(false);
   const [modalOpen2, setModalOpen2] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalUploadOpen, setModalUploadOpen] = useState(false);
+  const [progress, setProgress] = useState("");
   let preview = [];
   let instrumentsTxt = "";
   let MainCategoryForRec = "";
@@ -38,6 +43,19 @@ export default function ViewDetailedCoverPage(props) {
   const [youtubeLivePreview, setYoutubeLivePriview] = useState(true);
   const [lessonSubCategories, setLessonSubCategories] = useState([]);
   const [subCategoryPreview, setSubCategoryPreview] = useState(false);
+
+
+
+  // for uploading modal
+  const [fileType, setFileType] = useState("");
+  const [completedFiles, setCompletedFiles] = useState("0");
+  const [totalFiles, setTotalFiles] = useState("");
+  const [completeCoverAddingStatus, setCoverAddingStatus] = useState(true);
+  const [cancelOrCloseBtn, setCancelOrCloseBtn] = useState("Close");
+  const [finalDiv, setFinalDiv] = useState(true);
+  const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
+
+
   const [cover, setCover] = useState([]);
   let tempMainCategoryStore = "";
   let tempSubCategoryStore = "";
@@ -155,6 +173,66 @@ export default function ViewDetailedCoverPage(props) {
       });
   }
 
+
+  function UploadPdf() {
+    setFileType("Uploading Pdf Cover");
+    setModalUploadOpen(true);
+    setModalOpen(false);
+    const storageRef = ref(storage, `Covers(PDF)/${coverPDF[0].name}`);
+    const uploadTask = uploadBytesResumable(storageRef, coverPDF[0]);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const prog = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgress(prog);
+        if (prog >= 100) {
+          //setCompletedFiles("1");
+          //UploadImages();
+        } else {
+          // setClass("");
+        }
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+  function UploadImages() {
+    setFileType("Uploading Preview Images");
+    let storageRef = "";
+    const promises = [];
+    previewPages.map((previewPage,index) => {
+      storageRef = ref(storage, `PreviewImages/${previewPage.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, previewPage);
+      promises.push(uploadTask);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const prog = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setProgress(prog);
+          if (prog >= 100) {
+            setCompletedFiles(index+2);
+          } else {
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    });
+
+    Promise.all(promises).then(()=> {
+      setFileType("Cover added Successfully!");
+      setCompletedFiles(previewPages.length+1)
+      setFinalDiv(false);
+    }).catch(() => {alert("error")})
+  }
+
   function update(e) {
     e.preventDefault();
 
@@ -188,6 +266,9 @@ export default function ViewDetailedCoverPage(props) {
           for (let i = 0; i < previewPages.length; i++) {
             previewPageList.push(previewPages[i].name);
           }
+            UploadImages();
+         
+
         }
     
         if (
@@ -213,6 +294,7 @@ export default function ViewDetailedCoverPage(props) {
           updateCoverPdf = document.getElementById("tPdfFile").value;
         } else {
           updateCoverPdf = coverPDF[0].name;
+          UploadPdf();
         }
     
         const updatedCover = {
@@ -800,7 +882,11 @@ export default function ViewDetailedCoverPage(props) {
                       class="form-control form-control-sm"
                       accept="image/png, image/jpeg, image/jpg"
                       onChange={(e) => {
-                        setPreviewPages(e.target.files);
+                        for(let i = 0; i < e.target.files.length; i++){
+                          const newImage = e.target.files[i];
+                          newImage["id"] = Math.random();
+                          setPreviewPages((prevState)=>[...prevState,newImage]);
+                        }
                       }}
                       multiple
                     />
@@ -868,6 +954,87 @@ export default function ViewDetailedCoverPage(props) {
             </div>
           </Modal.Footer>
         </form>
+      </Modal>
+
+      <Modal show={modalUploadOpen} size="lg">
+        <Modal.Header></Modal.Header>
+
+        <Modal.Body>
+          <div className="container">
+            <h1 style={{ color: "#764A34", textAlign: "center" }}>
+              {progress}%
+            </h1>
+            <div class="progress">
+              <div
+                class="progress-bar bg-success"
+                role="progressbar"
+                style={{ width: `${progress}%` }}
+                aria-valuenow={progress}
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
+            <br />
+            {/* <h3 style={{ color: "#764A34", textAlign: "center" }}>
+              {completedFiles} / {totalFiles}
+            </h3>
+            <h2 style={{ color: "#764A34", textAlign: "center" }}>
+              {fileType}
+            </h2> */}
+          </div>
+          <div class="d-flex justify-content-center">
+            <div
+              class="spinner-grow text-dark"
+              role="status"
+              hidden={completeCoverAddingStatus}
+            >
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <div className="text-center" hidden={finalDiv}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="40"
+              height="40"
+              fill="#279B14"
+              class="bi bi-check-circle-fill"
+              viewBox="0 0 16 16"
+            >
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+            </svg>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <button
+            className="btn rounded"
+            onClick={() => {
+              setModalUploadOpen(false);
+            }}
+            style={{ backgroundColor: "#D0193A", color: "#ffffff" }}
+          >
+            {cancelOrCloseBtn}
+          </button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={modalOpenForPdf} size="lg">
+        <Modal.Header></Modal.Header>
+
+        <Modal.Body>
+          <div class="d-flex justify-content-center">
+            <div class="spinner-grow text-dark" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <br />
+          <h1 style={{ textAlign: "center", color: "#764A34" }}>
+            Please wait!
+          </h1>
+          <h4 style={{ textAlign: "center", color: "#764A34" }}>
+            PDF is Loading...
+          </h4>
+        </Modal.Body>
+        <Modal.Footer></Modal.Footer>
       </Modal>
     </div>
   );
