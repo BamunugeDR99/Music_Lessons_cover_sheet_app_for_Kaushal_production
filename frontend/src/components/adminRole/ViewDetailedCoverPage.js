@@ -157,71 +157,108 @@ export default function ViewDetailedCoverPage(props) {
 
   function update(e) {
     e.preventDefault();
-    let dynamicSubCategory = "";
-    let previewPageList = [];
-    //console.log(document.getElementById("PSampleImages").value);
 
-    if (document.getElementById("sampleimages").files.length === 0) {
-      previewPageList = document
-        .getElementById("PSampleImages")
-        .value.split(",");
-    } else {
-      for (let i = 0; i < previewPages.length; i++) {
-        previewPageList.push(previewPages[i].name);
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false
+    })
+    
+    swalWithBootstrapButtons.fire({
+      title: 'Do you want to update the cover ?',
+      // text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, update it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let dynamicSubCategory = "";
+        let previewPageList = [];
+        //console.log(document.getElementById("PSampleImages").value);
+    
+        if (document.getElementById("sampleimages").files.length === 0) {
+          previewPageList = document
+            .getElementById("PSampleImages")
+            .value.split(",");
+        } else {
+          for (let i = 0; i < previewPages.length; i++) {
+            previewPageList.push(previewPages[i].name);
+          }
+        }
+    
+        if (
+          document.getElementById("MainCategory").value ==
+          "Guitar Technics & Lessons"
+        ) {
+          dynamicSubCategory = document.getElementById("subCategory2").value;
+        } else if (
+          document.getElementById("MainCategory").value == "Classical Guitar Covers"
+        ) {
+          dynamicSubCategory = document.getElementById("subCategory1").value;
+        }
+    
+        let InstrumentArray = [];
+        if (instruments == "") {
+          InstrumentArray = document.getElementById("Instruments").value.split(",");
+        } else {
+          InstrumentArray = instruments.split(",");
+        }
+    
+        let updateCoverPdf = "";
+        if (document.getElementById("pdffile").files.length === 0) {
+          updateCoverPdf = document.getElementById("tPdfFile").value;
+        } else {
+          updateCoverPdf = coverPDF[0].name;
+        }
+    
+        const updatedCover = {
+          Title: document.getElementById("songName").value,
+          OriginalArtistName: document.getElementById("originalArtist").value,
+          InstrumentsPlayedOn: InstrumentArray,
+          ArrangedBy: arrangedBy,
+          SubCategory: dynamicSubCategory,
+          MainCategory: document.getElementById("MainCategory").value,
+          NoOfPages: document.getElementById("noOfPages").value,
+          NoOfPreviewPages: previewPageList.length,
+          Price: document.getElementById("price").value,
+    
+          YoutubeLink: document.getElementById("youtubeLink").value,
+          FacebookLink: document.getElementById("facebookLink").value,
+          PreviewPages: previewPageList,
+          CoverPdf: updateCoverPdf,
+        };
+    
+        axios
+          .put("http://localhost:8070/covers/update/" + CoverTempID, updatedCover)
+          .then(() => {
+            swalWithBootstrapButtons.fire(
+              'Updated!',
+              'Your cover has been updated.',
+              'success'
+            )
+            getCovers();
+          })
+          .catch((err) => {
+            alert(err);
+          });
+     
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        swalWithBootstrapButtons.fire(
+          'Cancelled',
+          'Process has been undo :)',
+          'error'
+        )
       }
-    }
-
-    if (
-      document.getElementById("MainCategory").value ==
-      "Guitar Technics & Lessons"
-    ) {
-      dynamicSubCategory = document.getElementById("subCategory2").value;
-    } else if (
-      document.getElementById("MainCategory").value == "Classical Guitar Covers"
-    ) {
-      dynamicSubCategory = document.getElementById("subCategory1").value;
-    }
-
-    let InstrumentArray = [];
-    if (instruments == "") {
-      InstrumentArray = document.getElementById("Instruments").value.split(",");
-    } else {
-      InstrumentArray = instruments.split(",");
-    }
-
-    let updateCoverPdf = "";
-    if (document.getElementById("pdffile").files.length === 0) {
-      updateCoverPdf = document.getElementById("tPdfFile").value;
-    } else {
-      updateCoverPdf = coverPDF[0].name;
-    }
-
-    const updatedCover = {
-      Title: document.getElementById("songName").value,
-      OriginalArtistName: document.getElementById("originalArtist").value,
-      InstrumentsPlayedOn: InstrumentArray,
-      ArrangedBy: arrangedBy,
-      SubCategory: dynamicSubCategory,
-      MainCategory: document.getElementById("MainCategory").value,
-      NoOfPages: document.getElementById("noOfPages").value,
-      NoOfPreviewPages: previewPageList.length,
-      Price: document.getElementById("price").value,
-
-      YoutubeLink: document.getElementById("youtubeLink").value,
-      FacebookLink: document.getElementById("facebookLink").value,
-      PreviewPages: previewPageList,
-      CoverPdf: updateCoverPdf,
-    };
-
-    axios
-      .put("http://localhost:8070/covers/update/" + CoverTempID, updatedCover)
-      .then(() => {
-        alert("cover updated");
-        getCovers();
-      })
-      .catch((err) => {
-        alert(err);
-      });
+    })
+    
+   
   }
 
   function getCovers() {
@@ -416,6 +453,18 @@ export default function ViewDetailedCoverPage(props) {
                 <h5 style={{ display: "inline" }}>{covers.NoOfDownloads}</h5>
                 <br />
                 <br />
+                <h5
+                  style={{
+                    display: "inline",
+                    color: "#764A34",
+                    letterSpacing: "2px",
+                  }}
+                >
+                  Recently Updated date and time:{" "}
+                </h5>{" "}<br/>
+                <h5 style={{ display : "inline"}}>{covers.UpdatedDateAndTime}</h5>
+                <br/>
+                <br/>
                 <div class="container">
                   <div class="row">
                     <div class="col-sm">

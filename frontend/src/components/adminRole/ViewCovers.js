@@ -48,8 +48,6 @@ export default function ViewCovers(props) {
   // for pdf preview
   const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
   let navigate = useNavigate();
-  const [pdfUrl, setPdfUrl] = "";
-  let flag = 0;
   useEffect(() => {
     function getAllClassicalGuitarCovers() {
       axios
@@ -243,6 +241,27 @@ export default function ViewCovers(props) {
   // add cover / exercise
   function addCover(e) {
     e.preventDefault();
+
+
+    const swalWithBootstrapButtons = Swal.mixin({
+  customClass: {
+    confirmButton: 'btn btn-success',
+    cancelButton: 'btn btn-danger'
+  },
+  buttonsStyling: false
+})
+
+swalWithBootstrapButtons.fire({
+  title: 'Are you sure?',
+  text: "You won't be able to revert this!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonText: 'Yes, add it!',
+  cancelButtonText: 'No, cancel!',
+  reverseButtons: true
+}).then((result) => {
+  if (result.isConfirmed) {
+
     setFinalDiv(true);
     setCoverAddingStatus(true);
 
@@ -294,6 +313,19 @@ export default function ViewCovers(props) {
         alert(err);
       });
     
+ 
+  } else if (
+    /* Read more about handling dismissals below */
+    result.dismiss === Swal.DismissReason.cancel
+  ) {
+    swalWithBootstrapButtons.fire(
+      'Cancelled',
+      'Process has been undo :)',
+      'error'
+    )
+  }
+})
+
   }
 
   function UploadPdf() {
