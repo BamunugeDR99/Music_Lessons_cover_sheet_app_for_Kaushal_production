@@ -28,7 +28,7 @@ export default function ViewCovers(props) {
   const [facebookLink, setFacebookLink] = useState("");
   const [noOfPages, setNoOfPages] = useState("");
   const [price, setPrices] = useState("");
-  const [previewPages, setPreviewPages] = useState("");
+  const [previewPages, setPreviewPages] = useState([]);
   const [coverPDF, setCoverPDF] = useState("");
   const [originalArtist, setOriginalArtist] = useState("");
   const [arrangedBy, setArranngedBy] = useState("kaushal Rashmika");
@@ -41,16 +41,14 @@ export default function ViewCovers(props) {
   const [fileType, setFileType] = useState("");
   const [completedFiles, setCompletedFiles] = useState("0");
   const [totalFiles, setTotalFiles] = useState("");
-  const [completeCoverAddingStatus,setCoverAddingStatus] = useState(true);
+  const [completeCoverAddingStatus, setCoverAddingStatus] = useState(true);
   const [cancelOrCloseBtn, setCancelOrCloseBtn] = useState("Close");
   const [finalDiv, setFinalDiv] = useState(true);
 
-
-
-  // for pdf preview 
-  const [modalOpenForPdf,setModalOpenForPdf] = useState(false)
+  // for pdf preview
+  const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
   let navigate = useNavigate();
-  const [pdfUrl,setPdfUrl] = ("");
+  const [pdfUrl, setPdfUrl] = "";
   let flag = 0;
   useEffect(() => {
     function getAllClassicalGuitarCovers() {
@@ -71,23 +69,20 @@ export default function ViewCovers(props) {
   function setContent() {
     setSubCategories(tempSubCategory);
     setLessonSubCategories(tempSubCategory2);
-
-   
-
     setCovers(tempCovers.filter((covers) => covers.Status != "3"));
     $(document).ready(function () {
       $("#Covers").DataTable();
     });
   }
 
-  function previewPdf(covername){
+  function previewPdf(covername) {
     setModalOpenForPdf(true);
     const storageRef = ref(storage, `Covers(PDF)/${covername}`);
     getDownloadURL(storageRef).then((url) => {
       // setPdfUrl(url)
-      window.location.href = url
-    //setModalOpenForPdf(false)
-  });
+      window.location.href = url;
+      //setModalOpenForPdf(false)
+    });
   }
 
   function GetLessonSubCategories() {
@@ -138,37 +133,37 @@ export default function ViewCovers(props) {
               document.getElementById("toggle" + index).checked = true;
               const Toast = Swal.mixin({
                 toast: true,
-                position: 'center',
+                position: "center",
                 showConfirmButton: false,
                 timer: 2000,
                 timerProgressBar: false,
                 didOpen: (toast) => {
-                  toast.addEventListener('mouseenter', Swal.stopTimer)
-                  toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-              })
-              
+                  toast.addEventListener("mouseenter", Swal.stopTimer);
+                  toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+              });
+
               Toast.fire({
-                icon: 'success',
-                title: 'Cover Activated'
-              })
+                icon: "success",
+                title: "Cover Activated",
+              });
             } else {
               document.getElementById("toggle" + index).checked = false;
               const Toast = Swal.mixin({
                 toast: true,
-                position: 'center',
+                position: "center",
                 showConfirmButton: false,
                 timer: 2000,
                 didOpen: (toast) => {
-                  toast.addEventListener('mouseenter', Swal.stopTimer)
-                  toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-              })
-              
+                  toast.addEventListener("mouseenter", Swal.stopTimer);
+                  toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+              });
+
               Toast.fire({
-                icon: 'warning',
-                title: 'Cover Deavtivated'
-              })
+                icon: "warning",
+                title: "Cover Deavtivated",
+              });
             }
           })
           .catch((err) => {
@@ -183,52 +178,51 @@ export default function ViewCovers(props) {
   function deleteCover(id) {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
-        confirmButton: 'btn btn-success',
-        cancelButton: 'btn btn-danger'
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger",
       },
-      buttonsStyling: false
-    })
-    
-    swalWithBootstrapButtons.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, cancel!',
-      reverseButtons: true
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const content = {
-          Status: "3",
-        };
-        axios
-          .put("http://localhost:8070/covers/StatusUpdate/" + id, content)
-          .then((res) => {
-            getAllClassicalGuitarCovers();
-            swalWithBootstrapButtons.fire(
-              'Deleted!',
-              'Your cover has been deleted.',
-              'success'
-            )
-          })
-          .catch((err) => {
-            alert(err);
-          });
+      buttonsStyling: false,
+    });
 
-     
-      } else if (
-        /* Read more about handling dismissals below */
-        result.dismiss === Swal.DismissReason.cancel
-      ) {
-        swalWithBootstrapButtons.fire(
-          'Cancelled',
-          'Your cover is safe :)',
-          'error'
-        )
-      }
-    })
-   
+    swalWithBootstrapButtons
+      .fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true,
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          const content = {
+            Status: "3",
+          };
+          axios
+            .put("http://localhost:8070/covers/StatusUpdate/" + id, content)
+            .then((res) => {
+              getAllClassicalGuitarCovers();
+              swalWithBootstrapButtons.fire(
+                "Deleted!",
+                "Your cover has been deleted.",
+                "success"
+              );
+            })
+            .catch((err) => {
+              alert(err);
+            });
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire(
+            "Cancelled",
+            "Your cover is safe :)",
+            "error"
+          );
+        }
+      });
   }
   function viewMoreCover(id) {
     navigate("/detailed/" + id);
@@ -252,7 +246,8 @@ export default function ViewCovers(props) {
     setFinalDiv(true);
     setCoverAddingStatus(true);
 
-    setTotalFiles(String(previewPages.length + 1));
+    setTotalFiles(previewPages.length+1);
+   // console.log(previewPages.length+1)
     let dynamicSubCategory = "";
     let previewPageList = [];
     for (let i = 0; i < previewPages.length; i++) {
@@ -285,29 +280,20 @@ export default function ViewCovers(props) {
       CoverPdf: coverPDF[0].name,
     };
     console.log(newCover);
-    UploadPdf()
-   // if (flag == 1) {
-     // console.log("success");
-      axios
+   UploadPdf();
+   
+    axios
       .post("http://localhost:8070/covers/add", newCover)
       .then(() => {
-       // alert("cover added");
         getAllClassicalGuitarCovers();
         $("input[type=text]").val("");
         $("input[type=number]").val("");
         $("input[type=file]").val("");
-        // setCoverAddingStatus(false);
-        // setFileType("Cover added successfully!");
-        // setCancelOrCloseBtn("close");
-        // setFinalDiv(false);
-
       })
       .catch((err) => {
         alert(err);
       });
-  //  } else {
-    //  console.log("erro has been occured");
-    //}
+    
   }
 
   function UploadPdf() {
@@ -339,10 +325,11 @@ export default function ViewCovers(props) {
   function UploadImages() {
     setFileType("Uploading Preview Images");
     let storageRef = "";
-    for (let i = 0; i < previewPages.length; i++) {
-      storageRef = ref(storage, `PreviewImages/${previewPages[i].name}`);
-      const uploadTask = uploadBytesResumable(storageRef, previewPages[i]);
-
+    const promises = [];
+    previewPages.map((previewPage,index) => {
+      storageRef = ref(storage, `PreviewImages/${previewPage.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, previewPage);
+      promises.push(uploadTask);
       uploadTask.on(
         "state_changed",
         (snapshot) => {
@@ -351,11 +338,7 @@ export default function ViewCovers(props) {
           );
           setProgress(prog);
           if (prog >= 100) {
-            // if (i  == previewPages.length) {
-            //   setFileType("Files uploaded successfully");
-            // } else {
-            //   setCompletedFiles(String(i + 2));
-            // }
+            setCompletedFiles(index+2);
           } else {
           }
         },
@@ -363,7 +346,13 @@ export default function ViewCovers(props) {
           console.log(error);
         }
       );
-    }
+    });
+
+    Promise.all(promises).then(()=> {
+      setFileType("Cover added Successfully!");
+      setCompletedFiles(previewPages.length+1)
+      setFinalDiv(false);
+    }).catch(() => {alert("error")})
   }
 
   function checkStatus(status) {
@@ -394,6 +383,7 @@ export default function ViewCovers(props) {
             style={{ backgroundColor: "#279B14", color: "#ffffff" }}
             onClick={() => {
               setModalOpen(true);
+              setPreviewPages("");
               setYoutubeLivePriview(true);
             }}
           >
@@ -500,7 +490,7 @@ export default function ViewCovers(props) {
                       className="btn-sm"
                       style={{ display: "inline", border: "1px solid #D0193A" }}
                       //onClick={() => window.location.href = {pdfUrl}}
-                      onClick = {()=> previewPdf(covers.CoverPdf)}
+                      onClick={() => previewPdf(covers.CoverPdf)}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -522,7 +512,7 @@ export default function ViewCovers(props) {
                     <button
                       className="btn-sm"
                       style={{ display: "inline", border: "1px solid #279B14" }}
-                     // onClick={() => viewMoreCover(covers._id)}
+                      // onClick={() => viewMoreCover(covers._id)}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -797,7 +787,11 @@ export default function ViewCovers(props) {
                       class="form-control form-control-sm"
                       accept="image/png, image/jpeg, image/jpg"
                       onChange={(e) => {
-                        setPreviewPages(e.target.files);
+                        for(let i = 0; i < e.target.files.length; i++){
+                          const newImage = e.target.files[i];
+                          newImage["id"] = Math.random();
+                          setPreviewPages((prevState)=>[...prevState,newImage]);
+                        }
                       }}
                       multiple
                       required
@@ -878,18 +872,19 @@ export default function ViewCovers(props) {
               ></div>
             </div>
             <br />
-            {/* <h3 style={{ color: "#764A34", textAlign: "center" }}>
+            <h3 style={{ color: "#764A34", textAlign: "center" }}>
               {completedFiles} / {totalFiles}
-            </h3> */}
+            </h3>
             <h2 style={{ color: "#764A34", textAlign: "center" }}>
               {fileType}
             </h2>
           </div>
-          <div
-            class="d-flex justify-content-center"
-        
-          >
-            <div class="spinner-grow text-dark" role="status"     hidden={completeCoverAddingStatus}>
+          <div class="d-flex justify-content-center">
+            <div
+              class="spinner-grow text-dark"
+              role="status"
+              hidden={completeCoverAddingStatus}
+            >
               <span class="sr-only">Loading...</span>
             </div>
           </div>
@@ -909,34 +904,35 @@ export default function ViewCovers(props) {
         <Modal.Footer>
           <button
             className="btn rounded"
-            onClick = {() => {setModalUploadOpen(false)}}
+            onClick={() => {
+              setModalUploadOpen(false);
+            }}
             style={{ backgroundColor: "#D0193A", color: "#ffffff" }}
           >
             {cancelOrCloseBtn}
           </button>
         </Modal.Footer>
       </Modal>
-   
-        <Modal show={modalOpenForPdf} size="lg">
-          <Modal.Header></Modal.Header>
 
-          <Modal.Body>
-          <div
-            class="d-flex justify-content-center"
-        
-          >
+      <Modal show={modalOpenForPdf} size="lg">
+        <Modal.Header></Modal.Header>
+
+        <Modal.Body>
+          <div class="d-flex justify-content-center">
             <div class="spinner-grow text-dark" role="status">
               <span class="sr-only">Loading...</span>
             </div>
           </div>
-          <br/>
-            <h1 style = {{textAlign : "center", color : "#764A34"}}>Please wait!</h1>
-            <h4  style = {{textAlign : "center", color : "#764A34"}}>PDF is Loading...</h4>
-          </Modal.Body>
-          <Modal.Footer></Modal.Footer>
-        </Modal>
-    
-
+          <br />
+          <h1 style={{ textAlign: "center", color: "#764A34" }}>
+            Please wait!
+          </h1>
+          <h4 style={{ textAlign: "center", color: "#764A34" }}>
+            PDF is Loading...
+          </h4>
+        </Modal.Body>
+        <Modal.Footer></Modal.Footer>
+      </Modal>
     </div>
   );
 }
