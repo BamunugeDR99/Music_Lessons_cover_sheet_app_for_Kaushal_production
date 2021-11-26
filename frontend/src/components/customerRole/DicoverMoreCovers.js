@@ -74,13 +74,18 @@ export default function DiscoverMoreCovers(props) {
                  src={"/images/"+covers.PreviewPages[0]}
                   class="card-img-top"
                   alt="..."
-                  style={{ borderRadius: "15px 15px 0px 0px" }}
+
+                  style={{ borderRadius: "15px 15px 0px 0px" , height : "350px"}}
                 />
                 <div class="card-body">
                   <h4 class="card-title" style={{ fontWeight: "bold" }}>
                     {covers.Title}
                   </h4>
                   <h5>{covers.OriginalArtistName}</h5>
+                  <h5>{covers.MainCategory}</h5>
+                  <h5>{covers.SubCategory}</h5>
+                  <h3 style = {{float : "right", color : "#764A34"}}><b>US$ {covers.Price}</b></h3>
+
                 </div>
               </div>
             );
