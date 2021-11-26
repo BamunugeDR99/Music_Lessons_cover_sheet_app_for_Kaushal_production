@@ -318,6 +318,7 @@ export default function LessonsAndCoversDetailed(props) {
                       {/* calling a another Component */}
                       <CurrencySelect coverPrice={covers.Price} />
                       <br />
+                      <h6 style={{ color: "#D0193A" }}>*The actual price will be slightly different*</h6>
                       <h3 id="changedValue" style={{ color: "#764A34" }}></h3>
                       {/* spinner  */}
                       <div

@@ -5,10 +5,16 @@ import Modal from "react-bootstrap/Modal";
 import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import "../../css/toogle.css";
+import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { storage } from "../../Configurations/firebaseConfigurations";
+import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
+import "../../css/ProgressCircularStyles.css";
 export default function ViewCovers(props) {
   const [covers, setCovers] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalUploadOpen, setModalUploadOpen] = useState(false);
+  const [progress, setProgress] = useState("");
   const [SubCategories, setSubCategories] = useState([]);
   let tempCovers = [];
   let tempMainCategory = "";
@@ -31,6 +37,11 @@ export default function ViewCovers(props) {
   const [lessonSubCategories, setLessonSubCategories] = useState([]);
   const [subCategoryPreview, setSubCategoryPreview] = useState(false);
 
+  // for uploading modal
+  const [fileType, setFileType] = useState("");
+  const [completedFiles, setCompletedFiles] = useState("0");
+  const [totalFiles, setTotalFiles] = useState("");
+  const [completeCoverAddingStatus,setCoverAddingStatus] = useState(true);
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -151,6 +162,7 @@ export default function ViewCovers(props) {
   // add cover / exercise
   function addCover(e) {
     e.preventDefault();
+    setTotalFiles(String(previewPages.length + 1));
     let dynamicSubCategory = "";
     let previewPageList = [];
     for (let i = 0; i < previewPages.length; i++) {
@@ -184,6 +196,7 @@ export default function ViewCovers(props) {
     };
     console.log(newCover);
 
+    UploadPdf();
     axios
       .post("http://localhost:8070/covers/add", newCover)
       .then(() => {
@@ -192,10 +205,70 @@ export default function ViewCovers(props) {
         $("input[type=text]").val("");
         $("input[type=number]").val("");
         $("input[type=file]").val("");
+        setCoverAddingStatus(false);
       })
       .catch((err) => {
         alert(err);
       });
+  }
+
+  function UploadPdf() {
+    setFileType("Uploading Pdf Cover");
+    setModalUploadOpen(true);
+    setModalOpen(false);
+    const storageRef = ref(storage, `Covers(PDF)/${coverPDF[0].name}`);
+    const uploadTask = uploadBytesResumable(storageRef, coverPDF[0]);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const prog = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgress(prog);
+        if (prog >= 100) {
+          setCompletedFiles("1");
+          UploadImages();
+        } else {
+          // setClass("");
+        }
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+  function UploadImages() {
+    setFileType("Uploading Preview Images");
+    let storageRef = "";
+    for (let i = 0; i < previewPages.length; i++) {
+      storageRef = ref(storage, `PreviewImages/${previewPages[i].name}`);
+      const uploadTask = uploadBytesResumable(storageRef, previewPages[i]);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const prog = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setProgress(prog);
+          if (prog >= 100) {
+            if (i + 1 == previewPages.length) {
+              setCompletedFiles(previewPages.length + 1);
+              console.log(i);
+              setFileType("Files uploaded successfully");
+              setCoverAddingStatus(false);
+            } else {
+              setCompletedFiles(String(i + 2));
+            }
+          } else {
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }
   }
 
   function checkStatus(status) {
@@ -689,7 +762,48 @@ export default function ViewCovers(props) {
           </Modal.Footer>
         </form>
       </Modal>
-      {/* <CoverUpdate/> */}
+
+      <Modal show={modalUploadOpen} size="lg">
+        <Modal.Header></Modal.Header>
+
+        <Modal.Body>
+          <div className="container">
+            <h1 style={{ color: "#764A34", textAlign: "center" }}>
+              {progress}%
+            </h1>
+            <div class="progress">
+              <div
+                class="progress-bar bg-success"
+                role="progressbar"
+                style={{ width: `${progress}%` }}
+                aria-valuenow={progress}
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
+            <br />
+            <h3 style={{ color: "#764A34", textAlign: "center" }}>
+              {completedFiles} / {totalFiles}
+            </h3>
+            <h2 style={{ color: "#764A34", textAlign: "center" }}>
+              {fileType}
+            </h2>
+          </div>
+          <div class="d-flex justify-content-center" hidden={completeCoverAddingStatus}>
+            <div class="spinner-grow text-dark" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <button
+            className="btn rounded"
+            style={{ backgroundColor: "#D0193A", color: "#ffffff" }}
+          >
+            Cancel
+          </button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
