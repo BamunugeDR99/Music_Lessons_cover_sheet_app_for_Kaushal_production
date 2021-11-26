@@ -6,6 +6,8 @@ const app = express();
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
+const jwt = require ('jsonwebtoken');
+
 
 const PORT = process.env.PORT || 8070;
 app.use(cors());
@@ -51,6 +53,8 @@ app.use("/order", orderRouter);
 
 const customerRouter = require("./routes/customers.js");
 app.use("/customer", customerRouter);
+
+
 
 
 app.listen(PORT, () => {
