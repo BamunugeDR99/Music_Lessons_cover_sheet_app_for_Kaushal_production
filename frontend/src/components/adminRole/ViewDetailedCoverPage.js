@@ -20,6 +20,7 @@ export default function ViewDetailedCoverPage(props) {
   let SubCategoryForRec = "";
   let location = useLocation();
 
+
   //   for update
   //const [covers, setCovers] = useState([]);
   const [SubCategories, setSubCategories] = useState([]);
@@ -44,8 +45,6 @@ export default function ViewDetailedCoverPage(props) {
   const [lessonSubCategories, setLessonSubCategories] = useState([]);
   const [subCategoryPreview, setSubCategoryPreview] = useState(false);
 
-
-
   // for uploading modal
   const [fileType, setFileType] = useState("");
   const [completedFiles, setCompletedFiles] = useState("0");
@@ -54,7 +53,6 @@ export default function ViewDetailedCoverPage(props) {
   const [cancelOrCloseBtn, setCancelOrCloseBtn] = useState("Close");
   const [finalDiv, setFinalDiv] = useState(true);
   const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
-
 
   const [cover, setCover] = useState([]);
   let tempMainCategoryStore = "";
@@ -87,7 +85,7 @@ export default function ViewDetailedCoverPage(props) {
   }, []);
 
   function setPreviousContent(content) {
-    console.log(content);
+    //console.log(content);
     tempCoverImages = content.PreviewPages;
     tempPdf = content.CoverPdf;
 
@@ -173,11 +171,10 @@ export default function ViewDetailedCoverPage(props) {
       });
   }
 
-
   function UploadPdf() {
-    setFileType("Uploading Pdf Cover");
+    setFileType("Uploading Pdf file");
     setModalUploadOpen(true);
-    setModalOpen(false);
+    setModalOpen2(true);
     const storageRef = ref(storage, `Covers(PDF)/${coverPDF[0].name}`);
     const uploadTask = uploadBytesResumable(storageRef, coverPDF[0]);
 
@@ -191,6 +188,7 @@ export default function ViewDetailedCoverPage(props) {
         if (prog >= 100) {
           //setCompletedFiles("1");
           //UploadImages();
+          setModalUploadOpen(false);
         } else {
           // setClass("");
         }
@@ -202,9 +200,11 @@ export default function ViewDetailedCoverPage(props) {
   }
   function UploadImages() {
     setFileType("Uploading Preview Images");
+    setModalUploadOpen(true);
+    setModalOpen2(true);
     let storageRef = "";
     const promises = [];
-    previewPages.map((previewPage,index) => {
+    previewPages.map((previewPage, index) => {
       storageRef = ref(storage, `PreviewImages/${previewPage.name}`);
       const uploadTask = uploadBytesResumable(storageRef, previewPage);
       promises.push(uploadTask);
@@ -216,7 +216,7 @@ export default function ViewDetailedCoverPage(props) {
           );
           setProgress(prog);
           if (prog >= 100) {
-            setCompletedFiles(index+2);
+            //setCompletedFiles(index+2);
           } else {
           }
         },
@@ -226,11 +226,13 @@ export default function ViewDetailedCoverPage(props) {
       );
     });
 
-    Promise.all(promises).then(()=> {
-      setFileType("Cover added Successfully!");
-      setCompletedFiles(previewPages.length+1)
-      setFinalDiv(false);
-    }).catch(() => {alert("error")})
+    Promise.all(promises)
+      .then(() => {
+        setModalUploadOpen(false);
+      })
+      .catch(() => {
+        alert("error");
+      });
   }
 
   function update(e) {
@@ -238,109 +240,115 @@ export default function ViewDetailedCoverPage(props) {
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
-        confirmButton: 'btn btn-success',
-        cancelButton: 'btn btn-danger'
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger",
       },
-      buttonsStyling: false
-    })
-    
-    swalWithBootstrapButtons.fire({
-      title: 'Do you want to update the cover ?',
-      // text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, update it!',
-      cancelButtonText: 'No, cancel!',
-      reverseButtons: true
-    }).then((result) => {
-      if (result.isConfirmed) {
-        let dynamicSubCategory = "";
-        let previewPageList = [];
-        //console.log(document.getElementById("PSampleImages").value);
-    
-        if (document.getElementById("sampleimages").files.length === 0) {
-          previewPageList = document
-            .getElementById("PSampleImages")
-            .value.split(",");
-        } else {
-          for (let i = 0; i < previewPages.length; i++) {
-            previewPageList.push(previewPages[i].name);
-          }
-            UploadImages();
-         
+      buttonsStyling: false,
+    });
 
-        }
-    
-        if (
-          document.getElementById("MainCategory").value ==
-          "Guitar Technics & Lessons"
-        ) {
-          dynamicSubCategory = document.getElementById("subCategory2").value;
-        } else if (
-          document.getElementById("MainCategory").value == "Classical Guitar Covers"
-        ) {
-          dynamicSubCategory = document.getElementById("subCategory1").value;
-        }
-    
-        let InstrumentArray = [];
-        if (instruments == "") {
-          InstrumentArray = document.getElementById("Instruments").value.split(",");
-        } else {
-          InstrumentArray = instruments.split(",");
-        }
-    
-        let updateCoverPdf = "";
-        if (document.getElementById("pdffile").files.length === 0) {
-          updateCoverPdf = document.getElementById("tPdfFile").value;
-        } else {
-          updateCoverPdf = coverPDF[0].name;
-          UploadPdf();
-        }
-    
-        const updatedCover = {
-          Title: document.getElementById("songName").value,
-          OriginalArtistName: document.getElementById("originalArtist").value,
-          InstrumentsPlayedOn: InstrumentArray,
-          ArrangedBy: arrangedBy,
-          SubCategory: dynamicSubCategory,
-          MainCategory: document.getElementById("MainCategory").value,
-          NoOfPages: document.getElementById("noOfPages").value,
-          NoOfPreviewPages: previewPageList.length,
-          Price: document.getElementById("price").value,
-    
-          YoutubeLink: document.getElementById("youtubeLink").value,
-          FacebookLink: document.getElementById("facebookLink").value,
-          PreviewPages: previewPageList,
-          CoverPdf: updateCoverPdf,
-        };
-    
-        axios
-          .put("http://localhost:8070/covers/update/" + CoverTempID, updatedCover)
-          .then(() => {
-            swalWithBootstrapButtons.fire(
-              'Updated!',
-              'Your cover has been updated.',
-              'success'
+    swalWithBootstrapButtons
+      .fire({
+        title: "Do you want to update the cover ?",
+        // text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, update it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true,
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          let dynamicSubCategory = "";
+          let previewPageList = [];
+          //console.log(document.getElementById("PSampleImages").value);
+
+          if (previewPages.length === 0) {
+            previewPageList = document
+              .getElementById("PSampleImages")
+              .value.split(",");
+            console.log(previewPages);
+          } else {
+            for (let i = 0; i < previewPages.length; i++) {
+              previewPageList.push(previewPages[i].name);
+            }
+            UploadImages();
+            console.log("a");
+            console.log(previewPages);
+          }
+
+          if (
+            document.getElementById("MainCategory").value ==
+            "Guitar Technics & Lessons"
+          ) {
+            dynamicSubCategory = document.getElementById("subCategory2").value;
+          } else if (
+            document.getElementById("MainCategory").value ==
+            "Classical Guitar Covers"
+          ) {
+            dynamicSubCategory = document.getElementById("subCategory1").value;
+          }
+
+          let InstrumentArray = [];
+          if (instruments == "") {
+            InstrumentArray = document
+              .getElementById("Instruments")
+              .value.split(",");
+          } else {
+            InstrumentArray = instruments.split(",");
+          }
+
+          let updateCoverPdf = "";
+          if (document.getElementById("pdffile").files.length === 0) {
+            updateCoverPdf = document.getElementById("tPdfFile").value;
+          } else {
+            updateCoverPdf = coverPDF[0].name;
+            UploadPdf();
+          }
+
+          const updatedCover = {
+            Title: document.getElementById("songName").value,
+            OriginalArtistName: document.getElementById("originalArtist").value,
+            InstrumentsPlayedOn: InstrumentArray,
+            ArrangedBy: arrangedBy,
+            SubCategory: dynamicSubCategory,
+            MainCategory: document.getElementById("MainCategory").value,
+            NoOfPages: document.getElementById("noOfPages").value,
+            NoOfPreviewPages: previewPageList.length,
+            Price: document.getElementById("price").value,
+            YoutubeLink: document.getElementById("youtubeLink").value,
+            FacebookLink: document.getElementById("facebookLink").value,
+            PreviewPages: previewPageList,
+            CoverPdf: updateCoverPdf,
+          };
+          // console.log(updatedCover);
+
+          axios
+            .put(
+              "http://localhost:8070/covers/update/" + CoverTempID,
+              updatedCover
             )
-            getCovers();
-          })
-          .catch((err) => {
-            alert(err);
-          });
-     
-      } else if (
-        /* Read more about handling dismissals below */
-        result.dismiss === Swal.DismissReason.cancel
-      ) {
-        swalWithBootstrapButtons.fire(
-          'Cancelled',
-          'Process has been undo :)',
-          'error'
-        )
-      }
-    })
-    
-   
+            .then(() => {
+              swalWithBootstrapButtons.fire(
+                "Updated!",
+                "Your cover has been updated.",
+                "success"
+              );
+              getCovers();
+            })
+            .catch((err) => {
+              alert(err);
+            });
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire(
+            "Cancelled",
+            "Process has been undo :)",
+            "error"
+          );
+        }
+      });
   }
 
   function getCovers() {
@@ -543,10 +551,13 @@ export default function ViewDetailedCoverPage(props) {
                   }}
                 >
                   Recently Updated date and time:{" "}
-                </h5>{" "}<br/>
-                <h5 style={{ display : "inline"}}>{covers.UpdatedDateAndTime}</h5>
-                <br/>
-                <br/>
+                </h5>{" "}
+                <br />
+                <h5 style={{ display: "inline" }}>
+                  {covers.UpdatedDateAndTime}
+                </h5>
+                <br />
+                <br />
                 <div class="container">
                   <div class="row">
                     <div class="col-sm">
@@ -591,7 +602,10 @@ export default function ViewDetailedCoverPage(props) {
                     <button
                       type="button"
                       class="btn btn-success rounded"
-                      onClick={() => setModalOpen2(true)}
+                      onClick={() => {
+                        setModalOpen2(true);
+                        setPreviewPages("");
+                      }}
                     >
                       Edit Cover
                     </button>
@@ -882,10 +896,13 @@ export default function ViewDetailedCoverPage(props) {
                       class="form-control form-control-sm"
                       accept="image/png, image/jpeg, image/jpg"
                       onChange={(e) => {
-                        for(let i = 0; i < e.target.files.length; i++){
+                        for (let i = 0; i < e.target.files.length; i++) {
                           const newImage = e.target.files[i];
                           newImage["id"] = Math.random();
-                          setPreviewPages((prevState)=>[...prevState,newImage]);
+                          setPreviewPages((prevState) => [
+                            ...prevState,
+                            newImage,
+                          ]);
                         }
                       }}
                       multiple

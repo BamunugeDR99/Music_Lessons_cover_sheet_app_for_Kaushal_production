@@ -80,6 +80,13 @@ export default function ViewCovers(props) {
       // setPdfUrl(url)
       window.location.href = url;
       //setModalOpenForPdf(false)
+    }).catch(()=> {
+      setModalOpenForPdf(false);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong!',
+      })
     });
   }
 
