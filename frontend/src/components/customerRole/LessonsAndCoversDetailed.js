@@ -3,6 +3,8 @@ import axios from "axios";
 import CurrencySelect from "./CurrencySelect";
 import DiscoverMoreCovers from "./DicoverMoreCovers";
 import Swal from "sweetalert2";
+import { storage } from "../../Configurations/firebaseConfigurations";
+import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 
 export default function LessonsAndCoversDetailed(props) {
   const [covers, setCovers] = useState([]);
@@ -13,7 +15,7 @@ export default function LessonsAndCoversDetailed(props) {
   useEffect(() => {
     function getCovers() {
       //const CoverID = props.match.params.id;
-      const CoverTempID = "61936caa6027859b76b2ddbc";
+      const CoverTempID = "61a096c139983f67656949f3";
       axios
         .get("http://localhost:8070/covers/get/" + CoverTempID)
         .then((res) => {
@@ -63,10 +65,15 @@ export default function LessonsAndCoversDetailed(props) {
     }
     imageSlider += "</div>";
     document.getElementById("img").innerHTML = imageSlider;
-    for (let i = 0; i < previewImages.length; i++) {
-      let ImagePath = "/images/" + previewImages[i];
-      document.getElementById("img" + i).src = ImagePath;
-    }
+
+    previewImages.map((previewImage, index) => {
+      const storageRef = ref(storage, `PreviewImages/${previewImage}`);
+      getDownloadURL(storageRef).then((url) => {
+        document.getElementById("img" + index).src = url;
+      });
+    });
+
+  
   }
 
   function addToCart(id) {
@@ -74,7 +81,7 @@ export default function LessonsAndCoversDetailed(props) {
 
     //let customerID = localStorage.getItem("CustomerID");
     let newItems = []; /// Change this later
-    const customerID = "6199d490bfd483038f7067bf";
+    const customerID = "61a096c139983f67656949f3";
     let coverIDs = [];
     let shoppingcartId = "";
     axios

@@ -2,24 +2,24 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import { storage } from "../../Configurations/firebaseConfigurations";
+import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 export default function DiscoverMoreCovers(props) {
   const [recommenedCovers, setRecommendedCovers] = useState([]);
 
-
-  const MainCategory = "Guitar Technics & Lessons";
-  const SubCategory = "Exercises";
-  
+  const MainCategory = "Classical Guitar Covers";
+  const SubCategory = "Sinhala";
+  //const MainCategory = props.mainCategory;
+  //const SubCategory = props.subCategory;
   useEffect(() => {
     function getRecommendCovers() {
-
-  // const MainCategory = props.mainCategory;
-  // const SubCategory = props.subCategory;
-  // console.log(MainCategory, SubCategory);
+      // console.log(MainCategory, SubCategory);
       axios
         .get("http://localhost:8070/covers/getCovers")
         .then((res) => {
-
-          const availableCovers = res.data.filter((recCovers)=> recCovers.Status != "3" || recCovers.Status != "2");
+          const availableCovers = res.data.filter(
+            (recCovers) => recCovers.Status != "3" || recCovers.Status != "2"
+          );
           setRecommendedCovers(
             availableCovers.filter(
               (covers) =>
@@ -27,7 +27,6 @@ export default function DiscoverMoreCovers(props) {
                 covers.SubCategory === SubCategory
             )
           );
-
         })
         .catch((err) => {
           alert(err);
@@ -57,43 +56,56 @@ export default function DiscoverMoreCovers(props) {
     },
   };
 
+  function displayImages(coverImageName) {
+    let imageUrl = "";
+    const storageRef = ref(storage, `PreviewImages/${coverImageName}`);
+   getDownloadURL(storageRef).then((url) => {
+      // imageUrl = url;
+      return "https://firebasestorage.googleapis.com/v0/b/kaushal-music-production-app.appspot.com/o/PreviewImages%2F923d10247b982186a4ebb24b7ba6fba8.jpg?alt=media&token=3441eb0f-dcfa-496f-93d2-0b59294462e9"
+    });
+
+   
+  }
 
   return (
     <div>
       <br />
       <Carousel responsive={responsive}>
         {/* <div className="container"> */}
-          {recommenedCovers.map((covers) => {
-            return (
-              <div
-                class="card"
-                style={{
-                  boxShadow: "rgba(0, 0, 0, 0.25) 0px 25px 50px -12px",
-                  borderRadius: "15px",
-                  marginRight : "15px",
-                  marginLeft : "15px"
-                }}
-              >
-                <img
-                 src={"/images/"+covers.PreviewPages[0]}
-                  class="card-img-top"
-                  alt="..."
-
-                  style={{ borderRadius: "15px 15px 0px 0px" , height : "350px"}}
-                />
-                <div class="card-body">
-                  <h4 class="card-title" style={{ fontWeight: "bold" }}>
-                    {covers.Title}
-                  </h4>
-                  <h5>{covers.OriginalArtistName}</h5>
-                  <h5>{covers.MainCategory}</h5>
-                  <h5>{covers.SubCategory}</h5>
-                  <h3 style = {{float : "right", color : "#764A34"}}><b>US$ {covers.Price}</b></h3>
-
-                </div>
+        {recommenedCovers.map((covers) => {
+          return (
+            <div
+              class="card"
+              style={{
+                boxShadow: "rgba(0, 0, 0, 0.25) 0px 25px 50px -12px",
+                borderRadius: "15px",
+                marginRight: "15px",
+                marginLeft: "15px",
+              }}
+            >
+              <img
+                src={ getDownloadURL(ref(storage, `PreviewImages/${covers.PreviewPages[0]}`)).then((url) => {
+                  // imageUrl = url;
+                  return "https://firebasestorage.googleapis.com/v0/b/kaushal-music-production-app.appspot.com/o/PreviewImages%2F923d10247b982186a4ebb24b7ba6fba8.jpg?alt=media&token=3441eb0f-dcfa-496f-93d2-0b59294462e9"
+                })}
+                class="card-img-top"
+                alt="..."
+                style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
+              />
+              <div class="card-body">
+                <h4 class="card-title" style={{ fontWeight: "bold" }}>
+                  {covers.Title}
+                </h4>
+                <h5>{covers.OriginalArtistName}</h5>
+                <h5>{covers.MainCategory}</h5>
+                <h5>{covers.SubCategory}</h5>
+                <h3 style={{ float: "right", color: "#764A34" }}>
+                  <b>US$ {covers.Price}</b>
+                </h3>
               </div>
-            );
-          })}
+            </div>
+          );
+        })}
         {/* </div> */}
       </Carousel>
     </div>
