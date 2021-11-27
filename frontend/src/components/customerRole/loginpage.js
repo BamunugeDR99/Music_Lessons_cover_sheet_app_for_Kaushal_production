@@ -45,12 +45,12 @@ export default function Login(props) {
 
     }
 
-    axios.interceptors.request.use( async(config)=>{
+    // axios.interceptors.request.use( async(config)=>{
 
-            let currentDate = new Date();
+    //         let currentDate = new Date();
 
-    }
-    );
+    // }
+    // );
 
      //remember me
 
@@ -117,12 +117,12 @@ export default function Login(props) {
             alert("Customer loggin Successfully!");
             //console.log("logging success");
             ///console.log(res.data);
-           setErrorMsg("");
+            setErrorMsg("");
             // props.history.push("/Customer/Home");
     
           })
           .catch((err) => {
-            //alert(err);
+            // alert(err);
             console.log(err.response.data);
             // alert(err.response.data.error);
     
@@ -137,7 +137,7 @@ export default function Login(props) {
                 popup: 'animate__animated animate__fadeOutUp'
               }
             })
-            setErrorMsg(err.response.data.error);
+                 setErrorMsg(err.response.data.error);
           });
       }
   
@@ -155,7 +155,7 @@ export default function Login(props) {
                 <div className="row  justify-content-center">
                     <div className="col-sm-5">
                         <h3 style={{ fontWeight: "bold" }} className="mt-5 mb-5">Sign In</h3>
-                        <h6 id="CusLoginError">{errorMsg}</h6>
+                        <h6 id="CusLoginError" style={{color:"red", fontWeight:"bold"}}>{errorMsg}</h6>
                     </div>
 
                 </div>

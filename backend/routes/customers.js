@@ -208,6 +208,8 @@ router.post("/refresh", (req, res) => {
         return res.status(403).json("Refresh token is not valid!");
     }
 
+    //if everything is ok, create new access token, refresh token and send to user
+    
     jwt.verify(refreshToken, "myRefreshSecretKey", (err, customerLogin) => {
 
         err && console.log(err);
@@ -225,12 +227,9 @@ router.post("/refresh", (req, res) => {
         });
 
     });
-    //if everything is ok, create new access token, refresh token and send to user
 
-
-
-
-
+     
+   
 
 }); 
 
@@ -287,16 +286,26 @@ router.post('/loginCustomer', async(req,res) => {
                const accsessToken =  generateAccessToken(customerLogin);
                const refreshToken =  generateRefreshToken(customerLogin);
 
+
+
                refreshTokens.push(refreshToken);
+
+               res.cookie("jwtoken", accsessToken, {
+                    expires: new Date(Date.now() + 30000),
+                    httpOnly:true
+
+                });
 
                 res.json({customerLogin: {
                     _id : customerLogin._id,
                     accsessToken: accsessToken,
                     refreshToken: refreshToken,
                     
-
                 }});
 
+                
+                console.log(accsessToken);
+                console.log(refreshToken);
 
             }
             
