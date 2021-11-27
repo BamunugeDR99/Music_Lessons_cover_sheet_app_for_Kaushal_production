@@ -120,15 +120,12 @@ export default function ViewDetailedCoverPage(props) {
     }
     imageSlider += "</div>";
     document.getElementById("img").innerHTML = imageSlider;
-    // for (let i = 0; i < previewImages.length; i++) {
-      previewImages.map((previewImage,index)=>{
-        const storageRef = ref(storage, `PreviewImages/${previewImage}`);
-        getDownloadURL(storageRef).then((url) => {
-          document.getElementById("img" + index).src = url;
-        });
-      })
-   
-    // }
+    previewImages.map((previewImage, index) => {
+      const storageRef = ref(storage, `PreviewImages/${previewImage}`);
+      getDownloadURL(storageRef).then((url) => {
+        document.getElementById("img" + index).src = url;
+      });
+    });
   }
 
   function youtubeLinkDefaultPreview() {
@@ -533,18 +530,20 @@ export default function ViewDetailedCoverPage(props) {
   function previewPdf(covername) {
     setModalOpenForPdf(true);
     const storageRef = ref(storage, `Covers(PDF)/${covername}`);
-    getDownloadURL(storageRef).then((url) => {
-      // setPdfUrl(url)
-      window.location.href = url;
-      //setModalOpenForPdf(false)
-    }).catch(()=> {
-      setModalOpenForPdf(false);
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Something went wrong!',
+    getDownloadURL(storageRef)
+      .then((url) => {
+        // setPdfUrl(url)
+        window.location.href = url;
+        //setModalOpenForPdf(false)
       })
-    });
+      .catch(() => {
+        setModalOpenForPdf(false);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+        });
+      });
   }
   return (
     <div>
@@ -789,7 +788,7 @@ export default function ViewDetailedCoverPage(props) {
                     <div className="container-sm">
                       <button
                         type="button"
-                        onClick = {()=>previewPdf(covers.CoverPdf)}
+                        onClick={() => previewPdf(covers.CoverPdf)}
                         style={{ color: "#ffffff", backgroundColor: "#D0193A" }}
                         class="btn rounded"
                       >
