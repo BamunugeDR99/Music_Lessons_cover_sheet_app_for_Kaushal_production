@@ -20,7 +20,6 @@ export default function ViewDetailedCoverPage(props) {
   let SubCategoryForRec = "";
   let location = useLocation();
 
-
   //   for update
   //const [covers, setCovers] = useState([]);
   const [SubCategories, setSubCategories] = useState([]);
@@ -171,7 +170,10 @@ export default function ViewDetailedCoverPage(props) {
       });
   }
 
-  function UploadPdf() {
+  function UploadPdf( updateCoverPdf,
+    InstrumentArray,
+    previewPageList,
+    dynamicSubCategory) {
     setFileType("Uploading Pdf file");
     setModalUploadOpen(true);
     setModalOpen2(true);
@@ -189,6 +191,38 @@ export default function ViewDetailedCoverPage(props) {
           //setCompletedFiles("1");
           //UploadImages();
           setModalUploadOpen(false);
+          const updatedCover = {
+            Title: document.getElementById("songName").value,
+            OriginalArtistName: document.getElementById("originalArtist").value,
+            InstrumentsPlayedOn: InstrumentArray,
+            ArrangedBy: arrangedBy,
+            SubCategory: dynamicSubCategory,
+            MainCategory: document.getElementById("MainCategory").value,
+            NoOfPages: document.getElementById("noOfPages").value,
+            NoOfPreviewPages: previewPageList.length,
+            Price: document.getElementById("price").value,
+            YoutubeLink: document.getElementById("youtubeLink").value,
+            FacebookLink: document.getElementById("facebookLink").value,
+            PreviewPages: previewPageList,
+            CoverPdf: updateCoverPdf,
+          };
+  
+          axios
+            .put(
+              "http://localhost:8070/covers/update/" + CoverTempID,
+              updatedCover
+            )
+            .then(() => {
+              Swal.fire(
+                "Updated!",
+                "Your cover has been updated.",
+                "success"
+              );
+              getCovers();
+            })
+            .catch((err) => {
+              alert(err);
+            });
         } else {
           // setClass("");
         }
@@ -198,7 +232,12 @@ export default function ViewDetailedCoverPage(props) {
       }
     );
   }
-  function UploadImages() {
+  async function UploadImages(
+    updateCoverPdf,
+    InstrumentArray,
+    previewPageList,
+    dynamicSubCategory
+  ) {
     setFileType("Uploading Preview Images");
     setModalUploadOpen(true);
     setModalOpen2(true);
@@ -229,14 +268,88 @@ export default function ViewDetailedCoverPage(props) {
     Promise.all(promises)
       .then(() => {
         setModalUploadOpen(false);
+        const updatedCover = {
+          Title: document.getElementById("songName").value,
+          OriginalArtistName: document.getElementById("originalArtist").value,
+          InstrumentsPlayedOn: InstrumentArray,
+          ArrangedBy: arrangedBy,
+          SubCategory: dynamicSubCategory,
+          MainCategory: document.getElementById("MainCategory").value,
+          NoOfPages: document.getElementById("noOfPages").value,
+          NoOfPreviewPages: previewPageList.length,
+          Price: document.getElementById("price").value,
+          YoutubeLink: document.getElementById("youtubeLink").value,
+          FacebookLink: document.getElementById("facebookLink").value,
+          PreviewPages: previewPageList,
+          CoverPdf: updateCoverPdf,
+        };
+
+        axios
+          .put(
+            "http://localhost:8070/covers/update/" + CoverTempID,
+            updatedCover
+          )
+          .then(() => {
+            Swal.fire(
+              "Updated!",
+              "Your cover has been updated.",
+              "success"
+            );
+            getCovers();
+          })
+          .catch((err) => {
+            alert(err);
+          });
       })
       .catch(() => {
         alert("error");
       });
   }
+function uploadBoth(updateCoverPdf,
+  InstrumentArray,
+  previewPageList,
+  dynamicSubCategory){
+    setFileType("Uploading Pdf file");
+    setModalUploadOpen(true);
+    setModalOpen2(true);
+    const storageRef = ref(storage, `Covers(PDF)/${coverPDF[0].name}`);
+    const uploadTask = uploadBytesResumable(storageRef, coverPDF[0]);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const prog = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgress(prog);
+        if (prog >= 100) {
+        UploadImages(updateCoverPdf,
+          InstrumentArray,
+          previewPageList,
+          dynamicSubCategory);
+    
+        } else {
+          // setClass("");
+        }
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+
+
+
+
+}
+
+
+
+
+
 
   function update(e) {
     e.preventDefault();
+    let updateCoverPdf = "";
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -260,22 +373,6 @@ export default function ViewDetailedCoverPage(props) {
         if (result.isConfirmed) {
           let dynamicSubCategory = "";
           let previewPageList = [];
-          //console.log(document.getElementById("PSampleImages").value);
-
-          if (previewPages.length === 0) {
-            previewPageList = document
-              .getElementById("PSampleImages")
-              .value.split(",");
-            console.log(previewPages);
-          } else {
-            for (let i = 0; i < previewPages.length; i++) {
-              previewPageList.push(previewPages[i].name);
-            }
-            UploadImages();
-            console.log("a");
-            console.log(previewPages);
-          }
-
           if (
             document.getElementById("MainCategory").value ==
             "Guitar Technics & Lessons"
@@ -297,47 +394,112 @@ export default function ViewDetailedCoverPage(props) {
             InstrumentArray = instruments.split(",");
           }
 
-          let updateCoverPdf = "";
-          if (document.getElementById("pdffile").files.length === 0) {
+          if (
+            previewPages.length === 0 &&
+            document.getElementById("pdffile").files.length === 0
+          ) {
+            previewPageList = document
+              .getElementById("PSampleImages")
+              .value.split(",");
             updateCoverPdf = document.getElementById("tPdfFile").value;
-          } else {
-            updateCoverPdf = coverPDF[0].name;
-            UploadPdf();
-          }
 
-          const updatedCover = {
-            Title: document.getElementById("songName").value,
-            OriginalArtistName: document.getElementById("originalArtist").value,
-            InstrumentsPlayedOn: InstrumentArray,
-            ArrangedBy: arrangedBy,
-            SubCategory: dynamicSubCategory,
-            MainCategory: document.getElementById("MainCategory").value,
-            NoOfPages: document.getElementById("noOfPages").value,
-            NoOfPreviewPages: previewPageList.length,
-            Price: document.getElementById("price").value,
-            YoutubeLink: document.getElementById("youtubeLink").value,
-            FacebookLink: document.getElementById("facebookLink").value,
-            PreviewPages: previewPageList,
-            CoverPdf: updateCoverPdf,
-          };
+            const updatedCover = {
+              Title: document.getElementById("songName").value,
+              OriginalArtistName:
+                document.getElementById("originalArtist").value,
+              InstrumentsPlayedOn: InstrumentArray,
+              ArrangedBy: arrangedBy,
+              SubCategory: dynamicSubCategory,
+              MainCategory: document.getElementById("MainCategory").value,
+              NoOfPages: document.getElementById("noOfPages").value,
+              NoOfPreviewPages: previewPageList.length,
+              Price: document.getElementById("price").value,
+              YoutubeLink: document.getElementById("youtubeLink").value,
+              FacebookLink: document.getElementById("facebookLink").value,
+              PreviewPages: previewPageList,
+              CoverPdf: updateCoverPdf,
+            };
+
+            axios
+              .put(
+                "http://localhost:8070/covers/update/" + CoverTempID,
+                updatedCover
+              )
+              .then(() => {
+                swalWithBootstrapButtons.fire(
+                  "Updated!",
+                  "Your cover has been updated.",
+                  "success"
+                );
+                getCovers();
+              })
+              .catch((err) => {
+                alert(err);
+              });
+          } else if (
+            previewPages.length != 0 &&
+            document.getElementById("pdffile").files.length === 0
+          ) {
+            for (let i = 0; i < previewPages.length; i++) {
+              previewPageList.push(previewPages[i].name);
+            }
+            updateCoverPdf = document.getElementById("tPdfFile").value;
+            UploadImages(
+              updateCoverPdf,
+              InstrumentArray,
+              previewPageList,
+              dynamicSubCategory
+            );
+          } else if( previewPages.length === 0 &&
+            document.getElementById("pdffile").files.length != 0){
+              updateCoverPdf = coverPDF[0].name;
+              previewPageList = document
+              .getElementById("PSampleImages")
+              .value.split(",");
+              UploadPdf(   updateCoverPdf,
+                InstrumentArray,
+                previewPageList,
+                dynamicSubCategory);
+            }else if(previewPages.length != 0 &&
+              document.getElementById("pdffile").files.length != 0){
+                updateCoverPdf = coverPDF[0].name;
+                for (let i = 0; i < previewPages.length; i++) {
+                  previewPageList.push(previewPages[i].name);
+                }
+                uploadBoth(updateCoverPdf,
+                  InstrumentArray,
+                  previewPageList,
+                  dynamicSubCategory);
+
+            }
+
+
+
+
+          // if (document.getElementById("pdffile").files.length === 0) {
+          //   updateCoverPdf = document.getElementById("tPdfFile").value;
+          // } else {
+        
+          // }
+
           // console.log(updatedCover);
 
-          axios
-            .put(
-              "http://localhost:8070/covers/update/" + CoverTempID,
-              updatedCover
-            )
-            .then(() => {
-              swalWithBootstrapButtons.fire(
-                "Updated!",
-                "Your cover has been updated.",
-                "success"
-              );
-              getCovers();
-            })
-            .catch((err) => {
-              alert(err);
-            });
+          // axios
+          //   .put(
+          //     "http://localhost:8070/covers/update/" + CoverTempID,
+          //     updatedCover
+          //   )
+          //   .then(() => {
+          //     swalWithBootstrapButtons.fire(
+          //       "Updated!",
+          //       "Your cover has been updated.",
+          //       "success"
+          //     );
+          //     getCovers();
+          //   })
+          //   .catch((err) => {
+          //     alert(err);
+          //   });
         } else if (
           /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel
