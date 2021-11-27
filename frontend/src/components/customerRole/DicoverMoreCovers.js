@@ -8,6 +8,7 @@ export default function DiscoverMoreCovers(props) {
 
   const MainCategory = "Guitar Technics & Lessons";
   const SubCategory = "Exercises";
+  
   useEffect(() => {
     function getRecommendCovers() {
 
@@ -17,13 +18,16 @@ export default function DiscoverMoreCovers(props) {
       axios
         .get("http://localhost:8070/covers/getCovers")
         .then((res) => {
+
+          const availableCovers = res.data.filter((recCovers)=> recCovers.Status != "3" || recCovers.Status != "2");
           setRecommendedCovers(
-            res.data.filter(
+            availableCovers.filter(
               (covers) =>
                 covers.MainCategory === MainCategory &&
                 covers.SubCategory === SubCategory
             )
           );
+
         })
         .catch((err) => {
           alert(err);
