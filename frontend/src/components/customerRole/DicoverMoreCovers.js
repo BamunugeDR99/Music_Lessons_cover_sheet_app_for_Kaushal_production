@@ -85,7 +85,7 @@ export default function DiscoverMoreCovers(props) {
             >
               <img
                 id = {index}
-                src = {displayImages(covers.PreviewPages[0],index)}
+                src = {displayImages(covers.PreviewPages[0],index) || "/images/Imageplaceholder.png"}
                 class="card-img-top"
                 alt="..."
                 style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
