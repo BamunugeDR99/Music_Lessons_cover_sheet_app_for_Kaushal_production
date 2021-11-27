@@ -120,6 +120,10 @@ export default function ViewDetailedCoverPage(props) {
     }
     imageSlider += "</div>";
     document.getElementById("img").innerHTML = imageSlider;
+    for(let i = 0;  i < previewImages.length;i++){
+      document.getElementById("img" + i).src = "/images/Imageplaceholder.png";
+        
+      }
     previewImages.map((previewImage, index) => {
       const storageRef = ref(storage, `PreviewImages/${previewImage}`);
       getDownloadURL(storageRef).then((url) => {

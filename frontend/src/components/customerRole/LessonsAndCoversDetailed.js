@@ -64,8 +64,12 @@ export default function LessonsAndCoversDetailed(props) {
       }
     }
     imageSlider += "</div>";
+  
     document.getElementById("img").innerHTML = imageSlider;
-
+    for(let i = 0;  i < previewImages.length;i++){
+      document.getElementById("img" + i).src = "/images/Imageplaceholder.png";
+        
+      }
     previewImages.map((previewImage, index) => {
       const storageRef = ref(storage, `PreviewImages/${previewImage}`);
       getDownloadURL(storageRef).then((url) => {
@@ -144,7 +148,9 @@ export default function LessonsAndCoversDetailed(props) {
                   class="carousel slide"
                   data-ride="carousel"
                 >
-                  <div id="img"></div>
+                  <div id="img">
+      
+                  </div>
                   {/* controls  */}
                   <a
                     class="carousel-control-prev"
