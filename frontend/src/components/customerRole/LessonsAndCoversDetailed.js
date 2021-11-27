@@ -15,7 +15,7 @@ export default function LessonsAndCoversDetailed(props) {
   useEffect(() => {
     function getCovers() {
       //const CoverID = props.match.params.id;
-      const CoverTempID = "61a096c139983f67656949f3";
+      const CoverTempID = "61a247ef9508b44b96cf150e";
       axios
         .get("http://localhost:8070/covers/get/" + CoverTempID)
         .then((res) => {

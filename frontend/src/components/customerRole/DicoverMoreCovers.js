@@ -17,9 +17,14 @@ export default function DiscoverMoreCovers(props) {
       axios
         .get("http://localhost:8070/covers/getCovers")
         .then((res) => {
-          const availableCovers = res.data.filter(
-            (recCovers) => recCovers.Status != "3" || recCovers.Status != "2"
+          let availableCovers = res.data.filter(
+            (recCovers) => String(recCovers.Status) != "3" 
           );
+
+           availableCovers = availableCovers.filter(
+            (recCovers) => String(recCovers.Status) != "2" 
+          );
+          console.log(availableCovers)
           setRecommendedCovers(
             availableCovers.filter(
               (covers) =>

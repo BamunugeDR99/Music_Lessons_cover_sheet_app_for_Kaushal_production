@@ -1174,10 +1174,10 @@ export default function ViewDetailedCoverPage(props) {
             <br />
             {/* <h3 style={{ color: "#764A34", textAlign: "center" }}>
               {completedFiles} / {totalFiles}
-            </h3>
+                  </h3>*/}
             <h2 style={{ color: "#764A34", textAlign: "center" }}>
               {fileType}
-            </h2> */}
+            </h2> 
           </div>
           <div class="d-flex justify-content-center">
             <div
@@ -1202,7 +1202,7 @@ export default function ViewDetailedCoverPage(props) {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <button
+          {/* <button
             className="btn rounded"
             onClick={() => {
               setModalUploadOpen(false);
@@ -1210,7 +1210,7 @@ export default function ViewDetailedCoverPage(props) {
             style={{ backgroundColor: "#D0193A", color: "#ffffff" }}
           >
             {cancelOrCloseBtn}
-          </button>
+          </button> */}
         </Modal.Footer>
       </Modal>
 
