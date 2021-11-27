@@ -56,15 +56,15 @@ export default function DiscoverMoreCovers(props) {
     },
   };
 
-  function displayImages(coverImageName) {
+  function displayImages(coverImageName,index) {
     let imageUrl = "";
     const storageRef = ref(storage, `PreviewImages/${coverImageName}`);
    getDownloadURL(storageRef).then((url) => {
       // imageUrl = url;
-      return "https://firebasestorage.googleapis.com/v0/b/kaushal-music-production-app.appspot.com/o/PreviewImages%2F923d10247b982186a4ebb24b7ba6fba8.jpg?alt=media&token=3441eb0f-dcfa-496f-93d2-0b59294462e9"
+      document.getElementById(index).src=  url;
+      // "https://firebasestorage.googleapis.com/v0/b/kaushal-music-production-app.appspot.com/o/PreviewImages%2F923d10247b982186a4ebb24b7ba6fba8.jpg?alt=media&token=3441eb0f-dcfa-496f-93d2-0b59294462e9"
     });
-
-   
+    
   }
 
   return (
@@ -72,7 +72,7 @@ export default function DiscoverMoreCovers(props) {
       <br />
       <Carousel responsive={responsive}>
         {/* <div className="container"> */}
-        {recommenedCovers.map((covers) => {
+        {recommenedCovers.map((covers,index) => {
           return (
             <div
               class="card"
@@ -84,10 +84,8 @@ export default function DiscoverMoreCovers(props) {
               }}
             >
               <img
-                src={ getDownloadURL(ref(storage, `PreviewImages/${covers.PreviewPages[0]}`)).then((url) => {
-                  // imageUrl = url;
-                  return "https://firebasestorage.googleapis.com/v0/b/kaushal-music-production-app.appspot.com/o/PreviewImages%2F923d10247b982186a4ebb24b7ba6fba8.jpg?alt=media&token=3441eb0f-dcfa-496f-93d2-0b59294462e9"
-                })}
+                id = {index}
+                src = {displayImages(covers.PreviewPages[0],index)}
                 class="card-img-top"
                 alt="..."
                 style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
