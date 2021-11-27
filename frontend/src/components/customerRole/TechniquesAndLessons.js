@@ -4,9 +4,8 @@ import CoverTemplate from "./covercardtemplate";
 import TopDownloadTemplate from "./topdownloadtemplate";
 import Modal from "react-bootstrap/Modal";
 import InputRange from "react-input-range";
-import { data, post } from "jquery";
 
-export default function MusicCoverPage() {
+export default function TechniquesAndLessons() {
   const [modelOpen, setmodelOpen] = useState(false);
   const [pricerange, setPriceRange] = useState("0");
   const [downloadrange, setDownloadRange] = useState("0");
@@ -18,18 +17,13 @@ export default function MusicCoverPage() {
   const [categorytext, setCategoryText] = useState("All");
   const [serchvalue, setSerchvalue] = useState("");
   const [categories, setCategories] = useState([]);
-  const [populercover, setpopulercover] = useState([]);
-  let pcover = [];
-  let dataholdedr = [];
 
-  useEffect(async () => {
-    await axios
-      .get("http://localhost:8070/covers/getcoverbymaincover")
+  useEffect(() => {
+    axios
+      .get("http://localhost:8070/covers/getcoverbymainexcercise")
       .then((res) => {
-        dataholdedr = res.data;
         setCovers(res.data);
         setfilterCover(res.data);
-
         // console.log(res.data);
       })
       .catch((err) => {
@@ -40,27 +34,14 @@ export default function MusicCoverPage() {
     axios
       .get("http://localhost:8070/mainCategory/get")
       .then((res) => {
-        setCategories(res.data[0].SubCategories);
-        console.log(res.data[0].SubCategories);
+        setCategories(res.data[1].SubCategories);
+        console.log(res.data[1].SubCategories);
       })
       .catch((err) => {
         alert(err.message);
       });
-
-    populercovers();
   }, []);
 
-  function populercovers() {
-    dataholdedr.map(
-      (post) => (
-        pcover = post,
-        pcover.NoOfDownloads >= post.NoOfDownloads ? (pcover = post) : <h1></h1>
-      ),
-      console.log(pcover)
-    );
-    console.log(pcover.Title);
-    setpopulercover(pcover);
-  }
   function modalopen() {
     // alert("This is alert");
     setmodelOpen(true);
@@ -239,11 +220,7 @@ export default function MusicCoverPage() {
                   </strong>
                 </h4>
 
-                <TopDownloadTemplate
-                  title={populercover.Title}
-                  price={populercover.Price}
-                  artist={populercover.OriginalArtistName}
-                />
+                <TopDownloadTemplate />
               </div>
             </div>
             <br />
@@ -251,7 +228,7 @@ export default function MusicCoverPage() {
           {/* right side of the page */}
           <div className="col-md-8">
             <h4 style={{ color: "#764A34" }}>
-              <strong>Classical Guitar Covers - {categorytext}</strong>
+              <strong>Technics and Lessons - {categorytext}</strong>
             </h4>
             <center>
               <h4 style={{ color: "red" }}>{nodata}</h4>

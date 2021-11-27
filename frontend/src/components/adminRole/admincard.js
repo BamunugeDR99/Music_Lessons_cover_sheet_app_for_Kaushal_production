@@ -17,9 +17,9 @@ export default function DashBoard(props) {
         >
           <div className="row">
             <div className="col-8">
-              <span style={{ color: props.color }}>30</span>
+              <span style={{ color: props.color }}>{props.num}</span>
               <br />
-              <span>Ongoing Orders</span>
+              <span>{props.value}</span>
             </div>
             <div className="col">
               <i

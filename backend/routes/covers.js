@@ -100,11 +100,33 @@ router.route("/getcovers").get((reg, res) => {
 //     });
 // });
 
-//Covers sort by sub category
-router.route("/getcoverbysubcategory/:category").get(async (req, res) => {
-  let subCategory = req.params.category;
+//Get covers by main category
+router.route("/getcoverbymaincover/").get(async (req, res) => {
+  let value = "Classical Guitar Covers";
   try {
-    const result = await Covers.find({ SubCategory: subCategory });
+    const result = await Covers.find({ MainCategory: value, Status: 1 });
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+});
+
+//Get covers by main category
+router.route("/getcoverbymainexcercise/").get(async (req, res) => {
+  let value = "Guitar Technics & Lessons";
+  try {
+    const result = await Covers.find({ MainCategory: value, Status: 1 });
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+});
+
+//getCoverById
+router.route("/getcoverbyid/:id").get(async (req, res) => {
+  let id = req.params.id;
+  try {
+    const result = await Covers.find({ _id: id });
     res.status(200).json(result);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -115,7 +137,7 @@ router.route("/getcoverbysubcategory/:category").get(async (req, res) => {
 router.route("/getcoverbypricerange/:price").get(async (req, res) => {
   let pricerange = req.params.price;
   try {
-    const result = await Covers.find({ Price: { $lte: pricerange } });
+    const result = await Covers.find({ Price: { $gte: 150 } });
     res.status(200).json(result);
   } catch (error) {
     res.status(404).json({ message: error.message });

@@ -14,11 +14,14 @@ import MainCategoriesDataTable from "./components/adminRole/MainCategoriesDataTa
 import ViewStudentDetails from "./components/testingComponents/ViewStudentdetails";
 import CustomerHeader from "./components/customerRole/CustomerHeaderTemp";
 import CustomerFooter from "./components/customerRole/CustomerFooterTemp";
+import MusicCart from "./components/customerRole/music_cart";
+import Lessons from "./components/customerRole/TechniquesAndLessons";
 
 import DataTableTest3 from "./components/dataTableTest";
 import MusicCoverPage from "./components/customerRole/musiccoverpage";
 import AdminHeader from "./components/adminRole/adminheader";
 import AdminHeader2 from "./components/adminRole/adminHeader2";
+import Login from "./components/customerRole/loginpage";
 function App() {
   return (
     <BrowserRouter>
@@ -33,6 +36,7 @@ function App() {
         <Route path="/e" element={<MainCategoriesDataTable />} />
         {/* <Route path="/e" element={<BootstrapDataTable />} /> */}
         <Route path="/f" element={<AddStudent />} />
+        <Route path="/l" element={<Login />} />
         {/* <Route path="/g" element={<ViewStudentDetails/>} /> */}
 
         <Route path="/header" element={<AdminHeader2 />} />
@@ -40,8 +44,10 @@ function App() {
         <Route path="/musiccoverpage" element={<MusicCoverPage />} />
         <Route path="/table" element={<DataTableTest />} />
         <Route path="/table3" element={<DataTableTest3 />} />
+        <Route path="/musiccart" element={<MusicCart />} />
+        <Route path="/lessons" element={<Lessons />} />
       </Routes>
-      <CustomerFooter />
+      {/* <CustomerFooter /> */}
     </BrowserRouter>
 
     //Commit1
