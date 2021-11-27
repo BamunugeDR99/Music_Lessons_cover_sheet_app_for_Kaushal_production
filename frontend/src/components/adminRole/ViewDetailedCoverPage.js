@@ -120,10 +120,15 @@ export default function ViewDetailedCoverPage(props) {
     }
     imageSlider += "</div>";
     document.getElementById("img").innerHTML = imageSlider;
-    for (let i = 0; i < previewImages.length; i++) {
-      let ImagePath = "/images/" + previewImages[i];
-      document.getElementById("img" + i).src = ImagePath;
-    }
+    // for (let i = 0; i < previewImages.length; i++) {
+      previewImages.map((previewImage,index)=>{
+        const storageRef = ref(storage, `PreviewImages/${previewImage}`);
+        getDownloadURL(storageRef).then((url) => {
+          document.getElementById("img" + index).src = url;
+        });
+      })
+   
+    // }
   }
 
   function youtubeLinkDefaultPreview() {
