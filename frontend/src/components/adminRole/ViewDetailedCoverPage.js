@@ -170,10 +170,12 @@ export default function ViewDetailedCoverPage(props) {
       });
   }
 
-  function UploadPdf( updateCoverPdf,
+  function UploadPdf(
+    updateCoverPdf,
     InstrumentArray,
     previewPageList,
-    dynamicSubCategory) {
+    dynamicSubCategory
+  ) {
     setFileType("Uploading Pdf file");
     setModalUploadOpen(true);
     setModalOpen2(true);
@@ -206,18 +208,14 @@ export default function ViewDetailedCoverPage(props) {
             PreviewPages: previewPageList,
             CoverPdf: updateCoverPdf,
           };
-  
+
           axios
             .put(
               "http://localhost:8070/covers/update/" + CoverTempID,
               updatedCover
             )
             .then(() => {
-              Swal.fire(
-                "Updated!",
-                "Your cover has been updated.",
-                "success"
-              );
+              Swal.fire("Updated!", "Your cover has been updated.", "success");
               getCovers();
             })
             .catch((err) => {
@@ -290,11 +288,7 @@ export default function ViewDetailedCoverPage(props) {
             updatedCover
           )
           .then(() => {
-            Swal.fire(
-              "Updated!",
-              "Your cover has been updated.",
-              "success"
-            );
+            Swal.fire("Updated!", "Your cover has been updated.", "success");
             getCovers();
           })
           .catch((err) => {
@@ -305,10 +299,12 @@ export default function ViewDetailedCoverPage(props) {
         alert("error");
       });
   }
-function uploadBoth(updateCoverPdf,
-  InstrumentArray,
-  previewPageList,
-  dynamicSubCategory){
+  function uploadBoth(
+    updateCoverPdf,
+    InstrumentArray,
+    previewPageList,
+    dynamicSubCategory
+  ) {
     setFileType("Uploading Pdf file");
     setModalUploadOpen(true);
     setModalOpen2(true);
@@ -323,11 +319,12 @@ function uploadBoth(updateCoverPdf,
         );
         setProgress(prog);
         if (prog >= 100) {
-        UploadImages(updateCoverPdf,
-          InstrumentArray,
-          previewPageList,
-          dynamicSubCategory);
-    
+          UploadImages(
+            updateCoverPdf,
+            InstrumentArray,
+            previewPageList,
+            dynamicSubCategory
+          );
         } else {
           // setClass("");
         }
@@ -336,16 +333,7 @@ function uploadBoth(updateCoverPdf,
         console.log(error);
       }
     );
-
-
-
-
-}
-
-
-
-
-
+  }
 
   function update(e) {
     e.preventDefault();
@@ -450,36 +438,40 @@ function uploadBoth(updateCoverPdf,
               previewPageList,
               dynamicSubCategory
             );
-          } else if( previewPages.length === 0 &&
-            document.getElementById("pdffile").files.length != 0){
-              updateCoverPdf = coverPDF[0].name;
-              previewPageList = document
+          } else if (
+            previewPages.length === 0 &&
+            document.getElementById("pdffile").files.length != 0
+          ) {
+            updateCoverPdf = coverPDF[0].name;
+            previewPageList = document
               .getElementById("PSampleImages")
               .value.split(",");
-              UploadPdf(   updateCoverPdf,
-                InstrumentArray,
-                previewPageList,
-                dynamicSubCategory);
-            }else if(previewPages.length != 0 &&
-              document.getElementById("pdffile").files.length != 0){
-                updateCoverPdf = coverPDF[0].name;
-                for (let i = 0; i < previewPages.length; i++) {
-                  previewPageList.push(previewPages[i].name);
-                }
-                uploadBoth(updateCoverPdf,
-                  InstrumentArray,
-                  previewPageList,
-                  dynamicSubCategory);
-
+            UploadPdf(
+              updateCoverPdf,
+              InstrumentArray,
+              previewPageList,
+              dynamicSubCategory
+            );
+          } else if (
+            previewPages.length != 0 &&
+            document.getElementById("pdffile").files.length != 0
+          ) {
+            updateCoverPdf = coverPDF[0].name;
+            for (let i = 0; i < previewPages.length; i++) {
+              previewPageList.push(previewPages[i].name);
             }
-
-
-
+            uploadBoth(
+              updateCoverPdf,
+              InstrumentArray,
+              previewPageList,
+              dynamicSubCategory
+            );
+          }
 
           // if (document.getElementById("pdffile").files.length === 0) {
           //   updateCoverPdf = document.getElementById("tPdfFile").value;
           // } else {
-        
+
           // }
 
           // console.log(updatedCover);
@@ -531,6 +523,23 @@ function uploadBoth(updateCoverPdf,
       .catch((err) => {
         alert(err);
       });
+  }
+
+  function previewPdf(covername) {
+    setModalOpenForPdf(true);
+    const storageRef = ref(storage, `Covers(PDF)/${covername}`);
+    getDownloadURL(storageRef).then((url) => {
+      // setPdfUrl(url)
+      window.location.href = url;
+      //setModalOpenForPdf(false)
+    }).catch(()=> {
+      setModalOpenForPdf(false);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong!',
+      })
+    });
   }
   return (
     <div>
@@ -775,6 +784,7 @@ function uploadBoth(updateCoverPdf,
                     <div className="container-sm">
                       <button
                         type="button"
+                        onClick = {()=>previewPdf(covers.CoverPdf)}
                         style={{ color: "#ffffff", backgroundColor: "#D0193A" }}
                         class="btn rounded"
                       >

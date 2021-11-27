@@ -18,7 +18,7 @@ router.route("/add").post((req, res) => {
   const PreviewPages = req.body.PreviewPages;
   const CoverPdf = req.body.CoverPdf;
   //const FeedBackIDs = req.body.FeedBackIDs;
- // const Status = req.body.Status;
+  // const Status = req.body.Status;
   // const UpdatedDateAndTime = req.body.UpdatedDateAndTime;
   const UpdatedUser = req.body.UpdatedUser;
   // const AddedDateAndTime = req.body.AddedDateAndTime;
@@ -59,9 +59,9 @@ router.route("/add").post((req, res) => {
           CoverPdf: newCovers.CoverPdf,
           FeedBackIDs: newCovers.FeedBackIDs,
           Status: newCovers.Status,
-          UpdatedDateAndTime : newCovers.UpdatedDateAndTime,
+          UpdatedDateAndTime: newCovers.UpdatedDateAndTime,
           UpdatedUser: newCovers.UpdatedUser,
-          AddedDateAndTime : newCovers.AddedDateAndTime,
+          AddedDateAndTime: newCovers.AddedDateAndTime,
         },
       });
     })
