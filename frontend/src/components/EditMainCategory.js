@@ -22,7 +22,7 @@ export default function EditMainCategories(props) {
     let [todos, setTodos] = useState([]);
 //     const [todos1, setTodos1] = useState([]);
 
-    const [covers, setCovers]=useState([]);
+    let [covers, setCovers]=useState([]);
 
     const [SubCat, setSubCat]=useState([]);
     const [value, setValue]=useState([]);
@@ -31,13 +31,18 @@ export default function EditMainCategories(props) {
     const [classical, setClassical]=useState([]);
     const [exercise, setExercise]=useState([]);
 
+    const [empty, setEmpty]=useState([]);
+
+    let cover= [];
+    let number=0;
+
 
     useEffect(()=>{
         function getClassical(){
             
             axios.get("http://localhost:8070/mainCategory/get/")
             .then((res)=>{
-              console.log(res.data)
+              // console.log(res.data)
               const filter1 = res.data.filter(
                 (classic) => classic._id == "61936e9d9ea7c21aebd01113"
               );
@@ -71,47 +76,109 @@ export default function EditMainCategories(props) {
 
 
       function deleteMainCategory(classic) {
-        console.log(classic)
+        // console.log(classic)
 
         axios.get("http://localhost:8070/covers/getCovers/")
         .then((res)=>{
-          console.log(res.data)
+          // console.log(res.data)
           
-          const filter2 = res.data.filter(
-            (cover) => cover.SubCategory == "Hindi"
-            // objectId
-          ); console.log(filter2)
-          setCovers(filter2)
-          console.log(covers)
-              
-        })
+          for(let i = 0; i < res.data.length; i++){
+              if(res.data[i].SubCategory === classic){
+                number=1;
+              }
+              else{
+                // number=2;
+              }
+        
+          }
 
-        // axios
-        //   .delete(`http://localhost:8070/mainCategory/deleteSubCategory/${classic}/61936e9d9ea7c21aebd01113`)
-        //   .then((res) => {
-        //     // let afterDelete = abc.splice(index, 1);
-        //     // setabc(afterDelete);
-    
-        //     Swal.fire({
-        //       title: "Are you sure?",
-        //       text: "You won't be able to revert this!",
-        //       icon: "warning",
-        //       showCancelButton: true,
-        //       confirmButtonColor: "#3085d6",
-        //       cancelButtonColor: "#d33",
-        //       confirmButtonText: "Yes, delete it!",
-        //     }).then((result) => {
-        //       if (result.isConfirmed) {
-        //         Swal.fire("Deleted!", "Your file has been deleted.", "success");
-        //         window.location.reload();
-        //       }
-              
-        //     });
-        //   })
-        //   .catch((err) => {
-        //     alert(err);
-        //   });
+          if(number==1){
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Can not delete this Category!',
+              footer: 'There are music covers available under this Category!'
+            })
+          }
+          else{
+              Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!",
+              }).then((result) => {
+                if (result.isConfirmed) {
+
+                  axios
+                  .delete(`http://localhost:8070/mainCategory/deleteSubCategory/${classic}/61936e9d9ea7c21aebd01113`)
+                  .then((res) => {
+              // let afterDelete = abc.splice(index, 1);
+              // setabc(afterDelete);
+                  Swal.fire("Deleted!", "Your file has been deleted.", "success");
+                  // window.location.reload();
+                })
+                .catch((err) => {
+                  alert(err);
+                });
+                }
+              });
+          }
+        })
       }
+
+      function deleteMainCategory1(classic) {
+        axios.get("http://localhost:8070/covers/getCovers/")
+        .then((res)=>{
+
+          for(let i = 0; i < res.data.length; i++){
+              if(res.data[i].SubCategory === classic){
+                number=1;
+              }
+              else{
+              }
+          }
+          if(number==1){
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Can not delete this Category!',
+              footer: 'There are music covers available under this Category!'
+            })
+          }
+          else{
+              Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!",
+              }).then((result) => {
+                if (result.isConfirmed) {
+
+                  axios
+                  .delete(`http://localhost:8070/mainCategory/deleteSubCategory/${classic}/619deb0ca35d670b4e68ec3e`)
+                  .then((res) => {
+              // let afterDelete = abc.splice(index, 1);
+              // setabc(afterDelete);
+                  Swal.fire("Deleted!", "Your file has been deleted.", "success");
+                  // window.location.reload();
+
+                })
+                .catch((err) => {
+                  alert(err);
+                });
+                }
+              });
+          }
+        })
+      }
+
+
 
     function modalopen2() {
         setmodelOpen2(true);
@@ -136,7 +203,9 @@ export default function EditMainCategories(props) {
               axios
                 .put("http://localhost:8070/mainCategory/ClassicalUpdate/61936e9d9ea7c21aebd01113" , updatedCategory)
                 .then((res) => {                              
-                  alert("success");
+                  Swal.fire("All Done!", "New Category Added", "success");
+                  setSubCat("")
+                // props.history.push("/Customer/Home");
                   modalClose2();
                 })
                  .catch((err) => {
@@ -157,7 +226,8 @@ export default function EditMainCategories(props) {
               axios
                 .put("http://localhost:8070/mainCategory/ExerciseUpdate/619deb0ca35d670b4e68ec3e" , updatedCategory)
                 .then((res) => {                              
-                  alert("success");
+                  Swal.fire("All Done!", "New Category Added", "success");
+                  setSubCat("")
                   modalClose2();
                 })
                 .catch((err) => {
@@ -165,7 +235,7 @@ export default function EditMainCategories(props) {
                 });  
         }
         else{
-          alert("Select A Category")
+          Swal.fire('Please select a category')
         }
       }
 
@@ -173,6 +243,9 @@ export default function EditMainCategories(props) {
   return (
      
 <div className="container">
+{/* <div class="spinner-border" role="status">
+  <span class="sr-only">Loading...</span>
+</div> */}
 <br/>
     <br/>
                 {/* <div class="input-group mb-3">
@@ -200,9 +273,9 @@ export default function EditMainCategories(props) {
     
     <div className="col-sm text-center">
 
-    <div class="table-title">
+    <div class="table-title text-left">
           <div class="row ">
-              <div class="col-sm-8">
+              <div class="col">
                   <h4>
                 Classical Guitar Covers
                 </h4></div>
@@ -240,6 +313,7 @@ export default function EditMainCategories(props) {
 
             </tbody>
             </table>
+            <br/>
             </div>
 {/* <div className='col-sm'> */}
 
@@ -247,9 +321,9 @@ export default function EditMainCategories(props) {
     <br/>
     <div className="col-sm text-center">
 
-<div class="table-title">
+<div class="table-title text-left">
       <div class="row ">
-          <div class="col-sm-8">
+          <div class="col">
               <h4>
               Guitar Technics & Lessons
          
@@ -274,7 +348,7 @@ export default function EditMainCategories(props) {
             <td>{classic}</td>
             <td>
             <button style={{ border:'2px solid #D0193A', borderRadius:'5px' }} 
-                            onClick={() => deleteMainCategory(classic,index)}
+                            onClick={() => deleteMainCategory1(classic)}
                             >
                             {/* {alert(index)} */}
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16" style={{color:'#D0193A'}}>
@@ -297,6 +371,7 @@ export default function EditMainCategories(props) {
 {/* Addnew Sub Category */}
 
 <Modal show={modelOpen2} size="lg">
+  <form>
         <Modal.Header>
         <div className="row text-center">
               <h3 >&ensp;Add a new Sub Category</h3> 
@@ -319,6 +394,7 @@ export default function EditMainCategories(props) {
             <div className="row">
             <div className="col-sm">
             <div class="form-group">
+          
                 <label for="exampleInputEmail1">Main Category</label>
                 <div>
                   <select className="browser-default custom-select" id="main" onChange={(e) => {setValue(e.target.value);}} required="true">
@@ -329,17 +405,15 @@ export default function EditMainCategories(props) {
                  
                 </div>
                 <small id="textHelp" class="form-text text-muted"></small>
+                
                 </div>
             </div>
             <div className="col-sm">
             <div class="form-group">
                 <label for="exampleInputText">Sub Categories </label>               
-                <input type="text" class="form-control" id="inputText" required="true"
+                <input type="text" class="form-control" id="inputText" required
                  onChange={(e) => {setSubCat(e.target.value);}}
               />
-                <div className="text-right" >
-                    <i class="fa fa-plus" ></i>
-                </div>
             </div>
             </div>
             </div>
@@ -349,23 +423,25 @@ export default function EditMainCategories(props) {
           <div className="row">
             <div className="col-md-6">
               <center>
-                <button
-                  type="button"
+                <input 
+                  type="submit"
                   class="btn btn-primary"
                   style={{
                     borderRadius: "10px",
                     backgroundColor: "#28A745",
                     color: "white",
                   }}
+                  required
                   onClick={sendData}
-                >
-                  <strong>Save</strong>
-                </button>
+                />
+                  {/* <strong>Save</strong> */}
+                {/* </button> */}
               </center>
             </div>
 
           </div>
         </Modal.Footer>
+        </form>
       </Modal>
 </div>
   );
