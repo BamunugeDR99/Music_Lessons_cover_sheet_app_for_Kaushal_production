@@ -89,17 +89,7 @@ router.route("/getcovers").get((reg, res) => {
       res.status(404).json({ message: error.message });
     });
 });
-// // route("/") this can use for fetching all the data from the DB
-// router.route("/getStudents").get((reg, res) => {
-//   Student.find()
-//     .then((students) => {
-//       res.json(students);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-      
-//     });
-// });
+
 
 // update
 router.route("/update/:id").put(async (req, res) => {
@@ -174,7 +164,7 @@ router.route("/delete/:id").delete(async (req, res) => {
     });
 });
 
-// // get one student details (Specific)
+// // get one cover details (Specific)
 router.route("/get/:id").get(async (req, res) => {
   let coverID = req.params.id;
   const covers = await Covers.findById(coverID)
@@ -192,7 +182,7 @@ router.route("/get/:id").get(async (req, res) => {
 
 
 
-//Update Discount
+//Update status
 router.route("/StatusUpdate/:id").put(async (req, res) => {
   let coverID = req.params.id;
   const{

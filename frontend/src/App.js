@@ -17,6 +17,7 @@ import CustomerFooter from "./components/customerRole/CustomerFooterTemp";
 import PurchaseHistory from "./components/purchaseHistory";
 import AdminVwCustomer from "./components/AdminVwCustomer";
 import EditCategories from "./components/EditCategories";
+import EditMainCategories from "./components/EditMainCategory";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Route path="/history" element={<PurchaseHistory/>} />
         <Route path="/acus" element={<AdminVwCustomer/>} />
         <Route path="/edit" element={<EditCategories/>} />
+        <Route path="/main" element={<EditMainCategories/>} />
         
       </Routes>
       <CustomerFooter />
