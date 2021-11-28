@@ -59,7 +59,7 @@ router.route("/updateCartCovers/:id").put(async (req, res) => {
 router.route("/getOneCart/:id").get((req, res) => {
   let customerID = req.params.id;
 
-  const getOne = Cart.findOne({ customerID: customerID }).exec((err, post) => {
+  const getOne = Cart.findOne({ CustomerID: customerID }).exec((err, post) => {
     if (err) {
       console.log(err);
     } else {
@@ -85,22 +85,28 @@ router.route("/deleteCart/:id").delete(async (req, res) => {
 });
 
 //delete cover from cart
-router.route("/deleteCartCover/:id").delete(async (req, res) => {
-  let CartID = req.params.id;
+router
+  .route("/deleteCartCover/:coverid/:customerid")
+  .delete(async (req, res) => {
+    let coverid = req.params.coverid;
+    let customerid = req.params.customerid;
 
-  try {
-    const result = await Cart.findOneAndDelete({ CoverIDs: CartID });
-    res.status(200).json(result);
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-});
+    try {
+      const result = await Cart.findOneAndUpdate(
+        { CustomerID: customerid },
+        { $pull: { CoverIDs: coverid } }
+      );
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(404).json({ message: error.message });
+    }
+  });
 
 // db.getCollection('validacao_permalinks').update(
-//   {'pecas.comentarios.id': "c1c586be8ded3d044f96fccc18473cf8"}, 
+//   {'pecas.comentarios.id': "c1c586be8ded3d044f96fccc18473cf8"},
 //   {
 //       $pull: { 'pecas.$.comentarios': {
-//           "id":"c1c586be8ded3d044f96fccc18473cf8"}            
+//           "id":"c1c586be8ded3d044f96fccc18473cf8"}
 //       }
 //    }
 // )

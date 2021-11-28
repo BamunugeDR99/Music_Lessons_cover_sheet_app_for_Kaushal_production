@@ -21,13 +21,14 @@ export default function DashBoard(props) {
               <br />
               <span>{props.value}</span>
             </div>
+            
             <div className="col">
               <i
-                class="fa fa-hourglass-end"
+                class={props.icon}
                 aria-hidden="true"
                 style={{
                   color: props.color,
-                  fontSize: "30px",
+                  fontSize: "20px",
                   marginTop: "10px",
                 }}
               ></i>

@@ -21,11 +21,12 @@ import DataTableTest3 from "./components/dataTableTest";
 import MusicCoverPage from "./components/customerRole/musiccoverpage";
 import AdminHeader from "./components/adminRole/adminheader";
 import AdminHeader2 from "./components/adminRole/adminHeader2";
+import DashBoard from "./components/adminRole/dashboard";
 import Login from "./components/customerRole/loginpage";
 function App() {
   return (
     <BrowserRouter>
-      {/* <CustomerHeader /> */}
+      <CustomerHeader />
       <Routes>
         <Route path="/" element={<LessonsAndCoversDetailed />} />
         <Route path="/a" element={<CustomerRegistration />} />
@@ -46,8 +47,9 @@ function App() {
         <Route path="/table3" element={<DataTableTest3 />} />
         <Route path="/musiccart" element={<MusicCart />} />
         <Route path="/lessons" element={<Lessons />} />
+        <Route path="/dashboard" element={<DashBoard />} />
       </Routes>
-      {/* <CustomerFooter /> */}
+      <CustomerFooter />
     </BrowserRouter>
 
     //Commit1

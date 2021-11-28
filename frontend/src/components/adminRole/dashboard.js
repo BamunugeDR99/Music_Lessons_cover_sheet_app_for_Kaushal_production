@@ -6,36 +6,61 @@ import Modal from "react-bootstrap/Modal";
 import { Eye } from "react-feather";
 import $ from "jquery";
 import DataTable from "datatables.net";
+import CoverTemplate from "../customerRole/covercardtemplate";
 
 // Admin dashboard
 export default function DashBoard() {
-  $(document).ready(function () {
-    $("#cover").DataTable();
-  });
-  $(document).ready(function () {
-    $("#excercise").DataTable();
-  });
-  $(document).ready(function () {
-    $("#users").DataTable();
-  });
   const [modelOpen, setmodelOpen] = useState(false);
-  const [modelOpen1, setmodelOpen1] = useState(false);
-  const [downloadmodal, setDownloadModal] = useState(false);
-  const [covers, setCovers] = useState([]);
-  const [coverlength, setCoverLength] = useState();
-  const [customers, setCustomers] = useState([]);
-  const [customerlength, setCustomersLength] = useState();
-  const [customercovers, setCustomerCovers] = useState([]);
+  const [coverlength, setCoverLength] = useState("Loading...");
+  const [customerlength, setCustomersLength] = useState("Loading...");
+  const [orders, setOrders] = useState([]);
+  const [total, setTotal] = useState("Loading...");
+  const [paymentdata, setPaymentData] = useState([]);
+  const [selectedCovers, setSelectedCovers] = useState([]);
+  const [feedbackLength, setFeedbackLength] = useState("Loading...");
+  const [alldownloads, setDownloads] = useState("Loading...");
 
-  let coverid = [];
-  let coverdetails = [];
+  let tableData = [];
+  let covers = [];
+  let customerdetails = [];
+  let tot = 0;
+  let downloads = 0;
+
+  let name = "";
+  let totalprice = "";
+  let date = "";
+  let cartID = "";
+  let customerID = "";
+  let coverID = [];
+  let orderHolder = [];
+
+  let dataholder = {
+    name,
+    totalprice,
+    date,
+    cartID,
+    customerID,
+    coverID,
+  };
 
   useEffect(() => {
+    document.getElementById("spinnerdiv").style.display = "block";
+    document.getElementById("maindiv").style.display = "none";
+
     axios
       .get("http://localhost:8070/covers/getcovers")
       .then((res) => {
-        setCovers(res.data);
         setCoverLength(res.data.length);
+        calculateDownloads(res.data);
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
+
+    axios
+      .get("http://localhost:8070/feedback/getAllFeedback")
+      .then((res) => {
+        setFeedbackLength(res.data.length);
       })
       .catch((err) => {
         alert(err.message);
@@ -44,218 +69,272 @@ export default function DashBoard() {
     axios
       .get("http://localhost:8070/customer/getAll")
       .then((res) => {
-        setCustomers(res.data);
         setCustomersLength(res.data.length);
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
+
+    axios
+      .get("http://localhost:8070/order/getOrders")
+      .then((res) => {
+        setOrders(res.data);
+        // console.log(res.data);
+        orderHolder = res.data;
+        loadIncome(res.data);
       })
       .catch((err) => {
         alert(err.message);
       });
   }, []);
 
-  function modalopen() {
-    // alert("This is alert");
-    setmodelOpen(true);
-  }
-  function modelOpen12() {
-    // alert("This is alert");
-    setmodelOpen1(true);
-  }
   function modalClose() {
     setmodelOpen(false);
   }
-  function modalClose1() {
-    setmodelOpen1(false);
+
+  async function loadIncome(data) {
+    await data.map(
+      (post) => (
+        (tot = tot + Number(post.TotalPrice)), loadCovers(post.CustomerID)
+      )
+    );
+    setTotal(tot);
   }
 
-  function loadCovers() {
-    document.getElementById("coverdiv").style.display = "block";
-    document.getElementById("excercisediv").style.display = "none";
-    document.getElementById("userdiv").style.display = "none";
-  }
-  function loadExcercise() {
-    document.getElementById("excercisediv").style.display = "block";
-    document.getElementById("coverdiv").style.display = "none";
-    document.getElementById("userdiv").style.display = "none";
-  }
-  function loadUsers() {
-    document.getElementById("userdiv").style.display = "block";
-    document.getElementById("excercisediv").style.display = "none";
-    document.getElementById("coverdiv").style.display = "none";
-  }
-  function loadIncome() {}
+  async function loadCovers(customerid) {
+    // console.log(customerid);
 
-  function viewcustomer(id) {
-    axios
-      .get(`http://localhost:8070/order/getorderbycustomer/${id}`)
+    await axios
+      .get(`http://localhost:8070/customer/get/${customerid}`)
       .then((res) => {
-        console.log(res.data[0].CoverIDs);
-        coverid = res.data[0].CoverIDs;
+        // console.log(res.data);
+        customerdetails.push(res.data);
       })
       .catch((err) => {
         alert(err.message);
       });
 
-    alert(coverid);
-    console.log(coverid);
-    for (let i = 0; i < customercovers.length; i++) {
-      axios
-        .get(`http://localhost:8070/cover/getcoverbyid/${covers[i]}`)
+    assignData();
+  }
+  async function assignData() {
+    if (customerdetails.length == orderHolder.length) {
+      // console.log(customerdetails);
+      // console.log(orderHolder);
+      for (let i = 0; i < orderHolder.length; i++) {
+        for (let j = 0; j < orderHolder.length; j++) {
+          if (orderHolder[i].CustomerID == customerdetails[j]._id) {
+            // console.log(customerdetails[j]);
+            // console.log(orderHolder[i]);
+            dataholder = {
+              name: customerdetails[j].FirstName,
+              totalprice: orderHolder[i].TotalPrice,
+              date: orderHolder[i].TransactionDateAndTime,
+              cartID: orderHolder[i]._id,
+              customerID: customerdetails[j]._id,
+              coverID: orderHolder[i].CoverIDs,
+            };
+            tableData.push(dataholder);
+            break;
+          }
+        }
+      }
+      console.log(tableData);
+      setPaymentData(tableData);
+      document.getElementById("spinnerdiv").style.display = "none";
+      document.getElementById("maindiv").style.display = "block";
+      $("#example").DataTable();
+    }
+  }
+  async function getOrderedCovers(data) {
+    console.log(data);
+
+    for (let k = 0; k < data.length; k++) {
+      setmodelOpen(true);
+
+      await axios
+        .get(`http://localhost:8070/covers/getcoverbyid/${data[k]}`)
         .then((res) => {
-          console.log(res.data);
-          coverdetails.push(res.data);
+          document.getElementById("spinnerdiv2").style.display = "block";
+          document.getElementById("modeldiv").style.display = "none";
+          covers.push(res.data[0]);
         })
         .catch((err) => {
+          console.log(err.message);
           alert(err.message);
         });
     }
-    console.log(coverdetails);
+    // testFunction();
+    console.log(covers);
+
+    setSelectedCovers(covers);
+    document.getElementById("spinnerdiv2").style.display = "none";
+    document.getElementById("modeldiv").style.display = "block";
+  }
+
+  function calculateDownloads(data) {
+    for (let i = 0; i < data.length; i++) {
+      downloads = downloads + Number(data[i].NoOfDownloads);
+    }
+    // console.log(downloads);
+    setDownloads(downloads);
   }
   return (
     <div>
+      {/* {console.log(selectedCovers)} */}
       <div className="row">
-        <div className="col-md-3" onClick={() => loadCovers()}>
+        <div className="col-md-2">
           {" "}
-          <AdminCard color="red" value="All Covers" num={coverlength} />
+          <AdminCard
+            color="red"
+            value="Covers"
+            num={coverlength}
+            icon={"fa fa-music"}
+          />
           <br />
         </div>
-        <div className="col-md-3" onClick={() => loadExcercise()}>
+        <div className="col-md-2">
           {" "}
-          <AdminCard color="green" value="All Excercises" num={coverlength} />
+          <AdminCard
+            color="#8B8000"
+            value="Excercises"
+            icon={"fa fa-file"}
+            num={coverlength}
+          />
           <br />
         </div>
-        <div className="col-md-3" onClick={() => loadUsers()}>
+        <div className="col-md-2">
           {" "}
-          <AdminCard color="blue" value="Users" num={customerlength} />
+          <AdminCard
+            color="blue"
+            icon={"fa fa-user"}
+            value="Users"
+            num={customerlength}
+          />
           <br />
         </div>
-        <div className="col-md-3">
+        <div className="col-md-2">
           {" "}
-          <AdminCard color="purple" value="Income" num={30} />
+          <AdminCard
+            color="#7CB9E8	"
+            icon={"fa fa-download"}
+            value="Downloads"
+            num={alldownloads}
+          />
+          <br />
+        </div>
+        <div className="col-md-2">
+          {" "}
+          <AdminCard
+            color="#54626F	"
+            icon={"fa fa-comments"}
+            value="Feedbacks"
+            num={feedbackLength}
+          />
+          <br />
+        </div>
+        <div className="col-md-2">
+          {" "}
+          <AdminCard
+            color="green"
+            icon={"fas fa-dollar-sign"}
+            value="Income"
+            num={total}
+          />
           <br />
         </div>
       </div>
       <hr />
-      <div id="coverdiv" className="row">
-        <table
-          id="cover"
-          className="table table-striped table-bordered"
-          style={{ width: "100%" }}
-        >
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Artist</th>
-              <th>Pages</th>
-              <th>No of downloads</th>
-              <th>Price</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {covers.map((post) => (
-              <tr>
-                <td>{post.Title}</td>
-                <td>{post.OriginalArtistName}</td>
-                <td>{post.NoOfPages}</td>
-                <td>{post.NoOfDownloads}</td>
-                <td>{post.Price}</td>
-                <td>
-                  <button className="btn btn-outline-primary">
-                    <i class="fa fa-eye" aria-hidden="true"></i>
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-          <tfoot>
-            <tr>
-              <th>Name</th>
-              <th>Position</th>
-              <th>Office</th>
-              <th>Age</th>
-              <th>Start date</th>
-              <th>Salary</th>
-            </tr>
-          </tfoot>
-        </table>
+      <div id="spinnerdiv" style={{ display: "block" }}>
+        <center>
+          <div class=" justify-content-center">
+            <div class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+        </center>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
       </div>
-
-      <div id="excercisediv" style={{ display: "none" }} className="row">
+      <div
+        className="container"
+        id="maindiv"
+        style={{ overflowX: "scroll", display: "none" }}
+      >
+        <div className="row">
+          <div className="col-md-4">
+            <div class="form-group">
+              <label>From</label>
+              <input
+                type="date"
+                class="form-control"
+                id="from"
+                aria-describedby="emailHelp"
+                placeholder="Enter email"
+              />
+            </div>{" "}
+          </div>
+          <div className="col-md-4">
+            <div class="form-group">
+              <label>To</label>
+              <input
+                type="date"
+                class="form-control"
+                id="to"
+                aria-describedby="emailHelp"
+                placeholder="Enter email"
+              />
+            </div>{" "}
+          </div>
+          <div className="col-md-4">
+            <center>
+              <button
+                type="submit"
+                class="btn btn-primary mb-1"
+                style={{ marginTop: "25px", height: "48px" }}
+              >
+                Search
+              </button>
+            </center>
+          </div>
+        </div>
         <table
-          id="excercise"
-          className="table table-striped table-bordered"
+          id="example"
+          class="table table-striped table-bordered"
           style={{ width: "100%" }}
         >
           <thead>
             <tr>
-              <th>Title2</th>
-              <th>Artist2</th>
-              <th>Pages</th>
-              <th>No of downloads</th>
-              <th>Price</th>
+              <th>Customer Name</th>
+              <th>Total Price</th>
+              <th>Date</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {covers.map((post) => (
+            {paymentdata.map((post) => (
               <tr>
-                <td>{post.Title}</td>
-                <td>{post.OriginalArtistName}</td>
-                <td>{post.NoOfPages}</td>
-                <td>{post.NoOfDownloads}</td>
-                <td>{post.Price}</td>
+                <td>{post.name}</td>
+                <td className="text-right">Rs.{post.totalprice}.00</td>
+                <td>{post.date.substr(0, 10)}</td>
                 <td>
-                  <button type="button" class="btn btn-outline-primary">
-                    Primary
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-          <tfoot>
-            <tr>
-              <th>Title</th>
-              <th>Artist</th>
-              <th>Pages</th>
-              <th>No of downloads</th>
-              <th>Price</th>
-              <th>Actions</th>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-
-      <div id="userdiv" style={{ display: "none" }} className="row">
-        <table
-          id="users"
-          className="table table-striped table-bordered"
-          style={{ width: "100%" }}
-        >
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Contact</th>
-              <th>Gender</th>
-              <th>Country</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {customers.map((post) => (
-              <tr>
-                <td>{post.FirstName}</td>
-                <td>{post.Email}</td>
-                <td>{post.ContactNumber}</td>
-                <td>{post.Gender}</td>
-                <td>{post.Country}</td>
-                <td>
+                  {" "}
                   <button
-                    onClick={() => viewcustomer(post._id)}
                     type="button"
-                    class="btn btn-outline-primary"
+                    onClick={() => getOrderedCovers(post.coverID)}
+                    class="btn btn-outline-secondary waves-effect btn-sm px-2"
                   >
-                    Primary
+                    <i class="fas fa-eye" aria-hidden="true"></i>
                   </button>
                 </td>
               </tr>
@@ -263,20 +342,18 @@ export default function DashBoard() {
           </tbody>
           <tfoot>
             <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Contact</th>
-              <th>Gender</th>
-              <th>Country</th>
+              <th>Customer Name</th>
+              <th className="text-right">Total Price :- Rs.{total}.00</th>
+              <th>Date</th>
               <th>Actions</th>
             </tr>
           </tfoot>
         </table>
       </div>
-      {/* Cover add model  */}
+
       <Modal show={modelOpen} size="lg">
         <Modal.Header>
-          <h4>Add Cover/Excercise</h4>
+          <h4>All ordered covers</h4>
           <button
             type="button"
             class="close"
@@ -289,138 +366,54 @@ export default function DashBoard() {
         </Modal.Header>
         <Modal.Body>
           <div className="container">
-            <div className="row">
-              <div className="col-sm-6">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Song Name*</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    placeholder="Song Name"
-                  />
-                  <label for="exampleInputEmail1">Main Category</label>
-                  <select className="form-control" id="country" name="country">
-                    <option>Select</option>
-                    <option>Covers</option>
-                    <option>Excercise</option>
-                  </select>
-                  <label for="exampleInputEmail1">YouTube Link*</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    placeholder="YouTube Link"
-                  />
-                  <label for="exampleInputEmail1">PDF File*</label>
-                  <input
-                    type="file"
-                    name="pdffile"
-                    id="pdffile"
-                    class="form-control form-control-sm"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    placeholder="Facebook Link*"
-                  />
+            <div id="spinnerdiv2" style={{ display: "block" }}>
+              <center>
+                <div class=" justify-content-center">
+                  <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
                 </div>
-              </div>
-              <div className="col-sm-6">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Instruments*</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    placeholder="Instrument"
-                  />
-                  <label for="exampleInputEmail1">Sub Category</label>
-                  <select className="form-control" id="country" name="country">
-                    <option>Select</option>
-                    <option>English</option>
-                    <option>Sinhala</option>
-                    <option>Hindi</option>
-                  </select>
-                  <label for="exampleInputEmail1">Facebook Link*</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    placeholder="Facebook Link*"
-                  />
-                  <label for="exampleInputEmail1">Preview Images*</label>
-                  <input
-                    type="file"
-                    name="sampleimages[]"
-                    id="sampleimages"
-                    class="form-control form-control-sm"
-                    multiple="true"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    placeholder="Facebook Link*"
-                  />
-                </div>
-              </div>
+              </center>
+            </div>
+            <div
+              style={{ display: "none" }}
+              id="modeldiv"
+              className="row text-center"
+            >
+              <table
+                id="example"
+                class="table table-striped table-bordered"
+                style={{ width: "100%" }}
+              >
+                <thead>
+                  <tr>
+                    <th>Cover Name</th>
+                    <th>Total Price</th>
+                    <th>Total Downloads</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedCovers.map((post) => (
+                    <tr>
+                      <td>{post.Title}</td>
+                      <td className="text-right">Rs.{post.Price}.00</td>
+                      <td>{post.NoOfDownloads}</td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th>Cover Name</th>
+                    <th>Total Price</th>
+                    <th>Total Downloads</th>
+                  </tr>
+                </tfoot>
+              </table>
             </div>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <div className="row">
-            <div className="col-md-6">
-              <center>
-                <button
-                  type="button"
-                  class="btn btn"
-                  style={{
-                    borderRadius: "10px",
-                    backgroundColor: "#28A745",
-                    color: "white",
-                  }}
-                >
-                  <strong>Submit</strong>
-                </button>
-              </center>
-            </div>
-          </div>
-        </Modal.Footer>
-      </Modal>
-
-      {/* Category model */}
-      <Modal show={modelOpen1} size="m">
-        <Modal.Header>
-          <h4>Add Main Category</h4>
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
-            onClick={modalClose1}
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="container">
-            <div className="row">
-              <div className="col-sm-12">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Main Category*</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    placeholder="Main Name"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-            </div>
-          </div>
+          <div className="row"></div>
         </Modal.Footer>
       </Modal>
     </div>

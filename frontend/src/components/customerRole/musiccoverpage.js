@@ -5,6 +5,7 @@ import TopDownloadTemplate from "./topdownloadtemplate";
 import Modal from "react-bootstrap/Modal";
 import InputRange from "react-input-range";
 import { data, post } from "jquery";
+import { Maximize } from "react-feather";
 
 export default function MusicCoverPage() {
   const [modelOpen, setmodelOpen] = useState(false);
@@ -19,8 +20,10 @@ export default function MusicCoverPage() {
   const [serchvalue, setSerchvalue] = useState("");
   const [categories, setCategories] = useState([]);
   const [populercover, setpopulercover] = useState([]);
-  let pcover = [];
   let dataholdedr = [];
+
+  let pcover = {};
+  let max = 0;
 
   useEffect(async () => {
     await axios
@@ -41,7 +44,7 @@ export default function MusicCoverPage() {
       .get("http://localhost:8070/mainCategory/get")
       .then((res) => {
         setCategories(res.data[0].SubCategories);
-        console.log(res.data[0].SubCategories);
+        // console.log(res.data[0].SubCategories);
       })
       .catch((err) => {
         alert(err.message);
@@ -51,14 +54,16 @@ export default function MusicCoverPage() {
   }, []);
 
   function populercovers() {
-    dataholdedr.map(
-      (post) => (
-        pcover = post,
-        pcover.NoOfDownloads >= post.NoOfDownloads ? (pcover = post) : <h1></h1>
-      ),
-      console.log(pcover)
-    );
-    console.log(pcover.Title);
+    // console.log(dataholdedr);
+    for (let i = 0; i < dataholdedr.length; i++) {
+      // console.log(dataholdedr[i].NoOfDownloads)
+      if (Number(dataholdedr[i].NoOfDownloads) > max) {
+        max = dataholdedr[i].NoOfDownloads;
+        console.log(max);
+        pcover = dataholdedr[i];
+      }
+    }
+    // console.log(pcover);
     setpopulercover(pcover);
   }
   function modalopen() {
@@ -123,6 +128,12 @@ export default function MusicCoverPage() {
       setCategoryCover(filtercover);
       setCovers(filtercover);
       setPriceRange(0);
+      if (filtercover.length != 0) {
+        setNoData("");
+      } else {
+        setNoData("No Covers available");
+        setCovers([]);
+      }
       setDownloadRange(0);
     } else {
       setCategoryText(type);
@@ -179,7 +190,10 @@ export default function MusicCoverPage() {
         <div className="row ">
           {/* left side of the page */}
           <div className="col-md-4">
-            <div className="list-group">
+            <div
+              className="list-group"
+              style={{ maxHeight: "30%", overflowY: "scroll" }}
+            >
               <a
                 href="#"
                 onClick={() => fetchData("All")}
@@ -196,15 +210,14 @@ export default function MusicCoverPage() {
                   <i className="fa fa-music"></i>&emsp; {post}
                 </a>
               ))}
-              ;
             </div>
             <div>
               <br />
-              <div className="row">
+              <div className="row text-center">
                 <div className="col-md-6">
-                  <label>Price Range</label>
+                  <label>Price Range </label>
                   <label>({pricerange} - 200+) </label>
-                  <div class="sadecontainer">
+                  <div class="slidecontainer">
                     <input
                       id="typeinp"
                       type="range"
@@ -217,7 +230,7 @@ export default function MusicCoverPage() {
                   </div>
                 </div>
                 <div className="col-md-6">
-                  <label>Downloads</label>
+                  <label>Downloads </label>
                   <label>({downloadrange} - 200+) </label>
                   <div class="slidecontainer">
                     <input
@@ -238,7 +251,8 @@ export default function MusicCoverPage() {
                     <center>Most Downloaded Classical Guitar Cover</center>
                   </strong>
                 </h4>
-
+              </div>
+              <div>
                 <TopDownloadTemplate
                   title={populercover.Title}
                   price={populercover.Price}
@@ -246,6 +260,7 @@ export default function MusicCoverPage() {
                 />
               </div>
             </div>
+
             <br />
           </div>
           {/* right side of the page */}
@@ -258,11 +273,12 @@ export default function MusicCoverPage() {
             </center>
             <div className="row">
               {covers.map((post) => (
-                <div className="col-md-3" onClick={() => modalopen()}>
+                <div className="col-md-4" onClick={() => modalopen()}>
                   <CoverTemplate
-                    name={post.Title}
+                    title={post.Title}
                     artist={post.OriginalArtistName}
                     price={post.Price}
+                    category={post.SubCategory}
                   />
                   <br />
                 </div>
@@ -273,6 +289,7 @@ export default function MusicCoverPage() {
           </div>
         </div>
       </div>
+
       {/* user details update model */}
       <Modal show={modelOpen} size="lg">
         <Modal.Header>

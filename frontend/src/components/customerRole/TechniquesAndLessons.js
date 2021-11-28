@@ -4,8 +4,11 @@ import CoverTemplate from "./covercardtemplate";
 import TopDownloadTemplate from "./topdownloadtemplate";
 import Modal from "react-bootstrap/Modal";
 import InputRange from "react-input-range";
+import { data, post } from "jquery";
+import { Maximize } from "react-feather";
 
-export default function TechniquesAndLessons() {
+
+export default function MusicCoverPage() {
   const [modelOpen, setmodelOpen] = useState(false);
   const [pricerange, setPriceRange] = useState("0");
   const [downloadrange, setDownloadRange] = useState("0");
@@ -17,13 +20,20 @@ export default function TechniquesAndLessons() {
   const [categorytext, setCategoryText] = useState("All");
   const [serchvalue, setSerchvalue] = useState("");
   const [categories, setCategories] = useState([]);
+  const [populercover, setpopulercover] = useState([]);
+  let dataholdedr = [];
 
-  useEffect(() => {
-    axios
+  let pcover = {};
+  let max = 0;
+
+  useEffect(async () => {
+    await axios
       .get("http://localhost:8070/covers/getcoverbymainexcercise")
       .then((res) => {
+        dataholdedr = res.data;
         setCovers(res.data);
         setfilterCover(res.data);
+
         // console.log(res.data);
       })
       .catch((err) => {
@@ -35,13 +45,28 @@ export default function TechniquesAndLessons() {
       .get("http://localhost:8070/mainCategory/get")
       .then((res) => {
         setCategories(res.data[1].SubCategories);
-        console.log(res.data[1].SubCategories);
+        // console.log(res.data[0].SubCategories);
       })
       .catch((err) => {
         alert(err.message);
       });
+
+    populercovers();
   }, []);
 
+  function populercovers() {
+    console.log(dataholdedr);
+    for (let i = 0; i < dataholdedr.length; i++) {
+      // console.log(dataholdedr[i].NoOfDownloads)
+      if (Number(dataholdedr[i].NoOfDownloads) >= max) {
+        max = dataholdedr[i].NoOfDownloads;
+        console.log(max);
+        pcover = dataholdedr[i];
+      }
+    }
+    console.log(pcover);
+    setpopulercover(pcover);
+  }
   function modalopen() {
     // alert("This is alert");
     setmodelOpen(true);
@@ -59,7 +84,7 @@ export default function TechniquesAndLessons() {
       setCovers(result);
       setNoData("");
     } else {
-      setNoData("No Covers available");
+      setNoData("No Lessons or Excercises available");
       setCovers([]);
     }
 
@@ -76,7 +101,7 @@ export default function TechniquesAndLessons() {
       setCovers(result);
       setNoData("");
     } else {
-      setNoData("No Covers available");
+      setNoData("No Lessons or Excercises available");
       setCovers([]);
     }
   }
@@ -93,7 +118,7 @@ export default function TechniquesAndLessons() {
       setCovers(searchResult);
       setNoData("");
     } else {
-      setNoData("No Covers available");
+      setNoData("No Lessons or Excercises available");
       setCovers([]);
     }
   }
@@ -104,6 +129,12 @@ export default function TechniquesAndLessons() {
       setCategoryCover(filtercover);
       setCovers(filtercover);
       setPriceRange(0);
+      if (filtercover.length != 0) {
+        setNoData("");
+      } else {
+        setNoData("No Lessons or Excercises available");
+        setCovers([]);
+      }
       setDownloadRange(0);
     } else {
       setCategoryText(type);
@@ -120,7 +151,7 @@ export default function TechniquesAndLessons() {
         setCovers(result);
         setNoData("");
       } else {
-        setNoData("No Covers available");
+        setNoData("No Lessons or Excercises available");
         setCovers([]);
       }
     }
@@ -160,7 +191,10 @@ export default function TechniquesAndLessons() {
         <div className="row ">
           {/* left side of the page */}
           <div className="col-md-4">
-            <div className="list-group">
+            <div
+              className="list-group"
+              style={{ maxHeight: "30%", overflowY: "scroll" }}
+            >
               <a
                 href="#"
                 onClick={() => fetchData("All")}
@@ -177,15 +211,14 @@ export default function TechniquesAndLessons() {
                   <i className="fa fa-music"></i>&emsp; {post}
                 </a>
               ))}
-              ;
             </div>
             <div>
               <br />
-              <div className="row">
+              <div className="row text-center">
                 <div className="col-md-6">
-                  <label>Price Range</label>
+                  <label>Price Range </label>
                   <label>({pricerange} - 200+) </label>
-                  <div class="sadecontainer">
+                  <div class="slidecontainer">
                     <input
                       id="typeinp"
                       type="range"
@@ -198,7 +231,7 @@ export default function TechniquesAndLessons() {
                   </div>
                 </div>
                 <div className="col-md-6">
-                  <label>Downloads</label>
+                  <label>Downloads </label>
                   <label>({downloadrange} - 200+) </label>
                   <div class="slidecontainer">
                     <input
@@ -219,27 +252,35 @@ export default function TechniquesAndLessons() {
                     <center>Most Downloaded Classical Guitar Cover</center>
                   </strong>
                 </h4>
-
-                <TopDownloadTemplate />
+              </div>
+              <div>
+                <TopDownloadTemplate
+                  title={populercover.Title}
+                  price={populercover.Price}
+                  artist={populercover.OriginalArtistName}
+                />
               </div>
             </div>
+
             <br />
           </div>
           {/* right side of the page */}
           <div className="col-md-8">
             <h4 style={{ color: "#764A34" }}>
-              <strong>Technics and Lessons - {categorytext}</strong>
+              <strong>Covers & Excercises - {categorytext}</strong>
             </h4>
             <center>
               <h4 style={{ color: "red" }}>{nodata}</h4>
             </center>
             <div className="row">
               {covers.map((post) => (
-                <div className="col-md-3" onClick={() => modalopen()}>
+                <div className="col-md-4" onClick={() => modalopen()}>
                   <CoverTemplate
-                    name={post.Title}
+                    title={post.Title}
                     artist={post.OriginalArtistName}
                     price={post.Price}
+                    category={post.SubCategory}
+
                   />
                   <br />
                 </div>

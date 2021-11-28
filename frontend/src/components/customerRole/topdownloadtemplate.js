@@ -2,7 +2,7 @@ import React from "react";
 
 export default function TopDownloadTemplate(props) {
   return (
-    <div>
+    <div >
       <div
         className="card"
         style={{

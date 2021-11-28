@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Order = require("../models/order");
 let Feedback = require("../models/order");
+let Customer = require("../models/customer");
 
 //Add Order
 router.route("/addOrder").post(async (req, res) => {
@@ -45,8 +46,8 @@ router.route("/getOrder/:id").get(async (req, res) => {
 router.route("/getOrders").get((req, res) => {
   //Variable declared at line 5
   Order.find()
-    .then((covers) => {
-      res.json(covers);
+    .then((orders) => {
+      res.json(orders);
     })
     .catch((err) => {
       console.log(err);

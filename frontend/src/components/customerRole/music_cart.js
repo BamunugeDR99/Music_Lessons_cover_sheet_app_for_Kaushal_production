@@ -23,11 +23,15 @@ export default function MusicCart(props) {
   useEffect(() => {
     axios
       .get(
-        "http://localhost:8070/shoppingCart/getOneCart/6199d490bfd483038f7067bf"
+        "http://localhost:8070/shoppingCart/getOneCart/61a26e4cb42a52e3ff12e82e"
       )
       .then((res) => {
-        callData(res.data.CoverIDs);
-        setDataholder(res.data.CoverIDs);
+        console.log(res.data.CoverIDs);
+        if (res.data.CoverIDs != "") {
+          callData(res.data.CoverIDs);
+          setDataholder(res.data.CoverIDs);
+          console.log(res.data);
+        }
       })
       .catch((err) => {
         alert(err.message);
@@ -35,29 +39,30 @@ export default function MusicCart(props) {
   }, []);
 
   async function callData(data) {
-    if (data.length > 0) {
-      for (let i = 0; i < data.length; i++) {
-        console.log(data[i]);
-        await axios
-          .get(`http://localhost:8070/covers/getcoverbyid/${data[i]}`)
-          .then((res) => {
-            cover = {
-              price: res.data[0].Price,
-              title: res.data[0].Title,
-              id: res.data[0]._id,
-              author: res.data[0].OriginalArtistName,
-            };
-            tot = Number(tot) + Number(res.data[0].Price);
-            console.log(Number(tot));
-            coverdetails.push(cover);
-            console.log(coverdetails);
-          })
-          .catch((err) => {
-            alert(err.message);
-          });
-      }
+    console.log(data.length);
+    console.log(data);
 
+    for (let i = 0; i < data.length; i++) {
+      console.log(data[i]);
+      await axios
+        .get(`http://localhost:8070/covers/getcoverbyid/${data[i]}`)
+        .then((res) => {
+          cover = {
+            price: res.data[0].Price,
+            title: res.data[0].Title,
+            id: res.data[0]._id,
+            author: res.data[0].OriginalArtistName,
+          };
+          tot = Number(tot) + Number(res.data[0].Price);
+          console.log(Number(tot));
+          coverdetails.push(cover);
+          console.log(coverdetails);
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
     }
+
     console.log(coverdetails);
     setCovers(coverdetails);
     setTotal(tot);
@@ -66,14 +71,16 @@ export default function MusicCart(props) {
   function removeBtn(id) {
     console.log(id);
     axios
-      .delete(`http://localhost:8070/shoppingCart/deleteCartCover/${id}`)
+      .delete(
+        `http://localhost:8070/shoppingCart/deleteCartCover/${id}/61a26e4cb42a52e3ff12e82e`
+      )
       .then((res) => {
         alert("Successfully deleted");
       })
       .catch((err) => {
         alert(err.message);
       });
-    callData(dataholder);
+    window.location.reload(true);
   }
   return (
     <div className="container">
