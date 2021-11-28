@@ -419,23 +419,6 @@ export default function DashBoard() {
               </div>
             </div>
           </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <div className="row">
-            <div className="col-md-6">
-              <center>
-                <button
-                  type="button"
-                  class="btn btn"
-                  style={{
-                    borderRadius: "10px",
-                    backgroundColor: "#28A745",
-                    color: "white",
-                  }}
-                >
-                  <strong>Submit</strong>
-                </button>
-              </center>
             </div>
           </div>
         </Modal.Footer>
