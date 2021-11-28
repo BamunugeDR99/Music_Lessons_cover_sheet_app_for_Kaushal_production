@@ -3,7 +3,7 @@ import axios from "axios";
 
 export default function MusicCart(props) {
   let [cartCovers, setCovers] = useState([]);
-  let [total, setTotal] = useState([]);
+  let [total, setTotal] = useState("Loading...");
   let [dataholder, setDataholder] = useState([]);
   let tot = 0;
   let coverdetails = [];
@@ -21,6 +21,9 @@ export default function MusicCart(props) {
   };
 
   useEffect(() => {
+    document.getElementById("spinnerdiv").style.display = "block";
+    document.getElementById("cartdiv").style.display = "none";
+
     axios
       .get(
         "http://localhost:8070/shoppingCart/getOneCart/61a26e4cb42a52e3ff12e82e"
@@ -65,6 +68,9 @@ export default function MusicCart(props) {
 
     console.log(coverdetails);
     setCovers(coverdetails);
+    document.getElementById("spinnerdiv").style.display = "none";
+    document.getElementById("cartdiv").style.display = "block";
+
     setTotal(tot);
   }
 
@@ -101,11 +107,38 @@ export default function MusicCart(props) {
         </h2>
       </div>
 
+      <br />
       <div class="row">
+        <div id="spinnerdiv" class="col-lg-8 " style={{ display: "block" }}>
+          <center>
+            <div class=" justify-content-center">
+              <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
+          </center>
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+        </div>
         <div
           class="col-lg-8"
+          id="cartdiv"
           style={{
             overflowY: "scroll",
+            display: "none",
           }}
         >
           <div>

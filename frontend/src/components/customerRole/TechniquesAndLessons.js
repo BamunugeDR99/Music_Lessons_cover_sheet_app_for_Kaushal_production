@@ -7,7 +7,6 @@ import InputRange from "react-input-range";
 import { data, post } from "jquery";
 import { Maximize } from "react-feather";
 
-
 export default function MusicCoverPage() {
   const [modelOpen, setmodelOpen] = useState(false);
   const [pricerange, setPriceRange] = useState("0");
@@ -27,12 +26,22 @@ export default function MusicCoverPage() {
   let max = 0;
 
   useEffect(async () => {
+    document.getElementById("bufferlink").style.display = "block";
+    document.getElementById("link").style.display = "none";
+    document.getElementById("link1").style.display = "none";
+    document.getElementById("spinnerdiv").style.display = "block";
+    document.getElementById("coverdiv").style.display = "none";
+    document.getElementById("spinnerdiv2").style.display = "block";
+    document.getElementById("topcover").style.display = "none";
+
     await axios
       .get("http://localhost:8070/covers/getcoverbymainexcercise")
       .then((res) => {
         dataholdedr = res.data;
         setCovers(res.data);
         setfilterCover(res.data);
+        document.getElementById("spinnerdiv").style.display = "none";
+        document.getElementById("coverdiv").style.display = "block";
 
         // console.log(res.data);
       })
@@ -45,6 +54,9 @@ export default function MusicCoverPage() {
       .get("http://localhost:8070/mainCategory/get")
       .then((res) => {
         setCategories(res.data[1].SubCategories);
+        document.getElementById("bufferlink").style.display = "none";
+        document.getElementById("link").style.display = "block";
+        document.getElementById("link1").style.display = "block";
         // console.log(res.data[0].SubCategories);
       })
       .catch((err) => {
@@ -55,7 +67,7 @@ export default function MusicCoverPage() {
   }, []);
 
   function populercovers() {
-    console.log(dataholdedr);
+    // console.log(dataholdedr);
     for (let i = 0; i < dataholdedr.length; i++) {
       // console.log(dataholdedr[i].NoOfDownloads)
       if (Number(dataholdedr[i].NoOfDownloads) >= max) {
@@ -64,8 +76,10 @@ export default function MusicCoverPage() {
         pcover = dataholdedr[i];
       }
     }
-    console.log(pcover);
+    // console.log(pcover);
     setpopulercover(pcover);
+    document.getElementById("spinnerdiv2").style.display = "none";
+    document.getElementById("topcover").style.display = "block";
   }
   function modalopen() {
     // alert("This is alert");
@@ -84,7 +98,7 @@ export default function MusicCoverPage() {
       setCovers(result);
       setNoData("");
     } else {
-      setNoData("No Lessons or Excercises available");
+      setNoData("No Covers available");
       setCovers([]);
     }
 
@@ -101,7 +115,7 @@ export default function MusicCoverPage() {
       setCovers(result);
       setNoData("");
     } else {
-      setNoData("No Lessons or Excercises available");
+      setNoData("No Covers available");
       setCovers([]);
     }
   }
@@ -118,7 +132,7 @@ export default function MusicCoverPage() {
       setCovers(searchResult);
       setNoData("");
     } else {
-      setNoData("No Lessons or Excercises available");
+      setNoData("No Covers available");
       setCovers([]);
     }
   }
@@ -129,10 +143,11 @@ export default function MusicCoverPage() {
       setCategoryCover(filtercover);
       setCovers(filtercover);
       setPriceRange(0);
+
       if (filtercover.length != 0) {
         setNoData("");
       } else {
-        setNoData("No Lessons or Excercises available");
+        setNoData("No Covers available");
         setCovers([]);
       }
       setDownloadRange(0);
@@ -151,7 +166,7 @@ export default function MusicCoverPage() {
         setCovers(result);
         setNoData("");
       } else {
-        setNoData("No Lessons or Excercises available");
+        setNoData("No Covers available");
         setCovers([]);
       }
     }
@@ -196,21 +211,35 @@ export default function MusicCoverPage() {
               style={{ maxHeight: "30%", overflowY: "scroll" }}
             >
               <a
+                style={{ display: "block" }}
+                id="bufferlink"
                 href="#"
+                className="list-group-item list-group-item-action"
+              >
+                &emsp; Loading...
+              </a>
+              <a
+                href="#"
+                id="link1"
+                style={{ display: "none" }}
                 onClick={() => fetchData("All")}
                 className="list-group-item list-group-item-action"
               >
                 <i className="fa fa-music"></i>&emsp; All
               </a>
-              {categories.map((post) => (
-                <a
-                  href="#"
-                  onClick={() => fetchData(post)}
-                  className="list-group-item list-group-item-action"
-                >
-                  <i className="fa fa-music"></i>&emsp; {post}
-                </a>
-              ))}
+              <span id="link">
+                {categories.map((post) => (
+                  <a
+                    href="#"
+                    id="link"
+                    style={{ display: "block" }}
+                    onClick={() => fetchData(post)}
+                    className="list-group-item list-group-item-action"
+                  >
+                    <i className="fa fa-music"></i>&emsp; {post}
+                  </a>
+                ))}
+              </span>
             </div>
             <div>
               <br />
@@ -253,7 +282,22 @@ export default function MusicCoverPage() {
                   </strong>
                 </h4>
               </div>
-              <div>
+              <center>
+                <div
+                  id="spinnerdiv2"
+                  class="col-lg-8 "
+                  style={{ display: "block" }}
+                >
+                  <br />
+
+                  <div class=" justify-content-center">
+                    <div class="spinner-border" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </div>
+                </div>
+              </center>
+              <div id="topcover" style={{ display: "none" }}>
                 <TopDownloadTemplate
                   title={populercover.Title}
                   price={populercover.Price}
@@ -267,30 +311,49 @@ export default function MusicCoverPage() {
           {/* right side of the page */}
           <div className="col-md-8">
             <h4 style={{ color: "#764A34" }}>
-              <strong>Covers & Excercises - {categorytext}</strong>
+              <strong>Techniques & Lessons - {categorytext}</strong>
             </h4>
             <center>
               <h4 style={{ color: "red" }}>{nodata}</h4>
             </center>
             <div className="row">
-              {covers.map((post) => (
-                <div className="col-md-4" onClick={() => modalopen()}>
-                  <CoverTemplate
-                    title={post.Title}
-                    artist={post.OriginalArtistName}
-                    price={post.Price}
-                    category={post.SubCategory}
+              <div
+                id="spinnerdiv"
+                class="col-lg-8 "
+                style={{ display: "block" }}
+              >
+                <br />
+                <center>
+                  <div class=" justify-content-center">
+                    <div class="spinner-border" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </div>
+                </center>
+              </div>
+            </div>{" "}
+            <span id="coverdiv">
+              <div className="row">
+                {covers.map((post) => (
+                  <div className="col-md-4" onClick={() => modalopen()}>
+                    <CoverTemplate
+                      title={post.Title}
+                      artist={post.OriginalArtistName}
+                      price={post.Price}
+                      category={post.SubCategory}
+                    />
+                    <br />
+                  </div>
+                ))}
 
-                  />
-                  <br />
-                </div>
-              ))}
-              <br />
-              <br />
-            </div>
+                <br />
+                <br />
+              </div>
+            </span>
           </div>
         </div>
       </div>
+
       {/* user details update model */}
       <Modal show={modelOpen} size="lg">
         <Modal.Header>
