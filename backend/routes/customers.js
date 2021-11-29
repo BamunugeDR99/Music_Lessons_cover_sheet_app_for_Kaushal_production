@@ -271,7 +271,7 @@ const generateRefreshToken = (customerLogin)=>{
         .status(500)
         .send({ status: "Error with updating data", error: err.message });
     });
-});
+
 
 // update password
 router.route("/updatePassword/:id").put(async (req, res) => {
@@ -299,69 +299,81 @@ router.route("/updatePassword/:id").put(async (req, res) => {
   });
 
 //Login route
+//Login route
 
-router.post("/loginCustomer", async (req, res) => {
-  try {
-    const { Username, Password } = req.body;
+router.post('/loginCustomer', async(req,res) => {
 
-    // if(!username || !password){
+  try{
+          const {Username, Password} = req.body;
 
-                //res.json({message: "Customer Sign In Successfully"});
+          // if(!username || !password){
 
-                //Generate access token
+          //     return res.status(400).json({error: "Please filled the all data"})
+          // }
 
-               const accsessToken =  generateAccessToken(customerLogin);
-               const refreshToken =  generateRefreshToken(customerLogin);
+          //check with database username
+
+          const customerLogin = await Customer.findOne({ Username: Username });
+
+          if(customerLogin){
+
+              const isMatch = await bcrypt.compare(Password, customerLogin.Password);
+          
+          if(!isMatch){   
+              
+              res.status(400).json({error: "Invalid Credientials"});
+
+          }else{
+
+              //res.json({message: "Customer Sign In Successfully"});
+
+              //Generate access token
+
+             const accsessToken =  generateAccessToken(customerLogin);
+             const refreshToken =  generateRefreshToken(customerLogin);
 
 
 
-               refreshTokens.push(refreshToken);
+             refreshTokens.push(refreshToken);
 
-               res.cookie("jwt", accsessToken, {
-                    expires: new Date(Date.now() + 30000),
-                    httpOnly:true
+             res.cookie("jwt", accsessToken, {
+                  expires: new Date(Date.now() + 30000),
+                  httpOnly:true
 
-                });
+              });
 
-                // console.log(`this is the cookie ${req.cookies.jwt}`);
+              // console.log(`this is the cookie ${req.cookies.jwt}`);
 
-                res.json({customerLogin: {
-                    _id : customerLogin._id,
-                    accsessToken: accsessToken,
-                    refreshToken: refreshToken,
-                    
-                }});
+              res.json({customerLogin: {
+                  _id : customerLogin._id,
+                  accsessToken: accsessToken,
+                  refreshToken: refreshToken,
+                  
+              }});
 
-                
-                // console.log(accsessToken);
-                // console.log(refreshToken);
+              
+              // console.log(accsessToken);
+              // console.log(refreshToken);
 
-            }
-            
-        }else{
+          }
+          
+      }else{
 
-    const customerLogin = await Customer.findOne({ Username: Username });
-
-    if (customerLogin) {
-      const isMatch = await bcrypt.compare(Password, customerLogin.Password);
-
-      if (!isMatch) {
-        res.status(400).json({ error: "Invalid Credientials" });
-      } else {
-        //res.json({message: "Customer Sign In Successfully"});
-        res.json({
-          customerLogin: {
-            _id: customerLogin._id,
-          },
-        });
+          res.status(400).json({error: "Customer does not exists"});
       }
-    } else {
-      res.status(400).json({ error: "Customer does not exists" });
-    }
-  } catch (err) {
-    console.log(err);
+         
+          
+  
+
+  }catch(err){
+
+      console.log(err);
   }
+
+
 });
+
+
 
 
 const verify = (req, res, next) =>{
