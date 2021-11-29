@@ -22,7 +22,7 @@ import MusicCoverPage from "./components/customerRole/musiccoverpage";
 function App() {
   return (
     <BrowserRouter>
-      {/* <CustomerHeader /> */}
+      <CustomerHeader />
       <Routes>
         <Route path="/" element={<LessonsAndCoversDetailed />} />
         <Route path="/a" element={<MusicCoverPage />} />

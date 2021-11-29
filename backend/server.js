@@ -51,8 +51,8 @@ app.use("/feedback", feedbackRouter);
 const orderRouter = require("./routes/orders.js");
 app.use("/order", orderRouter);
 
-// const customerRouter = require("./routes/customers.js");
-// app.use("/customer", customerRouter);
+const customerRouter = require("./routes/customers.js");
+app.use("/customer", customerRouter);
 
 const shoppingCartRouter = require("./routes/shoppingCarts.js");
 app.use("/shoppingCart",shoppingCartRouter); 
