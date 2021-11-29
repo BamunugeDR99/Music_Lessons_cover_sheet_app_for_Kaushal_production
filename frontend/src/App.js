@@ -16,6 +16,7 @@ import CustomerHeader from "./components/customerRole/CustomerHeaderTemp";
 import CustomerFooter from "./components/customerRole/CustomerFooterTemp";
 import Login from "./components/customerRole/loginpage";
 import MusicCart from "./components/customerRole/music_cart";
+import CustomerFeedback from "./components/customerRole/CustomerFeedback";
 function App() {
   return (
     <BrowserRouter>
@@ -33,6 +34,7 @@ function App() {
         {/* <Route path="/e" element={<BootstrapDataTable />} /> */}
         <Route path="/f" element={<AddStudent />} />
         {/* <Route path="/g" element={<ViewStudentDetails/>} /> */}
+        <Route path="/feedback" element={<CustomerFeedback/>} />
       </Routes>
       <CustomerFooter />
     </BrowserRouter>

@@ -80,7 +80,18 @@ router.route("/get/:id").get(async (req,res) =>{
     })
 });
 
-
+router.route("/getEmail/:email").get(async (req,res) =>{
+   
+    let email = req.params.email;
+    console.log(email);
+    const user = await Customer.find ({Email : email}).then((customer) =>{
+        // res.status(200).send({status:"User fetched"});
+        res.json(customer);
+    }).catch((err) =>{
+        console.log(err.message);
+        res.status(500).send({status : "Error with get user", error : err.message});
+    })
+})
 
 
 //Get all customers
@@ -93,6 +104,38 @@ router.route("/getAll").get((req ,res)=> {
     })
 });
 
+
+//Get all customer emails
+router.route("/getAllEmails").get((req ,res)=> {
+    Customer.find().then((customer)=>{
+        
+        let emails = [];
+        for (let i = 0; i < customer.length; i++){
+                emails.push(customer[i].Email);
+        }
+
+        res.json(emails);
+        
+    }).catch((err) =>{
+        console.log(err)
+    })
+});
+
+//Get all customer usernames
+router.route("/getUsernames").get((req ,res)=> {
+    Customer.find().then((customer)=>{
+        
+        let usernames = [];
+        for (let i = 0; i < customer.length; i++){
+                usernames.push(customer[i]. Username);
+        }
+
+        res.json(usernames);
+        
+    }).catch((err) =>{
+        console.log(err)
+    })
+});
 
 
 
