@@ -3,28 +3,18 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import LogoImage from '../../images/loginback.png';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import "../../css/login.css";
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+
 const eye = <FontAwesomeIcon icon={faEye} />;
+
 
 
 export default function Login(props) {
 
-
-    const styles = {
-        container: {
-            backgroundImage: `url(${LogoImage})`,
-            backgroundPosition: 'center',
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            width: '100vw',
-            height: '100vh'
-        }
-    };
 
     const refreshToken = async () =>{
 
@@ -123,7 +113,7 @@ export default function Login(props) {
           })
           .catch((err) => {
             // alert(err);
-            console.log(err.response.data);
+            console.log(err);
             // alert(err.response.data.error);
     
             Swal.fire({
@@ -149,117 +139,119 @@ export default function Login(props) {
     // }
 
     return (
-        <div   >
-            <div className=" container  ">
+       
+<div className="loginpage">
+<div class="container-fluid">
+    <div class="row no-gutter">
+        
+        <div class="col-md-6 d-none d-md-flex bg-image"></div>
 
-                <div className="row  justify-content-center">
-                    <div className="col-sm-5">
-                        <h3 style={{ fontWeight: "bold" }} className="mt-5 mb-5">Sign In</h3>
-                        <h6 id="CusLoginError" style={{color:"red", fontWeight:"bold"}}>{errorMsg}</h6>
-                    </div>
 
-                </div>
+        <div class="col-md-6 bg-light">
+            <div class="login d-flex align-items-center py-5">
 
-                <form className="mb-10" onSubmit={loginUser}>
+        
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-10 col-xl-7 mx-auto">
+                            <h3 class="display-4" style={{ fontWeight: "bold" }}>Sign In</h3>
+                            <h6 id="CusLoginError" style={{color:"red", fontWeight:"bold"}}>{errorMsg}</h6>
+                          <br/><br/>
+                            <form  onSubmit={loginUser}>
 
-                    {/* Username label & input field  */}
+                                 {/* Username label & input field  */}
 
-                    <div class="form-group row justify-content-center">
+                                <div class="form-group mb-3">
+                                    
+                                <label for="exampleInputEmail1" style={{ fontWeight: "bold" }}>Username</label>
 
-                        <div className="col-sm-5">
-                            <label for="exampleInputEmail1" style={{ fontWeight: "bold" }}>Username</label>
-                            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Username"  defaultValue={Username} 
-                                 name="Username"
-                                 onChange={handleChange}
-                                 onChange={(e) => {
-                                 setUsername(e.target.value);
-                             }}
-                             required
-                            />
-                        </div>
-                    </div>
+                                    <input id="inputEmail" type="text" placeholder="Username"  autofocus="" class="form-control rounded-pill border-0 shadow-sm px-4"
+                                    
+                                    defaultValue={Username}
+                                    name="Username"
+                                    onChange={handleChange}
+                                    onChange={(e) => {
+                                        setUsername(e.target.value);    
+                                    }}
 
-                     {/* Password label & input field  */}
+                                    required
+                                  
+                               
 
-                    <div class="form-group row justify-content-center">
+                                    />
+                                      
+                                </div>
 
-                        <div className="col-sm-5">
+                                 {/* Password label & input field  */}
 
-                            <label for="exampleInputEmail1" style={{ fontWeight: "bold" }}>Password</label>
+                                <div class="form-group mb-3">
+                                <label for="exampleInputEmail1" style={{ fontWeight: "bold" }}>Password</label>
 
-                            <div class="input-group mb-3">
-                                <input
-                                    placeholder="Password"
-                                    class="form-control"
+                                <input id="inputPassword" type="password" placeholder="Password" class="form-control rounded-pill border-0 shadow-sm px-4"
+                                    
                                     name="password"
                                     type={passwordShown ? "text" : "password"}
                                     onChange={(e) => {
-                                        setPassword(e.target.value);
-                                      }}
-                                      required
+                                        setPassword(e.target.value);  
+                                    }}
 
-
-                                />
-
-                                {/* eye icon */}
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2"> <i onClick={togglePasswordVisiblity}>{eye}</i></span>
+                                    required 
+                                    />
+                                    <span class="p-viewer">
+                                    <i style={{color:"#764A34"}} onClick={togglePasswordVisiblity}>{eye}</i>
+                                     </span>
                                 </div>
-                            </div>
 
+                                {/* Remember me */}
 
+                                <div class="custom-control custom-checkbox mb-3">
+                                    <input id="customCheck1" type="checkbox" class="custom-control-input"
+                                    
+                                    name="rememberMe"
+                                    checked={rememberMe}
+                                    onChange={handleChange}
+                                    
+                                    
+                                    />
+                                    <label for="customCheck1" class="custom-control-label">Remember Me </label> 
+                                    
+                                </div>
+
+                                
+                             {/* Submit Button */}
+                                
+                               
+                                <button type="submit" class="btn btn-block text-uppercase mb-2 rounded-pill shadow-sm" style={{ backgroundColor: "#764A34", color: "#ffffff", fontWeight: "bold" }}>Sign in</button>
+                               
+                               
+                            {/* forgot password */}
+
+                                <div class="text-center d-flex-center justify-content-between mt-4"> <p style={{textAlign:"center"}}><Link to="/CustomerForgotPassword" style={{ color: "#764A34", fontWeight: "bold" }}>Forgot Password?</Link></p>
+                               
+                                </div>
+                
+                              {/* Not a member link */}
+
+                                <div class="text-center d-flex-center justify-content-between mt-4"><p style={{ fontWeight: "bold" }}>Don't have an account? <Link style={{ color: "#764A34" }} to="/CustomerForgotPassword">Create One</Link></p>
+                               
+                               </div>
+                                
+                            </form>
                         </div>
                     </div>
+                </div>
 
-
-                    {/* Submit Button */}
-                    <div class="form-group row justify-content-center">
-                        <div className="col-sm-5">
-                            <div className="container-sm">
-                                <button type="submit" class="btn btn-lg btn-block rounded" style={{ backgroundColor: "#764A34", color: "#ffffff", fontWeight: "bold" }}>Sign in</button>
-
-                            </div>
-
-                        </div>
-                    </div>
-
-
-                    {/* Remember me & Forgot Password */}
-                    <div class="form-group row justify-content-center">
-                        <div className="col-xl-2 col-md-6 col-sm-3 col-6">
-                            <input type="checkbox" class="form-check-input ml-1" id="exampleCheck1" 
-                                name="rememberMe"
-                                checked={rememberMe}
-                                onChange={handleChange}
-                            />
-                            <label class="form-check-label ml-4 " for="exampleCheck1" style={{ color: "#764A34", fontWeight: "bold" }}>Remember me</label>
-
-                        </div >
-                        <div className="col-xl-3 col-md-6 col-sm-3   col-6">
-                            <Link to="/CustomerForgotPassword" style={{ color: "#000000", fontWeight: "bold" }}>Forgot Password?</Link>
-
-                        </div>
-                    </div>
-
-                     {/* Not a member link */}
-                    <div class="form-group row justify-content-center">
-                        <div className="col-sm-5">
-                            <p style={{ fontWeight: "bold" }}> Not a Member ?  <Link style={{ color: "#764A34" }} to="/CustomerForgotPassword">Sign Up</Link> </p>
-                        </div>
-                    </div>
-
-
-
-
-                </form>
             </div>
-
-
-
-
-
-
         </div>
+
+    </div>
+</div>
+
+
+
+</div>
+
+       
     )
 
 }

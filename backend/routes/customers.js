@@ -5,6 +5,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require ('jsonwebtoken');
 const app = express();
 app.use(express.json());
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
 
 
 
@@ -290,11 +292,13 @@ router.post('/loginCustomer', async(req,res) => {
 
                refreshTokens.push(refreshToken);
 
-               res.cookie("jwtoken", accsessToken, {
+               res.cookie("jwt", accsessToken, {
                     expires: new Date(Date.now() + 30000),
                     httpOnly:true
 
                 });
+
+                // console.log(`this is the cookie ${req.cookies.jwt}`);
 
                 res.json({customerLogin: {
                     _id : customerLogin._id,
@@ -304,8 +308,8 @@ router.post('/loginCustomer', async(req,res) => {
                 }});
 
                 
-                console.log(accsessToken);
-                console.log(refreshToken);
+                // console.log(accsessToken);
+                // console.log(refreshToken);
 
             }
             

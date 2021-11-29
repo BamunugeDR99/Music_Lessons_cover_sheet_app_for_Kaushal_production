@@ -7,6 +7,7 @@ import React, { Component } from "react";
 import DataTableTest from "./components/dataTableTest";
 import Home from "./components/customerRole/home";
 import "./css/home.css";
+import "./css/login.css";
 import Login from "./components/customerRole/loginpage";
 
 
