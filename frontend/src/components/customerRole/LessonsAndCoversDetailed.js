@@ -85,7 +85,7 @@ export default function LessonsAndCoversDetailed(props) {
 
     //let customerID = localStorage.getItem("CustomerID");
     let newItems = []; /// Change this later
-    const customerID = "61a096c139983f67656949f3";
+    const customerID = "61a26e4cb42a52e3ff12e82e";
     let coverIDs = [];
     let shoppingcartId = "";
     axios
@@ -94,6 +94,7 @@ export default function LessonsAndCoversDetailed(props) {
         console.log(res.data.CoverIDs);
         coverIDs = res.data.CoverIDs;
         shoppingcartId = res.data._id;
+        console.log(shoppingcartId)
         let falgs = 0;
         for (let i = 0; i < coverIDs.length; i++) {
           if (coverIDs[i] === id) {

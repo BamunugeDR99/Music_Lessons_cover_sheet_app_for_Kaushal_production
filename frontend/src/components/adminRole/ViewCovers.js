@@ -315,7 +315,6 @@ swalWithBootstrapButtons.fire({
         $("input[type=text]").val("");
         $("input[type=number]").val("");
         $("input[type=file]").val("");
-        setModalUploadOpen(false)
       })
       .catch((err) => {
         alert(err);
@@ -942,7 +941,7 @@ swalWithBootstrapButtons.fire({
           </div>
         </Modal.Body>
         <Modal.Footer>
-          {/* <button
+          <button
             className="btn rounded"
             onClick={() => {
               setModalUploadOpen(false);
@@ -950,7 +949,7 @@ swalWithBootstrapButtons.fire({
             style={{ backgroundColor: "#D0193A", color: "#ffffff" }}
           >
             {cancelOrCloseBtn}
-          </button> */}
+          </button>
         </Modal.Footer>
       </Modal>
 

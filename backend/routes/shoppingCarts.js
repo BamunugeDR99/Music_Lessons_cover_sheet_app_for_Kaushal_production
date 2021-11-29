@@ -86,7 +86,7 @@ router.route("/updateCartCovers/:id").put(async (req, res) => {
 
         let customerID = req.params.id;
 
-        const getOne = Cart.findOne({customerID:customerID}).exec ((err, post) =>{
+        const getOne = Cart.findOne({CustomerID:customerID}).exec ((err, post) =>{
 
             if(err){
 
