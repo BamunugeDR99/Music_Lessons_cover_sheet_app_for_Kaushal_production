@@ -35,7 +35,7 @@ export default function MusicCoverPage() {
     document.getElementById("topcover").style.display = "none";
 
     await axios
-      .get("http://localhost:8070/covers/getcoverbymaincover")
+      .get("http://localhost:8070/covers/getcoverbymainexcercise")
       .then((res) => {
         dataholdedr = res.data;
         setCovers(res.data);
@@ -53,7 +53,7 @@ export default function MusicCoverPage() {
     axios
       .get("http://localhost:8070/mainCategory/get")
       .then((res) => {
-        setCategories(res.data[0].SubCategories);
+        setCategories(res.data[1].SubCategories);
         document.getElementById("bufferlink").style.display = "none";
         document.getElementById("link").style.display = "block";
         document.getElementById("link1").style.display = "block";
@@ -311,7 +311,7 @@ export default function MusicCoverPage() {
           {/* right side of the page */}
           <div className="col-md-8">
             <h4 style={{ color: "#764A34" }}>
-              <strong>Classical Guitar Covers - {categorytext}</strong>
+              <strong>Techniques & Lessons - {categorytext}</strong>
             </h4>
             <center>
               <h4 style={{ color: "red" }}>{nodata}</h4>

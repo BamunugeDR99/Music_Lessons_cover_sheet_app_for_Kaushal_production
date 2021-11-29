@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -10,7 +9,6 @@ import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
 const eye = <FontAwesomeIcon icon={faEye} />;
-
 
 
 
@@ -199,7 +197,7 @@ export default function Login(props) {
                                     required 
                                     />
                                     <span class="p-viewer">
-                                    <i style={{color:"#764A34"}} onClick={togglePasswordVisiblity}>{eye}</i>
+                                    <i style={{color:"#764A34"}}onClick={togglePasswordVisiblity}>{eye}</i>
                                      </span>
                                 </div>
 
