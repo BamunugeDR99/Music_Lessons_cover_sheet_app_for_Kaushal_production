@@ -4,7 +4,7 @@ export default function Footer(props) {
 
     return(
       
-<footer class="page-footer font-small " style={{backgroundColor:"#764A34"}}>
+<footer class="page-footer font-small sticky-bottom" style={{backgroundColor:"#764A34"}}>
 
   <div class="container">
 

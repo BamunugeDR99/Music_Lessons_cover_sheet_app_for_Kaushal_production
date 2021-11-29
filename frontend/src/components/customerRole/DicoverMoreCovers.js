@@ -4,46 +4,60 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, getDownloadURL } from "@firebase/storage";
+import Swal from "sweetalert2";
 export default function DiscoverMoreCovers(props) {
   const [recommenedCovers, setRecommendedCovers] = useState([]);
   const [ErrorhandlingTxt, setErrorhandlingTxt] = useState("");
-  const MainCategory = "Classical Guitar Covers";
-  const SubCategory = "Sinhala";
-  let finalFilteredCovers = [];
-  //const MainCategory = props.mainCategory;
-  //const SubCategory = props.subCategory;
+
   useEffect(() => {
     function getRecommendCovers() {
-      // console.log(MainCategory, SubCategory);
+      const CoverID = props.CoverID;
       axios
-        .get("http://localhost:8070/covers/getCovers")
+        .get(`http://localhost:8070/covers/get/${CoverID}`)
         .then((res) => {
-          let availableCovers = res.data.filter(
-            (recCovers) => String(recCovers.Status) != "3"
-          );
+          const MainCategory = res.data.MainCategory;
+          const SubCategory = res.data.SubCategory;
+          axios
+            .get("http://localhost:8070/covers/getCovers")
+            .then((res) => {
+              let availableCovers = res.data.filter(
+                (recCovers) => String(recCovers.Status) != "3"
+              );
 
-          availableCovers = availableCovers.filter(
-            (recCovers) => String(recCovers.Status) != "2"
-          );
+              availableCovers = availableCovers.filter(
+                (recCovers) => String(recCovers.Status) != "2"
+              );
 
-          finalFilteredCovers = availableCovers.filter(
-            (covers) =>
-              covers.MainCategory === MainCategory &&
-              covers.SubCategory === SubCategory
-          );
+              availableCovers = availableCovers.filter(
+                (covers) =>
+                  covers.MainCategory === MainCategory &&
+                  covers.SubCategory === SubCategory
+              );
 
-         
-          setRecommendedCovers(finalFilteredCovers);
+              availableCovers = availableCovers.filter(
+                (covers) => covers._id != props.CoverID
+              );
 
-          if (finalFilteredCovers.length === 0) {
-            setErrorhandlingTxt("No more Reccomendations found!");
-          } else {
-            setErrorhandlingTxt("");
-          }
+              setRecommendedCovers(availableCovers);
 
+              if (availableCovers.length === 0) {
+                setErrorhandlingTxt("No more Reccomendations found!");
+              } else {
+                setErrorhandlingTxt("");
+              }
+            })
+            .catch((err) => {
+              alert(err);
+            });
         })
         .catch((err) => {
-          alert(err);
+          console.log(err);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+            footer: '<p style = "color : #D0193A">Currently unavailable!',
+          });
         });
     }
 
@@ -78,7 +92,7 @@ export default function DiscoverMoreCovers(props) {
           document.getElementById(index).src = url;
         })
         .catch((err) => {
-          ErrorhandlingTxt("Reccomended covers are not available right now!")
+          ErrorhandlingTxt("Reccomended covers are not available right now!");
         });
     }
   }
@@ -104,7 +118,8 @@ export default function DiscoverMoreCovers(props) {
               <img
                 id={index}
                 src={
-                  displayImages(covers.PreviewPages[0], index) || "/images/Imageplaceholder.png"
+                  displayImages(covers.PreviewPages[0], index) ||
+                  "/images/Imageplaceholder.png"
                 }
                 class="card-img-top"
                 alt="..."

@@ -26,7 +26,8 @@ function App() {
       <Routes>
         <Route path="/" element={<LessonsAndCoversDetailed />} />
         <Route path="/a" element={<CustomerForgotPassword/>} />
-     
+        <Route path = "/b" element = {<ViewCovers/>}/>
+        <Route path = "/detailed/:id" element = {<ViewDetailedCoverPage/>}/>
 
       </Routes>
       <Footer />
