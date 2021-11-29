@@ -3,7 +3,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import Modal from "react-bootstrap/Modal";
 import $ from "jquery";
-import "../css/toogle.css"
+// import "../css/toogle.css"
 
 export default function EditMainCategories(props) {
 
@@ -35,6 +35,7 @@ export default function EditMainCategories(props) {
 
     let cover= [];
     let number=0;
+    let no=0;
 
 
     useEffect(()=>{
@@ -118,6 +119,7 @@ export default function EditMainCategories(props) {
               // let afterDelete = abc.splice(index, 1);
               // setabc(afterDelete);
                   Swal.fire("Deleted!", "Your file has been deleted.", "success");
+                  // getClassical();
                   // window.location.reload();
                 })
                 .catch((err) => {
@@ -188,55 +190,85 @@ export default function EditMainCategories(props) {
       } 
     
     function sendData() {
+      console.log(SubCat)
+      axios.get("http://localhost:8070/mainCategory/get")
+        .then((res)=>{
+          console.log(res.data)
+          for(let i = 0; i < res.data.length; i++){
+            for(let j = 0; j < res.data.length +1; j++){
+              if(res.data[i].SubCategories[j] === SubCat){
+                no=1;
+                
+              }
+              else{
+              }
+              console.log(res.data[i].SubCategories[i])
+            }
+          }
+
+          if(no==1){
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Category Already Exists',
+            })
+          }
+          else{
+            if(value==1){
+
+              category.push(SubCat)
+              console.log(category);
+              console.log(SubCat[0]);
+                    
+              let updatedCategory = {      
+                  SubCategories : category,
+                  UpdatedDateAndTime : Date(),
+                }
+                console.log(updatedCategory);
+                  axios
+                    .put("http://localhost:8070/mainCategory/ClassicalUpdate/61936e9d9ea7c21aebd01113" , updatedCategory)
+                    .then((res) => {           
+                      // alert("Success")                   
+                      Swal.fire("All Done!", "New Category Added", "success");
+                      
+                    // props.history.push("/Customer/Home");
+                      modalClose2();
+                      setSubCat("")
+                    })
+                     .catch((err) => {
+                      console.log(err);
+                    });  
+            }
+            else if(value==2){
+    
+              category2.push(SubCat)
+              console.log(category2);
+              console.log(SubCat[0]);
+                    
+              let updatedCategory = {     
+                  SubCategories : category2,
+                  UpdatedDateAndTime : Date(),
+                }
+                console.log(updatedCategory);
+                  axios
+                    .put("http://localhost:8070/mainCategory/ExerciseUpdate/619deb0ca35d670b4e68ec3e" , updatedCategory)
+                    .then((res) => {                              
+                      Swal.fire("All Done!", "New Category Added", "success");
+                      
+                      modalClose2();
+                      setSubCat("")
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });  
+            }
+            else{
+              Swal.fire('Please select a category')
+            }
+          }
+        })
         console.log(value)
-        if(value==1){
-
-          category.push(SubCat)
-          console.log(category);
-          console.log(SubCat[0]);
-                
-          let updatedCategory = {      
-              SubCategories : category,
-              UpdatedDateAndTime : Date(),
-            }
-            console.log(updatedCategory);
-              axios
-                .put("http://localhost:8070/mainCategory/ClassicalUpdate/61936e9d9ea7c21aebd01113" , updatedCategory)
-                .then((res) => {                              
-                  Swal.fire("All Done!", "New Category Added", "success");
-                  setSubCat("")
-                // props.history.push("/Customer/Home");
-                  modalClose2();
-                })
-                 .catch((err) => {
-                  console.log(err);
-                });  
-        }
-        else if(value==2){
-
-          category2.push(SubCat)
-          console.log(category2);
-          console.log(SubCat[0]);
-                
-          let updatedCategory = {     
-              SubCategories : category2,
-              UpdatedDateAndTime : Date(),
-            }
-            console.log(updatedCategory);
-              axios
-                .put("http://localhost:8070/mainCategory/ExerciseUpdate/619deb0ca35d670b4e68ec3e" , updatedCategory)
-                .then((res) => {                              
-                  Swal.fire("All Done!", "New Category Added", "success");
-                  setSubCat("")
-                  modalClose2();
-                })
-                .catch((err) => {
-                  console.log(err);
-                });  
-        }
-        else{
-          Swal.fire('Please select a category')
-        }
+       
       }
 
 
@@ -371,7 +403,7 @@ export default function EditMainCategories(props) {
 {/* Addnew Sub Category */}
 
 <Modal show={modelOpen2} size="lg">
-  <form>
+  {/* <form> */}
         <Modal.Header>
         <div className="row text-center">
               <h3 >&ensp;Add a new Sub Category</h3> 
@@ -423,25 +455,22 @@ export default function EditMainCategories(props) {
           <div className="row">
             <div className="col-md-6">
               <center>
-                <input 
-                  type="submit"
-                  class="btn btn-primary"
-                  style={{
-                    borderRadius: "10px",
-                    backgroundColor: "#28A745",
-                    color: "white",
-                  }}
+              <button type="submit" class="btn btn-primary"
+                  style={{ borderRadius: "10px", backgroundColor: "#28A745",color: "white",}}
+                  onClick={sendData}>
+                  <strong>Save</strong> 
+              </button>
+                {/* <input  type="submit" class="btn btn-primary"
+                  style={{borderRadius: "10px",backgroundColor: "#28A745",color: "white",}}
                   required
-                  onClick={sendData}
-                />
-                  {/* <strong>Save</strong> */}
-                {/* </button> */}
+                  onClick={sendData} /> */}
+                  
               </center>
             </div>
 
           </div>
         </Modal.Footer>
-        </form>
+        {/* </form> */}
       </Modal>
 </div>
   );

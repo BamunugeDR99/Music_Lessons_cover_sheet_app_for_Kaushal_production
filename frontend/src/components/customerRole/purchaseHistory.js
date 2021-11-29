@@ -18,6 +18,7 @@ export default function PurchaseHistory(props) {
       axios
         .get("http://localhost:8070/order/getOrders")
         .then((res) => {
+          console.log(res.data)
           const filter = res.data.filter(
             (cus) => cus.CustomerID == "619bb6fb3d429b6f26addcba"
             // objectId
@@ -27,6 +28,7 @@ export default function PurchaseHistory(props) {
             covers.push(post.CoverIDs);
           });
 
+          console.log(res.data.TransactionDateAndTime)
 
 
           axios.get("http://localhost:8070/covers/getcovers").then((res) => {
@@ -223,7 +225,7 @@ export default function PurchaseHistory(props) {
             <b>No of downloads : {noData}</b>
           </h6>
           <h6>
-            <b>Total : Rs. {total} /-</b>
+            <b>Total : $ {total}</b>
           </h6>
           {/* </div> */}
         </div>
@@ -254,15 +256,15 @@ export default function PurchaseHistory(props) {
               <div className="col-sm text-center">
                 <img
                   class="rounded"
-                  placeholder={"Images/test2.jpg"}
-                  // alt={"Images/test2.jpg"}
+                  placeholder={"images/923d10247b982186a4ebb24b7ba6fba8.jpg"}
+                  // alt={"images/test2.jpg"}
                   style={{ width: "100%", margin: "auto" }}
-                  src={"Images/test2.jpg"}
-                  // ref={'Images/test2.jpg'} onError={
-                  //   () => this.img.src = 'Images/test2.jpg'}
-                  onError={(e)=>{ if (e.target.src !== "Images/test2.jpg"){
+                  src={"images/923d10247b982186a4ebb24b7ba6fba8.jpg"}
+                  // ref={'images/test2.jpg'} onError={
+                  //   () => this.img.src = 'images/test2.jpg'}
+                  onError={(e)=>{ if (e.target.src !== "images/923d10247b982186a4ebb24b7ba6fba8.jpg"){
                     e.target.onerror = null;
-                     e.target.src="Images/test2.jpg";}
+                     e.target.src="images/923d10247b982186a4ebb24b7ba6fba8.jpg";}
                 }
            }
                 />
@@ -324,7 +326,7 @@ export default function PurchaseHistory(props) {
                 style={{ backgroundColor: "white", lineHeight: "2em" }}
               >
                 <div className="text-right">
-                  <span class="text-center">11/11/2021</span>
+                  <span class="text-center">{post.TransactionDateAndTime}</span>
                 </div>
 
                 <span style={{ color: " #764A34" }}>

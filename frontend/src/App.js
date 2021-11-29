@@ -14,10 +14,10 @@ import MainCategoriesDataTable from "./components/adminRole/MainCategoriesDataTa
 import ViewStudentDetails from "./components/testingComponents/ViewStudentdetails";
 import CustomerHeader from "./components/customerRole/CustomerHeaderTemp";
 import CustomerFooter from "./components/customerRole/CustomerFooterTemp";
-import PurchaseHistory from "./components/purchaseHistory";
-import AdminVwCustomer from "./components/AdminVwCustomer";
+import PurchaseHistory from "./components/customerRole/purchaseHistory";
+import AdminVwCustomer from "./components/adminRole/AdminVwCustomer";
 import EditCategories from "./components/EditCategories";
-import EditMainCategories from "./components/EditMainCategory";
+import EditMainCategories from "./components/adminRole/EditMainCategory";
 
 function App() {
   return (
