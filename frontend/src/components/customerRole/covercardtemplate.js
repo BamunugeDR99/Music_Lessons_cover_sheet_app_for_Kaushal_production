@@ -1,49 +1,43 @@
 import React from "react";
+import "./../../css/covercard.css";
 
-export default function CoverTemplate() {
+export default function CoverTemplate(props) {
   return (
     <div>
-      <div
-        className="card"
-        style={{
-          width: "col-md-3",
-          lineHeight: "1em",
-          borderRadius: "10px",
-        }}
-      >
-        <img
-          className="card-img-top"
-          src="images/mike.jpeg"
-          alt="Card image cap"
-          style={{ borderTopLeftRadius: "10px", borderTopRightRadius: "10px" }}
-        />
-        <div>
-          <center>
-            <p
-              style={{
-                paddingLeft: "8px",
-                paddingTop: "8px",
-                fontSize: "14px",
-              }}
-              className="card-title col-xs-12"
-            >
-              Hall of Fame
-            </p>
-            <p
-              style={{ paddingLeft: "8px", fontSize: "14px" }}
-              className="card-title  col-xs-12"
-            >
-              Ryan Teddar
-            </p>
-            <h6
-              style={{ addingLeft: "8px", color: "#764A34" }}
-              className="card-title col-xs-12"
-            >
-              Rs.150.00
-            </h6>
-          </center>
+      <main>
+        <div className="container" style={{ position: "relative" }}>
+          <div className="row ">
+            <div className="col">
+              <div className="cardcss h-100 shadow">
+                {" "}
+                <img
+                  src="images/images.jpeg"
+                  className="card-img-top"
+                  alt="..."
+                />
+                <div className="label-top shadow-sm">{props.category}</div>
+                <div className="card-body">
+                  <center>
+                    <h7 className="card-title">{props.title}</h7>
+                    <br />
+
+                    <div className="row">
+                      <div className="col-md-12">
+                        <p className="card-title">{props.artist}</p>
+                      </div>
+                      <div className="col-md-12">
+                        <p className="card-title " style={{ color: "#764A34" }}>
+                          ${props.price}
+                        </p>
+                      </div>
+                    </div>
+                  </center>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

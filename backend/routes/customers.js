@@ -1,6 +1,12 @@
+const express = require("express");
 const router = require("express").Router();
 let Customer = require("../models/customer");
 const bcrypt = require('bcryptjs');
+const jwt = require ('jsonwebtoken');
+const app = express();
+app.use(express.json());
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
 
 
 
@@ -15,11 +21,16 @@ router.route("/add").post(async(req,res)=>{
     const Country = req.body.Country;
     const Username = req.body.Username;
     const Password = req.body.Password;
+    // const FeedBackIDs = req.body.FeedBackIDs;
+    // const OrderIDs = req.body.OrderIDs;
+    // const LoginStatus = req.body.LoginStatus;
+    // const DeleteStatus = req.body.DeleteStatus;
+    // const UpdatedUser = req.body.UpdatedUser;
     
     
  try{
 
-    const emailExist = await Customer.findOne({ Email: Email});
+    const emailExist = await Customer.findOne({Email: Email});
  
     if(emailExist){
  
@@ -80,18 +91,7 @@ router.route("/get/:id").get(async (req,res) =>{
     })
 });
 
-router.route("/getEmail/:email").get(async (req,res) =>{
-   
-    let email = req.params.email;
-    console.log(email);
-    const user = await Customer.find ({Email : email}).then((customer) =>{
-        // res.status(200).send({status:"User fetched"});
-        res.json(customer);
-    }).catch((err) =>{
-        console.log(err.message);
-        res.status(500).send({status : "Error with get user", error : err.message});
-    })
-})
+
 
 
 //Get all customers
@@ -104,38 +104,6 @@ router.route("/getAll").get((req ,res)=> {
     })
 });
 
-
-//Get all customer emails
-router.route("/getAllEmails").get((req ,res)=> {
-    Customer.find().then((customer)=>{
-        
-        let emails = [];
-        for (let i = 0; i < customer.length; i++){
-                emails.push(customer[i].Email);
-        }
-
-        res.json(emails);
-        
-    }).catch((err) =>{
-        console.log(err)
-    })
-});
-
-//Get all customer usernames
-router.route("/getUsernames").get((req ,res)=> {
-    Customer.find().then((customer)=>{
-        
-        let usernames = [];
-        for (let i = 0; i < customer.length; i++){
-                usernames.push(customer[i]. Username);
-        }
-
-        res.json(usernames);
-        
-    }).catch((err) =>{
-        console.log(err)
-    })
-});
 
 
 
@@ -223,6 +191,69 @@ router.route("/delete/:id").delete(async (req,res) =>{
       
         })
 
+ let refreshTokens = [];
+
+ //Issue
+
+router.post("/refresh", (req, res) => {
+
+    //take the refresh token from the user
+
+    const refreshToken = req.body.token;
+
+    //send error if there is no token or it's invalid
+
+    if(!refreshToken) return res.status(401).json("You are not authenticated!")
+
+    if(!refreshTokens.includes(refreshToken)){
+
+        return res.status(403).json("Refresh token is not valid!");
+    }
+
+    //if everything is ok, create new access token, refresh token and send to user
+    
+    jwt.verify(refreshToken, "myRefreshSecretKey", (err, customerLogin) => {
+
+        err && console.log(err);
+        refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
+
+        const newAccessToken = generateAccessToken(customerLogin);
+        const newRefreshToken = generateRefreshToken(customerLogin);
+        
+        refreshTokens.push(newRefreshToken);
+
+        res.status(200).json({
+
+                accsessToken: newAccessToken, 
+                refreshToken: newRefreshToken,
+        });
+
+    });
+
+     
+   
+
+}); 
+
+const generateAccessToken = (customerLogin)=>{
+
+    
+    return jwt.sign({id: customerLogin._id}, "mySecretKey", {
+        expiresIn: "15m",
+    });
+
+
+}
+
+const generateRefreshToken = (customerLogin)=>{
+
+    
+    return jwt.sign({id: customerLogin._id}, "myRefreshSecretKey" );
+
+
+}
+
+
 
 //Login route
 
@@ -251,11 +282,37 @@ router.post('/loginCustomer', async(req,res) => {
             }else{
 
                 //res.json({message: "Customer Sign In Successfully"});
+
+                //Generate access token
+
+               const accsessToken =  generateAccessToken(customerLogin);
+               const refreshToken =  generateRefreshToken(customerLogin);
+
+
+
+               refreshTokens.push(refreshToken);
+
+               res.cookie("jwt", accsessToken, {
+                    expires: new Date(Date.now() + 30000),
+                    httpOnly:true
+
+                });
+
+                // console.log(`this is the cookie ${req.cookies.jwt}`);
+
                 res.json({customerLogin: {
                     _id : customerLogin._id,
+                    accsessToken: accsessToken,
+                    refreshToken: refreshToken,
+                    
                 }});
 
+                
+                // console.log(accsessToken);
+                // console.log(refreshToken);
+
             }
+            
         }else{
 
             res.status(400).json({error: "Customer does not exists"});
@@ -271,5 +328,133 @@ router.post('/loginCustomer', async(req,res) => {
 
 
 });
+
+
+const verify = (req, res, next) =>{
+
+    const authHeader = req.headers.authorization;
+  
+    if(authHeader){
+  
+       const token = authHeader.split(" ")[1];
+  
+       jwt.verify(token, "mySecretKey" , (err, customerLogin)=>{
+  
+           if(err){
+               return res.status(403).json("Token is Invalid!");
+           }
+  
+           req.customerLogin = customerLogin;
+           next();
+  
+       });
+
+    }else{
+  
+       res.status(401).json("You are not authenticated");
+    }
+  };
+  
+
+
+ router.delete("/deleteUser/:id", verify , async (req, res) =>{
+  
+    let userID = req.params.id;
+    
+    if(req.customerLogin.id === userID){
+  
+        await Customer.findByIdAndDelete(userID)
+        
+        .then(() => {
+            res.status(200).send({status : "User has been Deleted"});
+       
+        }).catch((err) => {
+
+            console.log(err.message);
+            // res.status(500).send({status : "Error with delete", error : err.message});
+        })
+  
+    }else{
+  
+        res.status(403).json("You can not delete this profile.");
+    }
+  
+  });
+
+ 
+  //Logout
+
+router.post("/logout", verify, (req,res)=>{
+
+    const refreshToken = req.body.token;
+    refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
+    res.status(200).json("You logged out successfully.")
+
+})
+
+
+
+
+//Get all customer emails
+
+router.route("/getAllEmails").get((req ,res)=> {
+
+    Customer.find().then((customer)=>{
+
+       
+
+        let emails = [];
+
+        for (let i = 0; i < customer.length; i++){
+
+                emails.push(customer[i].Email);
+
+        }
+
+
+
+        res.json(emails);
+
+       
+
+    }).catch((err) =>{
+
+        console.log(err)
+
+    })
+
+});
+
+//Get all customer usernames
+
+router.route("/getUsernames").get((req ,res)=> {
+
+    Customer.find().then((customer)=>{
+
+       
+
+        let usernames = [];
+
+        for (let i = 0; i < customer.length; i++){
+
+                usernames.push(customer[i]. Username);
+
+        }
+
+
+
+        res.json(usernames);
+
+       
+
+    }).catch((err) =>{
+
+        console.log(err)
+
+    })
+
+});
+
+
 
 module.exports = router;

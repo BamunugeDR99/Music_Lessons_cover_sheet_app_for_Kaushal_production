@@ -7,7 +7,7 @@ const PasswordStrengthIndicator = ({validity : {minChar, number, specialChar}}) 
             <p className="text-dark"> Password must contain : </p>
             <div className="text-muted">
 
-                <PasswordStrengthIndicatorItem isValid = {minChar} text = "Have atleast 8 caharacters"/>
+                <PasswordStrengthIndicatorItem isValid = {minChar} text = "Have atleast 8 characters"/>
                 <PasswordStrengthIndicatorItem isValid = {number}  text = "Have atleast 1 number"/>
                 <PasswordStrengthIndicatorItem isValid = {specialChar}  text = "Have atleast 1 special character"/>
             </div>
