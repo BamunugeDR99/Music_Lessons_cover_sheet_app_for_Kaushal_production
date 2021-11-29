@@ -40,6 +40,8 @@ export default function CustomerForgotPassword(props) {
   const isNumberRegx = /\d/;
   const specialCharacterRegx = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
 
+
+  let c = "";
   function sendEmail(e) {
     e.preventDefault();
     setCodeVerification("");
@@ -50,11 +52,12 @@ export default function CustomerForgotPassword(props) {
     axios
       .get("http://localhost:8070/customer/getEmail/" + UserEmail)
       .then((res) => {
-        if (res.data === null) {
+        if (res.data.length == 0) {
           setLoading(true);
           setUserNotFoundError("User not found!");
         } else if (res.data != null) {
-          setCustomerID(res.data);
+         // console.log(res.data[0]._id)
+          setCustomerID(res.data[0]._id); 
           setUserNotFoundError("");
           emailConfiguration();
         }
@@ -84,7 +87,6 @@ export default function CustomerForgotPassword(props) {
     const hidEmail = hideEmail(UserEmail);
     const generatedCode = generateCode(8);
     setCode(generatedCode);
-    console.log(generateCode);
     const emailContent = {
       email: UserEmail,
       code: generatedCode,
