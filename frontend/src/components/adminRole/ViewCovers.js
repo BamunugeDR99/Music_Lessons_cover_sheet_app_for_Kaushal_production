@@ -452,6 +452,11 @@ export default function ViewCovers(props) {
       return "https://www.youtube.com/embed/";
     }
   }
+
+
+  let carNames ={
+
+  }
   return (
     <div>
       <div className="container-xxl">
@@ -706,6 +711,9 @@ export default function ViewCovers(props) {
                       }}
                       required
                     />
+
+<select isMulti options = {carNames}>
+</select>
                     <br />
                     <label for="exampleInputMainCategory">Main Category</label>
                     <select

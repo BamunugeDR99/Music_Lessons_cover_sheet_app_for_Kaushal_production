@@ -18,6 +18,7 @@ import DiscoverMoreCovers from "./components/customerRole/DicoverMoreCovers";
 import CoverUpdate from "./components/adminRole/CoverUpdate";
 import ViewDetailedCoverPage from "./components/adminRole/ViewDetailedCoverPage";
 import MusicCoverPage from "./components/customerRole/musiccoverpage";
+import PurchaseHistory from "./components/customerRole/purchaseHistory";
 
 function App() {
   return (
@@ -28,6 +29,8 @@ function App() {
         <Route path="/a" element={<CustomerForgotPassword/>} />
         <Route path = "/b" element = {<ViewCovers/>}/>
         <Route path = "/detailed/:id" element = {<ViewDetailedCoverPage/>}/>
+        <Route path = "/d" element = {<PurchaseHistory/>}/>
+        
 
       </Routes>
       <Footer />

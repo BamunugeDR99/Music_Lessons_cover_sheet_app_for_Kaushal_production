@@ -6,7 +6,7 @@ export default function PurchaseHistory(props) {
   const [searchValue, setSearchvalue] = useState([]);
   const [noData, setNoData] = useState([]);
   const [empty, setEmpty] = useState([]);
-  let [total, setTotal] = useState([]);
+  let [total, setTotal] = useState(0);
   let covers = [];
   let array2 = [];
 
@@ -18,7 +18,7 @@ export default function PurchaseHistory(props) {
       axios
         .get("http://localhost:8070/order/getOrders")
         .then((res) => {
-          console.log(res.data)
+          console.log(res.data);
           const filter = res.data.filter(
             (cus) => cus.CustomerID == "619bb6fb3d429b6f26addcba"
             // objectId
@@ -28,8 +28,7 @@ export default function PurchaseHistory(props) {
             covers.push(post.CoverIDs);
           });
 
-          console.log(res.data.TransactionDateAndTime)
-
+          console.log(res.data.TransactionDateAndTime);
 
           axios.get("http://localhost:8070/covers/getcovers").then((res) => {
             getSpecificOrderCoverDetiles(res.data);
@@ -42,61 +41,81 @@ export default function PurchaseHistory(props) {
     getCovers();
   }, []);
 
-
   function getSpecificOrderCoverDetiles(allCovers) {
+    setTotal(0);
+    TotalPrice = 0;
     for (let j = 0; j < allCovers.length; j++) {
       for (let i = 0; i < covers[0].length; i++) {
         if (covers[0][i] == allCovers[j]._id) {
           array2.push(allCovers[j]);
-          TotalPrice = TotalPrice + Number(array2[j].Price)
-          console.log(TotalPrice)
-          setTotal(TotalPrice)
+          console.log(allCovers[j].Price);
+          TotalPrice = TotalPrice + Number(allCovers[j].Price);
+          setTotal(total + Number(allCovers[j].Price));
+          console.log(TotalPrice);
           // console.log(array2[i])
           // console.log(array2[j].Price)
-          setNoData(array2.length)
+          setNoData(array2.length);
         }
       }
     }
+    document.getElementById("total").innerHTML = TotalPrice;
+    //setTotal(TotalPrice);
+
     // console.log(array2.Price)
 
     setCover(array2);
   }
 
-
   function searchByName(val) {
-    setSearchvalue(val);
+    //setSearchvalue(val);
+    setTotal("");
+    let searchResult = [];
+    axios
+      .get("http://localhost:8070/order/getOrders")
+      .then((res) => {
+        console.log(res.data);
+        const filter = res.data.filter(
+          (cus) => cus.CustomerID == "619bb6fb3d429b6f26addcba"
+          // objectId
+        );
 
-    let searchResult = cover.filter(
-      (post) =>
-        post.Title.toLowerCase().includes(val.toLowerCase()) ||
-        post.MainCategory.toLowerCase().includes(val.toLowerCase())||
-        post.SubCategory.toLowerCase().includes(val.toLowerCase())
-    );
+        filter.map((post) => {
+          covers.push(post.CoverIDs);
+        });
+
+        console.log(res.data.TransactionDateAndTime);
+
+        axios.get("http://localhost:8070/covers/getcovers").then((res) => {
+          searchResult = res.data.filter(
+            (post) =>
+              post.Title.toLowerCase().includes(val.toLowerCase()) ||
+              post.MainCategory.toLowerCase().includes(val.toLowerCase()) ||
+              post.SubCategory.toLowerCase().includes(val.toLowerCase())
+          );
+          getSpecificOrderCoverDetiles(searchResult);
+          if (searchResult.length == 0) {
+            //alert("d");
+            //
+            // setCover(cover);
+            setEmpty("No Covers available !");
+            // setCover([]);
+          } else {
+            setEmpty("");
+          }
+        });
+      })
+      .catch((err) => {
+        alert(err);
+      });
+
+    // setCover(searchResult);
+
     // if (searchResult.length != 0) {
-    //   // setCover(searchResult);
-    //   setEmpty("");
-    // } else {
-    //   setEmpty("No Covers available !");
-    //   setCover([]);
+    //  //
+    // }else{
+
     // }
-
-    setCover(searchResult);
-
-    if (searchResult !== null) {
-     //
-     setEmpty("");
-    }
-
-    if (searchResult.length === 0) {
-      //alert("d");
-     //
-     setCover(cover);
-     setEmpty("No Covers available !");
-      // setCover([]);
-    }
   }
-
-
 
   // function filterContent(data, userSearch) {
   //   let result = data.filter(
@@ -133,8 +152,6 @@ export default function PurchaseHistory(props) {
   //           covers.push(post.CoverIDs);
   //         });
 
-
-
   //         axios.get("http://localhost:8070/covers/getcovers").then((res) => {
   //           getSpecificOrderCoverDetiles(res.data);
   //         });
@@ -142,7 +159,7 @@ export default function PurchaseHistory(props) {
   //       .catch((err) => {
   //         alert(err);
   //       });
-    
+
   // }
 
   return (
@@ -151,9 +168,11 @@ export default function PurchaseHistory(props) {
       <br />
       <div className="row">
         <div className="col-sm">
-          <h3 style={{color:'#764A34'}}>
+          <h3 style={{ color: "#764A34" }}>
             {" "}
-            <center><b>Purchase History</b></center>
+            <center>
+              <b>Purchase History</b>
+            </center>
           </h3>
           <br />
         </div>
@@ -166,7 +185,8 @@ export default function PurchaseHistory(props) {
                 class="form-control"
                 placeholder="Search Music Covers"
                 onChange={(e) => {
-                  searchByName(e.target.value)}}
+                  searchByName(e.target.value);
+                }}
               />
               <div class="input-group-append">
                 <button className="input-group-text">
@@ -188,10 +208,9 @@ export default function PurchaseHistory(props) {
           <br />
         </div>
         <div className="col-sm text-right">
+          {/* <div className="row"> */}
 
-        {/* <div className="row"> */}
-
-            {/* <div className="col-6">
+          {/* <div className="col-6">
               <div style={{backgroundColor: "white",borderRadius: "10px", borderColor: props.color,border: `solid black`, padding: "20px 20px 20px 20px", }}>
                 <div className="row">
                   <div className="col-8">
@@ -221,24 +240,28 @@ export default function PurchaseHistory(props) {
               </div>
             </div> */}
 
-           <h6>
+          <h6>
             <b>No of downloads : {noData}</b>
           </h6>
-          <h6>
-            <b>Total : $ {total}</b>
+          <h6 style={{ display: "inline" }}>
+            <b>Total : $ </b>
+          </h6>
+          <h6 id="total" style={{ display: "inline" }}>
+            <b> </b>
           </h6>
           {/* </div> */}
         </div>
       </div>
-      <br /><center>
-        <h3 style={{color:'#D0193A '}}>{empty}</h3>
-        </center>
-        <br/>
+      <br />
+      <center>
+        <h3 style={{ color: "#D0193A " }}>{empty}</h3>
+      </center>
+      <br />
       {/* {cover2.map((post) => ( */}
       {cover.map((post) => {
-        TotalPrice += Number(post.Price)
+        TotalPrice += Number(post.Price);
         // console.log(TotalPrice)
-          // setTotal(TotalPrice)
+        // setTotal(TotalPrice)
         // alert("asd")
         return (
           <div
@@ -248,7 +271,7 @@ export default function PurchaseHistory(props) {
               borderRadius: "10px",
               width: "90%",
               margin: "auto",
-              marginBottom : "10px",
+              marginBottom: "10px",
               border: "2px solid sienna",
             }}
           >
@@ -262,11 +285,16 @@ export default function PurchaseHistory(props) {
                   src={"images/923d10247b982186a4ebb24b7ba6fba8.jpg"}
                   // ref={'images/test2.jpg'} onError={
                   //   () => this.img.src = 'images/test2.jpg'}
-                  onError={(e)=>{ if (e.target.src !== "images/923d10247b982186a4ebb24b7ba6fba8.jpg"){
-                    e.target.onerror = null;
-                     e.target.src="images/923d10247b982186a4ebb24b7ba6fba8.jpg";}
-                }
-           }
+                  onError={(e) => {
+                    if (
+                      e.target.src !==
+                      "images/923d10247b982186a4ebb24b7ba6fba8.jpg"
+                    ) {
+                      e.target.onerror = null;
+                      e.target.src =
+                        "images/923d10247b982186a4ebb24b7ba6fba8.jpg";
+                    }
+                  }}
                 />
               </div>
 
@@ -314,7 +342,6 @@ export default function PurchaseHistory(props) {
                       type="button"
                     >
                       View
-                      
                     </button>
                     <br />
                   </div>
@@ -334,9 +361,7 @@ export default function PurchaseHistory(props) {
                 </span>
                 <span>&ensp;{post.OriginalArtistName}</span>
                 <br />
-                <span style={{ color: " #764A34" }}>
-                  Arranged By&ensp;:
-                </span>
+                <span style={{ color: " #764A34" }}>Arranged By&ensp;:</span>
                 <span>&ensp;{post.ArrangedBy}</span>
                 <br />
                 <span style={{ color: " #764A34" }}>
@@ -347,17 +372,11 @@ export default function PurchaseHistory(props) {
               </div>
             </div>
           </div>
-         
         );
       })}
 
-{/* {console.log(TotalPrice)} */}
-{/* {setTotal(TotalPrice)} */}
-        
+      {/* {console.log(TotalPrice)} */}
+      {/* {setTotal(TotalPrice)} */}
     </div>
-    
-  
   );
 }
-
-    

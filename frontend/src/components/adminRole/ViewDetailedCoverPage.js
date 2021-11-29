@@ -149,8 +149,8 @@ export default function ViewDetailedCoverPage(props) {
   function setContent() {
     setSubCategories(tempSubCategory);
     setLessonSubCategories(tempSubCategory2);
-    // console.log(MainCategoryForRec)
-    // console.log(SubCategoryForRec)
+     console.log(MainCategoryForRec)
+     console.log(SubCategoryForRec)
 
     // setA(MainCategoryForRec);
     // setB(SubCategoryForRec)
