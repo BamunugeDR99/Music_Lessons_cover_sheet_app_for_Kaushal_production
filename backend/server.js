@@ -6,6 +6,8 @@ const app = express();
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
+const jwt = require ('jsonwebtoken');
+
 
 const PORT = process.env.PORT || 8070;
 app.use(cors());
@@ -54,6 +56,8 @@ app.use("/customer", customerRouter);
 
 const shoppingCartRouter = require("./routes/shoppingCarts.js");
 app.use("/shoppingCart",shoppingCartRouter); 
+
+
 
 app.listen(PORT, () => {
   console.log(`Server is up and running on PORT ${PORT}`);
