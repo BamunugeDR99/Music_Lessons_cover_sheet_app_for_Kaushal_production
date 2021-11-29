@@ -9,7 +9,6 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
-import "../../css/ProgressCircularStyles.css";
 export default function ViewCovers(props) {
   const [covers, setCovers] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);

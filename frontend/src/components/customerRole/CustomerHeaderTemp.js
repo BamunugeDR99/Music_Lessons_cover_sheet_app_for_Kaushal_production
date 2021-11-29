@@ -3,7 +3,7 @@ import axios from "axios";
 import "../../css/CustomerHeaderStyles.css";
 export default function CustomerHeader(props) {
   return (
-    <div>
+    <div className = "customerHeader">
      
       <nav
         class="navbar sticky-top navbar-expand-lg navbar-light"
