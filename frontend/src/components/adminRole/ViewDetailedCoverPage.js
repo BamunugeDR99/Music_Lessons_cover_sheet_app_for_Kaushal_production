@@ -59,6 +59,9 @@ export default function ViewDetailedCoverPage(props) {
   let tempPdf = "";
   let tempCoverImages = [];
   let CoverTempID = location.pathname.substring(10);
+
+  const [a,setA] = useState("");
+  const [b, setB] = useState("");
   useEffect(() => {
     function getCovers() {
       axios
@@ -146,12 +149,16 @@ export default function ViewDetailedCoverPage(props) {
   function setContent() {
     setSubCategories(tempSubCategory);
     setLessonSubCategories(tempSubCategory2);
+    // console.log(MainCategoryForRec)
+    // console.log(SubCategoryForRec)
 
+    // setA(MainCategoryForRec);
+    // setB(SubCategoryForRec)
     document.getElementById("MainCategory").value = MainCategoryForRec;
-    if (MainCategoryForRec == "Classical Guitar Covers") {
+    if (MainCategoryForRec === "Classical Guitar Covers") {
       document.getElementById("subCategory1").value = SubCategoryForRec;
       setSubCategoryPreview(false);
-    } else if (MainCategoryForRec == "Guitar Technics & Lessons") {
+    } else if (MainCategoryForRec === "Guitar Technics & Lessons") {
       document.getElementById("subCategory2").value = SubCategoryForRec;
       setSubCategoryPreview(true);
     }
@@ -391,13 +398,13 @@ export default function ViewDetailedCoverPage(props) {
           let dynamicSubCategory = "";
           let previewPageList = [];
           if (
-            document.getElementById("MainCategory").value ==
-            "Guitar Technics & Lessons"
+            document.getElementById("MainCategory").value ===
+            String("Guitar Technics & Lessons")
           ) {
             dynamicSubCategory = document.getElementById("subCategory2").value;
           } else if (
-            document.getElementById("MainCategory").value ==
-            "Classical Guitar Covers"
+            document.getElementById("MainCategory").value ===
+            String("Classical Guitar Covers")
           ) {
             dynamicSubCategory = document.getElementById("subCategory1").value;
           }
@@ -502,30 +509,6 @@ export default function ViewDetailedCoverPage(props) {
             );
           }
 
-          // if (document.getElementById("pdffile").files.length === 0) {
-          //   updateCoverPdf = document.getElementById("tPdfFile").value;
-          // } else {
-
-          // }
-
-          // console.log(updatedCover);
-
-          // axios
-          //   .put(
-          //     "http://localhost:8070/covers/update/" + CoverTempID,
-          //     updatedCover
-          //   )
-          //   .then(() => {
-          //     swalWithBootstrapButtons.fire(
-          //       "Updated!",
-          //       "Your cover has been updated.",
-          //       "success"
-          //     );
-          //     getCovers();
-          //   })
-          //   .catch((err) => {
-          //     alert(err);
-          //   });
         } else if (
           /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel
@@ -544,7 +527,8 @@ export default function ViewDetailedCoverPage(props) {
       .get("http://localhost:8070/covers/get/" + CoverTempID)
       .then((res) => {
         setCovers(res.data);
-        setPreviousContent(res.data);
+        setPreviousContent(res.data)
+        //setContent(res.data);
         preview = res.data.PreviewPages;
         printInstruments(res.data.InstrumentsPlayedOn);
         displayPreviewImageSlider(res.data.PreviewPages);
@@ -564,9 +548,9 @@ export default function ViewDetailedCoverPage(props) {
       });
   }
 
-  function previewPdf(covername) {
+  function previewPdf(pdfName) {
     setModalOpenForPdf(true);
-    const storageRef = ref(storage, `Covers(PDF)/${covername}`);
+    const storageRef = ref(storage, `Covers(PDF)/${pdfName}`);
     getDownloadURL(storageRef)
       .then((url) => {
         // setPdfUrl(url)
@@ -817,6 +801,7 @@ export default function ViewDetailedCoverPage(props) {
                       onClick={() => {
                         setModalOpen2(true);
                         setPreviewPages("");
+                       
                       }}
                     >
                       Edit Cover
@@ -938,6 +923,7 @@ export default function ViewDetailedCoverPage(props) {
                     <label for="exampleInputMainCategory">Main Category</label>
                     <select
                       required
+                      Value = {covers.MainCategory}
                       className="form-control"
                       onChange={() => {
                         if (subCategoryPreview == true) {
@@ -949,8 +935,8 @@ export default function ViewDetailedCoverPage(props) {
                       id="MainCategory"
                       name="category"
                     >
-                      <option>Classical Guitar Covers</option>
-                      <option>Guitar Technics & Lessons</option>
+                      <option value = "Classical Guitar Covers">Classical Guitar Covers</option>
+                      <option value = "Guitar Technics & Lessons">Guitar Technics & Lessons</option>
                     </select>
                     <br />
                     <label for="exampleInputEmail1">YouTube Link*</label>
