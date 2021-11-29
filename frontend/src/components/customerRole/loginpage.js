@@ -198,7 +198,7 @@ export default function Login(props) {
                                     required 
                                     />
                                     <span class="p-viewer">
-                                    <i style={{color:"#764A34"}} onClick={togglePasswordVisiblity}>{eye}</i>
+                                    <i style={{color:"#764A34"}}onClick={togglePasswordVisiblity}>{eye}</i>
                                      </span>
                                 </div>
 
