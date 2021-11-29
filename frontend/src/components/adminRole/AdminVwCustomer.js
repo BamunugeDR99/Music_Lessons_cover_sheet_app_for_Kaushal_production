@@ -1,6 +1,11 @@
 import React, { Component, useEffect, useState } from "react";
 import axios from "axios";
 import DataTable from "datatables.net";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'jquery/dist/jquery.min.js';
+//Datatable Modules
+import "datatables.net-dt/js/dataTables.dataTables"
+import "datatables.net-dt/css/jquery.dataTables.min.css"
 import $ from "jquery";
 
 export default function AdminVwCustomer(props) {
@@ -32,9 +37,9 @@ useEffect(()=>{
             console.log(filter.length)
               setLoged(filter.length)
             
-$(document).ready(function () {
-    $("#example").DataTable();
-  });
+              $(document).ready(function () {
+                $('#example').DataTable();
+            });
         })  
         .catch((err) => {
             alert(err);

@@ -7,9 +7,12 @@ export default function PurchaseHistory(props) {
   const [noData, setNoData] = useState([]);
   const [empty, setEmpty] = useState([]);
   let [total, setTotal] = useState([]);
+  let [time, setTime] = useState([]);
+  let [tot, setTot] = useState([]);
   let covers = [];
   let array2 = [];
 
+  let Tot=0;
   let TotalPrice = 0;
 
   useEffect(() => {
@@ -20,17 +23,21 @@ export default function PurchaseHistory(props) {
         .then((res) => {
           console.log(res.data)
           const filter = res.data.filter(
-            (cus) => cus.CustomerID == "619bb6fb3d429b6f26addcba"
+            (cus) => cus.CustomerID == "6199d490bfd483038f7067bf"
             // objectId
           );
 
           filter.map((post) => {
             covers.push(post.CoverIDs);
           });
-
-          console.log(res.data.TransactionDateAndTime)
-
-
+          for(let i = 0; i < res.data.length; i++){
+            // console.log(res.data[i].TotalPrice)
+            // Tot += Number(res.data[i].TotalPrice)
+            // setTot(res.data[i].TotalPrice)
+            // console.log(res.data[i].TransactionDateAndTime)
+            setTime(res.data[i].TransactionDateAndTime)
+        }
+          
           axios.get("http://localhost:8070/covers/getcovers").then((res) => {
             getSpecificOrderCoverDetiles(res.data);
           });
@@ -51,17 +58,12 @@ export default function PurchaseHistory(props) {
           TotalPrice = TotalPrice + Number(array2[j].Price)
           console.log(TotalPrice)
           setTotal(TotalPrice)
-          // console.log(array2[i])
-          // console.log(array2[j].Price)
           setNoData(array2.length)
         }
       }
     }
-    // console.log(array2.Price)
-
     setCover(array2);
   }
-
 
   function searchByName(val) {
     setSearchvalue(val);
@@ -97,53 +99,6 @@ export default function PurchaseHistory(props) {
   }
 
 
-
-  // function filterContent(data, userSearch) {
-  //   let result = data.filter(
-  //     (post) =>
-  //       post.Item_name.toLowerCase().includes(userSearch) ||
-  //       post.Brand.toLowerCase().includes(userSearch) ||
-  //       post.Model.toLowerCase().includes(userSearch)
-  //   );
-  //   console.log(userSearch);
-  //   let x = result;
-  //   array2( x);
-  //   if (result.length != 0) {
-  //     document.getElementById("itemsTxt").innerHTML = "";
-  //   } else if (result.length == 0) {
-  //     document.getElementById("itemsTxt").innerHTML = "No Result Found!";
-  //   }
-  // }
-
-  // // search
-  // function searchByName(e) {
-  //   let userSearch = e;
-  //   //document.getElementsByTagName("CircleLoader").loading = '{true}';
-  //   // document.getElementById("itemsTxt").innerHTML = "";
-
-  //   axios
-  //       .get("http://localhost:8070/order/getOrders")
-  //       .then((res) => {
-  //         const filter = res.data.filter(
-  //           (cus) => cus.CustomerID == "619bb6fb3d429b6f26addcba"
-  //           // objectId
-  //         );
-
-  //         filter.map((post) => {
-  //           covers.push(post.CoverIDs);
-  //         });
-
-
-
-  //         axios.get("http://localhost:8070/covers/getcovers").then((res) => {
-  //           getSpecificOrderCoverDetiles(res.data);
-  //         });
-  //       })
-  //       .catch((err) => {
-  //         alert(err);
-  //       });
-    
-  // }
 
   return (
     <div className="container">
@@ -302,6 +257,7 @@ export default function PurchaseHistory(props) {
                       Download
                     </button>
                     <br />
+                    <br />
                   </div>
                   <div className="col-sm">
                     <button
@@ -326,8 +282,9 @@ export default function PurchaseHistory(props) {
                 style={{ backgroundColor: "white", lineHeight: "2em" }}
               >
                 <div className="text-right">
-                  <span class="text-center">{post.TransactionDateAndTime}</span>
+                  <span class="text-center">{time}</span>
                 </div>
+                <br/>
 
                 <span style={{ color: " #764A34" }}>
                   Original Artist&ensp;:

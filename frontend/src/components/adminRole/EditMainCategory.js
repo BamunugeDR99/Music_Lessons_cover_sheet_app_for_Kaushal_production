@@ -3,7 +3,6 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import Modal from "react-bootstrap/Modal";
 import $ from "jquery";
-// import "../css/toogle.css"
 
 export default function EditMainCategories(props) {
 
@@ -195,7 +194,7 @@ export default function EditMainCategories(props) {
         .then((res)=>{
           console.log(res.data)
           for(let i = 0; i < res.data.length; i++){
-            for(let j = 0; j < res.data.length +1; j++){
+            for(let j = 0; j < res.data.length +5; j++){
               if(res.data[i].SubCategories[j] === SubCat){
                 no=1;
                 
@@ -294,7 +293,7 @@ export default function EditMainCategories(props) {
                     </div> */}
 
 <div class="col text-right">
-                <button type="button" class="btn btn-info add-new " onClick={() => modalopen2()}><i class="fa fa-plus"></i> Add New</button>
+                <button type="button" class='btn' style={{backgroundColor:'#279B14', color:'white'}}onClick={() => modalopen2()}><i class="fa fa-plus"></i> Add New</button>
             </div>
             <br/><br/>
 <div className="row" 
@@ -455,7 +454,7 @@ export default function EditMainCategories(props) {
           <div className="row">
             <div className="col-md-6">
               <center>
-              <button type="submit" class="btn btn-primary"
+              <button type="submit" class="btn"
                   style={{ borderRadius: "10px", backgroundColor: "#28A745",color: "white",}}
                   onClick={sendData}>
                   <strong>Save</strong> 
