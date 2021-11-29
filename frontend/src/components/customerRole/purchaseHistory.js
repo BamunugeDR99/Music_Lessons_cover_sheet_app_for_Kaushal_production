@@ -1,5 +1,8 @@
 import React, { Component, useEffect, useState } from "react";
 import axios from "axios";
+import { saveAs } from "file-saver";
+import {Button} from 'reactstrap'
+import Swal from "sweetalert2";
 
 export default function PurchaseHistory(props) {
   const [cover, setCover] = useState([]);
@@ -9,6 +12,7 @@ export default function PurchaseHistory(props) {
   let [total, setTotal] = useState([]);
   let [time, setTime] = useState([]);
   let [tot, setTot] = useState([]);
+  // let [pdfName, setPdfName] = useState([]);
   let covers = [];
   let array2 = [];
 
@@ -98,6 +102,111 @@ export default function PurchaseHistory(props) {
     }
   }
 
+  // function previewPdf(pdfName) {
+  //   setModalOpenForPdf(true);
+  //   const storageRef = ref(storage, `Covers(PDF)/${pdfName}`);
+  //   getDownloadURL(storageRef)
+  //     .then((url) => {
+  //       // setPdfUrl(url)
+  //       window.location.href = url;
+  //       //setModalOpenForPdf(false)
+  //     })
+  //     .catch(() => {
+  //       setModalOpenForPdf(false);
+  //       Swal.fire({
+  //         icon: "error",
+  //         title: "Oops...",
+  //         text: "Something went wrong!",
+  //       });
+  //     });
+  // }
+
+  function saveFile(CoverPdf){
+    console.log(CoverPdf)
+    // saveAs(
+    //   "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+    //   "example.pdf"
+    // );
+
+
+    // const storageRef = ref(storage, `Covers(PDF)/${CoverPdf}`);
+    // getDownloadURL(storageRef)
+    //   .then((url) => {
+    //     // setPdfUrl(url)
+    //     window.location.href = url;
+    //     //setModalOpenForPdf(false)
+
+
+        fetch('https://cors-anywhere.herokuapp.com/' + "https://firebasestorage.googleapis.com/v0/b/kaushal-music-production-app.appspot.com/o/Covers(PDF)%2Fsample.pdf?alt=media&token=7bc7ca7b-8f4a-4f7c-9fc4-f836237c47e6", {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/pdf',
+          },
+        })
+        .then((response) => response.blob())
+        .then((blob) => {
+          // Create blob link to download
+          const url = window.URL.createObjectURL(
+            new Blob([blob]),
+          );
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute(
+            'download',
+            `sample.pdf`,
+          );
+      
+          // Append to html link element page
+          document.body.appendChild(link);
+      
+          // Start download
+          link.click();
+      
+          // Clean up and remove the link
+          link.parentNode.removeChild(link);
+        });
+
+        
+        
+
+
+      // })
+      // .catch(() => {
+      //   setModalOpenForPdf(false);
+      //   Swal.fire({
+      //     icon: "error",
+      //     title: "Oops...",
+      //     text: "Something went wrong!",
+      //   });
+      // });
+
+    //   axios({
+    //     method: "get",
+    //     url: "downloadSamplePDF.php",
+    //     responseType: "arraybuffer"
+    //  })
+    //  .then((response) => {
+    //     var link = document.createElement("a");
+    //     link.href = window.URL.createObjectURL(
+    //        new Blob([response.data], {
+    //           type: "application/octet-stream"
+    //        })
+    //     );
+    //     link.download = "name_of_file_with_extension";
+  
+    //     document.body.appendChild(link);
+  
+    //     link.click();
+    //     setTimeout(function() {
+    //        window.URL.revokeObjectURL(link);
+    //     }, 200);
+    //  })
+    //  .catch((error) => {});
+
+    }
+
+    
+   
 
 
   return (
@@ -239,22 +348,24 @@ export default function PurchaseHistory(props) {
                     <span> &ensp;&ensp;{post.SubCategory}</span>
                     <br />
                     <span> &ensp;&ensp;Price : ${post.Price}</span>
+                    
                   </div>
                 </div>
                 <br />
                 <br />
                 <div className="row">
                   <div className="col-sm">
-                    <button
-                      style={{
-                        borderRadius: "25px",
-                        backgroundColor: "#D0193A",
-                        color: "white",
-                      }}
-                      className="btn btn-sm btn-block"
-                      type="button"
-                    >
+                  {/* <Button
+                        href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+                        color="transparent"
+                        target="_blank"
+                        download>Download
+                  </Button> */}
+
+                    <button style={{borderRadius: "25px", backgroundColor: "#D0193A",color: "white",}}
+                      className="btn btn-sm btn-block" type="button" onClick={() => saveFile(post.CoverPdf)} >
                       Download
+                      {/* {console.log(post.CoverPdf)} */}
                     </button>
                     <br />
                     <br />

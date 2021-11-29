@@ -291,9 +291,13 @@ export default function EditMainCategories(props) {
                         <div class="input-group-append"></div>
                         <br />
                     </div> */}
-
-<div class="col text-right">
+                    <div class="row">
+{/* <div class="col-sm text-right">
+  <h2 style={{color:'#764A34'}}>Categories</h2>
+  </div> */}
+            <div class="col-sm text-right">
                 <button type="button" class='btn' style={{backgroundColor:'#279B14', color:'white'}}onClick={() => modalopen2()}><i class="fa fa-plus"></i> Add New</button>
+            </div>
             </div>
             <br/><br/>
 <div className="row" 
