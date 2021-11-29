@@ -76,7 +76,12 @@ export default function ViewDetailedCoverPage(props) {
           getAllClassicalGutarMainCategories();
         })
         .catch((err) => {
-          alert(err);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+            footer: '<p style = "color : #D0193A">Currently unavailable!',
+          });
         });
     }
 
@@ -120,10 +125,9 @@ export default function ViewDetailedCoverPage(props) {
     }
     imageSlider += "</div>";
     document.getElementById("img").innerHTML = imageSlider;
-    for(let i = 0;  i < previewImages.length;i++){
+    for (let i = 0; i < previewImages.length; i++) {
       document.getElementById("img" + i).src = "/images/Imageplaceholder.png";
-        
-      }
+    }
     previewImages.map((previewImage, index) => {
       const storageRef = ref(storage, `PreviewImages/${previewImage}`);
       getDownloadURL(storageRef).then((url) => {
@@ -161,7 +165,12 @@ export default function ViewDetailedCoverPage(props) {
         setContent();
       })
       .catch((err) => {
-        alert(err);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
   }
   function getAllClassicalGutarMainCategories() {
@@ -172,7 +181,12 @@ export default function ViewDetailedCoverPage(props) {
         GetLessonSubCategories();
       })
       .catch((err) => {
-        alert(err);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
   }
 
@@ -232,7 +246,12 @@ export default function ViewDetailedCoverPage(props) {
         }
       },
       (error) => {
-        console.log(error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       }
     );
   }
@@ -332,11 +351,15 @@ export default function ViewDetailedCoverPage(props) {
             dynamicSubCategory
           );
         } else {
-          // setClass("");
         }
       },
       (error) => {
-        console.log(error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       }
     );
   }
@@ -428,7 +451,12 @@ export default function ViewDetailedCoverPage(props) {
                 getCovers();
               })
               .catch((err) => {
-                alert(err);
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "Something went wrong!",
+                  footer: '<p style = "color : #D0193A">Currently unavailable!',
+                });
               });
           } else if (
             previewPages.length != 0 &&
@@ -527,7 +555,12 @@ export default function ViewDetailedCoverPage(props) {
         getAllClassicalGutarMainCategories();
       })
       .catch((err) => {
-        alert(err);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
   }
 
@@ -1177,7 +1210,7 @@ export default function ViewDetailedCoverPage(props) {
                   </h3>*/}
             <h2 style={{ color: "#764A34", textAlign: "center" }}>
               {fileType}
-            </h2> 
+            </h2>
           </div>
           <div class="d-flex justify-content-center">
             <div

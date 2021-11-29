@@ -3,7 +3,7 @@ import axios from "axios";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { storage } from "../../Configurations/firebaseConfigurations";
-import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
+import { ref, getDownloadURL } from "@firebase/storage";
 export default function DiscoverMoreCovers(props) {
   const [recommenedCovers, setRecommendedCovers] = useState([]);
   const [ErrorhandlingTxt, setErrorhandlingTxt] = useState("");
@@ -32,12 +32,14 @@ export default function DiscoverMoreCovers(props) {
               covers.SubCategory === SubCategory
           );
 
+         
+          setRecommendedCovers(finalFilteredCovers);
+
           if (finalFilteredCovers.length === 0) {
             setErrorhandlingTxt("No more Reccomendations found!");
           } else {
             setErrorhandlingTxt("");
           }
-          setRecommendedCovers(finalFilteredCovers);
 
         })
         .catch((err) => {
@@ -102,8 +104,7 @@ export default function DiscoverMoreCovers(props) {
               <img
                 id={index}
                 src={
-                  displayImages(covers.PreviewPages[0], index) ||
-                  "/images/Imageplaceholder.png"
+                  displayImages(covers.PreviewPages[0], index) || "/images/Imageplaceholder.png"
                 }
                 class="card-img-top"
                 alt="..."

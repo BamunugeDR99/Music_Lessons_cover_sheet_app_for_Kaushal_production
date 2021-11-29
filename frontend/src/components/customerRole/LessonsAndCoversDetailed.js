@@ -28,7 +28,12 @@ export default function LessonsAndCoversDetailed(props) {
 
         })
         .catch((err) => {
-          alert(err);
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong!',
+            footer: '<p style = "color : #D0193A">Currently unavailable!'
+          })
         });
     }
 

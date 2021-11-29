@@ -60,7 +60,12 @@ export default function CustomerForgotPassword(props) {
         }
       })
       .catch((err) => {
-        alert(err);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
   }
 
@@ -76,7 +81,6 @@ export default function CustomerForgotPassword(props) {
   }
 
   function emailConfiguration() {
-
     const hidEmail = hideEmail(UserEmail);
     const generatedCode = generateCode(8);
     setCode(generatedCode);
@@ -139,14 +143,14 @@ export default function CustomerForgotPassword(props) {
       );
   }
 
-function hideEmail (email) {
-    return email.replace(/(.{2})(.*)(?=@)/,
-      function(gp1, gp2, gp3) { 
-        for(let i = gp3.length; i > 0; i--) { 
-          gp2+= "*"; 
-        } return gp2; 
-      });
-  };
+  function hideEmail(email) {
+    return email.replace(/(.{2})(.*)(?=@)/, function (gp1, gp2, gp3) {
+      for (let i = gp3.length; i > 0; i--) {
+        gp2 += "*";
+      }
+      return gp2;
+    });
+  }
 
   function verifyCode() {
     setLoading(false);
@@ -326,7 +330,6 @@ function hideEmail (email) {
                       color: "#ffffff",
                       borderRadius: "8px",
                     }}
-
                   >
                     Get Code
                   </button>

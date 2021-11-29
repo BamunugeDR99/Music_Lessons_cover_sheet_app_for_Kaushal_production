@@ -25,8 +25,7 @@ function App() {
       <CustomerHeader />
       <Routes>
         <Route path="/" element={<LessonsAndCoversDetailed />} />
-        <Route path="/a" element={<MusicCoverPage />} />
-
+        <Route path="/a" element={<CustomerForgotPassword/>} />
      
 
       </Routes>
