@@ -83,17 +83,6 @@ router.route("/getcovers").get((reg, res) => {
       res.status(404).json({ message: error.message });
     });
 });
-// // route("/") this can use for fetching all the data from the DB
-// router.route("/getStudents").get((reg, res) => {
-//   Student.find()
-//     .then((students) => {
-//       res.json(students);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-
-//     });
-// });
 
 // update
 router.route("/update/:id").put(async (req, res) => {
