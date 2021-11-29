@@ -6,9 +6,10 @@ import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 export default function DiscoverMoreCovers(props) {
   const [recommenedCovers, setRecommendedCovers] = useState([]);
-
+  const [ErrorhandlingTxt, setErrorhandlingTxt] = useState("");
   const MainCategory = "Classical Guitar Covers";
   const SubCategory = "Sinhala";
+  let finalFilteredCovers = [];
   //const MainCategory = props.mainCategory;
   //const SubCategory = props.subCategory;
   useEffect(() => {
@@ -18,20 +19,26 @@ export default function DiscoverMoreCovers(props) {
         .get("http://localhost:8070/covers/getCovers")
         .then((res) => {
           let availableCovers = res.data.filter(
-            (recCovers) => String(recCovers.Status) != "3" 
+            (recCovers) => String(recCovers.Status) != "3"
           );
 
-           availableCovers = availableCovers.filter(
-            (recCovers) => String(recCovers.Status) != "2" 
+          availableCovers = availableCovers.filter(
+            (recCovers) => String(recCovers.Status) != "2"
           );
-          console.log(availableCovers)
-          setRecommendedCovers(
-            availableCovers.filter(
-              (covers) =>
-                covers.MainCategory === MainCategory &&
-                covers.SubCategory === SubCategory
-            )
+
+          finalFilteredCovers = availableCovers.filter(
+            (covers) =>
+              covers.MainCategory === MainCategory &&
+              covers.SubCategory === SubCategory
           );
+
+          if (finalFilteredCovers.length === 0) {
+            setErrorhandlingTxt("No more Reccomendations found!");
+          } else {
+            setErrorhandlingTxt("");
+          }
+          setRecommendedCovers(finalFilteredCovers);
+
         })
         .catch((err) => {
           alert(err);
@@ -61,23 +68,27 @@ export default function DiscoverMoreCovers(props) {
     },
   };
 
-  function displayImages(coverImageName,index) {
-    let imageUrl = "";
-    const storageRef = ref(storage, `PreviewImages/${coverImageName}`);
-   getDownloadURL(storageRef).then((url) => {
-      // imageUrl = url;
-      document.getElementById(index).src=  url;
-      // "https://firebasestorage.googleapis.com/v0/b/kaushal-music-production-app.appspot.com/o/PreviewImages%2F923d10247b982186a4ebb24b7ba6fba8.jpg?alt=media&token=3441eb0f-dcfa-496f-93d2-0b59294462e9"
-    });
-    
+  async function displayImages(coverImageName, index) {
+    if (recommenedCovers.length != 0) {
+      const storageRef = ref(storage, `PreviewImages/${coverImageName}`);
+      await getDownloadURL(storageRef)
+        .then((url) => {
+          document.getElementById(index).src = url;
+        })
+        .catch((err) => {
+          ErrorhandlingTxt("Reccomended covers are not available right now!")
+        });
+    }
   }
 
   return (
     <div>
+      <h5 style={{ textAlign: "center", color: "#D0193A" }}>
+        {ErrorhandlingTxt}
+      </h5>
       <br />
       <Carousel responsive={responsive}>
-        {/* <div className="container"> */}
-        {recommenedCovers.map((covers,index) => {
+        {recommenedCovers.map((covers, index) => {
           return (
             <div
               class="card"
@@ -89,8 +100,11 @@ export default function DiscoverMoreCovers(props) {
               }}
             >
               <img
-                id = {index}
-                src = {displayImages(covers.PreviewPages[0],index) || "/images/Imageplaceholder.png"}
+                id={index}
+                src={
+                  displayImages(covers.PreviewPages[0], index) ||
+                  "/images/Imageplaceholder.png"
+                }
                 class="card-img-top"
                 alt="..."
                 style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
@@ -109,7 +123,6 @@ export default function DiscoverMoreCovers(props) {
             </div>
           );
         })}
-        {/* </div> */}
       </Carousel>
     </div>
   );
