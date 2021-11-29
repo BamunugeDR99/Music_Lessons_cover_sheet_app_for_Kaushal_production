@@ -5,6 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import Swal from "sweetalert2";
 import PasswordStrengthIndicator from "./passwordStrength";
 import { useNavigate } from 'react-router-dom';
+
 const bcrypt = require("bcryptjs");
 export default function CustomerHeader(props) {
 
@@ -40,7 +41,7 @@ export default function CustomerHeader(props) {
   const [CurrenteyeIcon2, setCurrentEyeIcon2] = useState(true);
 
 
-
+  const [modalOpenForLoading, setmodalOpenForLoading] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
 
   let [ExtraError, setExtraError] = useState("");
@@ -136,6 +137,7 @@ export default function CustomerHeader(props) {
 
 
     let nCopsw = document.getElementById("CurrentPassword").value;
+    console.log(CurrentPassword);
 
     if (nCopsw.length !== 0) {
 
@@ -159,13 +161,18 @@ export default function CustomerHeader(props) {
 
   function validatePasswords() {
 
+    let Password = document.getElementById("CPPassword").value;
+    let ConfirmPassword = document.getElementById("CPConfirmPassword").value;
     console.log(CurrentPassword2.length);
+    console.log(Password.length);
+    console.log(ConfirmPassword.length);
     if (CurrentPassword2.length === 0) {
 
       flag1 = 0;
       SetCurrentPasswordError2("Current password is required !");
     }
 
+    
     else if (Password.length === 0) {
 
       flag1 = 0;
@@ -210,7 +217,8 @@ export default function CustomerHeader(props) {
 
       console.log(Password);
       Password = bcrypt.hashSync(Password, bcrypt.genSaltSync(12));
-      console.log(Password);
+      SetPassword( bcrypt.hashSync(Password, bcrypt.genSaltSync(12)));
+      console.log("Password : " + Password);
 
       updateProfile();
 
@@ -309,6 +317,7 @@ export default function CustomerHeader(props) {
   function updateProfile() {
 
 
+    console.log("Password : " + Password);
 
 
     const newCustomer = {
@@ -330,13 +339,54 @@ export default function CustomerHeader(props) {
 
     if (flag1 === 1) {
 
-      axios.put("http://localhost:8070/customer/update/61a39c82dcee3e0dcd659516", newCustomer).then(() => {
 
-        alert("Discount Updated");
+
+      Swal.fire({
+        title: 'Do you want to save the changes?',
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Save',
+        denyButtonText: `Don't save`,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+
+          setmodalOpenForLoading(true);
+
+          
+      axios.put("http://localhost:8070/customer/update/61a50a72a955b7198787942f", newCustomer).then(() => {
+
+            setmodalOpenForLoading(false);
+            Swal.fire('Saved!', '', 'success');
+
+            ChangePasswordmodalClose();
       }).catch((err) => {
 
-        alert(err);
+        console.log(err);
+        setmodalOpenForLoading(false);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong! Try again Later!',
+         
+        })
       })
+
+        } else if (result.isDenied) {
+          Swal.fire('Changes are not saved', '', 'info')
+        }
+      })
+
+
+
+
+
+
+
+
+
+
+
 
     }
 
@@ -360,63 +410,65 @@ export default function CustomerHeader(props) {
 
     if (flag1 === 1) {
       console.log("Delete Karamu");
+
+      const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+      })
+  
+      swalWithBootstrapButtons.fire({
+        title: 'Are you sure?',
+        text: "Don't you enjoy our music anymore?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Delete Profile',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+  
+          axios
+            .delete("http://localhost:8070/customer/delete/61a50a72a955b7198787942f")
+            .then((res) => {
+  
+              swalWithBootstrapButtons.fire(
+                'Deleted!',
+                'Your Profile has been deleted.',
+                'success'
+              )
+              EditProfilemodalClose();
+              navigate('/');
+  
+  
+            }).catch((err) => {
+  
+              console.log(err);
+            })
+  
+  
+  
+  
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire(
+            'Cancelled',
+            'Thank you for staying with us !',
+            'error'
+          )
+        }
+      })
     }
-    // const swalWithBootstrapButtons = Swal.mixin({
-    //   customClass: {
-    //     confirmButton: 'btn btn-success',
-    //     cancelButton: 'btn btn-danger'
-    //   },
-    //   buttonsStyling: false
-    // })
-
-    // swalWithBootstrapButtons.fire({
-    //   title: 'Are you sure?',
-    //   text: "Don't you enjoy our music anymore?",
-    //   icon: 'warning',
-    //   showCancelButton: true,
-    //   confirmButtonText: 'Delete Profile',
-    //   cancelButtonText: 'Cancel',
-    //   reverseButtons: true
-    // }).then((result) => {
-    //   if (result.isConfirmed) {
-
-    //     axios
-    //       .delete("http://localhost:8070/customer/delete/61a0d541c3263c87327c7c4b")
-    //       .then((res) => {
-
-    //         swalWithBootstrapButtons.fire(
-    //           'Deleted!',
-    //           'Your Profile has been deleted.',
-    //           'success'
-    //         )
-    //         EditProfilemodalClose();
-    //         navigate('/');
-
-
-    //       }).catch((err) => {
-
-    //         console.log(err);
-    //       })
-
-
-
-
-    //   } else if (
-    //     /* Read more about handling dismissals below */
-    //     result.dismiss === Swal.DismissReason.cancel
-    //   ) {
-    //     swalWithBootstrapButtons.fire(
-    //       'Cancelled',
-    //       'Thank you for staying with us !',
-    //       'error'
-    //     )
-    //   }
-    // })
+   
   }
 
   function getCustomerDetails() {
 
-    axios.get("http://localhost:8070/customer/get/61a39c82dcee3e0dcd659516").then((res) => {
+    axios.get("http://localhost:8070/customer/get/61a50a72a955b7198787942f").then((res) => {
 
       console.log(res.data);
       SetCustomer(res.data);
@@ -429,6 +481,7 @@ export default function CustomerHeader(props) {
       setGender(res.data.Gender);
       setCountry(res.data.Country);
       SetCurrentPassword(res.data.Password);
+      SetPassword(res.data.Password);
 
 
     }).catch((err) => {
@@ -440,7 +493,7 @@ export default function CustomerHeader(props) {
 
     function getOne() {
 
-      axios.get("http://localhost:8070/customer/get/61a39c82dcee3e0dcd659516").then((res) => {
+      axios.get("http://localhost:8070/customer/get/61a50a72a955b7198787942f").then((res) => {
 
         SetCustomer(res.data);
 
@@ -452,6 +505,7 @@ export default function CustomerHeader(props) {
         setGender(res.data.Gender);
         setCountry(res.data.Country);
         SetCurrentPassword(res.data.Password);
+        SetPassword(res.data.Password);
 
 
       }).catch((err) => {
@@ -1214,9 +1268,8 @@ export default function CustomerHeader(props) {
         </Modal.Footer>
       </Modal>
 
-
-      {/* user details update model */}
-      <Modal show={profilemodelOpen} size="lg">
+       {/* My Profile model */}
+       <Modal show={profilemodelOpen} size="lg">
         <Modal.Header>
 
           <h1 >My Profile</h1>
@@ -1237,13 +1290,13 @@ export default function CustomerHeader(props) {
               <div className="col-sm-6">
                 <center>
                   <br />
-                  <div className="col-md-9 input-group">
+                  <div className="col-md-9 col-sm-6 input-group">
                     <h6 style={{ color: "#764A34" }} >
                       <strong>User Name</strong>: {Customer.Username}
                     </h6>
                   </div>
                   <br />
-                  <div className="col-md-9 input-group">
+                  <div className="col-md-9 col-sm-6 input-group">
 
                     <label for="test"><svg style={{ color: "#764A34" }}
                       xmlns="http://www.w3.org/2000/svg"
@@ -1263,7 +1316,7 @@ export default function CustomerHeader(props) {
 
                   </div>
                   <br />
-                  <div className="col-md-9 input-group">
+                  <div className="col-md-9 col-sm-6 input-group">
                     <label for="test"><svg style={{ color: "#764A34" }}
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"
@@ -1289,7 +1342,7 @@ export default function CustomerHeader(props) {
               <div className="col-sm-6">
                 <center>
                   <br />
-                  <div className="col-md-9 input-group">
+                  <div className="col-md-9 col-sm-6 input-group">
                     <h6 style={{ color: "#764A34" }}>
                       <strong>Email</strong>:{" "}
                       <a href="">
@@ -1298,7 +1351,7 @@ export default function CustomerHeader(props) {
                     </h6>
                   </div>
                   <br />
-                  <div className="col-md-9 input-group">
+                  <div className="col-md-9 col-sm-6 input-group">
                     <label for="test">  <svg style={{ color: "#764A34" }}
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"
@@ -1314,7 +1367,7 @@ export default function CustomerHeader(props) {
                     </span>
                   </div>
                   <br />
-                  <div className="col-md-9 input-group">
+                  <div className="col-md-9 col-sm-6 input-group">
                     <label for="test"><svg style={{ color: "#764A34" }}
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"
@@ -1345,7 +1398,7 @@ export default function CustomerHeader(props) {
           <div className="row">
 
 
-            <div className="col-md-6">
+            <div className="col-md-6 col-sm-6 mb-2">
 
               <button
                 type="button"
@@ -1364,7 +1417,7 @@ export default function CustomerHeader(props) {
               </button>
 
             </div>
-            <div className="col-md-6">
+            <div className="col-md-6 col-sm-6">
 
               <button
                 type="button"
@@ -1385,7 +1438,6 @@ export default function CustomerHeader(props) {
           </div>
         </Modal.Footer>
       </Modal>
-
 
 
       {/* Change Password */}
@@ -1562,7 +1614,7 @@ export default function CustomerHeader(props) {
                             borderBottomLeftRadius: "5px",
                           }}
                           class="form-control  border-right-0"
-                          id="inputpassword"
+                          id="CPPassword"
                           placeholder="New Password*"
                           onFocus={
                             () => setPasswordFocused(true)
@@ -1665,7 +1717,7 @@ export default function CustomerHeader(props) {
                             borderBottomLeftRadius: "5px",
                           }}
                           class="form-control border-right-0"
-                          id="inputConfirmPassword"
+                          id="CPConfirmPassword"
                           placeholder="Re-type Password*"
                           onChange={(e) => {
                             SetConfirmPassword(e.target.value);
@@ -1762,7 +1814,25 @@ export default function CustomerHeader(props) {
 
 
 
+      <Modal show={modalOpenForLoading} size="md">
+        <Modal.Header></Modal.Header>
 
+        <Modal.Body>
+          <div class="d-flex justify-content-center">
+            <div class="spinner-border text-success" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <br />
+          <h1 style={{ textAlign: "center", color: "#764A34" }}>
+            Please wait!
+          </h1>
+          <h6 style={{ textAlign: "center", color: "#764A34" }}>
+           Your changes are being saved...
+          </h6>
+        </Modal.Body>
+        <Modal.Footer></Modal.Footer>
+      </Modal>
 
 
 

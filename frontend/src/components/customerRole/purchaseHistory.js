@@ -63,40 +63,105 @@ export default function PurchaseHistory(props) {
   }
 
 
-  function searchByName(val) {
-    setSearchvalue(val);
+  // function searchByName(val) {
+  //   setSearchvalue(val);
 
-    let searchResult = cover.filter(
+  //   let searchResult = cover.filter(
+  //     (post) =>
+  //       post.Title.toLowerCase().includes(val.toLowerCase()) ||
+  //       post.MainCategory.toLowerCase().includes(val.toLowerCase())||
+  //       post.SubCategory.toLowerCase().includes(val.toLowerCase())
+  //   );
+  
+
+  //   setCover(searchResult);
+  //   console.log("Length : " + searchResult.length );
+
+   
+  //   if (searchResult.length ==0) {
+  //     //alert("d");
+   
+  //    setEmpty("No Covers available !");
+  //     // setCover([]);
+  //   }
+  // }
+
+  //DDDD
+
+  function searchByName(val) {
+
+    let data = cover;
+    let result = data.filter(
       (post) =>
-        post.Title.toLowerCase().includes(val.toLowerCase()) ||
+      post.Title.toLowerCase().includes(val.toLowerCase()) ||
         post.MainCategory.toLowerCase().includes(val.toLowerCase())||
         post.SubCategory.toLowerCase().includes(val.toLowerCase())
     );
-    // if (searchResult.length != 0) {
-    //   // setCover(searchResult);
-    //   setEmpty("");
-    // } else {
-    //   setEmpty("No Covers available !");
-    //   setCover([]);
-    // }
 
-    setCover(searchResult);
+    console.log(result);
 
-    if (searchResult !== null) {
-     //
-     setEmpty("");
+
+
+
+
+    if (result !== null) {
+      setCover(result);
+    //  document.getElementById("itemsTxt").innerHTML = "";
+    setEmpty("");
     }
 
-    if (searchResult.length === 0) {
+    if (result.length === 0) {
       //alert("d");
-     //
-     setCover(cover);
      setEmpty("No Covers available !");
-      // setCover([]);
     }
   }
 
+  // search
+  // function handleSearch(e) {
 
+  //   document.getElementById("itemsTxt").innerHTML = "";
+  //   let userSearch = e;
+  //   console.log(userSearch);
+
+  //   axios
+  //     .get("https://tech-scope-online.herokuapp.com/items/getItems")
+  //     .then((res) => {
+
+  //       let filteredData = res.data.filter((item) => item.DiscountStatus === true && item.ItemAvailabilityStatus === true)
+
+  //       filterContent(filteredData, userSearch);
+  //       console.log(res.data);
+  //     })
+  //     .catch((err) => {
+  //       alert(err);
+  //     });
+  // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
 
   // function filterContent(data, userSearch) {
   //   let result = data.filter(
