@@ -10,7 +10,7 @@ const SubCategorySchema = new Schema({
 
     Status : {
         type : String,
-        required : false
+        required : "1"
     },
 
     AddedDateAndTime : {
@@ -24,6 +24,7 @@ const SubCategorySchema = new Schema({
         required : false,
         default : null
     },
+    
     UpdatedUser : {
         type : String,
         required : false,

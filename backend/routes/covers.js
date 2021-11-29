@@ -5,20 +5,20 @@ let Covers = require("../models/Covers");
 router.route("/add").post((req, res) => {
   const Title = req.body.Title;
   const OriginalArtistName = req.body.OriginalArtistName;
-  const ArrangedBy = parseInt(req.body.ArrangedBy);
+  const ArrangedBy = req.body.ArrangedBy;
   const InstrumentsPlayedOn = req.body.InstrumentsPlayedOn;
   const SubCategory = req.body.SubCategory;
   const MainCategory = req.body.MainCategory;
   const NoOfPages = req.body.NoOfPages;
   const NoOfPreviewPages = req.body.NoOfPreviewPages;
-  const NoOfDownloads = req.body.NoOfDownloads;
+  //const NoOfDownloads = req.body.NoOfDownloads;
   const Price = req.body.Price;
   const YoutubeLink = req.body.YoutubeLink;
   const FacebookLink = req.body.FacebookLink;
   const PreviewPages = req.body.PreviewPages;
   const CoverPdf = req.body.CoverPdf;
-  const FeedBackIDs = req.body.FeedBackIDs;
-  const Status = req.body.Status;
+  //const FeedBackIDs = req.body.FeedBackIDs;
+  // const Status = req.body.Status;
   // const UpdatedDateAndTime = req.body.UpdatedDateAndTime;
   const UpdatedUser = req.body.UpdatedUser;
   // const AddedDateAndTime = req.body.AddedDateAndTime;
@@ -26,22 +26,17 @@ router.route("/add").post((req, res) => {
   const newCovers = new Covers({
     Title,
     OriginalArtistName,
-    ArrangedBy,
     InstrumentsPlayedOn,
     SubCategory,
     MainCategory,
     NoOfPages,
     NoOfPreviewPages,
-    NoOfDownloads,
     Price,
+    ArrangedBy,
     YoutubeLink,
     FacebookLink,
     PreviewPages,
     CoverPdf,
-    FeedBackIDs,
-    Status,
-    UpdatedDateAndTime,
-    UpdatedUser,
   });
 
   newCovers
@@ -63,11 +58,10 @@ router.route("/add").post((req, res) => {
           FacebookLink: newCovers.FacebookLink,
           CoverPdf: newCovers.CoverPdf,
           FeedBackIDs: newCovers.FeedBackIDs,
-          Status : newCovers.Status,
-          // UpdatedDateAndTime : newCovers.UpdatedDateAndTime,
-          UpdatedUser : newCovers.UpdatedUser,
-          // AddedDateAndTime : newCovers.AddedDateAndTime,
-          
+          Status: newCovers.Status,
+          UpdatedDateAndTime: newCovers.UpdatedDateAndTime,
+          UpdatedUser: newCovers.UpdatedUser,
+          AddedDateAndTime: newCovers.AddedDateAndTime,
         },
       });
     })
@@ -89,17 +83,50 @@ router.route("/getcovers").get((reg, res) => {
       res.status(404).json({ message: error.message });
     });
 });
-// // route("/") this can use for fetching all the data from the DB
-// router.route("/getStudents").get((reg, res) => {
-//   Student.find()
-//     .then((students) => {
-//       res.json(students);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-      
-//     });
-// });
+
+//Get covers by main category
+router.route("/getcoverbymaincover/").get(async (req, res) => {
+  let value = "Classical Guitar Covers";
+  try {
+    const result = await Covers.find({ MainCategory: value, Status: 1 });
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+});
+
+//Get covers by main category
+router.route("/getcoverbymainexcercise/").get(async (req, res) => {
+  let value = "Guitar Technics & Lessons";
+  try {
+    const result = await Covers.find({ MainCategory: value, Status: 1 });
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+});
+
+//getCoverById
+router.route("/getcoverbyid/:id").get(async (req, res) => {
+  let id = req.params.id;
+  try {
+    const result = await Covers.find({ _id: id });
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+});
+
+//Covers sort according to price range
+router.route("/getcoverbypricerange/:price").get(async (req, res) => {
+  let pricerange = req.params.price;
+  try {
+    const result = await Covers.find({ Price: { $gte: 150 } });
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+});
 
 // update
 router.route("/update/:id").put(async (req, res) => {
@@ -113,20 +140,20 @@ router.route("/update/:id").put(async (req, res) => {
     MainCategory,
     NoOfPages,
     NoOfPreviewPages,
-    NoOfDownloads,
+    PreviewPages,
+    //NoOfDownloads,
     Price,
     YoutubeLink,
     FacebookLink,
     CoverPdf,
-    FeedBackIDs,
-    Status,
+    //FeedBackIDs,
+    //Status,
     // UpdatedDateAndTime ,
     UpdatedUser,
     // AddedDateAndTime,
-   
   } = req.body;
 
-  const updateCovers= {
+  const updateCovers = {
     Title,
     OriginalArtistName,
     ArrangedBy,
@@ -135,17 +162,17 @@ router.route("/update/:id").put(async (req, res) => {
     MainCategory,
     NoOfPages,
     NoOfPreviewPages,
-    NoOfDownloads,
+    PreviewPages,
+    //NoOfDownloads,
     Price,
     YoutubeLink,
     FacebookLink,
     CoverPdf,
-    FeedBackIDs,
-    Status,
-    UpdatedDateAndTime : new Date(),
+    //FeedBackIDs,
+    //Status,
+    UpdatedDateAndTime: new Date(),
     UpdatedUser,
     // AddedDateAndTime,
-   
   };
 
   const update = await Covers.findByIdAndUpdate(coverID, updateCovers)
@@ -174,12 +201,10 @@ router.route("/delete/:id").delete(async (req, res) => {
     });
 });
 
-// // get one student details (Specific)
 router.route("/get/:id").get(async (req, res) => {
   let coverID = req.params.id;
   const covers = await Covers.findById(coverID)
     .then((coverss) => {
-      // res.status(200).send({status:"User fetched"});
       res.json(coverss);
     })
     .catch((err) => {
@@ -190,38 +215,41 @@ router.route("/get/:id").get(async (req, res) => {
     });
 });
 
-
-
-//Update Discount
 router.route("/StatusUpdate/:id").put(async (req, res) => {
   let coverID = req.params.id;
-  const{
-        Status
-       } = req.body;
+  const { Status } = req.body;
 
-  const StatusUpdate  = {
-    Status
-  }
+  const StatusUpdate = {
+    Status,
+  };
 
   const update = await Covers.updateOne(
+    { _id: coverID },
+    { $set: { Status: Status } }
+  )
+    .then(() => {
+      res.status(200).send({ status: "Status updated" });
+    })
+    .catch((err) => {
+      console.log(err);
+      res
+        .status(500)
+        .send({ status: "Error with updating data", error: err.message });
+    });
+});
 
-    {_id : coverID},
-    {$set : {Status :Status}},
+router.route("/getRecommendations").get(async (req, res) => {
+  const { MainCategory, SubCategory } = req.body;
 
-
-  ).then(() => {
-
-    res.status(200).send({ status: "Status updated" });
-  })
-  .catch((err) => {
-    console.log(err);
-    res
-      .status(500)
-      .send({ status: "Error with updating data", error: err.message });
-  });
-
-
-  })
-
+  await Covers.find({ MainCategory: MainCategory, SubCategory: SubCategory })
+    .then((covers) => {
+      res.json(covers);
+    })
+    .catch((err) => {
+      res
+        .status(500)
+        .send({ status: "Error with get user", error: err.message });
+    });
+});
 
 module.exports = router;

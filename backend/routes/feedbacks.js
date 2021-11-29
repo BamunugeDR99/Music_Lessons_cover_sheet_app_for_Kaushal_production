@@ -4,6 +4,8 @@ let Feedback = require("../models/feedback");
 //Add Feedback
 router.route("/addFeedback").post(async(req,res)=>{
 
+  console.log(new Date().toLocaleString('en-US', { timeZone: 'Asia/Colombo'})) ; 
+
     const 
     {
 

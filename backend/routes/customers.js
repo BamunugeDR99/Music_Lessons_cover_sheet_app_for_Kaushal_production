@@ -395,10 +395,65 @@ router.post("/logout", verify, (req,res)=>{
 
 
 
-//   router.post("/login", (req, res)=>{
-//      res.json("hey it works")
+//Get all customer emails
 
-//   });
+router.route("/getAllEmails").get((req ,res)=> {
+
+    Customer.find().then((customer)=>{
+
+       
+
+        let emails = [];
+
+        for (let i = 0; i < customer.length; i++){
+
+                emails.push(customer[i].Email);
+
+        }
+
+
+
+        res.json(emails);
+
+       
+
+    }).catch((err) =>{
+
+        console.log(err)
+
+    })
+
+});
+
+//Get all customer usernames
+
+router.route("/getUsernames").get((req ,res)=> {
+
+    Customer.find().then((customer)=>{
+
+       
+
+        let usernames = [];
+
+        for (let i = 0; i < customer.length; i++){
+
+                usernames.push(customer[i]. Username);
+
+        }
+
+
+
+        res.json(usernames);
+
+       
+
+    }).catch((err) =>{
+
+        console.log(err)
+
+    })
+
+});
 
 
 
