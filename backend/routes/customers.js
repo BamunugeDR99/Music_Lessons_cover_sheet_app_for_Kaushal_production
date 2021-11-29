@@ -21,11 +21,6 @@ router.route("/add").post(async(req,res)=>{
     const Country = req.body.Country;
     const Username = req.body.Username;
     const Password = req.body.Password;
-    // const FeedBackIDs = req.body.FeedBackIDs;
-    // const OrderIDs = req.body.OrderIDs;
-    // const LoginStatus = req.body.LoginStatus;
-    // const DeleteStatus = req.body.DeleteStatus;
-    // const UpdatedUser = req.body.UpdatedUser;
     
     
  try{
@@ -67,22 +62,19 @@ router.route("/add").post(async(req,res)=>{
   }
 });
 
-//Get one customer
-router.route("/get/:id").get(async (req, res) => {
-  let userID = req.params.id;
-
-  const user = await Customer.findById(userID)
-    .then((cutomerss) => {
-      // res.status(200).send({status:"User fetched"});
-      res.json(cutomerss);
+router.route("/getEmail/:email").get(async (req,res) =>{
+   
+    let email = req.params.email;
+    console.log(email);
+    const user = await Customer.find ({Email : email}).then((customer) =>{
+        // res.status(200).send({status:"User fetched"});
+        res.json(customer);
+    }).catch((err) =>{
+        console.log(err.message);
+        res.status(500).send({status : "Error with get user", error : err.message});
     })
-    .catch((err) => {
-      console.log(err.message);
-      res
-        .status(500)
-        .send({ status: "Error with get user", error: err.message });
-    });
-});
+})
+
 
 //Get all customers
 router.route("/getAll").get((req, res) => {
@@ -94,6 +86,41 @@ router.route("/getAll").get((req, res) => {
       console.log(err);
     });
 });
+
+
+//Get all customer emails
+router.route("/getAllEmails").get((req ,res)=> {
+    Customer.find().then((customer)=>{
+        
+        let emails = [];
+        for (let i = 0; i < customer.length; i++){
+                emails.push(customer[i].Email);
+        }
+
+        res.json(emails);
+        
+    }).catch((err) =>{
+        console.log(err)
+    })
+});
+
+//Get all customer usernames
+router.route("/getUsernames").get((req ,res)=> {
+    Customer.find().then((customer)=>{
+        
+        let usernames = [];
+        for (let i = 0; i < customer.length; i++){
+                usernames.push(customer[i]. Username);
+        }
+
+        res.json(usernames);
+        
+    }).catch((err) =>{
+        console.log(err)
+    })
+});
+
+
 
 // Update CUstomer
 router.route("/update/:id").put(async (req, res) => {

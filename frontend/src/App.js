@@ -43,6 +43,7 @@ function App() {
         {/* <Route path="/e" element={<BootstrapDataTable />} /> */}
         {/* <Route path="/f" element={<AddStudent />} /> */}
         {/* <Route path="/g" element={<ViewStudentDetails/>} /> */}
+        <Route path="/feedback" element={<CustomerFeedback/>} />
       </Routes>
       <Footer />
     </BrowserRouter>
