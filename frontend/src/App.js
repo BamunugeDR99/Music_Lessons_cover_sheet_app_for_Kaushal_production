@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AddStudent from "./components/customerRole/addstudent";
 import "./App.css";
 import "./css/DiscoverMoreCoversStyles.css";
+import "./css/initial.css";
+import "./css/home.css";
 import React, { Component } from "react";
 import CustomerRegistration from "./components/customerRole/CustomerRegistration";
 import CustomerForgotPassword from "./components/customerRole/CustomerForgotPassword";

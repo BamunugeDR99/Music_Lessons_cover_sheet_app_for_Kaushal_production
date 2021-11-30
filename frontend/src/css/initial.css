@@ -1,0 +1,50 @@
+.initial .hero-image  {
+  height: 100vh;
+  min-height: 500px;
+  background-image: url('../images/m.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+          
+          
+.initial .hero-text {
+  text-align: center;
+  position: absolute;
+  top: 68%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-shadow: 2px 2px #764A34;
+}
+
+.initial .hero-text #bt {
+  border: 1px solid #764A34;
+  outline: 0;
+  display: inline-block;
+  padding: 10px 25px;
+  color: #ffffff;
+  background-color: #764A34;
+  text-align: center;
+  cursor: pointer;
+  transition-duration: 0.4s;
+  
+ 
+}
+
+.initial .hero-text #bt:hover {
+  background-color: #ffffff;
+  color: #764A34;
+
+}
+
+.initial .logo{
+
+  width: 150px;
+  height: 150px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  border-radius: 40px;
+}
