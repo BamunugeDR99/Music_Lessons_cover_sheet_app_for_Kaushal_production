@@ -6,6 +6,8 @@ import Modal from "react-bootstrap/Modal";
 import { useLocation } from "react-router-dom";
 import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
+import Select from "react-select";
+
 
 export default function ViewDetailedCoverPage(props) {
   const [covers, setCovers] = useState([]);
@@ -30,7 +32,7 @@ export default function ViewDetailedCoverPage(props) {
 
   // user inputs
   const [songName, setSongName] = useState("");
-  const [instruments, setInstrument] = useState("");
+  const [instruments, setInstrument] = useState([]);
   const [youtubeLink, setYoutubeLink] = useState("");
   const [facebookLink, setFacebookLink] = useState("");
   const [noOfPages, setNoOfPages] = useState("");
@@ -62,7 +64,13 @@ export default function ViewDetailedCoverPage(props) {
 
   const [dropMainCategory, setDropMainCategory] = useState("");
   const [dropSubCategory, setDropSubCategory] = useState("");
-
+  
+  const instrumentsPlayedOn = [
+    { value: "Classical Guitar", label: "Classical Guitar" },
+    { value: "Piano", label: "Piano" },
+    { value: "Ukulele", label: "Ukulele" },
+    { value: "Acoustic Guitar", label: "Acoustic Guitar" },
+  ];
 
   useEffect(() => {
     function getCovers() {
@@ -77,7 +85,7 @@ export default function ViewDetailedCoverPage(props) {
           MainCategoryForRec = res.data.MainCategory;
           SubCategoryForRec = res.data.SubCategory;
           setYoutubeLink(res.data.YoutubeLink);
-
+          //setInstrument(res.data.InstrumentsPlayedOn);
           getAllClassicalGutarMainCategories();
         })
         .catch((err) => {
@@ -151,8 +159,8 @@ export default function ViewDetailedCoverPage(props) {
   function setContent() {
     setSubCategories(tempSubCategory);
     setLessonSubCategories(tempSubCategory2);
-    console.log(MainCategoryForRec);
-    console.log(SubCategoryForRec);
+   // console.log(MainCategoryForRec);
+   // console.log(SubCategoryForRec);
 
     // setA(MainCategoryForRec);
     // setB(SubCategoryForRec)
@@ -163,7 +171,7 @@ export default function ViewDetailedCoverPage(props) {
       setDropSubCategory(SubCategoryForRec);
       setSubCategoryPreview(false);
       setSubCategoryPreview2(true);
-      console.log("a")
+      //console.log("a")
     } else if (MainCategoryForRec === "Guitar Technics & Lessons") {
       setDropSubCategory(SubCategoryForRec)
       setSubCategoryPreview(true);
@@ -171,6 +179,8 @@ export default function ViewDetailedCoverPage(props) {
       //document.getElementById("subCategory2").value = SubCategoryForRec;
 
     }
+
+   
   }
 
   function GetLessonSubCategories() {
@@ -417,15 +427,16 @@ export default function ViewDetailedCoverPage(props) {
           ) {
             dynamicSubCategory = document.getElementById("subCategory1").value;
           }
-
           let InstrumentArray = [];
-          if (instruments == "") {
-            InstrumentArray = document
-              .getElementById("Instruments")
-              .value.split(",");
-          } else {
-            InstrumentArray = instruments.split(",");
+
+          if(instruments.length == 0){
+            InstrumentArray = document.getElementById("Instruments").value.split(",");
+          }else{
+            for (let i = 0; i < instruments.length; i++) {
+              InstrumentArray.push(instruments[i].value);
+            }
           }
+       
 
           if (
             previewPages.length === 0 &&
@@ -452,7 +463,7 @@ export default function ViewDetailedCoverPage(props) {
               PreviewPages: previewPageList,
               CoverPdf: updateCoverPdf,
             };
-
+console.log(updatedCover)
             axios
               .put(
                 "http://localhost:8070/covers/update/" + CoverTempID,
@@ -543,7 +554,7 @@ export default function ViewDetailedCoverPage(props) {
         MainCategoryForRec = res.data.MainCategory;
         SubCategoryForRec = res.data.SubCategory;
         setYoutubeLink(res.data.YoutubeLink);
-
+        //setInstrument(res.data.InstrumentsPlayedOn);
         getAllClassicalGutarMainCategories();
       })
       .catch((err) => {
@@ -1051,16 +1062,26 @@ export default function ViewDetailedCoverPage(props) {
                 <div className="col-sm-6">
                   <div class="form-group">
                     <label for="exampleInputEmail1">Instruments*</label>
+                    <Select
+                     //value={[instrumentsPlayedOn[0]]}
+                      isMulti
+                      name="colors"
+                      options={instrumentsPlayedOn}
+                      className="basic-multi-select"
+                      classNamePrefix="select"
+                      required
+                      placeholder = "Choose instruments"
+                      onChange={(val) => {
+                        setInstrument(val);
+                      }}
+                    /><br/>
                     <input
                       type="text"
                       class="form-control"
                       id="Instruments"
                       Value={covers.InstrumentsPlayedOn}
                       placeholder="Instrument Exp : (Guitar,Piano)"
-                      onChange={(e) => {
-                        setInstrument(e.target.value);
-                      }}
-                      required
+                      readOnly
                     />
 
                     <br />

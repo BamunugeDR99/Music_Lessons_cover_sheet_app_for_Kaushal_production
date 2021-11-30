@@ -73,9 +73,7 @@ export default function ViewCovers(props) {
 
     getAllClassicalGuitarCovers();
   }, []);
-  function logChange(val) {
-    console.log("Selected: " + val);
-  }
+
   function setContent() {
     setSubCategories(tempSubCategory);
     setLessonSubCategories(tempSubCategory2);
