@@ -12,6 +12,7 @@ export default function CustomerHeader(props) {
   const [editProfilemodelOpen, setEditProfilemodelOpen] = useState(false);
   const [changePasswordmodelOpen, setchangePasswordmodelOpen] = useState(false);
 
+  let [serchData, setSearchData] = useState([]);
   let [ContactNumberError, SetContactNoError] = useState("");
   let [PasswordError, SetPasswordError] = useState("");
   let [confirmPasswordError, SetConfirmPasswordError] = useState("");
@@ -72,6 +73,7 @@ export default function CustomerHeader(props) {
   let [Customer, SetCustomer] = useState([]);
 
   let [confirmDelete, setConfirmDelete] = useState(true);
+  let [statusHolder, setStatusHolder] = useState("1");
 
 
   useEffect(() => {
@@ -450,9 +452,14 @@ export default function CustomerHeader(props) {
         SetCurrentPassword(res.data.Password);
         SetPassword(res.data.Password);
 
+  useEffect(() => {
+    axios
+      .get("http://localhost:8070/covers/getcovers")
+      .then((res) => {
+        console.log(res.data);
+        setSearchData(res.data);
 
-      }).catch((err) => {
-        alert(err.message);
+        // console.log(res.data);
       })
       .catch((err) => {
         alert(err.message);
@@ -483,6 +490,10 @@ export default function CustomerHeader(props) {
     getOne();
   }, []);
 
+  function linkData(val) {
+    alert(val);
+   
+  }
   return (
     <div>
      
@@ -570,12 +581,18 @@ export default function CustomerHeader(props) {
           </ul>
           <form class="form-inline my-2 my-lg-0">
             <input
-              id="searchBar"
               class="form-control mr-sm-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
+              onChange={() => linkData()}
+              type="text"
+              list="cars"
             />
+            <datalist  class="form-control mr-sm-2" id="cars">
+              {serchData.map((post) => (
+                <option onClick={() => linkData(post.Title)} id={post._id}>
+                  {post.Title}
+                </option>
+              ))}
+            </datalist>
             <button
               id="SearchBtn"
               class="btn  my-2 my-sm-0 btn-sm"

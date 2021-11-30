@@ -1,47 +1,53 @@
 import React from "react";
+// import "./../../css/covercard.css";
+import { storage } from "../../Configurations/firebaseConfigurations";
+import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 
-export default function CoverTemplate() {
+export default function CoverTemplate(props) {
+  async function displayImages(coverImageName, index) {
+    // console.log(coverImageName);
+    // console.log(index);
+    const storageRef = ref(storage, `PreviewImages/${coverImageName}`);
+    await getDownloadURL(storageRef)
+      .then((url) => {
+        document.getElementById(index).src = url;
+      })
+      .catch((err) => {
+        // ErrorhandlingTxt("Reccomended covers are not available right now!");
+      });
+  }
   return (
     <div>
-      <div
-        className="card"
-        style={{
-          width: "col-md-3",
-          lineHeight: "1em",
-          borderRadius: "10px",
-        }}
-      >
-        <img
-          className="card-img-top"
-          src="images/mike.jpeg"
-          alt="Card image cap"
-          style={{ borderTopLeftRadius: "10px", borderTopRightRadius: "10px" }}
-        />
-        <div>
-          <center>
-            <p
-              style={{
-                paddingLeft: "8px",
-                paddingTop: "8px",
-                fontSize: "14px",
-              }}
-              className="card-title col-xs-12"
-            >
-              Hall of Fame
+      <main>
+        <div
+          class="card"
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.25) 0px 25px 50px -12px",
+            borderRadius: "15px",
+            marginRight: "15px",
+            marginLeft: "15px",
+          }}
+        >
+          <img
+            id={props.id}
+            src={
+              displayImages(props.imageName, props.id) ||
+              "/images/Imageplaceholder.png"
+            }
+            class="card-img-top"
+            alt="..."
+            style={{ borderRadius: "15px 15px 0px 0px", height: "300px" }}
+          />
+          <div class="card-body">
+            <p class="card-title" style={{ fontWeight: "bold" }}>
+              {props.title}
             </p>
-            <p
-              style={{ paddingLeft: "8px", fontSize: "14px" }}
-              className="card-title  col-xs-12"
-            >
-              Ryan Teddar
-            </p>
-            <h6
-              style={{ addingLeft: "8px", color: "#764A34" }}
-              className="card-title col-xs-12"
-            >
-              Rs.150.00
-            </h6>
-          </center>
+            <h5>{props.artist}</h5>
+            <h5>{props.category}</h5>
+            <h5 style={{ float: "right", color: "#764A34" }}>
+              <b>US$ {props.price}</b>
+            </h5>
+          </div>
         </div>
       </div>
     </div>

@@ -145,4 +145,20 @@ router.route("/deleteOrder/:id").delete(async (req, res) => {
 
 
 
+
+router.route("/getbyyear/:from/:to").get(async (req, res) => {
+  let start = req.params.from;
+  let end = req.params.to;
+  try {
+    const allOrders = await Order.find({
+      TransactionDateAndTime: { $gte: start, $lt: end },
+    });
+
+    console.log(allOrders);
+    res.status(200).json(allOrders);
+    // res.status(200).json(end);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+});
 module.exports = router;
