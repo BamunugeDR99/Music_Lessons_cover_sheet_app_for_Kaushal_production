@@ -18,6 +18,9 @@ import DiscoverMoreCovers from "./components/customerRole/DicoverMoreCovers";
 import CoverUpdate from "./components/adminRole/CoverUpdate";
 import ViewDetailedCoverPage from "./components/adminRole/ViewDetailedCoverPage";
 import MusicCoverPage from "./components/customerRole/musiccoverpage";
+import DashBoard from "./components/adminRole/dashboard";
+import Lessons from "./components/customerRole/TechniquesAndLessons";
+import Cart from "./components/customerRole/music_cart";
 
 function App() {
   return (
@@ -26,6 +29,10 @@ function App() {
       <Routes>
         <Route path="/" element={<LessonsAndCoversDetailed />} />
         <Route path="/a" element={<MusicCoverPage />} />
+        <Route path="/b" element={<Lessons />} />
+        <Route path="/c" element={<Cart />} />
+
+        <Route path="/dashboard" element={<DashBoard />} />
 
      
 

@@ -19,6 +19,9 @@ export default function DashBoard() {
   const [selectedCovers, setSelectedCovers] = useState([]);
   const [feedbackLength, setFeedbackLength] = useState("Loading...");
   const [alldownloads, setDownloads] = useState("Loading...");
+  const [fromValue, setFromValue] = useState("");
+  const [toValue, setToValue] = useState("");
+  const [error, setError] = useState("");
 
   let tableData = [];
   let covers = [];
@@ -82,6 +85,7 @@ export default function DashBoard() {
         // console.log(res.data);
         orderHolder = res.data;
         loadIncome(res.data);
+        setError("");
       })
       .catch((err) => {
         alert(err.message);
@@ -93,12 +97,16 @@ export default function DashBoard() {
   }
 
   async function loadIncome(data) {
-    await data.map(
-      (post) => (
-        (tot = tot + Number(post.TotalPrice)), loadCovers(post.CustomerID)
-      )
-    );
-    setTotal(tot);
+    console.log(data.length);
+    if (data.length > 0) {
+      await data.map(
+        (post) => (
+          (tot = tot + Number(post.TotalPrice)), loadCovers(post.CustomerID)
+        )
+      );
+      setTotal(tot);
+      setError("");
+    }
   }
 
   async function loadCovers(customerid) {
@@ -178,6 +186,55 @@ export default function DashBoard() {
     // console.log(downloads);
     setDownloads(downloads);
   }
+
+  function searchByDate(fromDate, toDate) {
+    setFromValue(fromDate);
+    setToValue(toDate);
+    if (fromDate != "" && toDate != "") {
+      document.getElementById("spinnerdiv").style.display = "block";
+      document.getElementById("maindiv").style.display = "none";
+
+      axios
+        .get(`http://localhost:8070/order/getbyyear/${fromDate}/${toDate}`)
+        .then((res) => {
+          if (res.data.length > 0) {
+            setOrders(res.data);
+            console.log(res.data);
+            orderHolder = res.data;
+            loadIncome(res.data);
+            document.getElementById("spinnerdiv").style.display = "none";
+            document.getElementById("maindiv").style.display = "block";
+          } else {
+            setError("No Data available");
+            setPaymentData([]);
+            setTotal("0");
+            document.getElementById("spinnerdiv").style.display = "none";
+            document.getElementById("maindiv").style.display = "block";
+          }
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+    }
+  }
+
+  function refresh() {
+    document.getElementById("spinnerdiv").style.display = "block";
+    document.getElementById("maindiv").style.display = "none";
+    axios
+      .get("http://localhost:8070/order/getOrders")
+      .then((res) => {
+        setOrders(res.data);
+        // console.log(res.data);
+        orderHolder = res.data;
+        loadIncome(res.data);
+        document.getElementById("spinnerdiv").style.display = "none";
+        document.getElementById("maindiv").style.display = "block";
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
+  }
   return (
     <div>
       {/* {console.log(selectedCovers)} */}
@@ -246,9 +303,9 @@ export default function DashBoard() {
       <hr />
       <div id="spinnerdiv" style={{ display: "block" }}>
         <center>
-          <div class=" justify-content-center">
-            <div class="spinner-border" role="status">
-              <span class="sr-only">Loading...</span>
+          <div className=" justify-content-center">
+            <div className="spinner-border" role="status">
+              <span className="sr-only">Loading...</span>
             </div>
           </div>
         </center>
@@ -279,6 +336,8 @@ export default function DashBoard() {
                 type="date"
                 class="form-control"
                 id="from"
+                value={fromValue}
+                onChange={(e) => searchByDate(e.target.value, toValue)}
                 aria-describedby="emailHelp"
                 placeholder="Enter email"
               />
@@ -291,23 +350,36 @@ export default function DashBoard() {
                 type="date"
                 class="form-control"
                 id="to"
+                value={toValue}
+                onChange={(e) => searchByDate(fromValue, e.target.value)}
                 aria-describedby="emailHelp"
                 placeholder="Enter email"
               />
             </div>{" "}
           </div>
           <div className="col-md-4">
-            <center>
-              <button
-                type="submit"
-                class="btn btn-primary mb-1"
-                style={{ marginTop: "25px", height: "48px" }}
-              >
-                Search
-              </button>
-            </center>
+            <button
+              type="button"
+              className="btn btn-outline-primary btn-sm"
+              data-mdb-ripple-color="dark"
+              onClick={(e) => refresh()}
+              style={{ marginTop: "18px" }}
+            >
+              <i
+                className="fa fa-refresh"
+                aria-hidden="true"
+                style={{
+                  color: "blue",
+                  fontSize: "20px",
+                  marginTop: "10px",
+                }}
+              ></i>
+            </button>
           </div>
         </div>
+        <h4 style={{ color: "red" }}>
+          <strong>{error}</strong>
+        </h4>
         <table
           id="example"
           class="table table-striped table-bordered"

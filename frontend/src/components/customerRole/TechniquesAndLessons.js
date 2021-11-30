@@ -40,6 +40,8 @@ export default function MusicCoverPage() {
         dataholdedr = res.data;
         setCovers(res.data);
         setfilterCover(res.data);
+        setCategoryCover(res.data);
+        setCovers(res.data);
         document.getElementById("spinnerdiv").style.display = "none";
         document.getElementById("coverdiv").style.display = "block";
 
@@ -120,57 +122,91 @@ export default function MusicCoverPage() {
     }
   }
 
-  function searchByName(val) {
+
+  async function searchByName(val) {
     setSerchvalue(val);
+    document.getElementById("spinnerdiv").style.display = "block";
+    document.getElementById("coverdiv").style.display = "none";
+    await axios
+      .get("http://localhost:8070/covers/getcoverbymaincover")
+      .then((res) => {
+        dataholdedr = res.data;
+        setCovers(res.data);
+        setfilterCover(res.data);
+        document.getElementById("spinnerdiv").style.display = "none";
+        document.getElementById("coverdiv").style.display = "block";
 
-    let searchResult = filtercover.filter(
-      (post) =>
-        post.Title.toLowerCase().includes(val.toLowerCase()) ||
-        post.OriginalArtistName.toLowerCase().includes(val.toLowerCase())
-    );
-    if (searchResult.length != 0) {
-      setCovers(searchResult);
-      setNoData("");
-    } else {
-      setNoData("No Covers available");
-      setCovers([]);
-    }
+        let searchResult = filtercover.filter(
+          (post) =>
+            post.Title.toLowerCase().includes(val.toLowerCase()) ||
+            post.OriginalArtistName.toLowerCase().includes(val.toLowerCase())
+        );
+        if (searchResult.length != 0) {
+          setCovers(searchResult);
+          setNoData("");
+        } else {
+          setNoData("No Covers available");
+          setCovers([]);
+        }
+
+        // console.log(res.data);
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
   }
 
-  function fetchData(type) {
-    if (type == "All") {
-      setCategoryText("All");
-      setCategoryCover(filtercover);
-      setCovers(filtercover);
-      setPriceRange(0);
+  async function fetchData(type) {
+    document.getElementById("spinnerdiv").style.display = "block";
+    document.getElementById("coverdiv").style.display = "none";
+    await axios
+      .get("http://localhost:8070/covers/getcoverbymainexcercise")
+      .then((res) => {
+        dataholdedr = res.data;
+        setCovers(res.data);
+        setfilterCover(res.data);
+        document.getElementById("spinnerdiv").style.display = "none";
+        document.getElementById("coverdiv").style.display = "block";
+        if (type == "All") {
+          setCategoryText("All");
+          setCategoryCover(filtercover);
+          setCovers(filtercover);
+          setPriceRange(0);
 
-      if (filtercover.length != 0) {
-        setNoData("");
-      } else {
-        setNoData("No Covers available");
-        setCovers([]);
-      }
-      setDownloadRange(0);
-    } else {
-      setCategoryText(type);
-      let filtercovers = filtercover;
-      let result = filtercovers.filter((post) =>
-        post.SubCategory.includes(type)
-      );
-      setCovers(result);
-      setCategoryCover(result);
-      setPriceRange(0);
-      setDownloadRange(0);
-      setNoData("");
-      if (result.length != 0) {
-        setCovers(result);
-        setNoData("");
-      } else {
-        setNoData("No Covers available");
-        setCovers([]);
-      }
-    }
+          if (filtercover.length != 0) {
+            setNoData("");
+          } else {
+            setNoData("No Covers available");
+            setCovers([]);
+          }
+          setDownloadRange(0);
+        } else {
+          setCategoryText(type);
+          let filtercovers = filtercover;
+          let result = filtercovers.filter((post) =>
+            post.SubCategory.includes(type)
+          );
+          setCovers(result);
+          setCategoryCover(result);
+          setPriceRange(0);
+          setDownloadRange(0);
+          setNoData("");
+          if (result.length != 0) {
+            setCovers(result);
+            setNoData("");
+          } else {
+            setNoData("No Covers available");
+            setCovers([]);
+          }
+        }
+
+        // console.log(res.data);
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
   }
+
 
   return (
     <div>
@@ -260,7 +296,7 @@ export default function MusicCoverPage() {
                   </div>
                 </div>
                 <div className="col-md-6">
-                  <label>Downloads </label>
+                  <label>Downloads Range</label>
                   <label>({downloadrange} - 200+) </label>
                   <div class="slidecontainer">
                     <input
@@ -302,6 +338,10 @@ export default function MusicCoverPage() {
                   title={populercover.Title}
                   price={populercover.Price}
                   artist={populercover.OriginalArtistName}
+                  maincat={populercover.MainCategory}
+                  subcat={populercover.SubCategory}
+                  // id="0"
+                  // imageName={populercover.PreviewPages[0]}
                 />
               </div>
             </div>
@@ -334,13 +374,15 @@ export default function MusicCoverPage() {
             </div>{" "}
             <span id="coverdiv">
               <div className="row">
-                {covers.map((post) => (
+                {covers.map((post, index) => (
                   <div className="col-md-4" onClick={() => modalopen()}>
                     <CoverTemplate
                       title={post.Title}
                       artist={post.OriginalArtistName}
                       price={post.Price}
                       category={post.SubCategory}
+                      id={index}
+                      imageName={post.PreviewPages[0]}
                     />
                     <br />
                   </div>
