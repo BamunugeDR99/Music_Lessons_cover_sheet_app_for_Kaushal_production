@@ -16,7 +16,7 @@ export default function Initial(props) {
    
    <div className="col-xl-5 justify-content-end">
 
-<div className="justify-content-end mt-5">
+<div className="justify-content-end mt-5" >
 <button type="button" class="btn btn " style={{backgroundColor:"#764A34", color:"white"}}>Register</button>
 <button type="button" class="btn btn "style={{backgroundColor:"#764A34", color:"white"}}>Login</button>
 
