@@ -169,14 +169,14 @@ export default function AdminLogin(props) {
       <div class="card login-card">
         <div class="row no-gutters">
           <div class="col-md-5">
-            <img src={k} alt="login" class="login-card-img" style={{ objectFit: "fill"}}/>
+            <img src="https://images.unsplash.com/photo-1522717203870-8c708be70b30?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80" alt="login" class="login-card-img" style={{ objectFit: "fill"}}/>
           </div>
           <div class="col-md-7">
             <div class="card-body">
                 {/* <h2 style={{textAlign:"center", fontWeight:"bold"}}>ADMINISTRATOR</h2> */}
               <div class="brand-wrapper" style={{display:"flex"}}>
                 <img src="images/KaushalOfficialLogo.jpeg" alt="logo" class="logo"></img>
-                <h4 style={{paddingLeft:"8px", paddingTop:"6px", fontWeight:"bold"}}>Administrator</h4>
+                <h4 style={{paddingLeft:"8px", paddingTop:"6px", fontWeight:"bold"}}>Admin</h4>
               </div>
               <p class="login-card-description">Sign In</p>
               <h6 id="CusLoginError" style={{color:"red", fontWeight:"bold"}}>{errorMsg}</h6>
@@ -185,7 +185,7 @@ export default function AdminLogin(props) {
                 {/* Username label & input field  */}
 
                   <div class="form-group">
-                    <label for="email" className="sr-only">Username</label>
+                    <label for="email">Username</label>
                     <input type="text" class="form-control" placeholder="Username"
                     
                     defaultValue={Username}
@@ -206,7 +206,7 @@ export default function AdminLogin(props) {
                   <div class="form-group mb-4">
 
                     
-                    <label for="password" className="sr-only">Password</label>
+                    <label for="password" >Password</label>
                     <input type="password" name="password" id="password" class="form-control" placeholder="Password"
                     
                     type={passwordShown ? "text" : "password"}
