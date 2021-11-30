@@ -43,7 +43,7 @@ export default function ViewDetailedCoverPage(props) {
   const [youtubeLivePreview, setYoutubeLivePriview] = useState(true);
   const [lessonSubCategories, setLessonSubCategories] = useState([]);
   const [subCategoryPreview, setSubCategoryPreview] = useState(false);
-
+  const [subCategoryPreview2, setSubCategoryPreview2] = useState(false);
   // for uploading modal
   const [fileType, setFileType] = useState("");
   const [completedFiles, setCompletedFiles] = useState("0");
@@ -60,8 +60,10 @@ export default function ViewDetailedCoverPage(props) {
   let tempCoverImages = [];
   let CoverTempID = location.pathname.substring(10);
 
-  const [a,setA] = useState("");
-  const [b, setB] = useState("");
+  const [dropMainCategory, setDropMainCategory] = useState("");
+  const [dropSubCategory, setDropSubCategory] = useState("");
+
+
   useEffect(() => {
     function getCovers() {
       axios
@@ -149,18 +151,25 @@ export default function ViewDetailedCoverPage(props) {
   function setContent() {
     setSubCategories(tempSubCategory);
     setLessonSubCategories(tempSubCategory2);
-     console.log(MainCategoryForRec)
-     console.log(SubCategoryForRec)
+    console.log(MainCategoryForRec);
+    console.log(SubCategoryForRec);
 
     // setA(MainCategoryForRec);
     // setB(SubCategoryForRec)
-    document.getElementById("MainCategory").value = MainCategoryForRec;
+    // document.getElementById("MainCategory").value = MainCategoryForRec;
+    setDropMainCategory(MainCategoryForRec);
     if (MainCategoryForRec === "Classical Guitar Covers") {
-      document.getElementById("subCategory1").value = SubCategoryForRec;
+     // document.getElementById("subCategory1").value = SubCategoryForRec;
+      setDropSubCategory(SubCategoryForRec);
       setSubCategoryPreview(false);
+      setSubCategoryPreview2(true);
+      console.log("a")
     } else if (MainCategoryForRec === "Guitar Technics & Lessons") {
-      document.getElementById("subCategory2").value = SubCategoryForRec;
+      setDropSubCategory(SubCategoryForRec)
       setSubCategoryPreview(true);
+      setSubCategoryPreview2(false);
+      //document.getElementById("subCategory2").value = SubCategoryForRec;
+
     }
   }
 
@@ -508,7 +517,6 @@ export default function ViewDetailedCoverPage(props) {
               dynamicSubCategory
             );
           }
-
         } else if (
           /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel
@@ -527,7 +535,7 @@ export default function ViewDetailedCoverPage(props) {
       .get("http://localhost:8070/covers/get/" + CoverTempID)
       .then((res) => {
         setCovers(res.data);
-        setPreviousContent(res.data)
+        setPreviousContent(res.data);
         //setContent(res.data);
         preview = res.data.PreviewPages;
         printInstruments(res.data.InstrumentsPlayedOn);
@@ -801,7 +809,6 @@ export default function ViewDetailedCoverPage(props) {
                       onClick={() => {
                         setModalOpen2(true);
                         setPreviewPages("");
-                       
                       }}
                     >
                       Edit Cover
@@ -896,6 +903,7 @@ export default function ViewDetailedCoverPage(props) {
               aria-label="Close"
               onClick={() => {
                 setModalOpen2(false);
+                //getCovers()
               }}
             >
               <span aria-hidden="true">&times;</span>
@@ -923,20 +931,28 @@ export default function ViewDetailedCoverPage(props) {
                     <label for="exampleInputMainCategory">Main Category</label>
                     <select
                       required
-                      Value = {covers.MainCategory}
+                      value={dropMainCategory}
                       className="form-control"
-                      onChange={() => {
+                      onChange={(e) => {
                         if (subCategoryPreview == true) {
                           setSubCategoryPreview(false);
+                          setDropMainCategory(e.target.value)
+                          setSubCategoryPreview2(true);
                         } else {
+                          setDropMainCategory(e.target.value)
                           setSubCategoryPreview(true);
+                          setSubCategoryPreview2(false);
                         }
                       }}
                       id="MainCategory"
                       name="category"
                     >
-                      <option value = "Classical Guitar Covers">Classical Guitar Covers</option>
-                      <option value = "Guitar Technics & Lessons">Guitar Technics & Lessons</option>
+                      <option value="Classical Guitar Covers">
+                        Classical Guitar Covers
+                      </option>
+                      <option value="Guitar Technics & Lessons">
+                        Guitar Technics & Lessons
+                      </option>
                     </select>
                     <br />
                     <label for="exampleInputEmail1">YouTube Link*</label>
@@ -1050,25 +1066,33 @@ export default function ViewDetailedCoverPage(props) {
                     <br />
                     <label for="exampleInputEmail1">Sub Category</label>
                     <select
+                      value={dropSubCategory}
                       hidden={subCategoryPreview}
                       className="form-control"
                       id="subCategory1"
                       name="subCategory"
+                      onChange = {(e) => {
+                        setDropSubCategory(e.target.value)
+                      }}
                       required
                     >
                       {SubCategories.map((sub) => {
-                        return <option>{sub}</option>;
+                        return <option value = {sub}>{sub}</option>;
                       })}
                     </select>
                     <select
+                      value={dropSubCategory}
                       hidden={!subCategoryPreview}
                       className="form-control"
                       id="subCategory2"
                       name="subCategory"
+                      onChange = {(e) => {
+                        setDropSubCategory(e.target.value)
+                      }}
                       required
                     >
                       {lessonSubCategories.map((sub) => {
-                        return <option>{sub}</option>;
+                        return <option value = {sub}>{sub}</option>;
                       })}
                     </select>
                     <br />
