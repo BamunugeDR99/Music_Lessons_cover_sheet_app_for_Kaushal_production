@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import CoverTemplate from "./covercardtemplate";
 import TopDownloadTemplate from "./topdownloadtemplate";
 import Modal from "react-bootstrap/Modal";
 import InputRange from "react-input-range";
+import { data, post } from "jquery";
+import { Maximize } from "react-feather";
 
 export default function MusicCoverPage() {
   const [modelOpen, setmodelOpen] = useState(false);
@@ -21,16 +23,8 @@ export default function MusicCoverPage() {
   const [populerimage, setpopulerimage] = useState();
   let dataholdedr = [];
 
-  let [component, setName] = useState([
-    <CoverTemplate />,
-    <CoverTemplate />,
-    <CoverTemplate />,
-    <CoverTemplate />,
-    <CoverTemplate />,
-    <CoverTemplate />,
-    <CoverTemplate />,
-    <CoverTemplate />,
-  ]);
+  let pcover = {};
+  let max = 0;
 
   useEffect(async () => {
     document.getElementById("bufferlink").style.display = "block";
@@ -243,8 +237,7 @@ export default function MusicCoverPage() {
               </button>
             </div>
           </div>
-        </div>
-        <div className="col-md-1"></div>
+        </center>
       </div>
       <br />
       <div class="c">
@@ -289,17 +282,18 @@ export default function MusicCoverPage() {
             </div>
             <div>
               <br />
-              <div className="row">
+              <div className="row text-center">
                 <div className="col-md-6">
-                  <label>Price Range</label>
+                  <label>Price Range </label>
+                  <label>({pricerange} - 200+) </label>
                   <div class="slidecontainer">
                     <input
                       id="typeinp"
                       type="range"
                       min="0"
-                      max="5"
-                      value={value1}
-                      onChange={(e) => handleValue1(e.target.value)}
+                      max="200"
+                      value={pricerange}
+                      onChange={(e) => sortByPrice(e.target.value)}
                       step="1"
                     />
                   </div>
@@ -312,9 +306,9 @@ export default function MusicCoverPage() {
                       id="typeinp"
                       type="range"
                       min="0"
-                      max="5"
-                      value={value2}
-                      onChange={(e) => handleValue2(e.target.value)}
+                      max="200"
+                      value={downloadrange}
+                      onChange={(e) => sortByDownloads(e.target.value)}
                       step="1"
                     />
                   </div>
@@ -326,6 +320,14 @@ export default function MusicCoverPage() {
                     <center>Most Downloaded Classical Guitar Cover</center>
                   </strong>
                 </h4>
+              </div>
+              <center>
+                <div
+                  id="spinnerdiv2"
+                  class="col-lg-8 "
+                  style={{ display: "block" }}
+                >
+                  <br />
 
                   <div class=" justify-content-center">
                     <div class="spinner-border" role="status">
@@ -346,12 +348,17 @@ export default function MusicCoverPage() {
                 />
               </div>
             </div>
+
+            <br />
           </div>
           {/* right side of the page */}
           <div className="col-md-8">
             <h4 style={{ color: "#764A34" }}>
-              <strong>Classical Guitar Covers</strong>
+              <strong>Classical Guitar Covers - {categorytext}</strong>
             </h4>
+            <center>
+              <h4 style={{ color: "red" }}>{nodata}</h4>
+            </center>
             <div className="row">
               <div
                 id="spinnerdiv"
@@ -390,9 +397,9 @@ export default function MusicCoverPage() {
               </div>
             </span>
           </div>
-          {console.log(component)}
         </div>
       </div>
+
       {/* user details update model */}
       <Modal show={modelOpen} size="lg">
         <Modal.Header>
