@@ -4,6 +4,7 @@ import AddStudent from "./components/customerRole/addstudent";
 import "./App.css";
 import "./css/DiscoverMoreCoversStyles.css";
 import "./css/initial.css";
+import "./css/home.css";
 import React, { Component } from "react";
 import CustomerRegistration from "./components/customerRole/CustomerRegistration";
 import CustomerForgotPassword from "./components/customerRole/CustomerForgotPassword";
@@ -23,13 +24,14 @@ import InitialPage from "./components/customerRole/initialpage";
 import Initial from "./components/customerRole/initial";
 
 import AdminLogin from "./components/adminRole/adminLogin";
+import Home from "./components/customerRole/home";
 
 
 function App() {
   return (
     <BrowserRouter>
    
-      {/* <CustomerHeader /> */}
+      <CustomerHeader />
       <Routes>
         
         <Route path="/" element={<LessonsAndCoversDetailed />} />
@@ -38,13 +40,13 @@ function App() {
         <Route path="/CustomerRegistration" element={<CustomerRegistration />} />
         <Route path="/CustomerForgotPassword" element={<CustomerForgotPassword />} />
         <Route path="/b" element={<InitialPage />} />
-        
+        <Route path="/home" element={<Home/>} />
         <Route path="/c" element={<Initial/>} />
 
         <Route path="/d" element={<AdminLogin/>} />
 
       </Routes>
-      {/* <Footer /> */}
+      <Footer />
     </BrowserRouter>
   );
 }
