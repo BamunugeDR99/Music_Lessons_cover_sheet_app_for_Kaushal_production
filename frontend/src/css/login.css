@@ -28,7 +28,7 @@
 * ==========================================
 *
 /* */
-.loginpage .login, .image {
+/* .loginpage .login, .image {
   min-height: 100vh;
 }
 
@@ -45,4 +45,4 @@
   position: relative;
   z-index: 1;
   cursor:pointer;
-}
+} */

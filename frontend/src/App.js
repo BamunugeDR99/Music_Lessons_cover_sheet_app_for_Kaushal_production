@@ -25,10 +25,10 @@ function App() {
   return (
     <BrowserRouter>
       <CustomerHeader />
-      {/* <AddStudent/>
-      <AddStudent2/> */}
+      <AddStudent />
+      {/* <AddStudent2/> */} 
       <Routes>
-        <Route path="/" element={<LessonsAndCoversDetailed />} />
+        {/* <Route path="/" element={<LessonsAndCoversDetailed />} /> */}
         <Route path="/a" element={<CustomerForgotPassword/>} />
         <Route path = "/b" element = {<ViewCovers/>}/>
         <Route path = "/detailed/:id" element = {<ViewDetailedCoverPage/>}/>
