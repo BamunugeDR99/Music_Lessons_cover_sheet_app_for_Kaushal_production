@@ -398,4 +398,16 @@ router.route("/updatePassword/:id").put(async (req, res) => {
     })
 })
 
+// //getOneUser by email
+// router.route("/getEmail/:email").get(async (req,res) =>{
+//   let email = req.params.email;
+//   const user = await Customer.findOne({Email : email}).then((customer) =>{
+//       // res.status(200).send({status:"User fetched"});
+//       res.json(customer);
+//   }).catch((err) =>{
+//       console.log(err.message);
+//       res.status(500).send({status : "Error with get user", error : err.message});
+//   })
+// })
+
 module.exports = router;

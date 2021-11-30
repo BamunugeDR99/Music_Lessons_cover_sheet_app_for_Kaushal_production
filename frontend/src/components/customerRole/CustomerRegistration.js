@@ -295,7 +295,7 @@ export default function CustomerRegistration(props) {
         axios.get("http://localhost:8070/customer/getEmail/" + Email).then((res)=> {
 
         const Cart = {
-          CustomerID :res.data[0]._id,
+          CustomerID :res.data._id,
           CoverIDs : [],
         }
 
@@ -336,7 +336,7 @@ export default function CustomerRegistration(props) {
         })
       })
       .catch((err) => {
-        alert(err);
+        console.log(err);
         setmodalOpenForLoading(false);
         Swal.fire({
           icon: 'error',
@@ -344,6 +344,7 @@ export default function CustomerRegistration(props) {
           text: 'Something went wrong! Try again Later!',
          
         })
+        
       });
 
     }

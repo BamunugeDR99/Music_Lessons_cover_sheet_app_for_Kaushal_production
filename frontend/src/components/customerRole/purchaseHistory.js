@@ -159,7 +159,6 @@ export default function PurchaseHistory(props) {
   //       .catch((err) => {
   //         alert(err);
   //       });
-
   // }
 
   return (

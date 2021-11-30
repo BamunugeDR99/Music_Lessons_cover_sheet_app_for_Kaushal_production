@@ -728,7 +728,6 @@ export default function ViewCovers(props) {
                       }}
                       required
                     />
-
                     <br />
                     <label for="exampleInputMainCategory">Main Category</label>
                     <select
