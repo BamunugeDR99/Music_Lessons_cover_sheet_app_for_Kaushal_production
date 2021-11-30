@@ -13,7 +13,7 @@ export default function LessonsAndCoversDetailed(props) {
   let instrumentsTxt = "";
   let MainCategoryForRec = "";
   let SubCategoryForRec = "";
-  let completedIncrements =  [];
+
   useEffect(() => {
     function getCovers() {
       //const CoverID = props.match.params.id;

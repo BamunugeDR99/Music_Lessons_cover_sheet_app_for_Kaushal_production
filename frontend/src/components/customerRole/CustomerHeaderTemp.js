@@ -73,6 +73,29 @@ export default function CustomerHeader(props) {
 
   let [confirmDelete, setConfirmDelete] = useState(true);
 
+
+  useEffect(() => {
+    function getCartCount() {
+      //const CoverID = props.match.params.id;
+      const CustomerID = "61a26e4cb42a52e3ff12e82e";
+      axios
+        .get("http://localhost:8070/shoppingCart/getOneCart/" + CustomerID)
+        .then((res) => {
+            document.getElementById("countHolder").innerHTML = res.data.CoverIDs.length;
+        })
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+            footer: '<p style = "color : #D0193A">Currently unavailable!',
+          });
+        });
+    }
+
+    getCartCount();
+  }, []);
+
   function clearErrors() {
     SetCurrentPasswordError("");
     SetCurrentPasswordError2("");
