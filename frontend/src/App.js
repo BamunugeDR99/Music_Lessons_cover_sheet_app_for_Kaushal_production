@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AddStudent from "./components/customerRole/addstudent";
 import "./App.css";
 import "./css/DiscoverMoreCoversStyles.css";
+import "./css/initial.css";
 import React, { Component } from "react";
 import CustomerRegistration from "./components/customerRole/CustomerRegistration";
 import CustomerForgotPassword from "./components/customerRole/CustomerForgotPassword";
@@ -18,19 +19,28 @@ import DiscoverMoreCovers from "./components/customerRole/DicoverMoreCovers";
 import CoverUpdate from "./components/adminRole/CoverUpdate";
 import ViewDetailedCoverPage from "./components/adminRole/ViewDetailedCoverPage";
 import MusicCoverPage from "./components/customerRole/musiccoverpage";
+import InitialPage from "./components/customerRole/initialpage";
+import Initial from "./components/customerRole/initial";
+
 
 function App() {
   return (
     <BrowserRouter>
-      <CustomerHeader />
+   
+      {/* <CustomerHeader /> */}
       <Routes>
+        
         <Route path="/" element={<LessonsAndCoversDetailed />} />
         <Route path="/a" element={<MusicCoverPage />} />
-
-     
+        <Route path="/login" element={<Login />} />
+        <Route path="/CustomerRegistration" element={<CustomerRegistration />} />
+        <Route path="/CustomerForgotPassword" element={<CustomerForgotPassword />} />
+        <Route path="/b" element={<InitialPage />} />
+        
+        <Route path="/c" element={<Initial/>} />
 
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </BrowserRouter>
   );
 }

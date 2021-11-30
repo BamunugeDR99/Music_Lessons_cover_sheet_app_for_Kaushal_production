@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import {faEyeSlash} from "@fortawesome/free-solid-svg-icons";
-import "../../css/login.css";
+import "../../css/adminLogin.css";
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,7 +15,7 @@ const sleye = <FontAwesomeIcon icon={faEyeSlash}/>;
 
 
 
-export default function Login(props) {
+export default function AdminLogin(props) {
 
 
     const refreshToken = async () =>{
@@ -161,7 +161,7 @@ export default function Login(props) {
 
     return (
        
-<div className="loginpage">
+<div className="adminLogin">
 
 <main class="d-flex align-items-center min-vh-100 py-3 py-md-0">
     <div class="container">
@@ -244,10 +244,7 @@ export default function Login(props) {
               {/* forgot password */}
 
                 <p class="forgot-password-link" > <Link to="/CustomerForgotPassword" style={{ color: "#764A34", fontWeight: "bold" }}>Forgot Password?</Link></p>
-              
-               {/* Not a member link */}
-              
-                <p class="login-card-footer-text">Don't have an account? <Link  to="/CustomerRegistration" style={{ color: "#764A34" }}>Create One</Link></p>
+            
                 
             </div>
           </div>
