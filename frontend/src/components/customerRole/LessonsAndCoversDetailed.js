@@ -5,6 +5,7 @@ import DiscoverMoreCovers from "./DicoverMoreCovers";
 import Swal from "sweetalert2";
 import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
+import $ from "jquery";
 
 export default function LessonsAndCoversDetailed(props) {
   const [covers, setCovers] = useState([]);
@@ -12,6 +13,7 @@ export default function LessonsAndCoversDetailed(props) {
   let instrumentsTxt = "";
   let MainCategoryForRec = "";
   let SubCategoryForRec = "";
+  let completedIncrements =  [];
   useEffect(() => {
     function getCovers() {
       //const CoverID = props.match.params.id;
@@ -125,6 +127,13 @@ export default function LessonsAndCoversDetailed(props) {
                 showConfirmButton: false,
                 timer: 1500,
               });
+
+              let count = parseInt($("#countHolder").text());
+              $("#countHolder").html(count + 1);
+           
+               //completedIncrements.push("#cart1");
+           
+              
             })
             .catch((err) => {
               alert(err);

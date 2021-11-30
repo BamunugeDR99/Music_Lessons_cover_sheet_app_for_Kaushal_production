@@ -19,21 +19,27 @@ import CoverUpdate from "./components/adminRole/CoverUpdate";
 import ViewDetailedCoverPage from "./components/adminRole/ViewDetailedCoverPage";
 import MusicCoverPage from "./components/customerRole/musiccoverpage";
 import PurchaseHistory from "./components/customerRole/purchaseHistory";
+import AddStudent2 from "./components/customerRole/addStudent2";
 
 function App() {
   return (
     <BrowserRouter>
       <CustomerHeader />
+      {/* <AddStudent/>
+      <AddStudent2/> */}
       <Routes>
         <Route path="/" element={<LessonsAndCoversDetailed />} />
         <Route path="/a" element={<CustomerForgotPassword/>} />
         <Route path = "/b" element = {<ViewCovers/>}/>
         <Route path = "/detailed/:id" element = {<ViewDetailedCoverPage/>}/>
         <Route path = "/d" element = {<PurchaseHistory/>}/>
+   
+
         
 
       </Routes>
       <Footer />
+
     </BrowserRouter>
   );
 }
