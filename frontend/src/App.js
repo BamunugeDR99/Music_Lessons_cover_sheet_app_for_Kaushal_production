@@ -31,7 +31,7 @@ function App() {
   return (
     <BrowserRouter>
    
-      <CustomerHeader />
+      {/* <CustomerHeader /> */}
       <Routes>
         
         <Route path="/" element={<LessonsAndCoversDetailed />} />
@@ -46,7 +46,7 @@ function App() {
         <Route path="/d" element={<AdminLogin/>} />
 
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </BrowserRouter>
   );
 }
