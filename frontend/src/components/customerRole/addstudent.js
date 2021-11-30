@@ -3,6 +3,7 @@ import axios from "axios";
 import AddStudent2 from "./addStudent2";
 import $ from "jquery";
 import "../../css/searchBarStyles.css";
+import {Link} from 'react-router-dom';
 export default function AddStudent(props) {
   // function increment(){
 
@@ -32,6 +33,8 @@ export default function AddStudent(props) {
   }
   return (
     <div className="MainSearchBar">
+        // link
+       <button> <Link to = "/b"> cfc</Link></button>
       <div class="wrapper">
         <div class="search-input" id="searchInput">
           <a href="" target="_blank" hidden></a>

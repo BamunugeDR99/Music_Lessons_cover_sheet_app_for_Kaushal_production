@@ -24,22 +24,17 @@ import AddStudent2 from "./components/customerRole/addStudent2";
 function App() {
   return (
     <BrowserRouter>
-      <CustomerHeader />
-      <AddStudent />
-      {/* <AddStudent2/> */} 
-      <Routes>
-        {/* <Route path="/" element={<LessonsAndCoversDetailed />} /> */}
-        <Route path="/a" element={<CustomerForgotPassword/>} />
-        <Route path = "/b" element = {<ViewCovers/>}/>
-        <Route path = "/detailed/:id" element = {<ViewDetailedCoverPage/>}/>
-        <Route path = "/d" element = {<PurchaseHistory/>}/>
-   
+        <CustomerHeader/>
 
-        
+      <Routes>
+       <Route path = "/f" element = {<LessonsAndCoversDetailed/>}/>
+       <Route path = "/b" element = {<AddStudent/>}/>
 
       </Routes>
-      <Footer />
+      <Routes>
 
+      </Routes>
+      <Footer/>
     </BrowserRouter>
   );
 }
