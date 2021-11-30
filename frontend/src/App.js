@@ -22,6 +22,8 @@ import MusicCoverPage from "./components/customerRole/musiccoverpage";
 import InitialPage from "./components/customerRole/initialpage";
 import Initial from "./components/customerRole/initial";
 
+import AdminLogin from "./components/adminRole/adminLogin";
+
 
 function App() {
   return (
@@ -38,6 +40,8 @@ function App() {
         <Route path="/b" element={<InitialPage />} />
         
         <Route path="/c" element={<Initial/>} />
+
+        <Route path="/d" element={<AdminLogin/>} />
 
       </Routes>
       {/* <Footer /> */}

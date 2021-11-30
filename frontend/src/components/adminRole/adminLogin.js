@@ -9,6 +9,7 @@ import {faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import "../../css/adminLogin.css";
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import k from "../../images/admin.jpg";
 
 const eye = <FontAwesomeIcon icon={faEye} />;
 const sleye = <FontAwesomeIcon icon={faEyeSlash}/>;
@@ -18,24 +19,24 @@ const sleye = <FontAwesomeIcon icon={faEyeSlash}/>;
 export default function AdminLogin(props) {
 
 
-    const refreshToken = async () =>{
+    // const refreshToken = async () =>{
 
-        try{
+    //     try{
 
-            const res = await axios.post("/refresh",{token: customer.refreshToken});
-            setCustomer({
+    //         const res = await axios.post("/refresh",{token: customer.refreshToken});
+    //         setCustomer({
                 
-                ...customer,
-                accessToken: res.data.accessToken,
-                refreshToken: res.data.refreshToken,
+    //             ...customer,
+    //             accessToken: res.data.accessToken,
+    //             refreshToken: res.data.refreshToken,
 
-            })
-        }catch (err){
+    //         })
+    //     }catch (err){
 
-            console.log(err);
-        }
+    //         console.log(err);
+    //     }
 
-    }
+    // }
 
     // axios.interceptors.request.use( async(config)=>{
 
@@ -66,7 +67,7 @@ export default function AdminLogin(props) {
         setPasswordShown(passwordShown ? false : true);
     };
 
-    let[customer, setCustomer] = useState(null);
+    // let[customer, setCustomer] = useState(null);
     let [Username, setUsername] = useState("");
     let [Password, setPassword] = useState("");
     let [errorMsg, setErrorMsg] = useState("");
@@ -86,7 +87,7 @@ export default function AdminLogin(props) {
       }, []);
 
 
-      function loginUser(e) {
+      function loginAdmin(e) {
         e.preventDefault();
     
         const loginCredentials = {
@@ -98,11 +99,11 @@ export default function AdminLogin(props) {
         localStorage.setItem("Username", rememberMe ? Username : "");
     
         axios
-          .post("http://localhost:8070/Customer/loginCustomer", loginCredentials)
+          .post("http://localhost:8070/admin/loginAdmin", loginCredentials)
           .then((res) => {
             
-            setCustomer(res.data.customerLogin);
-            localStorage.setItem("CustomerID", res.data.customerLogin._id);
+            // setCustomer(res.data.adminLogin);
+            localStorage.setItem("AdminID", res.data.adminLogin._id);
     
             // sessionStorage.setItem('userID',"sss");
 
@@ -168,17 +169,18 @@ export default function AdminLogin(props) {
       <div class="card login-card">
         <div class="row no-gutters">
           <div class="col-md-5">
-            <img src="https://images.unsplash.com/photo-1598233845720-008543fa485c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=363&q=80" alt="login" class="login-card-img"/>
+            <img src={k} alt="login" class="login-card-img" style={{ objectFit: "fill"}}/>
           </div>
           <div class="col-md-7">
             <div class="card-body">
+                {/* <h2 style={{textAlign:"center", fontWeight:"bold"}}>ADMINISTRATOR</h2> */}
               <div class="brand-wrapper" style={{display:"flex"}}>
                 <img src="images/KaushalOfficialLogo.jpeg" alt="logo" class="logo"></img>
-                <h5 style={{fontWeight:"bold", paddingLeft:"8px", paddingTop:"6px"}}>KAUSHAL RASHMIKA</h5>
+                <h4 style={{paddingLeft:"8px", paddingTop:"6px", fontWeight:"bold"}}>Administrator</h4>
               </div>
-              <p class="login-card-description">Sign into your account</p>
+              <p class="login-card-description">Sign In</p>
               <h6 id="CusLoginError" style={{color:"red", fontWeight:"bold"}}>{errorMsg}</h6>
-              <form onSubmit={loginUser}>
+              <form onSubmit={loginAdmin}>
 
                 {/* Username label & input field  */}
 
@@ -241,9 +243,9 @@ export default function AdminLogin(props) {
                   <input name="login" id="login" class="btn btn-block login-btn mb-4" type="submit" value="Login"/>
                 </form>
              
-              {/* forgot password */}
+             
 
-                <p class="forgot-password-link" > <Link to="/CustomerForgotPassword" style={{ color: "#764A34", fontWeight: "bold" }}>Forgot Password?</Link></p>
+                {/* <p class="forgot-password-link" > <Link to="/CustomerForgotPassword" style={{ color: "#764A34", fontWeight: "bold" }}>Forgot Password?</Link></p> */}
             
                 
             </div>
