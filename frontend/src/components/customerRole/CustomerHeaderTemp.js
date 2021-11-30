@@ -1290,13 +1290,13 @@ export default function CustomerHeader(props) {
               <div className="col-sm-6">
                 <center>
                   <br />
-                  <div className="col-md-9 col-sm-6 input-group">
+                  <div className="col-md-9 col-sm-6 input-group-append">
                     <h6 style={{ color: "#764A34" }} >
                       <strong>User Name</strong>: {Customer.Username}
                     </h6>
                   </div>
                   <br />
-                  <div className="col-md-9 col-sm-6 input-group">
+                  <div className="col-md-9 col-sm-6 input-group-append">
 
                     <label for="test"><svg style={{ color: "#764A34" }}
                       xmlns="http://www.w3.org/2000/svg"
@@ -1316,7 +1316,7 @@ export default function CustomerHeader(props) {
 
                   </div>
                   <br />
-                  <div className="col-md-9 col-sm-6 input-group">
+                  <div className="col-md-9 col-sm-6 input-group-append">
                     <label for="test"><svg style={{ color: "#764A34" }}
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"
@@ -1342,7 +1342,7 @@ export default function CustomerHeader(props) {
               <div className="col-sm-6">
                 <center>
                   <br />
-                  <div className="col-md-9 col-sm-6 input-group">
+                  <div className="col-md-9 col-sm-6 input-group-append">
                     <h6 style={{ color: "#764A34" }}>
                       <strong>Email</strong>:{" "}
                       <a href="">
@@ -1351,7 +1351,7 @@ export default function CustomerHeader(props) {
                     </h6>
                   </div>
                   <br />
-                  <div className="col-md-9 col-sm-6 input-group">
+                  <div className="col-md-9 col-sm-6 input-group-append">
                     <label for="test">  <svg style={{ color: "#764A34" }}
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"

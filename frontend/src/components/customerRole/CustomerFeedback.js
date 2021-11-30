@@ -114,8 +114,7 @@ export default function CustomerFeedback() {
 
     
             initialArray = remainingArray;
-            console.log("a");
-            console.log(initialArray);
+        console.log(initialArray);
     
 
 
