@@ -6,6 +6,11 @@ import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import "../../css/toogle.css";
 import Swal from "sweetalert2";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
+
+// Be sure to include styles at some point, probably during your bootstrapping
+// import 'react-select/dist/css/react-select.css';
 import { useNavigate } from "react-router-dom";
 import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
@@ -22,7 +27,7 @@ export default function ViewCovers(props) {
 
   // user inputs
   const [songName, setSongName] = useState("");
-  const [instruments, setInstrument] = useState("Classical Guitar");
+  const [instruments, setInstrument] = useState([]);
   const [youtubeLink, setYoutubeLink] = useState("");
   const [facebookLink, setFacebookLink] = useState("");
   const [noOfPages, setNoOfPages] = useState("");
@@ -44,6 +49,12 @@ export default function ViewCovers(props) {
   const [cancelOrCloseBtn, setCancelOrCloseBtn] = useState("Close");
   const [finalDiv, setFinalDiv] = useState(true);
 
+  const instrumentsPlayedOn = [
+    { value: "Classical Guitar", label: "Classical Guitar" },
+    { value: "Piano", label: "Piano" },
+    { value: "Ukulele", label: "Ukulele" },
+    { value: "Acoustic Guitar", label: "Acoustic Guitar" },
+  ];
   // for pdf preview
   const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
   let navigate = useNavigate();
@@ -62,13 +73,16 @@ export default function ViewCovers(props) {
 
     getAllClassicalGuitarCovers();
   }, []);
-
+  function logChange(val) {
+    console.log("Selected: " + val);
+  }
   function setContent() {
     setSubCategories(tempSubCategory);
     setLessonSubCategories(tempSubCategory2);
     setCovers(tempCovers.filter((covers) => covers.Status != "3"));
     $(document).ready(function () {
       $("#Covers").DataTable();
+      //$('.js-example-basic-multiple').select2();
     });
   }
 
@@ -311,7 +325,11 @@ export default function ViewCovers(props) {
           ) {
             dynamicSubCategory = document.getElementById("subCategory1").value;
           }
-          const InstrumntArray = instruments.split(",");
+          //const InstrumntArray = instruments.split(",");
+          let InstrumntArray = [];
+          for (let i = 0; i < instruments.length; i++) {
+            InstrumntArray.push(instruments[i].value);
+          }
           const newCover = {
             Title: songName,
             OriginalArtistName: originalArtist,
@@ -327,7 +345,7 @@ export default function ViewCovers(props) {
             PreviewPages: previewPageList,
             CoverPdf: coverPDF[0].name,
           };
-          console.log(newCover);
+          //console.log(newCover);
           UploadPdf();
 
           axios
@@ -453,10 +471,9 @@ export default function ViewCovers(props) {
     }
   }
 
-
-  let carNames ={
-
-  }
+  // function test(val){
+  //   console.log(val.value)
+  // }
   return (
     <div>
       <div className="container-xxl">
@@ -471,6 +488,7 @@ export default function ViewCovers(props) {
             onClick={() => {
               setModalOpen(true);
               setPreviewPages("");
+              setInstrument([]);
               setYoutubeLivePriview(true);
             }}
           >
@@ -634,7 +652,8 @@ export default function ViewCovers(props) {
                           d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
                         />
                       </svg>
-                    </button><span> </span>
+                    </button>
+                    <span> </span>
                     {/* delete cover  */}
                     <button
                       className="btn-sm"
@@ -712,8 +731,6 @@ export default function ViewCovers(props) {
                       required
                     />
 
-<select isMulti options = {carNames}>
-</select>
                     <br />
                     <label for="exampleInputMainCategory">Main Category</label>
                     <select
@@ -821,14 +838,18 @@ export default function ViewCovers(props) {
                 <div className="col-sm-6">
                   <div class="form-group">
                     <label for="exampleInputEmail1">Instruments*</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="Instrument Exp : (Guitar,Piano)"
-                      onChange={(e) => {
-                        setInstrument(e.target.value);
-                      }}
+                    <Select
+                     // defaultValue={[instrumentsPlayedOn[0]]}
+                      isMulti
+                      name="colors"
+                      options={instrumentsPlayedOn}
+                      className="basic-multi-select"
+                      classNamePrefix="select"
                       required
+                      placeholder = "Choose instruments"
+                      onChange={(val) => {
+                        setInstrument(val);
+                      }}
                     />
 
                     <br />
