@@ -94,10 +94,10 @@ customerSchema.pre('save',async function (next) {
 
     // console.log("hi")
 
-    if(this.isModified('Password')){
+    if(this.isModified('password')){
 
         var salt = bcrypt.genSaltSync(12);
-        this.Password = bcrypt.hashSync(this.Password, salt);
+        this.password = bcrypt.hashSync(this.password, salt);
         // this.confirmPassword = bcrypt.hashSync(this.confirmPassword, salt);
     }
 

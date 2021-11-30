@@ -1,5 +1,8 @@
 import React, { Component, useEffect, useState } from "react";
 import axios from "axios";
+import { saveAs } from "file-saver";
+import {Button} from 'reactstrap'
+import Swal from "sweetalert2";
 
 export default function PurchaseHistory(props) {
   const [cover, setCover] = useState([]);
@@ -10,6 +13,7 @@ export default function PurchaseHistory(props) {
   let covers = [];
   let array2 = [];
 
+  let Tot=0;
   let TotalPrice = 0;
 
   useEffect(() => {
@@ -20,7 +24,7 @@ export default function PurchaseHistory(props) {
         .then((res) => {
           console.log(res.data);
           const filter = res.data.filter(
-            (cus) => cus.CustomerID == "619bb6fb3d429b6f26addcba"
+            (cus) => cus.CustomerID == "6199d490bfd483038f7067bf"
             // objectId
           );
 
@@ -117,40 +121,43 @@ export default function PurchaseHistory(props) {
     // }
   }
 
-  // function filterContent(data, userSearch) {
-  //   let result = data.filter(
-  //     (post) =>
-  //       post.Item_name.toLowerCase().includes(userSearch) ||
-  //       post.Brand.toLowerCase().includes(userSearch) ||
-  //       post.Model.toLowerCase().includes(userSearch)
-  //   );
-  //   console.log(userSearch);
-  //   let x = result;
-  //   array2( x);
-  //   if (result.length != 0) {
-  //     document.getElementById("itemsTxt").innerHTML = "";
-  //   } else if (result.length == 0) {
-  //     document.getElementById("itemsTxt").innerHTML = "No Result Found!";
-  //   }
-  // }
 
-  // // search
-  // function searchByName(e) {
-  //   let userSearch = e;
-  //   //document.getElementsByTagName("CircleLoader").loading = '{true}';
-  //   // document.getElementById("itemsTxt").innerHTML = "";
+    // const storageRef = ref(storage, `Covers(PDF)/${CoverPdf}`);
+    // getDownloadURL(storageRef)
+    //   .then((url) => {
+    //     // setPdfUrl(url)
+    //     window.location.href = url;
+    //     //setModalOpenForPdf(false)
 
-  //   axios
-  //       .get("http://localhost:8070/order/getOrders")
-  //       .then((res) => {
-  //         const filter = res.data.filter(
-  //           (cus) => cus.CustomerID == "619bb6fb3d429b6f26addcba"
-  //           // objectId
-  //         );
 
-  //         filter.map((post) => {
-  //           covers.push(post.CoverIDs);
-  //         });
+        fetch('https://cors-anywhere.herokuapp.com/' + "https://firebasestorage.googleapis.com/v0/b/kaushal-music-production-app.appspot.com/o/Covers(PDF)%2Fsample.pdf?alt=media&token=7bc7ca7b-8f4a-4f7c-9fc4-f836237c47e6", {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/pdf',
+          },
+        })
+        .then((response) => response.blob())
+        .then((blob) => {
+          // Create blob link to download
+          const url = window.URL.createObjectURL(
+            new Blob([blob]),
+          );
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute(
+            'download',
+            `sample.pdf`,
+          );
+      
+          // Append to html link element page
+          document.body.appendChild(link);
+      
+          // Start download
+          link.click();
+      
+          // Clean up and remove the link
+          link.parentNode.removeChild(link);
+        });
 
   //         axios.get("http://localhost:8070/covers/getcovers").then((res) => {
   //           getSpecificOrderCoverDetiles(res.data);
@@ -311,23 +318,26 @@ export default function PurchaseHistory(props) {
                     <span> &ensp;&ensp;{post.SubCategory}</span>
                     <br />
                     <span> &ensp;&ensp;Price : ${post.Price}</span>
+                    
                   </div>
                 </div>
                 <br />
                 <br />
                 <div className="row">
                   <div className="col-sm">
-                    <button
-                      style={{
-                        borderRadius: "25px",
-                        backgroundColor: "#D0193A",
-                        color: "white",
-                      }}
-                      className="btn btn-sm btn-block"
-                      type="button"
-                    >
+                  {/* <Button
+                        href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+                        color="transparent"
+                        target="_blank"
+                        download>Download
+                  </Button> */}
+
+                    <button style={{borderRadius: "25px", backgroundColor: "#D0193A",color: "white",}}
+                      className="btn btn-sm btn-block" type="button" onClick={() => saveFile(post.CoverPdf)} >
                       Download
+                      {/* {console.log(post.CoverPdf)} */}
                     </button>
+                    <br />
                     <br />
                   </div>
                   <div className="col-sm">
@@ -352,8 +362,9 @@ export default function PurchaseHistory(props) {
                 style={{ backgroundColor: "white", lineHeight: "2em" }}
               >
                 <div className="text-right">
-                  <span class="text-center">{post.TransactionDateAndTime}</span>
+                  <span class="text-center">{time}</span>
                 </div>
+                <br/>
 
                 <span style={{ color: " #764A34" }}>
                   Original Artist&ensp;:

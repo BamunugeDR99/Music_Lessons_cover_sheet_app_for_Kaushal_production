@@ -1,86 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import CoverTemplate from "./covercardtemplate";
 import TopDownloadTemplate from "./topdownloadtemplate";
 import Modal from "react-bootstrap/Modal";
 import InputRange from "react-input-range";
-import { data, post } from "jquery";
-import { Maximize } from "react-feather";
 
 export default function MusicCoverPage() {
   const [modelOpen, setmodelOpen] = useState(false);
-  const [pricerange, setPriceRange] = useState("0");
-  const [downloadrange, setDownloadRange] = useState("0");
-  const [nodata, setNoData] = useState("");
-  const [covers, setCovers] = useState([]);
-  const [filtercover, setfilterCover] = useState([]);
-  const [categorycover, setCategoryCover] = useState([]);
-  // const [filtercovers, setFilterCovers] = useState([]);
-  const [categorytext, setCategoryText] = useState("All");
-  const [serchvalue, setSerchvalue] = useState("");
-  const [categories, setCategories] = useState([]);
-  const [populercover, setpopulercover] = useState([]);
-  let dataholdedr = [];
+  const [value1, setValue1] = useState("");
+  const [value2, setValue2] = useState("");
 
-  let pcover = {};
-  let max = 0;
+  let [component, setName] = useState([
+    <CoverTemplate />,
+    <CoverTemplate />,
+    <CoverTemplate />,
+    <CoverTemplate />,
+    <CoverTemplate />,
+    <CoverTemplate />,
+    <CoverTemplate />,
+    <CoverTemplate />,
+  ]);
 
-  useEffect(async () => {
-    document.getElementById("bufferlink").style.display = "block";
-    document.getElementById("link").style.display = "none";
-    document.getElementById("link1").style.display = "none";
-    document.getElementById("spinnerdiv").style.display = "block";
-    document.getElementById("coverdiv").style.display = "none";
-    document.getElementById("spinnerdiv2").style.display = "block";
-    document.getElementById("topcover").style.display = "none";
-
-    await axios
-      .get("http://localhost:8070/covers/getcoverbymaincover")
-      .then((res) => {
-        dataholdedr = res.data;
-        setCovers(res.data);
-        setfilterCover(res.data);
-        document.getElementById("spinnerdiv").style.display = "none";
-        document.getElementById("coverdiv").style.display = "block";
-
-        // console.log(res.data);
-      })
-      .catch((err) => {
-        alert(err.message);
-      });
-
-    // Getting sub categories
-    axios
-      .get("http://localhost:8070/mainCategory/get")
-      .then((res) => {
-        setCategories(res.data[0].SubCategories);
-        document.getElementById("bufferlink").style.display = "none";
-        document.getElementById("link").style.display = "block";
-        document.getElementById("link1").style.display = "block";
-        // console.log(res.data[0].SubCategories);
-      })
-      .catch((err) => {
-        alert(err.message);
-      });
-
-    populercovers();
-  }, []);
-
-  function populercovers() {
-    // console.log(dataholdedr);
-    for (let i = 0; i < dataholdedr.length; i++) {
-      // console.log(dataholdedr[i].NoOfDownloads)
-      if (Number(dataholdedr[i].NoOfDownloads) >= max) {
-        max = dataholdedr[i].NoOfDownloads;
-        console.log(max);
-        pcover = dataholdedr[i];
-      }
-    }
-    // console.log(pcover);
-    setpopulercover(pcover);
-    document.getElementById("spinnerdiv2").style.display = "none";
-    document.getElementById("topcover").style.display = "block";
-  }
   function modalopen() {
     // alert("This is alert");
     setmodelOpen(true);
@@ -88,188 +28,81 @@ export default function MusicCoverPage() {
   function modalClose() {
     setmodelOpen(false);
   }
-  function sortByPrice(v) {
-    setPriceRange(v);
-    // let dataholder = covers
-    let filtercovers = categorycover;
-    let result = filtercovers.filter((post) => Number(post.Price) >= v);
-
-    if (result.length != 0) {
-      setCovers(result);
-      setNoData("");
-    } else {
-      setNoData("No Covers available");
-      setCovers([]);
-    }
-
-    setDownloadRange(0);
+  function handleValue1(v) {
+    setValue1(v);
   }
-
-  function sortByDownloads(v) {
-    setPriceRange(0);
-
-    setDownloadRange(v);
-    let filtercovers = categorycover;
-    let result = filtercovers.filter((post) => Number(post.NoOfDownloads) >= v);
-    if (result.length != 0) {
-      setCovers(result);
-      setNoData("");
-    } else {
-      setNoData("No Covers available");
-      setCovers([]);
-    }
-  }
-
-  function searchByName(val) {
-    setSerchvalue(val);
-
-    let searchResult = filtercover.filter(
-      (post) =>
-        post.Title.toLowerCase().includes(val.toLowerCase()) ||
-        post.OriginalArtistName.toLowerCase().includes(val.toLowerCase())
-    );
-    if (searchResult.length != 0) {
-      setCovers(searchResult);
-      setNoData("");
-    } else {
-      setNoData("No Covers available");
-      setCovers([]);
-    }
-  }
-
-  function fetchData(type) {
-    if (type == "All") {
-      setCategoryText("All");
-      setCategoryCover(filtercover);
-      setCovers(filtercover);
-      setPriceRange(0);
-
-      if (filtercover.length != 0) {
-        setNoData("");
-      } else {
-        setNoData("No Covers available");
-        setCovers([]);
-      }
-      setDownloadRange(0);
-    } else {
-      setCategoryText(type);
-      let filtercovers = filtercover;
-      let result = filtercovers.filter((post) =>
-        post.SubCategory.includes(type)
-      );
-      setCovers(result);
-      setCategoryCover(result);
-      setPriceRange(0);
-      setDownloadRange(0);
-      setNoData("");
-      if (result.length != 0) {
-        setCovers(result);
-        setNoData("");
-      } else {
-        setNoData("No Covers available");
-        setCovers([]);
-      }
-    }
+  function handleValue2(v) {
+    setValue2(v);
   }
 
   return (
     <div>
       <br />
-      <div className="container">
-        <center>
-          <div className="col-md-11 input-group">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Search Music Covers"
-              onChange={(e) => searchByName(e.target.value)}
-            />
-            <div class="input-group-append">
-              <button className="input-group-text">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  class="bi bi-search"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-                </svg>
-              </button>
-            </div>
+      <div className="row">
+        <div className="col-md-1"></div>
+        <div className="col-md-10 input-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search Music Covers"
+          />
+          <div class="input-group-append">
+            <button className="input-group-text">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-search"
+                viewBox="0 0 16 16"
+              >
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+              </svg>
+            </button>
           </div>
-        </center>
+        </div>
+        <div className="col-md-1"></div>
       </div>
       <br />
       <div class="container">
         <div className="row ">
           {/* left side of the page */}
           <div className="col-md-4">
-            <div
-              className="list-group"
-              style={{ maxHeight: "30%", overflowY: "scroll" }}
-            >
-              <a
-                style={{ display: "block" }}
-                id="bufferlink"
-                href="#"
-                className="list-group-item list-group-item-action"
-              >
-                &emsp; Loading...
-              </a>
-              <a
-                href="#"
-                id="link1"
-                style={{ display: "none" }}
-                onClick={() => fetchData("All")}
-                className="list-group-item list-group-item-action"
-              >
-                <i className="fa fa-music"></i>&emsp; All
-              </a>
-              <span id="link">
-                {categories.map((post) => (
-                  <a
-                    href="#"
-                    id="link"
-                    style={{ display: "block" }}
-                    onClick={() => fetchData(post)}
-                    className="list-group-item list-group-item-action"
-                  >
-                    <i className="fa fa-music"></i>&emsp; {post}
-                  </a>
-                ))}
-              </span>
-            </div>
-            <div>
+            <div className="container">
+              <ul class="list-group">
+                <li class="list-group-item">Cras justo odio</li>
+                <li class="list-group-item">Dapibus ac facilisis in</li>
+                <li class="list-group-item">Morbi leo risus</li>
+                <li class="list-group-item">Porta ac consectetur ac</li>
+                <li class="list-group-item">Vestibulum at eros</li>
+              </ul>
+
               <br />
-              <div className="row text-center">
+              <div className="row">
                 <div className="col-md-6">
-                  <label>Price Range </label>
-                  <label>({pricerange} - 200+) </label>
+                  <label>Price Range</label>
                   <div class="slidecontainer">
                     <input
                       id="typeinp"
                       type="range"
                       min="0"
-                      max="200"
-                      value={pricerange}
-                      onChange={(e) => sortByPrice(e.target.value)}
+                      max="5"
+                      value={value1}
+                      onChange={(e) => handleValue1(e.target.value)}
                       step="1"
                     />
                   </div>
                 </div>
                 <div className="col-md-6">
-                  <label>Downloads </label>
-                  <label>({downloadrange} - 200+) </label>
+                  <label>Downloads</label>
                   <div class="slidecontainer">
                     <input
                       id="typeinp"
                       type="range"
                       min="0"
-                      max="200"
-                      value={downloadrange}
-                      onChange={(e) => sortByDownloads(e.target.value)}
+                      max="5"
+                      value={value2}
+                      onChange={(e) => handleValue2(e.target.value)}
                       step="1"
                     />
                   </div>
@@ -281,79 +114,30 @@ export default function MusicCoverPage() {
                     <center>Most Downloaded Classical Guitar Cover</center>
                   </strong>
                 </h4>
-              </div>
-              <center>
-                <div
-                  id="spinnerdiv2"
-                  class="col-lg-8 "
-                  style={{ display: "block" }}
-                >
-                  <br />
 
-                  <div class=" justify-content-center">
-                    <div class="spinner-border" role="status">
-                      <span class="sr-only">Loading...</span>
-                    </div>
-                  </div>
-                </div>
-              </center>
-              <div id="topcover" style={{ display: "none" }}>
-                <TopDownloadTemplate
-                  title={populercover.Title}
-                  price={populercover.Price}
-                  artist={populercover.OriginalArtistName}
-                />
+                <TopDownloadTemplate />
               </div>
             </div>
-
-            <br />
           </div>
           {/* right side of the page */}
           <div className="col-md-8">
             <h4 style={{ color: "#764A34" }}>
-              <strong>Classical Guitar Covers - {categorytext}</strong>
+              <strong>Classical Guitar Covers</strong>
             </h4>
-            <center>
-              <h4 style={{ color: "red" }}>{nodata}</h4>
-            </center>
             <div className="row">
-              <div
-                id="spinnerdiv"
-                class="col-lg-8 "
-                style={{ display: "block" }}
-              >
-                <br />
-                <center>
-                  <div class=" justify-content-center">
-                    <div class="spinner-border" role="status">
-                      <span class="sr-only">Loading...</span>
-                    </div>
-                  </div>
-                </center>
-              </div>
-            </div>{" "}
-            <span id="coverdiv">
-              <div className="row">
-                {covers.map((post) => (
-                  <div className="col-md-4" onClick={() => modalopen()}>
-                    <CoverTemplate
-                      title={post.Title}
-                      artist={post.OriginalArtistName}
-                      price={post.Price}
-                      category={post.SubCategory}
-                    />
-                    <br />
-                  </div>
-                ))}
-
-                <br />
-                <br />
-              </div>
-            </span>
+              {component.map((post) => (
+                <div className="col-md-3" onClick={() => modalopen()}>
+                  {post}
+                  <br />
+                </div>
+              ))}
+              <br />
+              <br />
+            </div>
           </div>
+          {console.log(component)}
         </div>
       </div>
-
       {/* user details update model */}
       <Modal show={modelOpen} size="lg">
         <Modal.Header>

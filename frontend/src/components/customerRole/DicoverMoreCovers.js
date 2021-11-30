@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
@@ -98,48 +98,213 @@ export default function DiscoverMoreCovers(props) {
   }
 
   return (
-    <div>
-      <h5 style={{ textAlign: "center", color: "#D0193A" }}>
-        {ErrorhandlingTxt}
-      </h5>
+    // 3 cards will be shown  so there needs to be 2 maps
+    <div className="container-lg">
       <br />
-      <Carousel responsive={responsive}>
-        {recommenedCovers.map((covers, index) => {
-          return (
-            <div
-              class="card"
-              style={{
-                boxShadow: "rgba(0, 0, 0, 0.25) 0px 25px 50px -12px",
-                borderRadius: "15px",
-                marginRight: "15px",
-                marginLeft: "15px",
-              }}
-            >
-              <img
-                id={index}
-                src={
-                  displayImages(covers.PreviewPages[0], index) ||
-                  "/images/Imageplaceholder.png"
-                }
-                class="card-img-top"
-                alt="..."
-                style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
-              />
-              <div class="card-body">
-                <h4 class="card-title" style={{ fontWeight: "bold" }}>
-                  {covers.Title}
-                </h4>
-                <h5>{covers.OriginalArtistName}</h5>
-                <h5>{covers.MainCategory}</h5>
-                <h5>{covers.SubCategory}</h5>
-                <h3 style={{ float: "right", color: "#764A34" }}>
-                  <b>US$ {covers.Price}</b>
-                </h3>
+      {/* <h1>{props.message}</h1> */}
+      <h1 style={{ textAlign: "center", color: "#764A34" }}>
+        <b>Dicover more!</b>
+      </h1>
+      <br />
+      <h3 style={{ textAlign: "left", color: "#000000" }}>
+        <b>Our Reccomandations</b>
+      </h3>
+      <div className="discoverBody">
+        <div
+          id="carouselExampleControls"
+          class="carousel slide"
+          data-ride="carousel"
+        >
+          <div class="carousel-inner">
+            {/* one row */}
+            <div class="carousel-item active">
+              <div class="cards-wrapper">
+                {/* Single card */}
+                <div class="card">
+                  <img
+                    src={"/images/istockphoto-1127565686-170667a.jpg"}
+                    class="card-img-top"
+                    alt="..."
+                  />
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">
+                      Some quick example text to build on the card title and
+                      make up the bulk of the card's content.
+                    </p>
+                    <a href="#" class="btn btn-primary">
+                      Go somewhere
+                    </a>
+                  </div>
+                </div>
+                <div class="card d-none d-md-block">
+                  <img
+                    src={"/images/istockphoto-1127565686-170667a.jpg"}
+                    class="card-img-top"
+                    alt="..."
+                  />
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">
+                      Some quick example text to build on the card title and
+                      make up the bulk of the card's content.
+                    </p>
+                    <a href="#" class="btn btn-primary">
+                      Go somewhere
+                    </a>
+                  </div>
+                </div>
+                <div class="card d-none d-md-block">
+                  <img
+                    src={"/images/istockphoto-1127565686-170667a.jpg"}
+                    class="card-img-top"
+                    alt="..."
+                  />
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">
+                      Some quick example text to build on the card title and
+                      make up the bulk of the card's content.
+                    </p>
+                    <a href="#" class="btn btn-primary">
+                      Go somewhere
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
-          );
-        })}
-      </Carousel>
+            <div class="carousel-item">
+              <div class="cards-wrapper">
+                <div class="card">
+                  <img
+                    src={"/images/istockphoto-1127565686-170667a.jpg"}
+                    class="card-img-top"
+                    alt="..."
+                  />
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">
+                      Some quick example text to build on the card title and
+                      make up the bulk of the card's content.
+                    </p>
+                    <a href="#" class="btn btn-primary">
+                      Go somewhere
+                    </a>
+                  </div>
+                </div>
+                <div class="card d-none d-md-block">
+                  <img
+                    src={"/images/istockphoto-1127565686-170667a.jpg"}
+                    class="card-img-top"
+                    alt="..."
+                  />
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">
+                      Some quick example text to build on the card title and
+                      make up the bulk of the card's content.
+                    </p>
+                    <a href="#" class="btn btn-primary">
+                      Go somewhere
+                    </a>
+                  </div>
+                </div>
+                <div class="card d-none d-md-block">
+                  <img
+                    src={"/images/istockphoto-1127565686-170667a.jpg"}
+                    class="card-img-top"
+                    alt="..."
+                  />
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">
+                      Some quick example text to build on the card title and
+                      make up the bulk of the card's content.
+                    </p>
+                    <a href="#" class="btn btn-primary">
+                      Go somewhere
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="cards-wrapper">
+                <div class="card">
+                  <img
+                    src={"/images/istockphoto-1127565686-170667a.jpg"}
+                    class="card-img-top"
+                    alt="..."
+                  />
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">
+                      Some quick example text to build on the card title and
+                      make up the bulk of the card's content.
+                    </p>
+                    <a href="#" class="btn btn-primary">
+                      Go somewhere
+                    </a>
+                  </div>
+                </div>
+                <div class="card d-none d-md-block">
+                  <img
+                    src={"/images/istockphoto-1127565686-170667a.jpg"}
+                    class="card-img-top"
+                    alt="..."
+                  />
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">
+                      Some quick example text to build on the card title and
+                      make up the bulk of the card's content.
+                    </p>
+                    <a href="#" class="btn btn-primary">
+                      Go somewhere
+                    </a>
+                  </div>
+                </div>
+                <div class="card d-none d-md-block">
+                  <img
+                    src={"/images/istockphoto-1127565686-170667a.jpg"}
+                    class="card-img-top"
+                    alt="..."
+                  />
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">
+                      Some quick example text to build on the card title and
+                      make up the bulk of the card's content.
+                    </p>
+                    <a href="#" class="btn btn-primary">
+                      Go somewhere
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* controls  */}
+          <a
+            class="carousel-control-prev"
+            href="#carouselExampleControls"
+            role="button"
+            data-slide="prev"
+          >
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a
+            class="carousel-control-next"
+            href="#carouselExampleControls"
+            role="button"
+            data-slide="next"
+          >
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+      </div>
     </div>
   );
 }

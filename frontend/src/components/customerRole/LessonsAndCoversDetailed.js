@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import CurrencySelect from "./CurrencySelect";
 import DiscoverMoreCovers from "./DicoverMoreCovers";
@@ -148,6 +148,7 @@ export default function LessonsAndCoversDetailed(props) {
 
   return (
     <div>
+      <br />
       <div class="card container-xxl" style={{ border: "solid #764A34" }}>
         <div class="card-body">
           <div class="container">
@@ -235,12 +236,11 @@ export default function LessonsAndCoversDetailed(props) {
                 <div class="embed-responsive embed-responsive-16by9">
                   <iframe
                     class="embed-responsive-item"
-                    // need to use embeded youtube link
-                    src={covers.YoutubeLink}
+                    src="https://www.youtube.com/embed/CM4CkVFmTds"
                     title="YouTube video player"
-                    frameBorder="0"
+                    frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
+                    allowfullscreen
                   ></iframe>
                 </div>
                 <br />
@@ -248,12 +248,12 @@ export default function LessonsAndCoversDetailed(props) {
               <div class="col-sm">
                 {/* main title */}
                 <h3 style={{ color: "#764A34", letterSpacing: "10px" }}>
-                  {covers.Title}
+                  We Wish You a Merry Christmas
                 </h3>
                 <br />
                 {/* original artis name  */}
                 <h4 style={{ color: "#764A34", float: "right" }}>
-                  {covers.OriginalArtistName}
+                  Santa Claus
                 </h4>
                 <br />
                 <br />
@@ -268,7 +268,7 @@ export default function LessonsAndCoversDetailed(props) {
                   Arrange by :{" "}
                 </h5>{" "}
                 <h5 style={{ display: "inline", letterSpacing: "2px" }}>
-                  {covers.ArrangedBy}
+                  Niki Minaj
                 </h5>
                 <br />
                 <br />
@@ -282,10 +282,9 @@ export default function LessonsAndCoversDetailed(props) {
                   {/* instruments played on array  */}
                   Instruments played on :{" "}
                 </h5>{" "}
-                <h5
-                  id="instruments"
-                  style={{ display: "inline", letterSpacing: "2px" }}
-                ></h5>
+                <h5 style={{ display: "inline", letterSpacing: "2px" }}>
+                  Guitar
+                </h5>
                 <br />
                 <br />
                 <h5
@@ -299,7 +298,7 @@ export default function LessonsAndCoversDetailed(props) {
                   Main Category :{" "}
                 </h5>{" "}
                 <h5 style={{ display: "inline", letterSpacing: "2px" }}>
-                  {covers.MainCategory}
+                  Classical Guitar
                 </h5>
                 <br />
                 <br />
@@ -314,7 +313,7 @@ export default function LessonsAndCoversDetailed(props) {
                   Sub-category :{" "}
                 </h5>{" "}
                 <h5 style={{ display: "inline", letterSpacing: "2px" }}>
-                  {covers.SubCategory}
+                  English
                 </h5>
                 <br />
                 <br />
@@ -328,16 +327,14 @@ export default function LessonsAndCoversDetailed(props) {
                   {/* no of pages  */}
                   No of pages :{" "}
                 </h5>{" "}
-                <h5 style={{ display: "inline", letterSpacing: "2px" }}>
-                  {covers.NoOfPages}
-                </h5>
+                <h5 style={{ display: "inline", letterSpacing: "2px" }}>5</h5>
                 <br />
                 <br />
                 <div class="container">
                   <div class="row">
                     <div class="col-sm">
                       {/* calling a another Component */}
-                      <CurrencySelect coverPrice={covers.Price} />
+                      <CurrencySelect />
                       <br />
                       <h6 style={{ color: "#D0193A" }}>
                         *The actual price will be slightly different*
@@ -371,7 +368,7 @@ export default function LessonsAndCoversDetailed(props) {
                           color: "#764A34",
                         }}
                       >
-                        {covers.Price}
+                        5.99
                       </h1>
                     </div>
                   </div>
@@ -380,31 +377,15 @@ export default function LessonsAndCoversDetailed(props) {
                   <button
                     type="button"
                     class="btn btn-success btn-block rounded"
-                    onClick={() => addToCart(covers._id)}
                   >
                     Add to cart
                   </button>
                   <br />
                   <br />
                   <div className="container-sm">
-                    {/* directly going to the payment gateway */}
                     <button
                       type="button"
                       class="btn btn-success btn-block rounded"
-                      onClick={() => {
-                        Swal.fire({
-                          title: "Are you sure?",
-                          icon: "warning",
-                          showCancelButton: true,
-                          confirmButtonColor: "#764A34",
-                          cancelButtonColor: "#D0193A",
-                          confirmButtonText: "Yes",
-                        }).then((result) => {
-                          if (result.isConfirmed) {
-                            alert("Bought");
-                          }
-                        });
-                      }}
                     >
                       Buy it now
                     </button>

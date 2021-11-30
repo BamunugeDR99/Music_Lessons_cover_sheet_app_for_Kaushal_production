@@ -6,9 +6,14 @@ import "./css/DiscoverMoreCoversStyles.css";
 import "./css/initial.css";
 import "./css/home.css";
 import React, { Component } from "react";
+import DataTableTest from "./components/dataTableTest";
 import CustomerRegistration from "./components/customerRole/CustomerRegistration";
 import CustomerForgotPassword from "./components/customerRole/CustomerForgotPassword";
 import LessonsAndCoversDetailed from "./components/customerRole/LessonsAndCoversDetailed";
+import ViewCategories from "./components/adminRole/ViewCategories";
+import BootstrapDataTable from "./components/adminRole/BootstrapDataTable";
+import MainCategoriesDataTable from "./components/adminRole/MainCategoriesDataTable";
+import ViewStudentDetails from "./components/testingComponents/ViewStudentdetails";
 import CustomerHeader from "./components/customerRole/CustomerHeaderTemp";
 import Footer from "./components/customerRole/footer";
 import ViewCovers from "./components/adminRole/ViewCovers";
@@ -38,6 +43,8 @@ function App() {
       </Routes>
       <Footer/>
     </BrowserRouter>
+
+    //Commit1
   );
 }
 

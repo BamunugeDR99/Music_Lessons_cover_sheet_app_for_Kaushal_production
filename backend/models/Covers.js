@@ -15,9 +15,7 @@ const CoversSchema = new Schema({
 
     ArrangedBy : {
         type : String,
-        required : false,
-        default : "Kaushal Rashmika"
-
+        required : true
     },
 
     InstrumentsPlayedOn : [{
@@ -47,9 +45,7 @@ const CoversSchema = new Schema({
     
     NoOfDownloads : {
         type : String,
-        required : false,
-        default : "0"
-        
+        required : true
     },
 
     Price : {
@@ -81,14 +77,12 @@ const CoversSchema = new Schema({
 
     FeedBackIDs : [{
         type : String,
-        required : false,
-        default : null
+        required : true,
     }],
 
     Status : {
         type : String,
         required : false,
-        default : "1"
     },
 
     UpdatedDateAndTime : {
@@ -104,7 +98,7 @@ const CoversSchema = new Schema({
 
     AddedDateAndTime : {
         type : Date,
-        required: false,
+        required: true,
         default : new Date()
     }
 

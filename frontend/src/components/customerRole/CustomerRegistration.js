@@ -1,8 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import PasswordStrengthIndicator from "./passwordStrength";
-import Swal from "sweetalert2";
-import Modal from "react-bootstrap/Modal";
 
 export default function CustomerRegistration(props) {
   const [passwordShown, setPasswordShown] = useState(false);
@@ -380,53 +377,17 @@ export default function CustomerRegistration(props) {
           <div class="card-body">
             <div class="text-center">
               <img
-                src={"/images/KaushalOfficialLogo.jpeg"}
+                src={"/images/Kaushal_temp_logo.png"}
                 class="rounded img-responsive"
                 alt="Production_logo"
                 style={{ width: "150px" }}
               />
             </div>
             <br />
-            <form onSubmit={getDetails}>
+            <form>
               <div class="text-center">
                 <h2 style={{ color: "#764A34" }}>REGISTER HERE</h2>
-                <p className=" mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{FirstNameError}</p>
-                <p className=" mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{LastNameError}</p>
-                <p className=" mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{ExtraError}</p>
-
-
-                <div className="text-center" hidden={passwordMatchDiv}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="40"
-                    height="40"
-                    fill="#279B14"
-                    class="bi bi-check-circle-fill"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                  </svg>
-                  <p style={{ color: "#279B14" }}>
-                    <b>Password Match</b>
-                  </p>
-                </div>
-                <div className="text-center" hidden={passwordMisMatchDiv}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="40"
-                    height="40"
-                    fill="#D0193A"
-                    class="bi bi-x-circle-fill"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
-                  </svg>
-                  <p style={{ color: "#D0193A" }}>
-                    <b>Password MisMatch</b>
-                  </p>
-                </div>
               </div>
-
               <br />
               {/* username */}
               <div class="text-center">
@@ -453,18 +414,9 @@ export default function CustomerRegistration(props) {
                         type="text"
                         class="form-control rounded"
                         id="inputUsername"
-                        placeholder="Username*"
-                        onChange={(e) => {
-                          SetUsername(e.target.value);
-                          SetUsernameError("");
-                          checkUserName(e.target.value);
-
-                        }}
-                        required
+                        placeholder="Username"
                       />
                     </div>
-                    <p className="ml-5 mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{UsernameError}</p>
-
                   </div>
                 </div>
               </div>
@@ -492,17 +444,9 @@ export default function CustomerRegistration(props) {
                         type="email"
                         class="form-control rounded"
                         id="inputEmail"
-                        placeholder="Email*"
-                        onChange={(e) => {
-                          SetEmail(e.target.value);
-                          SetEmailError("");
-                          checkEmail(e.target.value);
-
-                        }}
-                        required
+                        placeholder="Email"
                       />
                     </div>
-                    <p className="ml-5 mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{EmailError}</p>
                   </div>
                 </div>
               </div>
@@ -533,18 +477,10 @@ export default function CustomerRegistration(props) {
                         type="number"
                         class="form-control rounded"
                         id="inputContact"
-                        placeholder="Contact Number*"
-                        onChange={(e) => {
-                          SetContactNo(e.target.value);
-                          SetContactNoError("");
-
-                        }}
-                        required
+                        placeholder="Contact"
                       />
                     </div>
-                    <p className="ml-5 mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{ContactNumberError}</p>
                   </div>
-
                 </div>
               </div>
               {/* password */}
@@ -575,27 +511,7 @@ export default function CustomerRegistration(props) {
                         }}
                         class="form-control  border-right-0"
                         id="inputpassword"
-                        placeholder="Password*"
-                        onFocus={
-                          () => setPasswordFocused(true)
-                        }
-                        onBlur={
-                          () => setPasswordFocused(false)
-                        }
-
-                        onChange={(e) => {
-                          SetPassword(e.target.value);
-                          SetPasswordError("");
-                          setExtraError("");
-                          setPasswordValidity({
-                            minChar: e.target.value.length >= 8 ? true : false,
-                            number: isNumberRegx.test(e.target.value) ? true : false,
-                            specialChar: specialCharacterRegx.test(e.target.value) ? true : false
-                          })
-
-                        }}
-
-                        required
+                        placeholder="Password"
                       />
 
                       <span class="input-group-append bg-white border-left-0">
@@ -639,8 +555,6 @@ export default function CustomerRegistration(props) {
                         </span>
                       </span>
                     </div>
-                    <p className="ml-5 mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{PasswordError}</p>
-                    {passwordFocused && <PasswordStrengthIndicator validity={passwordValidity} />}
                   </div>
                 </div>
               </div>
@@ -672,21 +586,7 @@ export default function CustomerRegistration(props) {
                         }}
                         class="form-control border-right-0"
                         id="inputConfirmPassword"
-                        placeholder="Re-type Password*"
-                        onChange={(e) => {
-                          SetConfirmPassword(e.target.value);
-                          SetConfirmPasswordError("");
-                          checkPasswords(e.target.value);
-                        }}
-
-                        onBlur={
-                          () => {
-                            setPasswordMatchDiv(true);
-                            setPasswordMisMatchDiv(true);
-                          }
-                        }
-
-                        required
+                        placeholder="Re-type Password"
                       />
                       <span class="input-group-append bg-white border-left-0">
                         <span class="input-group-text bg-transparent">
@@ -729,7 +629,6 @@ export default function CustomerRegistration(props) {
                         </span>
                       </span>
                     </div>
-                    <p className="ml-5 mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{confirmPasswordError}</p>
                   </div>
                 </div>
               </div>
@@ -760,18 +659,9 @@ export default function CustomerRegistration(props) {
                             type="text"
                             class="form-control rounded"
                             id="inputFirstname"
-                            placeholder="First Name*"
-                            onChange={(e) => {
-                              setFirstName(e.target.value);
-                              setFirstNameError("");
-                              checkNamePattern(e.target.value, "first");
-                            }}
-
-                            required
-
+                            placeholder="First Name"
                           />
                         </div>
-
                       </div>
                     </div>
                   </div>
@@ -800,17 +690,9 @@ export default function CustomerRegistration(props) {
                             type="text"
                             class="form-control rounded"
                             id="inputLastname"
-                            placeholder="Last Name*"
-                            onChange={(e) => {
-                              setLastName(e.target.value);
-                              setLastNameError("");
-                              checkNamePattern(e.target.value, "last");
-                            }}
-
-                            required
+                            placeholder="Last Name"
                           />
                         </div>
-
                       </div>
                     </div>
                   </div>
@@ -825,15 +707,6 @@ export default function CustomerRegistration(props) {
                     name="inlineRadioOptions"
                     id="RadioMale"
                     value="Male"
-
-                    onChange={(e) => {
-                      setGender(e.target.value);
-                      setGenderError("");
-
-
-                    }}
-
-                    required
                   />
                   <label class="form-check-label" for="inlineRadio1">
                     Male
@@ -846,18 +719,10 @@ export default function CustomerRegistration(props) {
                     name="inlineRadioOptions"
                     id="RadioFemale"
                     value="Female"
-                    onChange={(e) => {
-                      setGender(e.target.value);
-                      setGenderError("");
-
-
-                    }}
-                    required
                   />
                   <label class="form-check-label" for="inlineRadio2">
                     Female
                   </label>
-
                 </div>
                 <div class="form-check form-check-inline">
                   <input
@@ -866,20 +731,11 @@ export default function CustomerRegistration(props) {
                     name="inlineRadioOptions"
                     id="RadioOther"
                     value="Other"
-                    onChange={(e) => {
-                      setGender(e.target.value);
-                      setGenderError("");
-
-
-                    }}
-
-                    required
                   />
                   <label class="form-check-label" for="inlineRadio3">
                     Other
                   </label>
                 </div>
-                <p className="ml-5 mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{GenderError}</p>
               </div>
               <br />
               {/* country */}
@@ -897,14 +753,6 @@ export default function CustomerRegistration(props) {
                   </svg>
                 </span>
                 <select
-                  onClick={(e) => {
-                    setCountry(e.target.value);
-                    setCountryError("");
-
-
-                  }}
-
-                  required
                   class="selectpicker countrypicker"
                   id="selectedCountry"
                   style={{
@@ -914,7 +762,6 @@ export default function CustomerRegistration(props) {
                     borderRadius: "2px",
                   }}
                 ></select>
-                <p className="ml-5 mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{CountryError}</p>
               </div>
               <br />
               {/* terms and condition */}
@@ -924,15 +771,7 @@ export default function CustomerRegistration(props) {
                     class="form-check-input"
                     type="checkbox"
                     value=""
-                    id="TermsC"
-                    onClick={(e) => {
-
-                      setTnCError("");
-
-
-                    }}
-
-                    required
+                    id="termsCheckbox"
                   />
                   <label class="form-check-label" for="defaultCheck1">
                     Agree to terms and conditions.{" "}
@@ -941,7 +780,6 @@ export default function CustomerRegistration(props) {
                     </a>
                   </label>
                 </div>
-                <p className="ml-5 mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{TnCError}</p>
               </div>
               <br />
               {/* submit button */}
@@ -963,37 +801,6 @@ export default function CustomerRegistration(props) {
         </div>
       </div>
       <br />
-
-  
-      <Modal show={modalOpenForLoading} size="md">
-        <Modal.Header></Modal.Header>
-
-        <Modal.Body>
-          <div class="d-flex justify-content-center">
-            <div class="spinner-border text-success" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
-          </div>
-          <br />
-          <h1 style={{ textAlign: "center", color: "#764A34" }}>
-            Please wait!
-          </h1>
-          <h6 style={{ textAlign: "center", color: "#764A34" }}>
-           Your Account is Being Created...
-          </h6>
-        </Modal.Body>
-        <Modal.Footer></Modal.Footer>
-      </Modal>
-
-
-
-
-
-
-
-
-
-
     </div>
   );
 }

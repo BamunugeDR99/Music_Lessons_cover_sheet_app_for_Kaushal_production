@@ -27,14 +27,12 @@ const feedbackSchema = new Schema({
     },
 
    AddedDateAndTime: {
-        type: String,
+        type: Date,
         required: true,
-        // default: new Date().toLocaleString('en-US', { timeZone: 'Asia/Colombo'})
-        default: new Date().toLocaleString('en-US', { timeZone: 'Asia/Colombo'})
+        default: new Date()
+       
     }
 
-
-   
 })
 
 const Feedback = mongoose.model("Feedback", feedbackSchema);

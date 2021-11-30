@@ -17,18 +17,17 @@ export default function DashBoard(props) {
         >
           <div className="row">
             <div className="col-8">
-              <span style={{ color: props.color }}>{props.num}</span>
+              <span style={{ color: props.color }}>30</span>
               <br />
-              <span>{props.value}</span>
+              <span>Ongoing Orders</span>
             </div>
-            
             <div className="col">
               <i
-                class={props.icon}
+                class="fa fa-hourglass-end"
                 aria-hidden="true"
                 style={{
                   color: props.color,
-                  fontSize: "20px",
+                  fontSize: "30px",
                   marginTop: "10px",
                 }}
               ></i>

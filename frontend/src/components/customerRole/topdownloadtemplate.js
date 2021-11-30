@@ -1,8 +1,8 @@
 import React from "react";
 
-export default function TopDownloadTemplate(props) {
+export default function TopDownloadTemplate() {
   return (
-    <div >
+    <div>
       <div
         className="card"
         style={{
@@ -18,16 +18,16 @@ export default function TopDownloadTemplate(props) {
         />
         <div className="card-body">
           <center>
-            <h7 className="card-title">{props.title}</h7>
+            <h7 className="card-title">Hall of Fame</h7>
             <br />
 
             <div className="row">
               <div className="col-md-6">
-                <p className="card-title">{props.artist}</p>
+                <p className="card-title">Ryan Teddar</p>
               </div>
               <div className="col-md-6">
                 <p className="card-title " style={{ color: "#764A34" }}>
-                  ${props.price}
+                  Rs.150.00
                 </p>
               </div>
             </div>

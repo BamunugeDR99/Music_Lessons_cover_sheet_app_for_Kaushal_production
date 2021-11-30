@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import "../../css/CustomerHeaderStyles.css";
 import Modal from "react-bootstrap/Modal";
@@ -484,7 +484,7 @@ export default function CustomerHeader(props) {
   }, []);
 
   return (
-    <div className = "customerHeader">
+    <div>
      
       <nav
         class="navbar sticky-top navbar-expand-lg navbar-light"
@@ -585,7 +585,7 @@ export default function CustomerHeader(props) {
             </button>
           </form>
           <div>
-            <span className="userProfileSpan" onClick={Profilemodalopen}>
+            <span className="userProfileSpan">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="30"
