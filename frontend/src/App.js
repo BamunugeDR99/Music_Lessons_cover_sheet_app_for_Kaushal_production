@@ -9,12 +9,13 @@ import CustomerForgotPassword from "./components/customerRole/CustomerForgotPass
 // import LessonsAndCoversDetailed from "./components/customerRole/LessonsAndCoversDetailed";
 // import ViewCovers from "./components/adminRole/ViewCovers";
 // import ViewDetailedCoverPage from "./components/adminRole/ViewDetailedCoverPage";
-
+import Home from "./components/customerRole/home";
+import InitialPage from "./components/customerRole/initialpage";
 function App() {
   return (
     <Router>
       <div>
-        <Route path = "/" exact component = {CustomerForgotPassword}/>
+        <Route path = "/" exact component = {InitialPage}/>
       </div>
     </Router>
   );
