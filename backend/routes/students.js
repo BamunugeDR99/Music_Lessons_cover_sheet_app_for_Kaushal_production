@@ -6,12 +6,11 @@ router.route("/add").post((req, res) => {
   const name = req.body.name;
   const age = parseInt(req.body.age);
   const gender = req.body.gender;
-  
+
   const newStudent = new Student({
     name,
     age,
     gender,
-    
   });
 
   newStudent
@@ -22,7 +21,7 @@ router.route("/add").post((req, res) => {
           name: newStudent.name,
           gender: newStudent.gender,
           age: newStudent.age,
-          date : newStudent.date
+          date: newStudent.date,
         },
       });
     })
@@ -97,29 +96,19 @@ router.route("/get/:id").get(async (req, res) => {
     });
 });
 
-
-
-
-    
 router.post("/getByName", (req, res) => {
-    const { name } = req.body;
-  // when there are two equals inputs in the database the first document will be retireved from the database 
-  
-    Student.findOne({ name }).then((studentsss) => {
-    
-      res.json({
-        studentsss: {
-          name: studentsss.name,
-          age: studentsss.age,
-          gender: studentsss.gender,
-        }
-      });
+  const { name } = req.body;
+  // when there are two equals inputs in the database the first document will be retireved from the database
+
+  Student.findOne({ name }).then((studentsss) => {
+    res.json({
+      studentsss: {
+        name: studentsss.name,
+        age: studentsss.age,
+        gender: studentsss.gender,
+      },
     });
   });
-  
-
-
-
-
+});
 
 module.exports = router;

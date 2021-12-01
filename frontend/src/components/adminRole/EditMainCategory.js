@@ -2,7 +2,7 @@ import React, { Component, useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Modal from "react-bootstrap/Modal";
-import $ from "jquery";
+// import $ from "jquery";
 
 export default function EditMainCategories(props) {
 
@@ -60,13 +60,13 @@ export default function EditMainCategories(props) {
                   setCategory2(filter2[0].SubCategories)
                   console.log(filter2[0].SubCategories)
 
-                $(document).ready(function () {
-                  $("#example").DataTable();
-                });  
+                // $(document).ready(function () {
+                //   $("#example").DataTable();
+                // });  
 
-                $(document).ready(function () {
-                  $("#example2").DataTable();
-                });  
+                // $(document).ready(function () {
+                //   $("#example2").DataTable();
+                // });  
             })
             .catch((err)=>{
                 alert(err);
@@ -482,4 +482,3 @@ export default function EditMainCategories(props) {
 </div>
   );
 }
-

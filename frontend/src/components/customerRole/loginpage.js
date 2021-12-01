@@ -1,134 +1,293 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import LogoImage from '../../images/loginback.png';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
-import "../../css/login.css"
+import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import "../../css/login.css";
+import Swal from "sweetalert2";
+
 const eye = <FontAwesomeIcon icon={faEye} />;
-
-
-
+const sleye = <FontAwesomeIcon icon={faEyeSlash} />;
 
 export default function Login(props) {
+  const refreshToken = async () => {
+    try {
+      const res = await axios.post("/refresh", {
+        token: customer.refreshToken,
+      });
+      setCustomer({
+        ...customer,
+        accessToken: res.data.accessToken,
+        refreshToken: res.data.refreshToken,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-    const styles = {
-        container: {
-            backgroundImage: `url(${LogoImage})`,
-            backgroundPosition: 'center',
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            width: '100vw',
-            height: '100vh'
-        }
+  // axios.interceptors.request.use( async(config)=>{
+
+  //         let currentDate = new Date();
+
+  // }
+  // );
+
+  //remember me
+
+  const [rememberMe, setRememberMe] = useState(false);
+
+  const handleChange = (event) => {
+    const input = event.target;
+    const value = input.type === "checkbox" ? input.checked : input.value;
+
+    setRememberMe(value);
+  };
+
+  const [passwordShown, setPasswordShown] = useState(false);
+
+
+
+  // Password toggle handler
+  const togglePasswordVisiblity = () => {
+    setPasswordShown(passwordShown ? false : true);
+  };
+
+  let [customer, setCustomer] = useState(null);
+  let [Username, setUsername] = useState("");
+  let [Password, setPassword] = useState("");
+  let [errorMsg, setErrorMsg] = useState("");
+
+  useEffect(() => {
+    function RememberMe() {
+      if (localStorage.getItem("rememberMe") === "true") {
+        setUsername(localStorage.getItem("Username"));
+      } else {
+        setUsername("");
+      }
+    }
+
+    RememberMe();
+    // displayStudentdetails();
+  }, []);
+
+  function loginUser(e) {
+    e.preventDefault();
+
+    const loginCredentials = {
+      Username,
+      Password,
     };
 
+    localStorage.setItem("rememberMe", rememberMe);
+    localStorage.setItem("Username", rememberMe ? Username : "");
 
+    axios
+      .post("http://localhost:8070/Customer/loginCustomer", loginCredentials)
+      .then((res) => {
+        setCustomer(res.data.customerLogin);
+        localStorage.setItem("CustomerID", res.data.customerLogin._id);
 
-    const [passwordShown, setPasswordShown] = useState(false);
+        // sessionStorage.setItem('userID',"sss");
 
-    // Password toggle handler
-    const togglePasswordVisiblity = () => {
-        setPasswordShown(passwordShown ? false : true);
-    };
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 1500,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
 
+        Toast.fire({
+          icon: "success",
+          title: "Signed in successfully",
+        });
 
-    return (
-        <div className="wrapper" >
-            <div className=" container">
+        props.history.push("/customer/home");
+        // alert("Customer loggin Successfully!");
+        //console.log("logging success");
+        ///console.log(res.data);
+        setErrorMsg("");
+        // props.history.push("/Customer/Home");
+      })
+      .catch((err) => {
+        // alert(err);
+        console.log(err);
+        // alert(err.response.data.error);
 
-                <div className="row justify-content-center">
-                    <div className="col-xl-5">
-                        <h3 style={{ fontWeight: "bold" }} className="mt-5 mb-5">Sign In</h3>
-                    </div>
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Please Check Your Username & Password!",
+          showClass: {
+            popup: "animate__animated animate__fadeInDown",
+          },
+          hideClass: {
+            popup: "animate__animated animate__fadeOutUp",
+          },
+        });
+        setErrorMsg(err.response.data.error);
+      });
+  }
 
-                </div>
+  // function navCheck(){
 
-                <form className="mb-10">
+  //     navigate('/cart');
+  // }
 
+  return (
+    <div className="loginpage">
+      <main class="d-flex align-items-center min-vh-100 py-3 py-md-0">
+        <div class="container">
+          <div class="card login-card">
+            <div class="row no-gutters">
+              <div class="col-md-5">
+                <img
+                  src="https://images.unsplash.com/photo-1598233845720-008543fa485c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=363&q=80"
+                  alt="login"
+                  class="login-card-img"
+                />
+              </div>
+              <div class="col-md-7">
+                <div class="card-body">
+                  <div class="brand-wrapper" style={{ display: "flex" }}>
+                    <img
+                      src={"/images/KaushalOfficialLogo.jpeg"}
+                      alt="logo"
+                      class="logo"
+                    ></img>
+                    <h5
+                      style={{
+                        fontWeight: "bold",
+                        paddingLeft: "8px",
+                        paddingTop: "6px",
+                      }}
+                    >
+                      KAUSHAL RASHMIKA
+                    </h5>
+                  </div>
+                  <p class="login-card-description">Sign into your account</p>
+                  <h6
+                    id="CusLoginError"
+                    style={{ color: "red", fontWeight: "bold" }}
+                  >
+                    {errorMsg}
+                  </h6>
+                  <form onSubmit={loginUser}>
                     {/* Username label & input field  */}
 
-                    <div class="form-group row justify-content-center">
-
-                        <div className="col-xl-5">
-                            <label for="exampleInputEmail1" style={{ fontWeight: "bold" }}>Username</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Username" />
-                        </div>
+                    <div class="form-group">
+                      <label for="email" className="sr-only">
+                        Username
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Username"
+                        defaultValue={Username}
+                        name="Username"
+                        onChange={handleChange}
+                        onChange={(e) => {
+                          setUsername(e.target.value);
+                        }}
+                        required
+                      />
                     </div>
 
-                     {/* Password label & input field  */}
+                    {/* Password label & input field  */}
 
-                    <div class="form-group row justify-content-center">
-
-                        <div className="col-xl-5">
-
-                            <label for="exampleInputEmail1" style={{ fontWeight: "bold" }}>Password</label>
-
-                            <div class="input-group mb-3">
-                                <input
-                                    placeholder="Password"
-                                    class="form-control"
-                                    name="password"
-                                    type={passwordShown ? "text" : "password"}
-
-
-                                />
-
-                                {/* eye icon */}
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2"> <i onClick={togglePasswordVisiblity}>{eye}</i></span>
-                                </div>
-                            </div>
-
-
-                        </div>
+                    <div class="form-group mb-4">
+                      <label for="password" className="sr-only">
+                        Password
+                      </label>
+                      <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        class="form-control"
+                        placeholder="Password"
+                        type={passwordShown ? "text" : "password"}
+                        onChange={(e) => {
+                          setPassword(e.target.value);
+                        }}
+                        required
+                      />
+                      <span class="p-viewer">
+                        <i
+                          style={{ color: "#764A34" }}
+                          className={`fa ${
+                            passwordShown ? "fa-eye" : "fa-eye-slash"
+                          } password-icon`}
+                          onClick={togglePasswordVisiblity}
+                        >
+                          {" "}
+                        </i>
+                      </span>
                     </div>
 
+                    {/* Remember me */}
 
-                    {/* Submit Button      */}
-                    <div class="form-group row justify-content-center">
-                        <div className="col-xl-5">
-                            <div className="container-sm">
-                                <button type="submit" class="btn btn-lg btn-block rounded" style={{ backgroundColor: "#764A34", color: "#ffffff", fontWeight: "bold" }} >Sign in</button>
-
-                            </div>
-
-                        </div>
+                    <div class="custom-control custom-checkbox mb-3">
+                      <input
+                        id="customCheck1"
+                        type="checkbox"
+                        class="custom-control-input"
+                        name="rememberMe"
+                        checked={rememberMe}
+                        onChange={handleChange}
+                      />
+                      <label for="customCheck1" class="custom-control-label">
+                        Remember Me{" "}
+                      </label>
                     </div>
 
+                    {/* Submit Button */}
 
-                    {/* Remember me & Forgot Password */}
-                    <div class="form-group row justify-content-center">
-                        <div className="col-xl-2 col-md-6 col-sm-6 col-6">
-                            <input type="checkbox" class="form-check-input ml-1" id="exampleCheck1" />
-                            <label class="form-check-label ml-4 " for="exampleCheck1" style={{ color: "#764A34", fontWeight: "bold" }}>Remember me</label>
+                    <input
+                      name="login"
+                      id="login"
+                      class="btn btn-block login-btn mb-4"
+                      type="submit"
+                      value="Login"
+                    />
+                  </form>
 
-                        </div >
-                        <div className="col-xl-3 col-md-6 col-sm-6 col-6">
-                            <Link to="/CustomerForgotPassword" style={{ color: "#000000", fontWeight: "bold" }}>Forgot Password?</Link>
+                  {/* forgot password */}
 
-                        </div>
-                    </div>
+                  <p class="forgot-password-link">
+                    {" "}
+                    <Link
+                      to="/customer/forgotpassword"
+                      style={{ color: "#764A34", fontWeight: "bold" }}
+                    >
+                      Forgot Password?
+                    </Link>
+                  </p>
 
-                     {/* Not a member link */}
-                    <div class="form-group row justify-content-center">
-                        <div className="col-xl-5">
-                            <p style={{ fontWeight: "bold" }}> Not a Member ?  <Link style={{ color: "#764A34" }} to="/CustomerForgotPassword">Sign Up</Link> </p>
-                        </div>
-                    </div>
+                  {/* Not a member link */}
 
-
-
-
-                </form>
+                  <p class="login-card-footer-text">
+                    Don't have an account?{" "}
+                    <Link
+                      to="/customer/registration"
+                      style={{ color: "#764A34" }}
+                    >
+                      Create One
+                    </Link>
+                  </p>
+                </div>
+              </div>
             </div>
-
-
-
-
-
-
+          </div>
         </div>
-    )
-
+      </main>
+      <br />
+      <br />
+    </div>
+  );
 }
