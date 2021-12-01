@@ -10,8 +10,8 @@ import React, { Component } from "react";
 function App() {
   return (
     <BrowserRouter>
-      <Routes></Routes>
-      <Routes></Routes>
+      <Routes>
+      </Routes>
     </BrowserRouter>
 
   );
