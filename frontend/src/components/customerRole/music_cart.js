@@ -244,5 +244,43 @@ export default function MusicCart(props) {
           </div>
         </div>
 
-    )
+        {/* Cart Calculations */}
+        <div class="col-lg-4  justify-content-end">
+          <div class="mb-6 ">
+            <div class="pt-3">
+              <h5 class="mb-3" style={{ fontWeight: "bold" }}>
+                The Total Amount of
+              </h5>
+              <ul class="list-group list-group-flush">
+                {/* Temporary Amount */}
+                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                  Temporary Amount: ${total}
+                </li>
+
+                {/* Sub Total */}
+                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                  <div>
+                    <strong>Sub Total: ${total}</strong>
+                  </div>
+                </li>
+              </ul>
+
+              {/* Checkout Button */}
+              <button
+                type="button"
+                class="btn  btn-block"
+                style={{ backgroundColor: "#279B14", color: "white" }}
+              >
+                <i class="bi bi-arrow-right"></i>
+                Go to Checkout
+              </button>
+
+              <br />
+              <br />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
