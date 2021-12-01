@@ -157,7 +157,7 @@ export default function Login(props) {
                 <div class="card-body">
                   <div class="brand-wrapper" style={{ display: "flex" }}>
                     <img
-                      src={"images/KaushalOfficialLogo.jpeg"}
+                      src={"/images/KaushalOfficialLogo.jpeg"}
                       alt="logo"
                       class="logo"
                     ></img>

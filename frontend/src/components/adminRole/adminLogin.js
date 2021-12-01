@@ -174,7 +174,7 @@ export default function AdminLogin(props) {
             <div class="card-body">
                 {/* <h2 style={{textAlign:"center", fontWeight:"bold"}}>ADMINISTRATOR</h2> */}
               <div class="brand-wrapper" style={{display:"flex"}}>
-                <img src="images/KaushalOfficialLogo.jpeg" alt="logo" class="logo"></img>
+                <img src={"/images/KaushalOfficialLogo.jpeg"} alt="logo" class="logo"></img>
                 <h4 style={{paddingLeft:"8px", paddingTop:"6px", fontWeight:"bold"}}>Admin</h4>
               </div>
               <p class="login-card-description">Sign In</p>
