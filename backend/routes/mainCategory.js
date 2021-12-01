@@ -6,9 +6,9 @@ router.route("/add").post((req, res) => {
   const Name = req.body.Name;
   const SubCategories = req.body.SubCategories;
   const Status = req.body.Status;
-//   const UpdatedDateAndTime = req.body.UpdatedDateAndTime;
+  //   const UpdatedDateAndTime = req.body.UpdatedDateAndTime;
   const UpdatedUser = req.body.UpdatedUser;
-//   const AddedDateAndTime = req.body.AddedDateAndTime;
+  //   const AddedDateAndTime = req.body.AddedDateAndTime;
 
   const newMainCategory = new MainCategory({
     Name,
@@ -27,11 +27,10 @@ router.route("/add").post((req, res) => {
           _id: newMainCategory._id,
           // Name: newMainCategory.Name,
           SubCategories: newMainCategory.Name,
-          Status : newMainCategory.Status,
-        //   UpdatedDateAndTime : newMainCategory.UpdatedDateAndTime,
-          UpdatedUser : newMainCategory.UpdatedUser,
-        //   AddedDateAndTime : newMainCategory.AddedDateAndTime,
-          
+          Status: newMainCategory.Status,
+          //   UpdatedDateAndTime : newMainCategory.UpdatedDateAndTime,
+          UpdatedUser: newMainCategory.UpdatedUser,
+          //   AddedDateAndTime : newMainCategory.AddedDateAndTime,
         },
       });
     })
@@ -63,20 +62,21 @@ router.route("/update/:id").put(async (req, res) => {
     // UpdatedDateAndTime,
     UpdatedUser,
     // AddedDateAndTime,
-   
   } = req.body;
 
-  const updateMainCategory= {
+  const updateMainCategory = {
     // Name,
     SubCategories,
     Status,
-    UpdatedDateAndTime : new Date(),
+    UpdatedDateAndTime: new Date(),
     UpdatedUser,
     // AddedDateAndTime,
-   
   };
 
-  const update = await MainCategory.findByIdAndUpdate(mainCategoryID, updateMainCategory)
+  const update = await MainCategory.findByIdAndUpdate(
+    mainCategoryID,
+    updateMainCategory
+  )
     .then(() => {
       res.status(200).send({ status: "MainCategory updated" });
     })
@@ -102,10 +102,12 @@ router.route("/delete/:id").delete(async (req, res) => {
     });
 });
 
+// // get one student details (Specific)
 router.route("/get/:id").get(async (req, res) => {
   let mainCategoryID = req.params.id;
   const mainCategory = await MainCategory.findById(mainCategoryID)
     .then((mainCategorys) => {
+      // res.status(200).send({status:"User fetched"});
       res.json(mainCategorys);
     })
     .catch((err) => {
@@ -116,112 +118,101 @@ router.route("/get/:id").get(async (req, res) => {
     });
 });
 
-
-
 //Update Status
 router.route("/StatusUpdate/:id").put(async (req, res) => {
   let mainCategoryID = req.params.id;
-  const{
-        Status
-       } = req.body;
+  const { Status } = req.body;
 
-  const StatusUpdate  = {
-    Status
-  }
+  const StatusUpdate = {
+    Status,
+  };
 
   const update = await MainCategory.updateOne(
+    { _id: mainCategoryID },
+    { $set: { Status: Status } }
+  )
+    .then(() => {
+      res.status(200).send({ status: "Status updated" });
+    })
+    .catch((err) => {
+      console.log(err);
+      res
+        .status(500)
+        .send({ status: "Error with updating data", error: err.message });
+    });
+});
 
-    {_id : mainCategoryID},
-    {$set : {Status :Status}},
-
-
-  ).then(() => {
-
-    res.status(200).send({ status: "Status updated" });
-  })
-  .catch((err) => {
-    console.log(err);
-    res
-      .status(500)
-      .send({ status: "Error with updating data", error: err.message });
-  });
-
-
-  })
-
-  //Update Classical Guitar Covers
+//Update Classical Guitar Covers
 router.route("/ClassicalUpdate/:id").put(async (req, res) => {
   let mainCategoryID = req.params.id;
-  const{
-        SubCategories,
-        UpdatedDateAndTime,
-       } = req.body;
+  const { SubCategories, UpdatedDateAndTime } = req.body;
 
-  const ClassicalUpdate  = {
+  const ClassicalUpdate = {
     SubCategories,
-    UpdatedDateAndTime : new Date(),
-  }
+    UpdatedDateAndTime: new Date(),
+  };
 
   const update = await MainCategory.updateOne(
+    { _id: mainCategoryID },
+    {
+      $set: {
+        SubCategories: SubCategories,
+        UpdatedDateAndTime: UpdatedDateAndTime,
+      },
+    }
+  )
+    .then(() => {
+      res.status(200).send({ status: "Category updated" });
+    })
+    .catch((err) => {
+      console.log(err);
+      res
+        .status(500)
+        .send({ status: "Error with updating data", error: err.message });
+    });
+});
 
-    {_id : mainCategoryID},
-    {$set : {SubCategories :SubCategories,UpdatedDateAndTime:UpdatedDateAndTime}},
-
-
-  ).then(() => {
-
-    res.status(200).send({ status: "Category updated" });
-  })
-  .catch((err) => {
-    console.log(err);
-    res
-      .status(500)
-      .send({ status: "Error with updating data", error: err.message });
-  });
-
-
-  })
-
-
-    //Update Exercise and techniques
+//Update Exercise and techniques
 router.route("/ExerciseUpdate/:id").put(async (req, res) => {
   let mainCategoryID = req.params.id;
-  const{
-        SubCategories,
-        UpdatedDateAndTime,
-       } = req.body;
+  const { SubCategories, UpdatedDateAndTime } = req.body;
 
-  const ExerciseUpdate  = {
+  const ExerciseUpdate = {
     SubCategories,
-    UpdatedDateAndTime : new Date(),
-  }
+    UpdatedDateAndTime: new Date(),
+  };
 
   const update = await MainCategory.updateOne(
+    { _id: mainCategoryID },
+    {
+      $set: {
+        SubCategories: SubCategories,
+        UpdatedDateAndTime: UpdatedDateAndTime,
+      },
+    }
+  )
+    .then(() => {
+      res.status(200).send({ status: "Category updated" });
+    })
+    .catch((err) => {
+      console.log(err);
+      res
+        .status(500)
+        .send({ status: "Error with updating data", error: err.message });
+    });
+});
 
-    {_id : mainCategoryID},
-    {$set : {SubCategories :SubCategories,UpdatedDateAndTime:UpdatedDateAndTime}},
-
-
-  ).then(() => {
-
-    res.status(200).send({ status: "Category updated" });
-  })
-  .catch((err) => {
-    console.log(err);
-    res
-      .status(500)
-      .send({ status: "Error with updating data", error: err.message });
-  });
-
-
-  })
-
-  router.route("/deleteSubCategory/:CategoryName/:id").delete(async (req, res) => {
+router
+  .route("/deleteSubCategory/:CategoryName/:id")
+  .delete(async (req, res) => {
     let CategoryName = req.params.CategoryName;
     let id = req.params.id;
-  
+
     try {
-      const result = await MainCategory.findOneAndUpdate({ _id : id }, {"$pull": {SubCategories: CategoryName}});
+      const result = await MainCategory.findOneAndUpdate(
+        { _id: id },
+        { $pull: { SubCategories: CategoryName } }
+      );
       res.status(200).json(result);
     } catch (error) {
       res.status(404).json({ message: error.message });

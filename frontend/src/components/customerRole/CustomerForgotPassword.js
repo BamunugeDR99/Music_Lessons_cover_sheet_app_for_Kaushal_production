@@ -40,6 +40,8 @@ export default function CustomerForgotPassword(props) {
   const isNumberRegx = /\d/;
   const specialCharacterRegx = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
 
+
+  let c = "";
   function sendEmail(e) {
     e.preventDefault();
     setCodeVerification("");
@@ -50,17 +52,23 @@ export default function CustomerForgotPassword(props) {
     axios
       .get("http://localhost:8070/customer/getEmail/" + UserEmail)
       .then((res) => {
-        if (res.data === null) {
+        if (res.data.length == 0) {
           setLoading(true);
           setUserNotFoundError("User not found!");
         } else if (res.data != null) {
-          setCustomerID(res.data);
+         // console.log(res.data[0]._id)
+          setCustomerID(res.data[0]._id); 
           setUserNotFoundError("");
           emailConfiguration();
         }
       })
       .catch((err) => {
-        alert(err);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
   }
 
@@ -76,11 +84,9 @@ export default function CustomerForgotPassword(props) {
   }
 
   function emailConfiguration() {
-
     const hidEmail = hideEmail(UserEmail);
     const generatedCode = generateCode(8);
     setCode(generatedCode);
-    console.log(generateCode);
     const emailContent = {
       email: UserEmail,
       code: generatedCode,
@@ -139,14 +145,14 @@ export default function CustomerForgotPassword(props) {
       );
   }
 
-function hideEmail (email) {
-    return email.replace(/(.{2})(.*)(?=@)/,
-      function(gp1, gp2, gp3) { 
-        for(let i = gp3.length; i > 0; i--) { 
-          gp2+= "*"; 
-        } return gp2; 
-      });
-  };
+  function hideEmail(email) {
+    return email.replace(/(.{2})(.*)(?=@)/, function (gp1, gp2, gp3) {
+      for (let i = gp3.length; i > 0; i--) {
+        gp2 += "*";
+      }
+      return gp2;
+    });
+  }
 
   function verifyCode() {
     setLoading(false);
@@ -219,11 +225,13 @@ function hideEmail (email) {
                   "success"
                 );
                 setLoading(true);
+                props.history.push("/customer/login")
                 // navigate to the login page
               })
               .catch((err) => {
                 // alert(err);
                 Swal.fire("Error has been occured please try again!", "error");
+                props.history.push("/customer/login")
               });
           } else {
             setLoading(true);
@@ -326,7 +334,6 @@ function hideEmail (email) {
                       color: "#ffffff",
                       borderRadius: "8px",
                     }}
-
                   >
                     Get Code
                   </button>

@@ -16,7 +16,7 @@ export default function CurrencySelect(props) {
   function calculateCurrency(currency) {
     const selectedCurrency = document.getElementById("selectedCurrency").value;
     const currencyRate = currency.rates[selectedCurrency];
-    const musicCoverValue = props.coverPrice;
+    const musicCoverValue = 5;
     const newValue = (musicCoverValue * currencyRate).toFixed(2);
     document.getElementById("loadingBar").hidden = true;
     document.getElementById("changedValue").innerHTML =

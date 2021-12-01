@@ -1,91 +1,62 @@
 import React, { useState } from "react";
 import axios from "axios";
-import CoverTemplate from "./covercardtemplate";
-import TopDownloadTemplate from "./topdownloadtemplate";
-
+import AddStudent2 from "./addStudent2";
+import $ from "jquery";
+import "../../css/searchBarStyles.css";
+import {Link} from 'react-router-dom';
 export default function AddStudent(props) {
-  let [name, setName] = useState("");
-  let [age, setAge] = useState("");
-  let [gender, setGender] = useState("");
+  // function increment(){
 
-  function sendData(e) {
-    e.preventDefault();
+  //   // if( completedIncrements.indexOf("#cart1") == -1 ) {
+  //     var count = parseInt($("#countHolder").text());
+  //      $("#countHolder").html(count + 1);
 
-    const newStudent = {
-      name,
-      age,
-      gender,
-    };
+  //       completedIncrements.push("#cart1");
+  //   }
+  // }
+  //     <div className="container">
+  //         <div id="cart1" class="addcart" onClick = {increment}>Add Cart</div>
+  //         <i class="fa" style={{fontSize:"24px"}}>&#xf07a;</i>
+  // <span class='badge badge-warning' id='lblCartCount'> 5 </span>
+  //     </div>
 
-    console.log(newStudent);
-    // axios
-    //   .post("http://localhost:8070/student/add", newStudent)
-    //   .then(() => {
-    //     alert("Student Added");
-
-    //   })
-    //   .catch((err) => {
-    //     alert(err);
-    //   });
-    // alert("aas");
-    // const { history } = props;
-    // history.push("/");
+  const [status, setStatus] = useState(0);
+  function test() {
+    const searchWrapper = document.querySelector("#searchInput");
+    if (status == 0) {
+      searchWrapper.classList.add("active");
+      setStatus(1);
+    }else{
+        searchWrapper.classList.remove("active");
+        setStatus(0);
+    }
   }
-
   return (
-    <div className="container">
-      <form onSubmit={sendData}>
-        <div className="mb-3">
-          <label htmlFor="name" className="form-label">
-            Student Name
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="name"
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="age" className="form-label">
-            Student Age
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="age"
-            onChange={(e) => {
-              setAge(e.target.value);
-            }}
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="gender" className="form-label">
-            Student Gender
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="gender"
-            onChange={(e) => {
-              setGender(e.target.value);
-            }}
-          />
-        </div>
-
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
-      </form>
-      <div className="row">
-        <div className="col-md-3">
-          <CoverTemplate />
-        </div>
-        <div className="col-md-3">
-          <TopDownloadTemplate />
+    <div className="MainSearchBar">
+        // link
+       <button> <Link to = "/b"> cfc</Link></button>
+      <div class="wrapper">
+        <div class="search-input" id="searchInput">
+          <a href="" target="_blank" hidden></a>
+          <input type="text" placeholder="Type to search.." />
+          <div class="autocom-box">
+            {/* <!-- here list are inserted from javascript --> */}
+            <li>d</li>
+            <li>d</li>
+            <li>d</li>
+          </div>
+          <div class="icon" onClick={test}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-search"
+              viewBox="0 0 16 16"
+            >
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+            </svg>
+          </div>
         </div>
       </div>
     </div>

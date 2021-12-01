@@ -5,6 +5,7 @@ import DiscoverMoreCovers from "./DicoverMoreCovers";
 import Swal from "sweetalert2";
 import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
+import $ from "jquery";
 
 export default function LessonsAndCoversDetailed(props) {
   const [covers, setCovers] = useState([]);
@@ -12,10 +13,10 @@ export default function LessonsAndCoversDetailed(props) {
   let instrumentsTxt = "";
   let MainCategoryForRec = "";
   let SubCategoryForRec = "";
+
   useEffect(() => {
     function getCovers() {
-      //const CoverID = props.match.params.id;
-      const CoverTempID = "61a247ef9508b44b96cf150e";
+      const CoverTempID = props.match.params.id;
       axios
         .get("http://localhost:8070/covers/get/" + CoverTempID)
         .then((res) => {
@@ -25,10 +26,14 @@ export default function LessonsAndCoversDetailed(props) {
           displayPreviewImageSlider(res.data.PreviewPages);
           MainCategoryForRec = res.data.MainCategory;
           SubCategoryForRec = res.data.SubCategory;
-
         })
         .catch((err) => {
-          alert(err);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+            footer: '<p style = "color : #D0193A">Currently unavailable!',
+          });
         });
     }
 
@@ -64,20 +69,18 @@ export default function LessonsAndCoversDetailed(props) {
       }
     }
     imageSlider += "</div>";
-  
+
     document.getElementById("img").innerHTML = imageSlider;
-    for(let i = 0;  i < previewImages.length;i++){
-      document.getElementById("img" + i).src = "/images/verticalImageHolder.jpeg";
-        
-      }
+    for (let i = 0; i < previewImages.length; i++) {
+      document.getElementById("img" + i).src =
+        "/images/verticaLImageHolder.jpg";
+    }
     previewImages.map((previewImage, index) => {
       const storageRef = ref(storage, `PreviewImages/${previewImage}`);
       getDownloadURL(storageRef).then((url) => {
         document.getElementById("img" + index).src = url;
       });
     });
-
-  
   }
 
   function addToCart(id) {
@@ -85,7 +88,7 @@ export default function LessonsAndCoversDetailed(props) {
 
     //let customerID = localStorage.getItem("CustomerID");
     let newItems = []; /// Change this later
-    const customerID = "61a26e4cb42a52e3ff12e82e";
+    const customerID = localStorage.getItem("CustomerID");
     let coverIDs = [];
     let shoppingcartId = "";
     axios
@@ -94,7 +97,7 @@ export default function LessonsAndCoversDetailed(props) {
         console.log(res.data.CoverIDs);
         coverIDs = res.data.CoverIDs;
         shoppingcartId = res.data._id;
-        console.log(shoppingcartId)
+        console.log(shoppingcartId);
         let falgs = 0;
         for (let i = 0; i < coverIDs.length; i++) {
           if (coverIDs[i] === id) {
@@ -123,6 +126,13 @@ export default function LessonsAndCoversDetailed(props) {
                 showConfirmButton: false,
                 timer: 1500,
               });
+
+              let count = parseInt($("#countHolder").text());
+              $("#countHolder").html(count + 1);
+           
+               //completedIncrements.push("#cart1");
+           
+              
             })
             .catch((err) => {
               alert(err);
@@ -149,9 +159,7 @@ export default function LessonsAndCoversDetailed(props) {
                   class="carousel slide"
                   data-ride="carousel"
                 >
-                  <div id="img">
-      
-                  </div>
+                  <div id="img"></div>
                   {/* controls  */}
                   <a
                     class="carousel-control-prev"
@@ -208,19 +216,18 @@ export default function LessonsAndCoversDetailed(props) {
                 {/* add a facebook icon  */}
                 <div className="text-center">
                   <a
-                      class="btn rounded"
-                      style={{ backgroundColor: "#3b5998"}}
-                      href={covers.FacebookLink}
-                      role="button"
-                    >
-                      <i
-                        class="fab fa-facebook-f fa-3x"
-                        style={{ color: "#ffffff" }}
-                      ></i>
-                      
-                    </a><br/>
-                   <p style = {{color  : "#3b5998"}}> Watch it on facebook</p>
-
+                    class="btn rounded"
+                    style={{ backgroundColor: "#3b5998" }}
+                    href={covers.FacebookLink}
+                    role="button"
+                  >
+                    <i
+                      class="fab fa-facebook-f fa-3x"
+                      style={{ color: "#ffffff" }}
+                    ></i>
+                  </a>
+                  <br />
+                  <p style={{ color: "#3b5998" }}> Watch it on facebook</p>
                 </div>
                 <br />
                 <br />
@@ -332,7 +339,9 @@ export default function LessonsAndCoversDetailed(props) {
                       {/* calling a another Component */}
                       <CurrencySelect coverPrice={covers.Price} />
                       <br />
-                      <h6 style={{ color: "#D0193A" }}>*The actual price will be slightly different*</h6>
+                      <h6 style={{ color: "#D0193A" }}>
+                        *The actual price will be slightly different*
+                      </h6>
                       <h3 id="changedValue" style={{ color: "#764A34" }}></h3>
                       {/* spinner  */}
                       <div
@@ -408,15 +417,19 @@ export default function LessonsAndCoversDetailed(props) {
       </div>
       {/* discover more */}
       {/* <DiscoverMoreCovers message = "sonal"/> */}
-      <br/>
-      <h2 style = {{textAlign : "center",color : "#764A34"}}><b>Discover more!</b></h2>
-      <div className = "container-xl">
-        <h3><b>Our Recommendations </b></h3>
-      {/* <DiscoverMoreCovers subCategory = "Exercises" mainCategory = "Guitar Technics & Lessons"/> */}
-      <DiscoverMoreCovers subCategory = {SubCategoryForRec} mainCategory = {MainCategoryForRec}/>
-
+      <br />
+      <h2 style={{ textAlign: "center", color: "#764A34" }}>
+        <b>Discover more!</b>
+      </h2>
+      <div className="container-xl">
+        <h3>
+          <b>Our Recommendations </b>
+        </h3>
+        {/* <DiscoverMoreCovers subCategory = "Exercises" mainCategory = "Guitar Technics & Lessons"/> */}
+        <DiscoverMoreCovers
+         CoverID = "61a247ef9508b44b96cf150e"
+        />
       </div>
-    
     </div>
   );
 }

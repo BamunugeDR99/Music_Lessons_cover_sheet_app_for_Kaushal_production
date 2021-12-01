@@ -5,9 +5,9 @@ let SubCategory = require("../models/SubCategory");
 router.route("/add").post((req, res) => {
   const Name = req.body.Name;
   const Status = req.body.Status;
-//   const UpdatedDateAndTime = req.body.UpdatedDateAndTime;
+  //   const UpdatedDateAndTime = req.body.UpdatedDateAndTime;
   const UpdatedUser = req.body.UpdatedUser;
-//   const AddedDateAndTime = req.body.AddedDateAndTime;
+  //   const AddedDateAndTime = req.body.AddedDateAndTime;
 
   const newSubCategory = new SubCategory({
     Name,
@@ -23,11 +23,10 @@ router.route("/add").post((req, res) => {
       res.json({
         newSubCategory: {
           _id: newSubCategory._id,
-          Status : newSubCategory.Status,
-        //   UpdatedDateAndTime : newSubCategory.UpdatedDateAndTime,
-          UpdatedUser : newSubCategory.UpdatedUser,
-        //   AddedDateAndTime : newSubCategory.AddedDateAndTime,
-          
+          Status: newSubCategory.Status,
+          //   UpdatedDateAndTime : newSubCategory.UpdatedDateAndTime,
+          UpdatedUser: newSubCategory.UpdatedUser,
+          //   AddedDateAndTime : newSubCategory.AddedDateAndTime,
         },
       });
     })
@@ -58,19 +57,20 @@ router.route("/update/:id").put(async (req, res) => {
     // UpdatedDateAndTime,
     UpdatedUser,
     // AddedDateAndTime,
-   
   } = req.body;
 
-  const updateSubCategory= {
+  const updateSubCategory = {
     Name,
     Status,
-    UpdatedDateAndTime : new Date(),
+    UpdatedDateAndTime: new Date(),
     UpdatedUser,
     // AddedDateAndTime,
-   
   };
 
-  const update = await SubCategory.findByIdAndUpdate(subCategoryID, updateSubCategory)
+  const update = await SubCategory.findByIdAndUpdate(
+    subCategoryID,
+    updateSubCategory
+  )
     .then(() => {
       res.status(200).send({ status: "SubCategory updated" });
     })
@@ -96,6 +96,7 @@ router.route("/delete/:id").delete(async (req, res) => {
     });
 });
 
+// // get one student details (Specific)
 router.route("/get/:id").get(async (req, res) => {
   let subCategoryID = req.params.id;
   const subCategory = await SubCategory.findById(subCategoryID)
@@ -111,38 +112,28 @@ router.route("/get/:id").get(async (req, res) => {
     });
 });
 
-
-
 //Update Discount
 router.route("/StatusUpdate/:id").put(async (req, res) => {
   let subCategoryID = req.params.id;
-  const{
-        Status
-       } = req.body;
+  const { Status } = req.body;
 
-  const StatusUpdate  = {
-    Status
-  }
+  const StatusUpdate = {
+    Status,
+  };
 
   const update = await SubCategory.updateOne(
-
-    {_id : subCategoryID},
-    {$set : {Status :Status}},
-
-
-  ).then(() => {
-
-    res.status(200).send({ status: "Status updated" });
-  })
-  .catch((err) => {
-    console.log(err);
-    res
-      .status(500)
-      .send({ status: "Error with updating data", error: err.message });
-  });
-
-
-  })
-
+    { _id: subCategoryID },
+    { $set: { Status: Status } }
+  )
+    .then(() => {
+      res.status(200).send({ status: "Status updated" });
+    })
+    .catch((err) => {
+      console.log(err);
+      res
+        .status(500)
+        .send({ status: "Error with updating data", error: err.message });
+    });
+});
 
 module.exports = router;

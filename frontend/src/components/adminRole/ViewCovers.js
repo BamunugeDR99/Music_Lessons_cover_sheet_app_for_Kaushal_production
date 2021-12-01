@@ -6,7 +6,11 @@ import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import "../../css/toogle.css";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
+
+// Be sure to include styles at some point, probably during your bootstrapping
+// import 'react-select/dist/css/react-select.css';
 import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 export default function ViewCovers(props) {
@@ -22,7 +26,7 @@ export default function ViewCovers(props) {
 
   // user inputs
   const [songName, setSongName] = useState("");
-  const [instruments, setInstrument] = useState("Classical Guitar");
+  const [instruments, setInstrument] = useState([]);
   const [youtubeLink, setYoutubeLink] = useState("");
   const [facebookLink, setFacebookLink] = useState("");
   const [noOfPages, setNoOfPages] = useState("");
@@ -44,9 +48,14 @@ export default function ViewCovers(props) {
   const [cancelOrCloseBtn, setCancelOrCloseBtn] = useState("Close");
   const [finalDiv, setFinalDiv] = useState(true);
 
+  const instrumentsPlayedOn = [
+    { value: "Classical Guitar", label: "Classical Guitar" },
+    { value: "Piano", label: "Piano" },
+    { value: "Ukulele", label: "Ukulele" },
+    { value: "Acoustic Guitar", label: "Acoustic Guitar" },
+  ];
   // for pdf preview
   const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
-  let navigate = useNavigate();
   useEffect(() => {
     function getAllClassicalGuitarCovers() {
       axios
@@ -69,24 +78,27 @@ export default function ViewCovers(props) {
     setCovers(tempCovers.filter((covers) => covers.Status != "3"));
     $(document).ready(function () {
       $("#Covers").DataTable();
+      //$('.js-example-basic-multiple').select2();
     });
   }
 
   function previewPdf(covername) {
     setModalOpenForPdf(true);
     const storageRef = ref(storage, `Covers(PDF)/${covername}`);
-    getDownloadURL(storageRef).then((url) => {
-      // setPdfUrl(url)
-      window.location.href = url;
-      //setModalOpenForPdf(false)
-    }).catch(()=> {
-      setModalOpenForPdf(false);
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Something went wrong!',
+    getDownloadURL(storageRef)
+      .then((url) => {
+        // setPdfUrl(url)
+        window.location.href = url;
+        //setModalOpenForPdf(false)
       })
-    });
+      .catch(() => {
+        setModalOpenForPdf(false);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+        });
+      });
   }
 
   function GetLessonSubCategories() {
@@ -171,11 +183,21 @@ export default function ViewCovers(props) {
             }
           })
           .catch((err) => {
-            alert(err);
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+              footer: '<p style = "color : #D0193A">Currently unavailable!',
+            });
           });
       })
       .catch((err) => {
-        alert(err);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
   }
 
@@ -214,7 +236,12 @@ export default function ViewCovers(props) {
               );
             })
             .catch((err) => {
-              alert(err);
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+                footer: '<p style = "color : #D0193A">Currently unavailable!',
+              });
             });
         } else if (
           /* Read more about handling dismissals below */
@@ -229,7 +256,7 @@ export default function ViewCovers(props) {
       });
   }
   function viewMoreCover(id) {
-    navigate("/detailed/" + id);
+    props.history.push("/admin/viewmorecover/" + id);
   }
 
   function getAllClassicalGuitarCovers() {
@@ -240,7 +267,12 @@ export default function ViewCovers(props) {
         getAllClassicalGutarMainCategories();
       })
       .catch((err) => {
-        alert(err);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
   }
 
@@ -248,90 +280,97 @@ export default function ViewCovers(props) {
   function addCover(e) {
     e.preventDefault();
 
-
     const swalWithBootstrapButtons = Swal.mixin({
-  customClass: {
-    confirmButton: 'btn btn-success',
-    cancelButton: 'btn btn-danger'
-  },
-  buttonsStyling: false
-})
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger",
+      },
+      buttonsStyling: false,
+    });
 
-swalWithBootstrapButtons.fire({
-  title: 'Are you sure?',
-  text: "You won't be able to revert this!",
-  icon: 'warning',
-  showCancelButton: true,
-  confirmButtonText: 'Yes, add it!',
-  cancelButtonText: 'No, cancel!',
-  reverseButtons: true
-}).then((result) => {
-  if (result.isConfirmed) {
-
-    setFinalDiv(true);
-    setCoverAddingStatus(true);
-
-    setTotalFiles(previewPages.length+1);
-   // console.log(previewPages.length+1)
-    let dynamicSubCategory = "";
-    let previewPageList = [];
-    for (let i = 0; i < previewPages.length; i++) {
-      previewPageList.push(previewPages[i].name);
-    }
-    if (
-      document.getElementById("MainCategory").value ==
-      "Guitar Technics & Lessons"
-    ) {
-      dynamicSubCategory = document.getElementById("subCategory2").value;
-    } else if (
-      document.getElementById("MainCategory").value == "Classical Guitar Covers"
-    ) {
-      dynamicSubCategory = document.getElementById("subCategory1").value;
-    }
-    const InstrumntArray = instruments.split(",");
-    const newCover = {
-      Title: songName,
-      OriginalArtistName: originalArtist,
-      InstrumentsPlayedOn: InstrumntArray,
-      ArrangedBy: arrangedBy,
-      SubCategory: dynamicSubCategory,
-      MainCategory: document.getElementById("MainCategory").value,
-      NoOfPages: noOfPages,
-      NoOfPreviewPages: previewPages.length,
-      Price: price,
-      YoutubeLink: youtubeLink,
-      FacebookLink: facebookLink,
-      PreviewPages: previewPageList,
-      CoverPdf: coverPDF[0].name,
-    };
-    console.log(newCover);
-   UploadPdf();
-   
-    axios
-      .post("http://localhost:8070/covers/add", newCover)
-      .then(() => {
-        getAllClassicalGuitarCovers();
-        $("input[type=text]").val("");
-        $("input[type=number]").val("");
-        $("input[type=file]").val("");
+    swalWithBootstrapButtons
+      .fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, add it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true,
       })
-      .catch((err) => {
-        alert(err);
-      });
-    
- 
-  } else if (
-    /* Read more about handling dismissals below */
-    result.dismiss === Swal.DismissReason.cancel
-  ) {
-    swalWithBootstrapButtons.fire(
-      'Cancelled',
-      'Process has been undo :)',
-      'error'
-    )
-  }
-})
+      .then((result) => {
+        if (result.isConfirmed) {
+          setFinalDiv(true);
+          setCoverAddingStatus(true);
 
+          setTotalFiles(previewPages.length + 1);
+          // console.log(previewPages.length+1)
+          let dynamicSubCategory = "";
+          let previewPageList = [];
+          for (let i = 0; i < previewPages.length; i++) {
+            previewPageList.push(previewPages[i].name);
+          }
+          if (
+            document.getElementById("MainCategory").value ==
+            "Guitar Technics & Lessons"
+          ) {
+            dynamicSubCategory = document.getElementById("subCategory2").value;
+          } else if (
+            document.getElementById("MainCategory").value ==
+            "Classical Guitar Covers"
+          ) {
+            dynamicSubCategory = document.getElementById("subCategory1").value;
+          }
+          //const InstrumntArray = instruments.split(",");
+          let InstrumntArray = [];
+          for (let i = 0; i < instruments.length; i++) {
+            InstrumntArray.push(instruments[i].value);
+          }
+          const newCover = {
+            Title: songName,
+            OriginalArtistName: originalArtist,
+            InstrumentsPlayedOn: InstrumntArray,
+            ArrangedBy: arrangedBy,
+            SubCategory: dynamicSubCategory,
+            MainCategory: document.getElementById("MainCategory").value,
+            NoOfPages: noOfPages,
+            NoOfPreviewPages: previewPages.length,
+            Price: price,
+            YoutubeLink: youtubeLink,
+            FacebookLink: facebookLink,
+            PreviewPages: previewPageList,
+            CoverPdf: coverPDF[0].name,
+          };
+          //console.log(newCover);
+          UploadPdf();
+
+          axios
+            .post("http://localhost:8070/covers/add", newCover)
+            .then(() => {
+              getAllClassicalGuitarCovers();
+              $("input[type=text]").val("");
+              $("input[type=number]").val("");
+              $("input[type=file]").val("");
+            })
+            .catch((err) => {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+                footer: '<p style = "color : #D0193A">Currently unavailable!',
+              });
+            });
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire(
+            "Cancelled",
+            "Process has been undo :)",
+            "error"
+          );
+        }
+      });
   }
 
   function UploadPdf() {
@@ -356,7 +395,12 @@ swalWithBootstrapButtons.fire({
         }
       },
       (error) => {
-        console.log(error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       }
     );
   }
@@ -364,7 +408,7 @@ swalWithBootstrapButtons.fire({
     setFileType("Uploading Preview Images");
     let storageRef = "";
     const promises = [];
-    previewPages.map((previewPage,index) => {
+    previewPages.map((previewPage, index) => {
       storageRef = ref(storage, `PreviewImages/${previewPage.name}`);
       const uploadTask = uploadBytesResumable(storageRef, previewPage);
       promises.push(uploadTask);
@@ -376,21 +420,35 @@ swalWithBootstrapButtons.fire({
           );
           setProgress(prog);
           if (prog >= 100) {
-            setCompletedFiles(index+2);
+            setCompletedFiles(index + 2);
           } else {
           }
         },
         (error) => {
-          console.log(error);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+            footer: '<p style = "color : #D0193A">Currently unavailable!',
+          });
         }
       );
     });
 
-    Promise.all(promises).then(()=> {
-      setFileType("Cover added Successfully!");
-      setCompletedFiles(previewPages.length+1)
-      setFinalDiv(false);
-    }).catch(() => {alert("error")})
+    Promise.all(promises)
+      .then(() => {
+        setFileType("Cover added Successfully!");
+        setCompletedFiles(previewPages.length + 1);
+        setFinalDiv(false);
+      })
+      .catch(() => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
+      });
   }
 
   function checkStatus(status) {
@@ -408,6 +466,10 @@ swalWithBootstrapButtons.fire({
       return "https://www.youtube.com/embed/";
     }
   }
+
+  // function test(val){
+  //   console.log(val.value)
+  // }
   return (
     <div>
       <div className="container-xxl">
@@ -422,6 +484,7 @@ swalWithBootstrapButtons.fire({
             onClick={() => {
               setModalOpen(true);
               setPreviewPages("");
+              setInstrument([]);
               setYoutubeLivePriview(true);
             }}
           >
@@ -550,6 +613,9 @@ swalWithBootstrapButtons.fire({
                     <button
                       className="btn-sm"
                       style={{ display: "inline", border: "1px solid #279B14" }}
+                      onClick = {() => {
+                        props.history.push("/admin/customerfeedbacks/"+covers._id)
+                      }}
                       // onClick={() => viewMoreCover(covers._id)}
                     >
                       <svg
@@ -586,6 +652,7 @@ swalWithBootstrapButtons.fire({
                         />
                       </svg>
                     </button>
+                    <span> </span>
                     {/* delete cover  */}
                     <button
                       className="btn-sm"
@@ -769,14 +836,18 @@ swalWithBootstrapButtons.fire({
                 <div className="col-sm-6">
                   <div class="form-group">
                     <label for="exampleInputEmail1">Instruments*</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="Instrument Exp : (Guitar,Piano)"
-                      onChange={(e) => {
-                        setInstrument(e.target.value);
-                      }}
+                    <Select
+                     // defaultValue={[instrumentsPlayedOn[0]]}
+                      isMulti
+                      name="colors"
+                      options={instrumentsPlayedOn}
+                      className="basic-multi-select"
+                      classNamePrefix="select"
                       required
+                      placeholder = "Choose instruments"
+                      onChange={(val) => {
+                        setInstrument(val);
+                      }}
                     />
 
                     <br />
@@ -825,10 +896,13 @@ swalWithBootstrapButtons.fire({
                       class="form-control form-control-sm"
                       accept="image/png, image/jpeg, image/jpg"
                       onChange={(e) => {
-                        for(let i = 0; i < e.target.files.length; i++){
+                        for (let i = 0; i < e.target.files.length; i++) {
                           const newImage = e.target.files[i];
                           newImage["id"] = Math.random();
-                          setPreviewPages((prevState)=>[...prevState,newImage]);
+                          setPreviewPages((prevState) => [
+                            ...prevState,
+                            newImage,
+                          ]);
                         }
                       }}
                       multiple

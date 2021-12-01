@@ -8,7 +8,6 @@ import { faEye } from "@fortawesome/free-solid-svg-icons";
 import {faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import "../../css/adminLogin.css";
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
 import k from "../../images/admin.jpg";
 
 const eye = <FontAwesomeIcon icon={faEye} />;
@@ -60,7 +59,6 @@ export default function AdminLogin(props) {
 
     const [passwordShown, setPasswordShown] = useState(false);
 
-    let navigate = useNavigate();
 
     // Password toggle handler
     const togglePasswordVisiblity = () => {
@@ -127,6 +125,7 @@ export default function AdminLogin(props) {
             // alert("Customer loggin Successfully!");
             //console.log("logging success");
             ///console.log(res.data);
+            props.history.push("/admin/dashboard")
             setErrorMsg("");
             // props.history.push("/Customer/Home");
     
@@ -175,7 +174,7 @@ export default function AdminLogin(props) {
             <div class="card-body">
                 {/* <h2 style={{textAlign:"center", fontWeight:"bold"}}>ADMINISTRATOR</h2> */}
               <div class="brand-wrapper" style={{display:"flex"}}>
-                <img src="images/KaushalOfficialLogo.jpeg" alt="logo" class="logo"></img>
+                <img src={"/images/KaushalOfficialLogo.jpeg"} alt="logo" class="logo"></img>
                 <h4 style={{paddingLeft:"8px", paddingTop:"6px", fontWeight:"bold"}}>Admin</h4>
               </div>
               <p class="login-card-description">Sign In</p>

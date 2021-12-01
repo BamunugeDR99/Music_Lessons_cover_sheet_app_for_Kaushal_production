@@ -1,6 +1,11 @@
 import React, { Component, useEffect, useState } from "react";
 import axios from "axios";
 import DataTable from "datatables.net";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'jquery/dist/jquery.min.js';
+//Datatable Modules
+import "datatables.net-dt/js/dataTables.dataTables"
+import "datatables.net-dt/css/jquery.dataTables.min.css"
 import $ from "jquery";
 
 export default function AdminVwCustomer(props) {
@@ -32,9 +37,9 @@ useEffect(()=>{
             console.log(filter.length)
               setLoged(filter.length)
             
-$(document).ready(function () {
-    $("#example").DataTable();
-  });
+              $(document).ready(function () {
+                $('#example').DataTable();
+            });
         })  
         .catch((err) => {
             alert(err);
@@ -52,20 +57,64 @@ $(document).ready(function () {
       <br/>
       <br/>
         <div class="table-title">
-        <div class="row text-right">
+        <div class="row text-center">
             <div class="col-7">
               <h2 style={{color:'#764A34'}}><b>Customer Details</b></h2>
             </div>
-            <div className="col-5"><b>
-                <span>No of Customers : {length}</span>
-              <br/>
-                <span>Online Customers : {loged}</span>
-                </b>
+            <div className="col-5">
+              {/* <b> */}
+               <div className="row text-center" >
+                {/* <div className="col-sm text-center" style={{border:'1px solid black', borderRadius:'5px', padding:'10px'}}>
+                <div className="row" >
+                    <span> {length}</span>
+                    </div>
+                    <div className="row" >
+                    <span>No of Customers :</span>
+                      </div>
+                  <br/>
+              </div>
+                <div className="col-sm" style={{border:'1px solid black', borderRadius:'5px'}}>
+                  <span>Online Customers : {loged}</span>
+                  
+              </div> */}
+               <div className="col-sm">
+                 {/* <b> */}
+                    <div class="card" style={{border:'1px solid blue' , borderRadius:'10px '}}>
+                      <div class="card-body  text-left">
+                        {/* <div class="col-8"> */}
+                          <div className="row" >
+                            <span> {length}</span>  
+                            </div>
+                            <div className="row" >
+                             <span>Total Customers </span>
+                          </div>
+                          {/* </div> */}
+                          {/* <div class="col-4">
+                         
+                          </div> */}
+                      </div>
+                    </div>
+                    </div>
+                    <div className="col-sm">
+                    <div class="card" style={{border:'1px solid #279B14' , borderRadius:'10px '}}>
+                      <div class="card-body  text-left">
+                          <div className="row" >
+                            <span> {loged}</span>  
+                            </div>
+                            <div className="row" >
+                            <span>Online Customers </span>
+                          </div>
+                      </div>
+                    </div>
+                    </div>
+                    {/* </b> */}
             </div>
+            </div>
+            {/* <br/> */}
         </div>
     </div>
    
-    
+    <br/>
             <table class="table table-striped table-bordered text-center" id="example">
             <thead class="thead-dark">
         
@@ -84,22 +133,22 @@ $(document).ready(function () {
             {    console.log(customers)}
                 {customers.map((cus)=>{
                     return(
-                <tr>
-                    {/* <th scope="row"></th> */}
-                    <td>{cus.FirstName}</td>
-                    <td>{cus.LastName}</td>
-                    <td>{cus.Email}</td>
-                    <td>{cus.ContactNumber}</td>
-                    <td>{cus.Country}</td> 
-                    {/*  */}
-                    <td>{cus.LoginStatus}
-                    {(() => {
-                  if (cus.LoginStatus == true){
-                    return (
-                        <span class="text-success">Online &ensp;<i class="fas fa-circle"  style={{color:'#279B14'}}></i></span>
-                    )}
-                  return <span class="text-danger">Offline &ensp;<i class="fas fa-circle"  style={{color:'#D0193A '}}></i></span>
-                  })()}
+                  <tr>
+                      {/* <th scope="row"></th> */}
+                      <td>{cus.FirstName}</td>
+                      <td>{cus.LastName}</td>
+                      <td>{cus.Email}</td>
+                      <td>{cus.ContactNumber}</td>
+                      <td>{cus.Country}</td> 
+                      {/*  */}
+                      <td>{cus.LoginStatus}
+                      {(() => {
+                        if (cus.LoginStatus == true){
+                          return (
+                              <span class="text-success">Online &ensp;<i class="fas fa-circle"  style={{color:'#279B14'}}></i></span>
+                      )}
+                          return <span class="text-danger">Offline &ensp;<i class="fas fa-circle"  style={{color:'#D0193A '}}></i></span>
+                    })()}
                   </td>
                 </tr>
                     )

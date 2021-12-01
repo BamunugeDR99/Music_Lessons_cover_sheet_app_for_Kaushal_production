@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const Order = require("../models/order");
 let Feedback = require("../models/order");
-let Customer = require("../models/customer");
 
 //Add Order
 router.route("/addOrder").post(async (req, res) => {
@@ -46,8 +45,8 @@ router.route("/getOrder/:id").get(async (req, res) => {
 router.route("/getOrders").get((req, res) => {
   //Variable declared at line 5
   Order.find()
-    .then((orders) => {
-      res.json(orders);
+    .then((covers) => {
+      res.json(covers);
     })
     .catch((err) => {
       console.log(err);
@@ -80,17 +79,6 @@ router.route("/updateOrder/:id").put(async (req, res) => {
     });
 });
 
-//Get orders by customer
-router.route("/getorderbycustomer/:id").get(async (req, res) => {
-  let id = req.params.id;
-  try {
-    const result = await Order.find({ CustomerID: id });
-    res.status(200).json(result);
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-});
-
 //Delete Order
 router.route("/deleteOrder/:id").delete(async (req, res) => {
   let OrderObjectID = req.params.id;
@@ -107,4 +95,19 @@ router.route("/deleteOrder/:id").delete(async (req, res) => {
     });
 });
 
+router.route("/getbyyear/:from/:to").get(async (req, res) => {
+  let start = req.params.from;
+  let end = req.params.to;
+  try {
+    const allOrders = await Order.find({
+      TransactionDateAndTime: { $gte: start, $lt: end },
+    });
+
+    console.log(allOrders);
+    res.status(200).json(allOrders);
+    // res.status(200).json(end);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+});
 module.exports = router;
