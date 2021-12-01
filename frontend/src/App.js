@@ -25,7 +25,7 @@ import AdminTempHeader from "./components/adminRole/adminHeaderTemp";
 function App() {
   return (
     <BrowserRouter>
-      <AdminTempHeader />
+      <CustomerHeader />
       <Routes>
         <Route path="/" element={<LessonsAndCoversDetailed />} />
         <Route path="/a" element={<MusicCoverPage />} />
