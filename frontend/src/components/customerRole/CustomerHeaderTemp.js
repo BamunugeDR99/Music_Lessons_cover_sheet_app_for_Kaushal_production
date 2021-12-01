@@ -41,7 +41,7 @@ export default function CustomerHeader(props) {
 
   const [modalOpenForLoading, setmodalOpenForLoading] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
-
+  const [statusHolder, setStatusHolder] = useState("1");
   let [ExtraError, setExtraError] = useState("");
 
   const [passwordMatchDiv, setPasswordMatchDiv] = useState(true);
@@ -276,7 +276,8 @@ export default function CustomerHeader(props) {
 
           axios
             .put(
-              "http://localhost:8070/customer/update/"+localStorage.getItem("CustomerID"),
+              "http://localhost:8070/customer/update/" +
+                localStorage.getItem("CustomerID"),
               newCustomer
             )
             .then(() => {
@@ -336,7 +337,8 @@ export default function CustomerHeader(props) {
           if (result.isConfirmed) {
             axios
               .delete(
-                "http://localhost:8070/customer/delete/"+localStorage.getItem("CustomerID")
+                "http://localhost:8070/customer/delete/" +
+                  localStorage.getItem("CustomerID")
               )
               .then((res) => {
                 swalWithBootstrapButtons.fire(
@@ -366,7 +368,10 @@ export default function CustomerHeader(props) {
 
   function getCustomerDetails() {
     axios
-      .get("http://localhost:8070/customer/get/"+localStorage.getItem("CustomerID"))
+      .get(
+        "http://localhost:8070/customer/get/" +
+          localStorage.getItem("CustomerID")
+      )
       .then((res) => {
         console.log(res.data);
         SetCustomer(res.data);
@@ -389,7 +394,10 @@ export default function CustomerHeader(props) {
   useEffect(() => {
     function getOne() {
       axios
-        .get("http://localhost:8070/customer/get/"+localStorage.getItem("CustomerID"))
+        .get(
+          "http://localhost:8070/customer/get/" +
+            localStorage.getItem("CustomerID")
+        )
         .then((res) => {
           SetCustomer(res.data);
 
@@ -501,14 +509,18 @@ export default function CustomerHeader(props) {
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
           <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item">
-              <Link class="nav-link" to = "/customer/dicoversmusiccovers" id="classicalHeader">
+              <Link
+                class="nav-link"
+                to="/customer/dicoversmusiccovers"
+                id="classicalHeader"
+              >
                 <font>Classical Guitar Covers </font>
               </Link>
             </li>
             <li class="nav-item">
               <Link
                 class="nav-link"
-               to  = "/customer/discovertechniquesandlessons"
+                to="/customer/discovertechniquesandlessons"
                 tabindex="-1"
                 aria-disabled="true"
                 id="classicalHeader"
@@ -541,38 +553,62 @@ export default function CustomerHeader(props) {
               Search
             </button>
           </form>
+
           <div>
-            <span className="userProfileSpan" onClick={Profilemodalopen}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="30"
-                height="30"
-                fill="#764A34"
-                class="bi bi-person-fill"
-                viewBox="0 0 16 16"
-                id="icons"
-              >
-                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
-              </svg>
-              <font id="myAccount">My Account </font>
-            </span>
-            <svg
-              id="Sicons"
-              onClick = {()=> {
-                props.history.push("/customer/shoppingcart")
-              }}
-              xmlns="http://www.w3.org/2000/svg"
-              width="30"
-              height="30"
-              fill="#764A34"
-              class="bi bi-bag-fill"
-              viewBox="0 0 16 16"
-            >
-              <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5z" />
-            </svg>
-            <span class="badge badge-warning" id="countHolder">
-              0
-            </span>
+            {statusHolder == 1 ? (
+              <div>
+                <span className="userProfileSpan" onClick={Profilemodalopen}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="30"
+                    height="30"
+                    fill="#764A34"
+                    class="bi bi-person-fill"
+                    viewBox="0 0 16 16"
+                    id="icons"
+                  >
+                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                  </svg>
+                  <font id="myAccount">My Account </font>
+                </span>
+                <svg
+                  id="Sicons"
+                  onClick={() => {
+                    props.history.push("/customer/shoppingcart");
+                  }}
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="30"
+                  height="30"
+                  fill="#764A34"
+                  class="bi bi-bag-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5z" />
+                </svg>
+                <span class="badge badge-warning" id="countHolder">
+                  0
+                </span>
+              </div>
+            ) : (
+              <div>
+                <button
+                  id="SearchBtn"
+                  class="btn  my-2 my-sm-0 btn-sm"
+                  type="submit"
+                  style={{ color: "white", backgroundColor: "#764A34" }}
+                >
+                  Sign In
+                </button>
+                <button
+                  id="SearchBtn"
+                  class="btn  my-2 my-sm-0 btn-sm"
+                  type="submit"
+                  style={{ color: "white", backgroundColor: "#764A34" }}
+                >
+                  Register
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </nav>
@@ -1431,8 +1467,8 @@ export default function CustomerHeader(props) {
                   fontSize: "13px",
                   fontWeight: "bold",
                 }}
-                onClick={() =>{
-                  props.history.push("/customer/purchasehistory")
+                onClick={() => {
+                  props.history.push("/customer/purchasehistory");
                 }}
               >
                 <strong>Purchase History</strong>

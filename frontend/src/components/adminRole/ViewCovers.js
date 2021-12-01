@@ -11,7 +11,6 @@ import makeAnimated from "react-select/animated";
 
 // Be sure to include styles at some point, probably during your bootstrapping
 // import 'react-select/dist/css/react-select.css';
-import { useNavigate } from "react-router-dom";
 import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 export default function ViewCovers(props) {
@@ -57,7 +56,6 @@ export default function ViewCovers(props) {
   ];
   // for pdf preview
   const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
-  let navigate = useNavigate();
   useEffect(() => {
     function getAllClassicalGuitarCovers() {
       axios
@@ -258,7 +256,7 @@ export default function ViewCovers(props) {
       });
   }
   function viewMoreCover(id) {
-    navigate("/detailed/" + id);
+    props.history.push("/admin/viewmorecover/" + id);
   }
 
   function getAllClassicalGuitarCovers() {
@@ -615,6 +613,9 @@ export default function ViewCovers(props) {
                     <button
                       className="btn-sm"
                       style={{ display: "inline", border: "1px solid #279B14" }}
+                      onClick = {() => {
+                        props.history.push("/admin/customerfeedbacks/"+covers._id)
+                      }}
                       // onClick={() => viewMoreCover(covers._id)}
                     >
                       <svg

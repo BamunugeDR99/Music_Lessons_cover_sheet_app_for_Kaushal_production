@@ -19,7 +19,7 @@ export default function ViewDetailedCoverPage(props) {
   let instrumentsTxt = "";
   let MainCategoryForRec = "";
   let SubCategoryForRec = "";
-  let location = useLocation();
+
 
   //   for update
   //const [covers, setCovers] = useState([]);
@@ -59,7 +59,7 @@ export default function ViewDetailedCoverPage(props) {
   let tempSubCategoryStore = "";
   let tempPdf = "";
   let tempCoverImages = [];
-  // let CoverTempID = location.pathname.substring(10);
+  let CoverTempID = props.match.params.id;
 
   const [dropMainCategory, setDropMainCategory] = useState("");
   const [dropSubCategory, setDropSubCategory] = useState("");

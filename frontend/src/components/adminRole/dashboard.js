@@ -3,7 +3,6 @@ import axios from "axios";
 import MusicCoverPage from "./../customerRole/musiccoverpage";
 import AdminCard from "./../adminRole/admincard";
 import Modal from "react-bootstrap/Modal";
-import { Eye } from "react-feather";
 import $ from "jquery";
 import DataTable from "datatables.net";
 import CoverTemplate from "../customerRole/covercardtemplate";
@@ -237,6 +236,7 @@ export default function DashBoard() {
   }
   return (
     <div>
+      <br/>
       {/* {console.log(selectedCovers)} */}
       <div className="row">
         <div className="col-md-2">

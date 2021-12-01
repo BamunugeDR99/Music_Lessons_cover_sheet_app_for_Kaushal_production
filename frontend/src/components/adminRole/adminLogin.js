@@ -8,7 +8,6 @@ import { faEye } from "@fortawesome/free-solid-svg-icons";
 import {faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import "../../css/adminLogin.css";
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
 import k from "../../images/admin.jpg";
 
 const eye = <FontAwesomeIcon icon={faEye} />;
@@ -60,7 +59,6 @@ export default function AdminLogin(props) {
 
     const [passwordShown, setPasswordShown] = useState(false);
 
-    let navigate = useNavigate();
 
     // Password toggle handler
     const togglePasswordVisiblity = () => {
@@ -127,6 +125,7 @@ export default function AdminLogin(props) {
             // alert("Customer loggin Successfully!");
             //console.log("logging success");
             ///console.log(res.data);
+            props.history.push("/admin/dashboard")
             setErrorMsg("");
             // props.history.push("/Customer/Home");
     
