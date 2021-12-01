@@ -4,7 +4,6 @@ import "../../css/CustomerHeaderStyles.css";
 import Modal from "react-bootstrap/Modal";
 import Swal from "sweetalert2";
 import PasswordStrengthIndicator from "./passwordStrength";
-import { useNavigate } from 'react-router-dom';
 import "../../css/shoppingcartIncrementStyles.css";
 
 const bcrypt = require("bcryptjs");
@@ -281,7 +280,7 @@ export default function CustomerHeader(props) {
 
   }
   //Navigation Variable
-  let navigate = useNavigate();
+  // let navigate = useNavigate();
 
 
 
@@ -441,7 +440,7 @@ export default function CustomerHeader(props) {
                 'success'
               )
               EditProfilemodalClose();
-              navigate('/');
+              // navigate('/');
   
   
             }).catch((err) => {

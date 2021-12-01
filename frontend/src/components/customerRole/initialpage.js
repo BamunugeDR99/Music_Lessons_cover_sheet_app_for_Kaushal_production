@@ -10,6 +10,9 @@ export default function InitialPage(props) {
         <button
           type="button"
           class="login"
+          onClick = {() => {
+              props.history.push("/customer/login")
+          }}
           style={{ float: "right", marginRight: "20px" }}
         >
           Login{" "}
@@ -17,6 +20,9 @@ export default function InitialPage(props) {
         <button
           type="button"
           class="register"
+          onClick = {() => {
+              props.history.push("/customer/registration")
+          }}
           style={{ float: "right", marginRight: "20px" }}
         >
           Register
@@ -32,9 +38,9 @@ export default function InitialPage(props) {
           ></img>
           <h1>KAUSHAL RASHMIKA PRODUCTIONS</h1>
 
-          <a href="#about" class="btn-get-started">
+          <Link href="#about" class="btn-get-started"  to = "/customer/registration">
             Get Started
-          </a>
+          </Link>
         </div>
       </section>
     </div>

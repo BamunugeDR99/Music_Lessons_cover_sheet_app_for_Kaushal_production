@@ -225,11 +225,13 @@ export default function CustomerForgotPassword(props) {
                   "success"
                 );
                 setLoading(true);
+                props.history.push("/customer/login")
                 // navigate to the login page
               })
               .catch((err) => {
                 // alert(err);
                 Swal.fire("Error has been occured please try again!", "error");
+                props.history.push("/customer/login")
               });
           } else {
             setLoading(true);
