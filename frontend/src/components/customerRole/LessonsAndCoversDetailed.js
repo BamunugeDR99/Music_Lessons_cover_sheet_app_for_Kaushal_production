@@ -5,7 +5,7 @@ import DiscoverMoreCovers from "./DicoverMoreCovers";
 import Swal from "sweetalert2";
 import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
-import $ from "jquery";
+import $, { ajaxPrefilter } from "jquery";
 
 export default function LessonsAndCoversDetailed(props) {
   const [covers, setCovers] = useState([]);
@@ -71,16 +71,28 @@ export default function LessonsAndCoversDetailed(props) {
     imageSlider += "</div>";
 
     document.getElementById("img").innerHTML = imageSlider;
+    
     for (let i = 0; i < previewImages.length; i++) {
       document.getElementById("img" + i).src =
         "/images/verticaLImageHolder.jpg";
     }
-    previewImages.map((previewImage, index) => {
-      const storageRef = ref(storage, `PreviewImages/${previewImage}`);
-      getDownloadURL(storageRef).then((url) => {
-        document.getElementById("img" + index).src = url;
+   
+      previewImages.map((previewImage, index) => {
+        if(document.getElementById("img"+index) != null){
+          
+          const storageRef = ref(storage, `PreviewImages/${previewImage}`);
+          getDownloadURL(storageRef).then((url) => {
+            document.getElementById("img" + index).src = url;
+          });
+        }else if(document.getElementById("img"+index) == null){
+          alert("gg");
+        }
+    
       });
-    });
+    
+    
+   
+  
   }
 
   function addToCart(id) {

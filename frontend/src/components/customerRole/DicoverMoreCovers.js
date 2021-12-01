@@ -76,7 +76,7 @@ export default function DiscoverMoreCovers(props) {
           document.getElementById(index).src = url;
         })
         .catch((err) => {
-          ErrorhandlingTxt("Reccomended covers are not available right now!")
+          setErrorhandlingTxt("Reccomended covers are not available right now!")
         });
     }
   }
@@ -102,9 +102,7 @@ export default function DiscoverMoreCovers(props) {
               <img
                 id={index}
                 src={
-                  displayImages(covers.PreviewPages[0], index) ||
-                  "/images/imageplaceholder.png"
-                }
+                  displayImages(covers.PreviewPages[0], index)   ||  "/images/imageplaceholder.png" }
                 class="card-img-top"
                 alt="..."
                 style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
