@@ -19,6 +19,7 @@ import MusicCoverPage from "./components/customerRole/musiccoverpage";
 import TechniquesAndLessons from "./components/customerRole/TechniquesAndLessons";
 import PurchaseHistory from "./components/customerRole/purchaseHistory";
 import MusicCart from "./components/customerRole/music_cart";
+import LessonAndCoversDetailed from "./components/customerRole/LessonsAndCoversDetailed";
 import Footer from "./components/customerRole/footer";
 
 
@@ -36,6 +37,7 @@ function App() {
         <Route path = "/customer/discovertechniquesandlessons" exact component = {TechniquesAndLessons}/>
         <Route path = "/customer/purchasehistory" exact component = {PurchaseHistory}/>
         <Route path = "/customer/shoppingcart" exact component = {MusicCart}/>
+        <Route path = "/customer/detailedcover/:id" exact component = {LessonAndCoversDetailed}/>
 
         <Route path = "/customer"  component = {Footer}/>
 

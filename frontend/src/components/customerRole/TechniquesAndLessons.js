@@ -7,7 +7,7 @@ import InputRange from "react-input-range";
 import { data, post } from "jquery";
 
 
-export default function MusicCoverPage() {
+export default function TechniquesAndLessons(props) {
   const [modelOpen, setmodelOpen] = useState(false);
   const [pricerange, setPriceRange] = useState("0");
   const [downloadrange, setDownloadRange] = useState("0");
@@ -333,7 +333,9 @@ export default function MusicCoverPage() {
                   </div>
                 </div>
               </center>
-              <div id="topcover" style={{ display: "none" }}>
+              <div id="topcover" style={{ display: "none" }} onClick = {() => {
+                props.history.push("/customer/detailedcover/"+populercover._id)
+              }}>
                 <TopDownloadTemplate
                   title={populercover.Title}
                   price={populercover.Price}
@@ -375,7 +377,7 @@ export default function MusicCoverPage() {
             <span id="coverdiv">
               <div className="row">
                 {covers.map((post, index) => (
-                  <div className="col-md-4" onClick={() => modalopen()}>
+                  <div className="col-md-4" onClick={() =>{props.history.push("/customer/detailedcover/"+post._id)}}>
                     <CoverTemplate
                       title={post.Title}
                       artist={post.OriginalArtistName}

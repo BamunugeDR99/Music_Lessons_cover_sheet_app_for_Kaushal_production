@@ -17,7 +17,7 @@ export default function LessonsAndCoversDetailed(props) {
   useEffect(() => {
     function getCovers() {
       //const CoverID = props.match.params.id;
-      const CoverTempID = "61a247ef9508b44b96cf150e";
+      const CoverTempID = props.match.params.id;
       axios
         .get("http://localhost:8070/covers/get/" + CoverTempID)
         .then((res) => {
@@ -89,7 +89,7 @@ export default function LessonsAndCoversDetailed(props) {
 
     //let customerID = localStorage.getItem("CustomerID");
     let newItems = []; /// Change this later
-    const customerID = "61a26e4cb42a52e3ff12e82e";
+    const customerID = localStorage.getItem("CustomerID");
     let coverIDs = [];
     let shoppingcartId = "";
     axios

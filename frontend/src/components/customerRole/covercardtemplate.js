@@ -1,7 +1,8 @@
-import React from "react";
+import React  from "react";
 // import "./../../css/covercard.css";
 import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
+
 
 export default function CoverTemplate(props) {
   async function displayImages(coverImageName, index) {
