@@ -201,6 +201,7 @@ export default function CustomerHeader(props) {
     setProfilemodelOpen(false);
     clearErrors();
   }
+  
 
   function EditProfilemodalopen() {
     // alert("This is alert");
