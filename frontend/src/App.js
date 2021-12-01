@@ -27,11 +27,13 @@ import AdminLogin from "./components/adminRole/adminLogin";
 import Home from "./components/customerRole/home";
 
 
+
+
 function App() {
   return (
     <BrowserRouter>
    
-      <CustomerHeader />
+      {/* <CustomerHeader /> */}
       <Routes>
         
         <Route path="/" element={<LessonsAndCoversDetailed />} />
@@ -46,7 +48,7 @@ function App() {
         <Route path="/d" element={<AdminLogin/>} />
 
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </BrowserRouter>
   );
 }
