@@ -5,7 +5,7 @@ import TopDownloadTemplate from "./topdownloadtemplate";
 import Modal from "react-bootstrap/Modal";
 import InputRange from "react-input-range";
 import { data, post } from "jquery";
-import { Maximize } from "react-feather";
+
 
 export default function MusicCoverPage() {
   const [modelOpen, setmodelOpen] = useState(false);

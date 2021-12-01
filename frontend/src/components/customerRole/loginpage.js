@@ -108,6 +108,7 @@ export default function Login(props) {
           title: "Signed in successfully",
         });
 
+        props.history.push("/customer/home");
         // alert("Customer loggin Successfully!");
         //console.log("logging success");
         ///console.log(res.data);
