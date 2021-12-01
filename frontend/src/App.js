@@ -17,6 +17,8 @@ import CustomerForgotPassword from "./components/customerRole/CustomerForgotPass
 import Home from "./components/customerRole/home";
 import MusicCoverPage from "./components/customerRole/musiccoverpage";
 import TechniquesAndLessons from "./components/customerRole/TechniquesAndLessons";
+import PurchaseHistory from "./components/customerRole/purchaseHistory";
+import MusicCart from "./components/customerRole/music_cart";
 import Footer from "./components/customerRole/footer";
 
 
@@ -32,6 +34,9 @@ function App() {
         <Route path = "/customer/home" exact component = {Home}/>
         <Route path = "/customer/dicoversmusiccovers" exact component = {MusicCoverPage}/>
         <Route path = "/customer/discovertechniquesandlessons" exact component = {TechniquesAndLessons}/>
+        <Route path = "/customer/purchasehistory" exact component = {PurchaseHistory}/>
+        <Route path = "/customer/shoppingcart" exact component = {MusicCart}/>
+
         <Route path = "/customer"  component = {Footer}/>
 
 

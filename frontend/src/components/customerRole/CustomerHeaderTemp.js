@@ -276,7 +276,7 @@ export default function CustomerHeader(props) {
 
           axios
             .put(
-              "http://localhost:8070/customer/update/61a50a72a955b7198787942f",
+              "http://localhost:8070/customer/update/"+localStorage.getItem("CustomerID"),
               newCustomer
             )
             .then(() => {
@@ -336,7 +336,7 @@ export default function CustomerHeader(props) {
           if (result.isConfirmed) {
             axios
               .delete(
-                "http://localhost:8070/customer/delete/61a50a72a955b7198787942f"
+                "http://localhost:8070/customer/delete/"+localStorage.getItem("CustomerID")
               )
               .then((res) => {
                 swalWithBootstrapButtons.fire(
@@ -366,7 +366,7 @@ export default function CustomerHeader(props) {
 
   function getCustomerDetails() {
     axios
-      .get("http://localhost:8070/customer/get/61a50a72a955b7198787942f")
+      .get("http://localhost:8070/customer/get/"+localStorage.getItem("CustomerID"))
       .then((res) => {
         console.log(res.data);
         SetCustomer(res.data);
@@ -389,7 +389,7 @@ export default function CustomerHeader(props) {
   useEffect(() => {
     function getOne() {
       axios
-        .get("http://localhost:8070/customer/get/61a50a72a955b7198787942f")
+        .get("http://localhost:8070/customer/get/"+localStorage.getItem("CustomerID"))
         .then((res) => {
           SetCustomer(res.data);
 
@@ -415,7 +415,7 @@ export default function CustomerHeader(props) {
     function getCartCount() {
       //const CoverID = props.match.params.id;
 
-      const CustomerID = "61a26e4cb42a52e3ff12e82e";
+      const CustomerID = localStorage.getItem("CustomerID");
 
       axios
 
@@ -432,7 +432,7 @@ export default function CustomerHeader(props) {
 
             title: "Oops...",
 
-            text: "Something went wrong!",
+            text: "Somethi went wrong!",
 
             footer: '<p style = "color : #D0193A">Currently unavailable!',
           });
@@ -558,6 +558,9 @@ export default function CustomerHeader(props) {
             </span>
             <svg
               id="Sicons"
+              onClick = {()=> {
+                props.history.push("/customer/shoppingcart")
+              }}
               xmlns="http://www.w3.org/2000/svg"
               width="30"
               height="30"
@@ -1428,7 +1431,9 @@ export default function CustomerHeader(props) {
                   fontSize: "13px",
                   fontWeight: "bold",
                 }}
-                onClick={goToEditProfile}
+                onClick={() =>{
+                  props.history.push("/customer/purchasehistory")
+                }}
               >
                 <strong>Purchase History</strong>
               </button>

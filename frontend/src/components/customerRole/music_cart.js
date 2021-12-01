@@ -32,7 +32,7 @@ export default function MusicCart(props) {
     setTotal("Loading...");
     await axios
       .get(
-        "http://localhost:8070/shoppingCart/getOneCart/61a26e4cb42a52e3ff12e82e"
+        "http://localhost:8070/shoppingCart/getOneCart/"+localStorage.getItem("CustomerID")
       )
       .then((res) => {
         console.log(res.data.CoverIDs);
@@ -101,7 +101,7 @@ export default function MusicCart(props) {
       if (result.isConfirmed) {
         axios
           .delete(
-            `http://localhost:8070/shoppingCart/deleteCartCover/${id}/61a26e4cb42a52e3ff12e82e`
+            `http://localhost:8070/shoppingCart/deleteCartCover/${id}/`+localStorage.getItem("CustomerID")
           )
           .then((res) => {
             alert("Successfully deleted");

@@ -21,7 +21,7 @@ export default function PurchaseHistory(props) {
         .then((res) => {
           console.log(res.data);
           const filter = res.data.filter(
-            (cus) => cus.CustomerID == "619bb6fb3d429b6f26addcba"
+            (cus) => cus.CustomerID == localStorage.getItem("CustomerID")
             // objectId
           );
 
@@ -76,7 +76,7 @@ export default function PurchaseHistory(props) {
       .then((res) => {
         console.log(res.data);
         const filter = res.data.filter(
-          (cus) => cus.CustomerID == "619bb6fb3d429b6f26addcba"
+          (cus) => cus.CustomerID == localStorage.getItem("CustomerID")
           // objectId
         );
 
