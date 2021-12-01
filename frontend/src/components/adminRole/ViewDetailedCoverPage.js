@@ -3,7 +3,7 @@ import axios from "axios";
 import CurrencySelect from "./CurrencySelect";
 import Swal from "sweetalert2";
 import Modal from "react-bootstrap/Modal";
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 import Select from "react-select";
@@ -59,7 +59,7 @@ export default function ViewDetailedCoverPage(props) {
   let tempSubCategoryStore = "";
   let tempPdf = "";
   let tempCoverImages = [];
-  let CoverTempID = location.pathname.substring(10);
+  // let CoverTempID = location.pathname.substring(10);
 
   const [dropMainCategory, setDropMainCategory] = useState("");
   const [dropSubCategory, setDropSubCategory] = useState("");
