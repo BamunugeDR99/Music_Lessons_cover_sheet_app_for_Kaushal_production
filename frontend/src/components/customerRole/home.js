@@ -1,22 +1,100 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
 
+
 export default function Home(props) {
+
+  let [Top4Downloads, setTop4Downloads] = useState([]);
+
+  useEffect(async () => {
+   
+
+    function test(){
+
+      axios.get("http://localhost:8070/covers/getcovers").then((res)=> {
+
+          getTop4Downloads(res.data);
+
+      }).catch((err)=> {
+          console.log(err);
+      })
+  }
+  test();
+
+    }, []);
+
+    
+
+    function getTop4Downloads(data){
+
+      let count =0;
+      let currentmaxArray = [];
+      let remainingArray = [];
+      let tempArray=[];
+      let tempArray2=[];
+      let LastArray = []
+
+
+      let initialArray = data;
+
+      for(let i = 0 ; i < data.length; i++){
+
+        
+          let max = initialArray.reduce((max, b) => Math.max(max, b.NoOfDownloads), initialArray[0].NoOfDownloads);
+          
+
+          tempArray = initialArray.filter((item) => item.NoOfDownloads === String(max));
+
+   
+          for(let p = 0 ; p < tempArray.length; p++){
+
+              currentmaxArray.push(tempArray[p]);
+          }
+
+          count = currentmaxArray.length;
+    
+          if(count >= 4){
+              break;
+          }
+
+          tempArray2 = initialArray.filter((item) => item.NoOfDownloads !== String(max));
+
+
+         
+          for(let q = 0 ;q < tempArray2.length ; q++ ){
+              remainingArray.push(tempArray2[q]);
+          }
+
+          initialArray = remainingArray;
+          remainingArray = [];
+ 
+      }
+      
+      for(let l = 0 ; l < 4 ; l++){
+
+          LastArray.push(currentmaxArray[l]);
+
+
+      }
+
+
+      setTop4Downloads(LastArray);
+  }
 
 return(
 
     <div className="home" style={{overflowX:"hidden"}}>
 
-        <img src = {'/images/home1.jpg'} class="img-fluid" alt="Cover Image" style={{borderRadius:"0px 0px 10px 10px", width:"100%"}}/> <br/><br/>
+        <img src = {'/images/hm.jpeg'} class="img-fluid" alt="Cover Image" style={{borderRadius:"0px" , width:"100%"}}/> <br/><br/>
         
         <h1 style={{color:"#764A34", textAlign:"center", fontWeight:"bold"}}>Discover them now!</h1><br/>
 
         <div>
 
         <h2 style={{fontWeight:"bold", paddingLeft:"30px"}}>Our Top Downloads-</h2><br/>
-
+       
     <div class="card-deck" style={{paddingRight:"50px", paddingLeft:"50px"}}>
   
         {/* <div class="card" style={{boxShadow: "rgba(0, 0, 0, 0.25) 0px 25px 50px -12px", borderRadius:"15px"}}>
@@ -27,33 +105,40 @@ return(
                 </div>
         </div> */}
 
-            <div
-              class="card"
-              style={{
-                boxShadow: "rgba(0, 0, 0, 0.25) 0px 25px 50px -12px",
-                borderRadius: "15px",
-                marginRight: "15px",
-                marginLeft: "15px",
-              }}
-            >
-              <img
+{Top4Downloads.map((covers) => (
+             <div
+             class="card"
+             style={{
+               boxShadow: "rgba(0, 0, 0, 0.25) 0px 25px 50px -12px",
+               borderRadius: "15px",
+               marginRight: "15px",
+               marginLeft: "15px",
+             }}
+           >
+             <img
                
-                img src={'/images/cover.jpg'}
-                class="card-img-top"
-                alt="..."
-                style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
-              />
-              <div class="card-body">
-                <h4 class="card-title" style={{ fontWeight: "bold" }}>
-                Believer
-                </h4>
-                <h5>By Imagine Dragons</h5>
-               
-              </div>
-            </div>
+               src={
+                 "Images/cover.jpg"
+                }
+               class="card-img-top"
+               alt="..."
+               style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
+             />
+             <div class="card-body">
+               <h4 class="card-title" style={{ fontWeight: "bold" }}>
+                 {covers.Title}
+               </h4>
+               <h5>{covers.OriginalArtistName}</h5>
+               <h5>{covers.MainCategory}</h5>
+               <h5>{covers.SubCategory}</h5>
+               <h3 style={{ float: "right", color: "#764A34" }}>
+                 <b>US$ {covers.Price}</b>
+               </h3>
+             </div>
+           </div>
 
-
-        
+))}
+{/*         
         <div
               class="card"
               style={{
@@ -128,7 +213,7 @@ return(
                 <h5>By Toni Elizabeth Watson</h5>
                
               </div>
-            </div>
+            </div> */}
 
         </div>
 
