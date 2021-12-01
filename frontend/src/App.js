@@ -18,6 +18,7 @@ import PurchaseHistory from "./components/customerRole/purchaseHistory";
 import AdminVwCustomer from "./components/adminRole/AdminVwCustomer";
 import EditCategories from "./components/EditCategories";
 import EditMainCategories from "./components/adminRole/EditMainCategory";
+import Search from "./components/testingComponents/search";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
         <Route path="/acus" element={<AdminVwCustomer/>} />
         <Route path="/edit" element={<EditCategories/>} />
         <Route path="/main" element={<EditMainCategories/>} />
+        <Route path="/search" element={<Search/>} />
         
       </Routes>
       <CustomerFooter />
