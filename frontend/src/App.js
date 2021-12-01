@@ -20,11 +20,12 @@ import ViewDetailedCoverPage from "./components/adminRole/ViewDetailedCoverPage"
 import MusicCoverPage from "./components/customerRole/musiccoverpage";
 import PurchaseHistory from "./components/customerRole/purchaseHistory";
 import CustomerFeedback from "./components/customerRole/CustomerFeedback";
+import AdminTempHeader from "./components/adminRole/adminHeaderTemp";
 
 function App() {
   return (
     <BrowserRouter>
-      <CustomerHeader />
+      <AdminTempHeader />
       <Routes>
         <Route path="/" element={<LessonsAndCoversDetailed />} />
         <Route path="/a" element={<MusicCoverPage />} />
@@ -32,8 +33,7 @@ function App() {
         <Route path= "/history" element={<PurchaseHistory/>}/>
          <Route path= "/feedback" element={<CustomerFeedback/>}/>
 
-     
-
+        
       </Routes>
       <Footer />
     </BrowserRouter>

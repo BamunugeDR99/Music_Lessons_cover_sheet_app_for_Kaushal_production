@@ -29,7 +29,6 @@ export default function CustomerFeedback() {
 
     let [AllComments, setAllComments] = useState([]);
     let [finalFeedback, setfinalFeedback] = useState([]);
-    let [TopDownloads, setTopDownloads] = useState([]);
     let [Top4Downloads, setTop4Downloads] = useState([]);
     
 
@@ -86,42 +85,70 @@ export default function CustomerFeedback() {
 
 
     function getTop4Downloads(data){
+
         let count =0;
-        let currentmaxArray = []
+        let currentmaxArray = [];
         let remainingArray = [];
+        let tempArray=[];
+        let tempArray2=[];
+        let LastArray = []
 
 
         let initialArray = data;
 
         for(let i = 0 ; i < data.length; i++){
 
+          
             let max = initialArray.reduce((max, b) => Math.max(max, b.NoOfDownloads), initialArray[0].NoOfDownloads);
-   
-            console.log("Max : " + max);
-     
+            
 
-      
-            currentmaxArray.push(initialArray.filter((item) => item.NoOfDownloads === String(max))) ;
-            console.log(currentmaxArray);
+            tempArray = initialArray.filter((item) => item.NoOfDownloads === String(max));
+
+     
+            for(let p = 0 ; p < tempArray.length; p++){
+
+                currentmaxArray.push(tempArray[p]);
+            }
+
+
+
             count = currentmaxArray.length;
+      
             if(count >= 4){
                 break;
             }
+
+            tempArray2 = initialArray.filter((item) => item.NoOfDownloads !== String(max));
+
+
            
-         
-            
-            remainingArray.push(initialArray.filter((item) => item.NoOfDownloads !== String(max))) ;
+            for(let q = 0 ;q < tempArray2.length ; q++ ){
+                remainingArray.push(tempArray2[q]);
+            }
 
     
             initialArray = remainingArray;
-        console.log(initialArray);
-    
+            remainingArray = [];
+   
 
 
         }
 
-        console.log(currentmaxArray);
-      
+
+        
+        for(let l = 0 ; l < 4 ; l++){
+
+            LastArray.push(currentmaxArray[l]);
+
+
+        }
+
+
+        setTop4Downloads(LastArray);
+
+
+
+
     }
 
     async function getFeedbackss(AllF) {
@@ -202,6 +229,23 @@ export default function CustomerFeedback() {
 
                 </tbody>
             </table>
+
+
+            {/* <div>
+
+                  {Top4Downloads.map((download) => {
+
+                      return(
+                        <div>
+
+                            <p>{download.Title} <span>{` : ${download.NoOfDownloads}`}</span></p>
+                        </div>
+                      )
+                  })
+
+                  }      
+
+            </div> */}
         </div>
     )
 }
