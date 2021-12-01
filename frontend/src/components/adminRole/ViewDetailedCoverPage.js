@@ -8,7 +8,6 @@ import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 import Select from "react-select";
 
-
 export default function ViewDetailedCoverPage(props) {
   const [covers, setCovers] = useState([]);
   const [modalOpen3, setModalOpen3] = useState(false);
@@ -64,7 +63,7 @@ export default function ViewDetailedCoverPage(props) {
 
   const [dropMainCategory, setDropMainCategory] = useState("");
   const [dropSubCategory, setDropSubCategory] = useState("");
-  
+
   const instrumentsPlayedOn = [
     { value: "Classical Guitar", label: "Classical Guitar" },
     { value: "Piano", label: "Piano" },
@@ -159,28 +158,25 @@ export default function ViewDetailedCoverPage(props) {
   function setContent() {
     setSubCategories(tempSubCategory);
     setLessonSubCategories(tempSubCategory2);
-   // console.log(MainCategoryForRec);
-   // console.log(SubCategoryForRec);
+    // console.log(MainCategoryForRec);
+    // console.log(SubCategoryForRec);
 
     // setA(MainCategoryForRec);
     // setB(SubCategoryForRec)
     // document.getElementById("MainCategory").value = MainCategoryForRec;
     setDropMainCategory(MainCategoryForRec);
     if (MainCategoryForRec === "Classical Guitar Covers") {
-     // document.getElementById("subCategory1").value = SubCategoryForRec;
+      // document.getElementById("subCategory1").value = SubCategoryForRec;
       setDropSubCategory(SubCategoryForRec);
       setSubCategoryPreview(false);
       setSubCategoryPreview2(true);
       //console.log("a")
     } else if (MainCategoryForRec === "Guitar Technics & Lessons") {
-      setDropSubCategory(SubCategoryForRec)
+      setDropSubCategory(SubCategoryForRec);
       setSubCategoryPreview(true);
       setSubCategoryPreview2(false);
       //document.getElementById("subCategory2").value = SubCategoryForRec;
-
     }
-
-   
   }
 
   function GetLessonSubCategories() {
@@ -429,14 +425,15 @@ export default function ViewDetailedCoverPage(props) {
           }
           let InstrumentArray = [];
 
-          if(instruments.length == 0){
-            InstrumentArray = document.getElementById("Instruments").value.split(",");
-          }else{
+          if (instruments.length == 0) {
+            InstrumentArray = document
+              .getElementById("Instruments")
+              .value.split(",");
+          } else {
             for (let i = 0; i < instruments.length; i++) {
               InstrumentArray.push(instruments[i].value);
             }
           }
-       
 
           if (
             previewPages.length === 0 &&
@@ -463,7 +460,7 @@ export default function ViewDetailedCoverPage(props) {
               PreviewPages: previewPageList,
               CoverPdf: updateCoverPdf,
             };
-console.log(updatedCover)
+            console.log(updatedCover);
             axios
               .put(
                 "http://localhost:8070/covers/update/" + CoverTempID,
@@ -947,10 +944,10 @@ console.log(updatedCover)
                       onChange={(e) => {
                         if (subCategoryPreview == true) {
                           setSubCategoryPreview(false);
-                          setDropMainCategory(e.target.value)
+                          setDropMainCategory(e.target.value);
                           setSubCategoryPreview2(true);
                         } else {
-                          setDropMainCategory(e.target.value)
+                          setDropMainCategory(e.target.value);
                           setSubCategoryPreview(true);
                           setSubCategoryPreview2(false);
                         }
@@ -1063,18 +1060,19 @@ console.log(updatedCover)
                   <div class="form-group">
                     <label for="exampleInputEmail1">Instruments*</label>
                     <Select
-                     //value={[instrumentsPlayedOn[0]]}
+                      //value={[instrumentsPlayedOn[0]]}
                       isMulti
                       name="colors"
                       options={instrumentsPlayedOn}
                       className="basic-multi-select"
                       classNamePrefix="select"
                       required
-                      placeholder = "Choose instruments"
+                      placeholder="Choose instruments"
                       onChange={(val) => {
                         setInstrument(val);
                       }}
-                    /><br/>
+                    />
+                    <br />
                     <input
                       type="text"
                       class="form-control"
@@ -1092,13 +1090,13 @@ console.log(updatedCover)
                       className="form-control"
                       id="subCategory1"
                       name="subCategory"
-                      onChange = {(e) => {
-                        setDropSubCategory(e.target.value)
+                      onChange={(e) => {
+                        setDropSubCategory(e.target.value);
                       }}
                       required
                     >
                       {SubCategories.map((sub) => {
-                        return <option value = {sub}>{sub}</option>;
+                        return <option value={sub}>{sub}</option>;
                       })}
                     </select>
                     <select
@@ -1107,13 +1105,13 @@ console.log(updatedCover)
                       className="form-control"
                       id="subCategory2"
                       name="subCategory"
-                      onChange = {(e) => {
-                        setDropSubCategory(e.target.value)
+                      onChange={(e) => {
+                        setDropSubCategory(e.target.value);
                       }}
                       required
                     >
                       {lessonSubCategories.map((sub) => {
-                        return <option value = {sub}>{sub}</option>;
+                        return <option value={sub}>{sub}</option>;
                       })}
                     </select>
                     <br />

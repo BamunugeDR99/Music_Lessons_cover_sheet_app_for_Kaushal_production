@@ -74,7 +74,7 @@ export default function LessonsAndCoversDetailed(props) {
     document.getElementById("img").innerHTML = imageSlider;
     for (let i = 0; i < previewImages.length; i++) {
       document.getElementById("img" + i).src =
-        "/images/verticalImageHolder.jpeg";
+        "/images/verticaLImageHolder.jpg";
     }
     previewImages.map((previewImage, index) => {
       const storageRef = ref(storage, `PreviewImages/${previewImage}`);

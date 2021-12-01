@@ -103,7 +103,7 @@ export default function DiscoverMoreCovers(props) {
                 id={index}
                 src={
                   displayImages(covers.PreviewPages[0], index) ||
-                  "/images/Imageplaceholder.png"
+                  "/images/imageplaceholder.png"
                 }
                 class="card-img-top"
                 alt="..."

@@ -26,21 +26,21 @@ export default function MusicCart(props) {
     images,
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     document.getElementById("spinnerdiv").style.display = "block";
     document.getElementById("cartdiv").style.display = "none";
     setTotal("Loading...");
-    axios
+    await axios
       .get(
         "http://localhost:8070/shoppingCart/getOneCart/61a26e4cb42a52e3ff12e82e"
       )
       .then((res) => {
         console.log(res.data.CoverIDs);
         if (res.data.CoverIDs != "") {
-          callData(res.data.CoverIDs);
           setDataholder(res.data.CoverIDs);
-          console.log(res.data);
+          // console.log(res.data);
           setTotal("Loading...");
+          callData(res.data.CoverIDs);
         } else {
           document.getElementById("spinnerdiv").style.display = "none";
           document.getElementById("cartdiv").style.display = "block";
@@ -58,10 +58,11 @@ export default function MusicCart(props) {
     console.log(data);
 
     for (let i = 0; i < data.length; i++) {
-      console.log(data[i]);
       await axios
         .get(`http://localhost:8070/covers/getcoverbyid/${data[i]}`)
         .then((res) => {
+          console.log(res.data[0].Price);
+          // console.log("asd")
           cover = {
             price: res.data[0].Price,
             title: res.data[0].Title,
@@ -69,10 +70,10 @@ export default function MusicCart(props) {
             author: res.data[0].OriginalArtistName,
             images: res.data[0].PreviewPages,
           };
+
           tot = Number(tot) + Number(res.data[0].Price);
-          console.log(Number(tot));
           coverdetails.push(cover);
-          console.log(coverdetails);
+          // console.log(cover);
         })
         .catch((err) => {
           alert(err.message);
@@ -127,7 +128,6 @@ export default function MusicCart(props) {
   }
   return (
     <div className="container">
-      {console.log(tot)}
       <div
         style={{ alignContent: "center" }}
         className="d-flex justify-content-center mt-2"
@@ -184,7 +184,7 @@ export default function MusicCart(props) {
             </center>
             {cartCovers.map(
               (post, index) => (
-                console.log(post.images),
+                console.log(post.title),
                 (
                   <div class="card mb-3">
                     <div class="row no-gutters">

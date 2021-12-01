@@ -272,7 +272,7 @@ export default function DashBoard() {
         <div className="col-md-2">
           {" "}
           <AdminCard
-            color="#7CB9E8	"
+            color="#7CB9E8  "
             icon={"fa fa-download"}
             value="Downloads"
             num={alldownloads}
@@ -282,7 +282,7 @@ export default function DashBoard() {
         <div className="col-md-2">
           {" "}
           <AdminCard
-            color="#54626F	"
+            color="#54626F  "
             icon={"fa fa-comments"}
             value="Feedbacks"
             num={feedbackLength}
@@ -360,20 +360,12 @@ export default function DashBoard() {
           <div className="col-md-4">
             <button
               type="button"
-              className="btn btn-outline-primary btn-sm"
+              className="btn btn-outline-danger btn-sm"
               data-mdb-ripple-color="dark"
               onClick={(e) => refresh()}
-              style={{ marginTop: "18px" }}
+              style={{ marginTop: "35px" }}
             >
-              <i
-                className="fa fa-refresh"
-                aria-hidden="true"
-                style={{
-                  color: "blue",
-                  fontSize: "20px",
-                  marginTop: "10px",
-                }}
-              ></i>
+              Clear Filters
             </button>
           </div>
         </div>

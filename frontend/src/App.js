@@ -6,17 +6,15 @@ import "./css/DiscoverMoreCoversStyles.css";
 import "./css/initial.css";
 import "./css/home.css";
 import React, { Component } from "react";
-
-
+import CustomerForgotPassword from "./components/customerRole/CustomerForgotPassword";
+import LessonsAndCoversDetailed from "./components/customerRole/LessonsAndCoversDetailed";
+import ViewCovers from "./components/adminRole/ViewCovers";
+import ViewDetailedCoverPage from "./components/adminRole/ViewDetailedCoverPage";
 
 function App() {
   return (
     <BrowserRouter>
-      
-      <Routes>
-  
-     
-      </Routes>
+      <Routes></Routes>
     </BrowserRouter>
   );
 }
