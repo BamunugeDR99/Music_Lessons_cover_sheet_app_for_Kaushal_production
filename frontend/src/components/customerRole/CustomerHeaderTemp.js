@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../css/CustomerHeaderStyles.css";
 import Modal from "react-bootstrap/Modal";
@@ -12,7 +12,6 @@ export default function CustomerHeader(props) {
   const [editProfilemodelOpen, setEditProfilemodelOpen] = useState(false);
   const [changePasswordmodelOpen, setchangePasswordmodelOpen] = useState(false);
 
-  let [serchData, setSearchData] = useState([]);
   let [ContactNumberError, SetContactNoError] = useState("");
   let [PasswordError, SetPasswordError] = useState("");
   let [confirmPasswordError, SetConfirmPasswordError] = useState("");
@@ -73,7 +72,6 @@ export default function CustomerHeader(props) {
   let [Customer, SetCustomer] = useState([]);
 
   let [confirmDelete, setConfirmDelete] = useState(true);
-  let [statusHolder, setStatusHolder] = useState("1");
 
 
   useEffect(() => {
@@ -136,7 +134,6 @@ export default function CustomerHeader(props) {
 
   function checkCurrentPassword() {
     let nCopsw = document.getElementById("CurrentPassword").value;
-    console.log(CurrentPassword);
 
     if (nCopsw.length !== 0) {
       const isMatch = bcrypt.compareSync(nCopsw, CurrentPassword);
@@ -152,12 +149,7 @@ export default function CustomerHeader(props) {
   }
 
   function validatePasswords() {
-
-    let Password = document.getElementById("CPPassword").value;
-    let ConfirmPassword = document.getElementById("CPConfirmPassword").value;
     console.log(CurrentPassword2.length);
-    console.log(Password.length);
-    console.log(ConfirmPassword.length);
     if (CurrentPassword2.length === 0) {
       flag1 = 0;
       SetCurrentPasswordError2("Current password is required !");
@@ -193,8 +185,7 @@ export default function CustomerHeader(props) {
     if (flag1 === 1) {
       console.log(Password);
       Password = bcrypt.hashSync(Password, bcrypt.genSaltSync(12));
-      SetPassword( bcrypt.hashSync(Password, bcrypt.genSaltSync(12)));
-      console.log("Password : " + Password);
+      console.log(Password);
 
       updateProfile();
     }
@@ -269,11 +260,6 @@ export default function CustomerHeader(props) {
   }
 
   function updateProfile() {
-
-
-    console.log("Password : " + Password);
-
-
     const newCustomer = {
       FirstName,
       LastName,
@@ -291,56 +277,17 @@ export default function CustomerHeader(props) {
     console.log(flag1);
 
     if (flag1 === 1) {
-
-
-
-      Swal.fire({
-        title: 'Do you want to save the changes?',
-        showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: 'Save',
-        denyButtonText: `Don't save`,
-      }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
-        if (result.isConfirmed) {
-
-          setmodalOpenForLoading(true);
-
-          
-      axios.put("http://localhost:8070/customer/update/61a50a72a955b7198787942f", newCustomer).then(() => {
-
-            setmodalOpenForLoading(false);
-            Swal.fire('Saved!', '', 'success');
-
-            ChangePasswordmodalClose();
-      }).catch((err) => {
-
-        console.log(err);
-        setmodalOpenForLoading(false);
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Something went wrong! Try again Later!',
-         
+      axios
+        .put(
+          "http://localhost:8070/customer/update/61a39c82dcee3e0dcd659516",
+          newCustomer
+        )
+        .then(() => {
+          alert("Discount Updated");
         })
-      })
-
-        } else if (result.isDenied) {
-          Swal.fire('Changes are not saved', '', 'info')
-        }
-      })
-
-
-
-
-
-
-
-
-
-
-
-
+        .catch((err) => {
+          alert(err);
+        });
     }
   }
 
@@ -356,91 +303,61 @@ export default function CustomerHeader(props) {
 
     if (flag1 === 1) {
       console.log("Delete Karamu");
-
-      const swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-          confirmButton: 'btn btn-success',
-          cancelButton: 'btn btn-danger'
-        },
-        buttonsStyling: false
-      })
-  
-      swalWithBootstrapButtons.fire({
-        title: 'Are you sure?',
-        text: "Don't you enjoy our music anymore?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Delete Profile',
-        cancelButtonText: 'Cancel',
-        reverseButtons: true
-      }).then((result) => {
-        if (result.isConfirmed) {
-  
-          axios
-            .delete("http://localhost:8070/customer/delete/61a50a72a955b7198787942f")
-            .then((res) => {
-  
-              swalWithBootstrapButtons.fire(
-                'Deleted!',
-                'Your Profile has been deleted.',
-                'success'
-              )
-              EditProfilemodalClose();
-              navigate('/');
-  
-  
-            }).catch((err) => {
-  
-              console.log(err);
-            })
-  
-  
-  
-  
-        } else if (
-          /* Read more about handling dismissals below */
-          result.dismiss === Swal.DismissReason.cancel
-        ) {
-          swalWithBootstrapButtons.fire(
-            'Cancelled',
-            'Thank you for staying with us !',
-            'error'
-          )
-        }
-      })
     }
-   
+    // const swalWithBootstrapButtons = Swal.mixin({
+    //   customClass: {
+    //     confirmButton: 'btn btn-success',
+    //     cancelButton: 'btn btn-danger'
+    //   },
+    //   buttonsStyling: false
+    // })
+
+    // swalWithBootstrapButtons.fire({
+    //   title: 'Are you sure?',
+    //   text: "Don't you enjoy our music anymore?",
+    //   icon: 'warning',
+    //   showCancelButton: true,
+    //   confirmButtonText: 'Delete Profile',
+    //   cancelButtonText: 'Cancel',
+    //   reverseButtons: true
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
+
+    //     axios
+    //       .delete("http://localhost:8070/customer/delete/61a0d541c3263c87327c7c4b")
+    //       .then((res) => {
+
+    //         swalWithBootstrapButtons.fire(
+    //           'Deleted!',
+    //           'Your Profile has been deleted.',
+    //           'success'
+    //         )
+    //         EditProfilemodalClose();
+    //         navigate('/');
+
+    //       }).catch((err) => {
+
+    //         console.log(err);
+    //       })
+
+    //   } else if (
+    //     /* Read more about handling dismissals below */
+    //     result.dismiss === Swal.DismissReason.cancel
+    //   ) {
+    //     swalWithBootstrapButtons.fire(
+    //       'Cancelled',
+    //       'Thank you for staying with us !',
+    //       'error'
+    //     )
+    //   }
+    // })
   }
 
   function getCustomerDetails() {
-
-    axios.get("http://localhost:8070/customer/get/61a50a72a955b7198787942f").then((res) => {
-
-      console.log(res.data);
-      SetCustomer(res.data);
-
-      SetUsername(res.data.Username);
-      setFirstName(res.data.FirstName);
-      setLastName(res.data.LastName);
-      SetEmail(res.data.Email);
-      SetContactNo(res.data.ContactNumber);
-      setGender(res.data.Gender);
-      setCountry(res.data.Country);
-      SetCurrentPassword(res.data.Password);
-      SetPassword(res.data.Password);
-
-
-    }).catch((err) => {
-      alert(err.message);
-    })
-  }
-
-  useEffect(() => {
-
-    function getOne() {
-
-      axios.get("http://localhost:8070/customer/get/61a50a72a955b7198787942f").then((res) => {
-
+    axios
+      .get("http://localhost:8070/customer/get/61a39c82dcee3e0dcd659516")
+      .then((res) => {
+        console.log(res.data);
         SetCustomer(res.data);
 
         SetUsername(res.data.Username);
@@ -451,16 +368,6 @@ export default function CustomerHeader(props) {
         setGender(res.data.Gender);
         setCountry(res.data.Country);
         SetCurrentPassword(res.data.Password);
-        SetPassword(res.data.Password);
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:8070/covers/getcovers")
-      .then((res) => {
-        console.log(res.data);
-        setSearchData(res.data);
-
-        // console.log(res.data);
       })
       .catch((err) => {
         alert(err.message);
@@ -491,13 +398,8 @@ export default function CustomerHeader(props) {
     getOne();
   }, []);
 
-  function linkData(val) {
-    alert(val);
-   
-  }
   return (
-    <div>
-     
+    <div className="customerHeader">
       <nav
         class="navbar sticky-top navbar-expand-lg navbar-light"
         style={{ background: "#ffffff" }}
@@ -582,18 +484,12 @@ export default function CustomerHeader(props) {
           </ul>
           <form class="form-inline my-2 my-lg-0">
             <input
+              id="searchBar"
               class="form-control mr-sm-2"
-              onChange={() => linkData()}
-              type="text"
-              list="cars"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
             />
-            <datalist  class="form-control mr-sm-2" id="cars">
-              {serchData.map((post) => (
-                <option onClick={() => linkData(post.Title)} id={post._id}>
-                  {post.Title}
-                </option>
-              ))}
-            </datalist>
             <button
               id="SearchBtn"
               class="btn  my-2 my-sm-0 btn-sm"
@@ -603,7 +499,7 @@ export default function CustomerHeader(props) {
             </button>
           </form>
           <div>
-            <span className="userProfileSpan">
+            <span className="userProfileSpan" onClick={Profilemodalopen}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="30"
@@ -1296,8 +1192,8 @@ export default function CustomerHeader(props) {
         </Modal.Footer>
       </Modal>
 
-       {/* My Profile model */}
-       <Modal show={profilemodelOpen} size="lg">
+      {/* user details update model */}
+      <Modal show={profilemodelOpen} size="lg">
         <Modal.Header>
           <h1>My Profile</h1>
 
@@ -1317,25 +1213,26 @@ export default function CustomerHeader(props) {
               <div className="col-sm-6">
                 <center>
                   <br />
-                  <div className="col-md-9 col-sm-6 input-group-append">
-                    <h6 style={{ color: "#764A34" }} >
+                  <div className="col-md-9 input-group">
+                    <h6 style={{ color: "#764A34" }}>
                       <strong>User Name</strong>: {Customer.Username}
                     </h6>
                   </div>
                   <br />
-                  <div className="col-md-9 col-sm-6 input-group-append">
-
-                    <label for="test"><svg style={{ color: "#764A34" }}
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      fill="currentColor"
-                      class="bi bi-person-fill"
-                      viewBox="0 0 16 16"
-
-                    >
-                      <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
-                    </svg></label>
+                  <div className="col-md-9 input-group">
+                    <label for="test">
+                      <svg
+                        style={{ color: "#764A34" }}
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        fill="currentColor"
+                        class="bi bi-person-fill"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                      </svg>
+                    </label>
                     <span>
                       <p
                         className="ml-2"
@@ -1349,20 +1246,23 @@ export default function CustomerHeader(props) {
                     </span>
                   </div>
                   <br />
-                  <div className="col-md-9 col-sm-6 input-group-append">
-                    <label for="test"><svg style={{ color: "#764A34" }}
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      fill="currentColor"
-                      class="bi bi-telephone-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"
-                      />
-                    </svg></label>
+                  <div className="col-md-9 input-group">
+                    <label for="test">
+                      <svg
+                        style={{ color: "#764A34" }}
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        fill="currentColor"
+                        class="bi bi-telephone-fill"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"
+                        />
+                      </svg>
+                    </label>
                     <span>
                       <p
                         className="ml-2"
@@ -1381,7 +1281,7 @@ export default function CustomerHeader(props) {
               <div className="col-sm-6">
                 <center>
                   <br />
-                  <div className="col-md-9 col-sm-6 input-group-append">
+                  <div className="col-md-9 input-group">
                     <h6 style={{ color: "#764A34" }}>
                       <strong>Email</strong>:{" "}
                       <a href="">
@@ -1390,17 +1290,21 @@ export default function CustomerHeader(props) {
                     </h6>
                   </div>
                   <br />
-                  <div className="col-md-9 col-sm-6 input-group-append">
-                    <label for="test">  <svg style={{ color: "#764A34" }}
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      fill="currentColor"
-                      class="bi bi-globe"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4H4.09zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a6.958 6.958 0 0 0-.656 2.5h2.49zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5H4.847zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5H4.51zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12c.138.386.295.744.468 1.068.552 1.035 1.218 1.65 1.887 1.855V12H5.145zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11a13.652 13.652 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5H3.82zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855.173-.324.33-.682.468-1.068H8.5zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5a6.959 6.959 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5h2.49zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4a7.966 7.966 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4h2.355z" />
-                    </svg></label>
+                  <div className="col-md-9 input-group">
+                    <label for="test">
+                      {" "}
+                      <svg
+                        style={{ color: "#764A34" }}
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        fill="currentColor"
+                        class="bi bi-globe"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4H4.09zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a6.958 6.958 0 0 0-.656 2.5h2.49zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5H4.847zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5H4.51zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12c.138.386.295.744.468 1.068.552 1.035 1.218 1.65 1.887 1.855V12H5.145zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11a13.652 13.652 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5H3.82zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855.173-.324.33-.682.468-1.068H8.5zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5a6.959 6.959 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5h2.49zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4a7.966 7.966 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4h2.355z" />
+                      </svg>
+                    </label>
                     <span>
                       <p
                         className="ml-2"
@@ -1414,20 +1318,23 @@ export default function CustomerHeader(props) {
                     </span>
                   </div>
                   <br />
-                  <div className="col-md-9 col-sm-6 input-group">
-                    <label for="test"><svg style={{ color: "#764A34" }}
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      fill="currentColor"
-                      class="bi bi-gender-ambiguous"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M11.5 1a.5.5 0 0 1 0-1h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V1.707l-3.45 3.45A4 4 0 0 1 8.5 10.97V13H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V14H6a.5.5 0 0 1 0-1h1.5v-2.03a4 4 0 1 1 3.471-6.648L14.293 1H11.5zm-.997 4.346a3 3 0 1 0-5.006 3.309 3 3 0 0 0 5.006-3.31z"
-                      />
-                    </svg></label>
+                  <div className="col-md-9 input-group">
+                    <label for="test">
+                      <svg
+                        style={{ color: "#764A34" }}
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        fill="currentColor"
+                        class="bi bi-gender-ambiguous"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M11.5 1a.5.5 0 0 1 0-1h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V1.707l-3.45 3.45A4 4 0 0 1 8.5 10.97V13H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V14H6a.5.5 0 0 1 0-1h1.5v-2.03a4 4 0 1 1 3.471-6.648L14.293 1H11.5zm-.997 4.346a3 3 0 1 0-5.006 3.309 3 3 0 0 0 5.006-3.31z"
+                        />
+                      </svg>
+                    </label>
                     <span>
                       <p
                         className="ml-2"
@@ -1450,10 +1357,7 @@ export default function CustomerHeader(props) {
         </Modal.Body>
         <Modal.Footer>
           <div className="row">
-
-
-            <div className="col-md-6 col-sm-6 mb-2">
-
+            <div className="col-md-6">
               <button
                 type="button"
                 class="btn  btn-block"
@@ -1468,8 +1372,7 @@ export default function CustomerHeader(props) {
                 <strong>Edit Profile</strong>
               </button>
             </div>
-            <div className="col-md-6 col-sm-6">
-
+            <div className="col-md-6">
               <button
                 type="button"
                 class="btn  btn-block"
@@ -1665,7 +1568,7 @@ export default function CustomerHeader(props) {
                             borderBottomLeftRadius: "5px",
                           }}
                           class="form-control  border-right-0"
-                          id="CPPassword"
+                          id="inputpassword"
                           placeholder="New Password*"
                           onFocus={() => setPasswordFocused(true)}
                           onBlur={() => setPasswordFocused(false)}
@@ -1781,7 +1684,7 @@ export default function CustomerHeader(props) {
                             borderBottomLeftRadius: "5px",
                           }}
                           class="form-control border-right-0"
-                          id="CPConfirmPassword"
+                          id="inputConfirmPassword"
                           placeholder="Re-type Password*"
                           onChange={(e) => {
                             SetConfirmPassword(e.target.value);
@@ -1868,34 +1771,6 @@ export default function CustomerHeader(props) {
           </div>
         </Modal.Footer>
       </Modal>
-
-
-
-      <Modal show={modalOpenForLoading} size="md">
-        <Modal.Header></Modal.Header>
-
-        <Modal.Body>
-          <div class="d-flex justify-content-center">
-            <div class="spinner-border text-success" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
-          </div>
-          <br />
-          <h1 style={{ textAlign: "center", color: "#764A34" }}>
-            Please wait!
-          </h1>
-          <h6 style={{ textAlign: "center", color: "#764A34" }}>
-           Your changes are being saved...
-          </h6>
-        </Modal.Body>
-        <Modal.Footer></Modal.Footer>
-      </Modal>
-
-
-
-
-
-
     </div>
   );
 }

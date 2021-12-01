@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import CurrencySelect from "./CurrencySelect";
 import DiscoverMoreCovers from "./DicoverMoreCovers";
@@ -13,6 +13,7 @@ export default function LessonsAndCoversDetailed(props) {
   let instrumentsTxt = "";
   let MainCategoryForRec = "";
   let SubCategoryForRec = "";
+
   useEffect(() => {
     function getCovers() {
       //const CoverID = props.match.params.id;
@@ -148,7 +149,6 @@ export default function LessonsAndCoversDetailed(props) {
 
   return (
     <div>
-      <br />
       <div class="card container-xxl" style={{ border: "solid #764A34" }}>
         <div class="card-body">
           <div class="container">
@@ -236,11 +236,12 @@ export default function LessonsAndCoversDetailed(props) {
                 <div class="embed-responsive embed-responsive-16by9">
                   <iframe
                     class="embed-responsive-item"
-                    src="https://www.youtube.com/embed/CM4CkVFmTds"
+                    // need to use embeded youtube link
+                    src={covers.YoutubeLink}
                     title="YouTube video player"
-                    frameborder="0"
+                    frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
+                    allowFullScreen
                   ></iframe>
                 </div>
                 <br />
@@ -248,12 +249,12 @@ export default function LessonsAndCoversDetailed(props) {
               <div class="col-sm">
                 {/* main title */}
                 <h3 style={{ color: "#764A34", letterSpacing: "10px" }}>
-                  We Wish You a Merry Christmas
+                  {covers.Title}
                 </h3>
                 <br />
                 {/* original artis name  */}
                 <h4 style={{ color: "#764A34", float: "right" }}>
-                  Santa Claus
+                  {covers.OriginalArtistName}
                 </h4>
                 <br />
                 <br />
@@ -268,7 +269,7 @@ export default function LessonsAndCoversDetailed(props) {
                   Arrange by :{" "}
                 </h5>{" "}
                 <h5 style={{ display: "inline", letterSpacing: "2px" }}>
-                  Niki Minaj
+                  {covers.ArrangedBy}
                 </h5>
                 <br />
                 <br />
@@ -282,9 +283,10 @@ export default function LessonsAndCoversDetailed(props) {
                   {/* instruments played on array  */}
                   Instruments played on :{" "}
                 </h5>{" "}
-                <h5 style={{ display: "inline", letterSpacing: "2px" }}>
-                  Guitar
-                </h5>
+                <h5
+                  id="instruments"
+                  style={{ display: "inline", letterSpacing: "2px" }}
+                ></h5>
                 <br />
                 <br />
                 <h5
@@ -298,7 +300,7 @@ export default function LessonsAndCoversDetailed(props) {
                   Main Category :{" "}
                 </h5>{" "}
                 <h5 style={{ display: "inline", letterSpacing: "2px" }}>
-                  Classical Guitar
+                  {covers.MainCategory}
                 </h5>
                 <br />
                 <br />
@@ -313,7 +315,7 @@ export default function LessonsAndCoversDetailed(props) {
                   Sub-category :{" "}
                 </h5>{" "}
                 <h5 style={{ display: "inline", letterSpacing: "2px" }}>
-                  English
+                  {covers.SubCategory}
                 </h5>
                 <br />
                 <br />
@@ -327,14 +329,16 @@ export default function LessonsAndCoversDetailed(props) {
                   {/* no of pages  */}
                   No of pages :{" "}
                 </h5>{" "}
-                <h5 style={{ display: "inline", letterSpacing: "2px" }}>5</h5>
+                <h5 style={{ display: "inline", letterSpacing: "2px" }}>
+                  {covers.NoOfPages}
+                </h5>
                 <br />
                 <br />
                 <div class="container">
                   <div class="row">
                     <div class="col-sm">
                       {/* calling a another Component */}
-                      <CurrencySelect />
+                      <CurrencySelect coverPrice={covers.Price} />
                       <br />
                       <h6 style={{ color: "#D0193A" }}>
                         *The actual price will be slightly different*
@@ -368,7 +372,7 @@ export default function LessonsAndCoversDetailed(props) {
                           color: "#764A34",
                         }}
                       >
-                        5.99
+                        {covers.Price}
                       </h1>
                     </div>
                   </div>
@@ -377,15 +381,31 @@ export default function LessonsAndCoversDetailed(props) {
                   <button
                     type="button"
                     class="btn btn-success btn-block rounded"
+                    onClick={() => addToCart(covers._id)}
                   >
                     Add to cart
                   </button>
                   <br />
                   <br />
                   <div className="container-sm">
+                    {/* directly going to the payment gateway */}
                     <button
                       type="button"
                       class="btn btn-success btn-block rounded"
+                      onClick={() => {
+                        Swal.fire({
+                          title: "Are you sure?",
+                          icon: "warning",
+                          showCancelButton: true,
+                          confirmButtonColor: "#764A34",
+                          cancelButtonColor: "#D0193A",
+                          confirmButtonText: "Yes",
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            alert("Bought");
+                          }
+                        });
+                      }}
                     >
                       Buy it now
                     </button>

@@ -1,7 +1,8 @@
+
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import LogoImage from '../../images/loginback.png';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import {faEyeSlash} from "@fortawesome/free-solid-svg-icons";
@@ -14,76 +15,62 @@ const sleye = <FontAwesomeIcon icon={faEyeSlash}/>;
 
 
 
-
 export default function Login(props) {
 
-    const styles = {
-        container: {
-            backgroundImage: `url(${LogoImage})`,
-            backgroundPosition: 'center',
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            width: '100vw',
-            height: '100vh'
-        }
-    };
 
+    const refreshToken = async () =>{
+
+        try{
+
+            const res = await axios.post("/refresh",{token: customer.refreshToken});
+            setCustomer({
+                
+                ...customer,
+                accessToken: res.data.accessToken,
+                refreshToken: res.data.refreshToken,
+
+            })
+        }catch (err){
+
+            console.log(err);
+        }
+
+    }
+
+    // axios.interceptors.request.use( async(config)=>{
+
+    //         let currentDate = new Date();
+
+    // }
+    // );
+
+     //remember me
+
+  const [rememberMe, setRememberMe] = useState(false);
+
+  const handleChange = (event) => {
+    const input = event.target;
+    const value = input.type === "checkbox" ? input.checked : input.value;
+
+    setRememberMe(value);
+
+  };
 
 
     const [passwordShown, setPasswordShown] = useState(false);
+
+    let navigate = useNavigate();
 
     // Password toggle handler
     const togglePasswordVisiblity = () => {
         setPasswordShown(passwordShown ? false : true);
     };
 
+    let[customer, setCustomer] = useState(null);
+    let [Username, setUsername] = useState("");
+    let [Password, setPassword] = useState("");
+    let [errorMsg, setErrorMsg] = useState("");
 
-    return (
-        <div className="wrapper" >
-            <div className=" container">
-
-                <div className="row justify-content-center">
-                    <div className="col-xl-5">
-                        <h3 style={{ fontWeight: "bold" }} className="mt-5 mb-5">Sign In</h3>
-                    </div>
-
-                </div>
-
-                <form className="mb-10">
-
-                    {/* Username label & input field  */}
-
-                    <div class="form-group row justify-content-center">
-
-                        <div className="col-xl-5">
-                            <label for="exampleInputEmail1" style={{ fontWeight: "bold" }}>Username</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Username" />
-                        </div>
-                    </div>
-
-                     {/* Password label & input field  */}
-
-                    <div class="form-group row justify-content-center">
-
-  };
-
-                            <label for="exampleInputEmail1" style={{ fontWeight: "bold" }}>Password</label>
-
-                            <div class="input-group mb-3">
-                                <input
-                                    placeholder="Password"
-                                    class="form-control"
-                                    name="password"
-                                    type={passwordShown ? "text" : "password"}
-
-
-                                />
-
-                                {/* eye icon */}
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2"> <i onClick={togglePasswordVisiblity}>{eye}</i></span>
-                                </div>
-                            </div>
 
     useEffect(() => {
         function RememberMe() {
@@ -272,11 +259,8 @@ export default function Login(props) {
 <br/><br/>
 </div>
 
-    </div>
-</div>
 
-
-        </div>
+       
     )
 
 }

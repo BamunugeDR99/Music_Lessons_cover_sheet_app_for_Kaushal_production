@@ -49,7 +49,7 @@ export default function CoverTemplate(props) {
             </h5>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import MusicCoverPage from "./../customerRole/musiccoverpage";
 import AdminCard from "./../adminRole/admincard";
 import Modal from "react-bootstrap/Modal";
+import { Eye } from "react-feather";
+import $ from "jquery";
+import DataTable from "datatables.net";
+import CoverTemplate from "../customerRole/covercardtemplate";
 
 // Admin dashboard
 export default function DashBoard() {
@@ -119,15 +124,67 @@ export default function DashBoard() {
 
     assignData();
   }
-  function modelOpen12() {
-    // alert("This is alert");
-    setmodelOpen1(true);
+  async function assignData() {
+    if (customerdetails.length == orderHolder.length) {
+      // console.log(customerdetails);
+      // console.log(orderHolder);
+      for (let i = 0; i < orderHolder.length; i++) {
+        for (let j = 0; j < orderHolder.length; j++) {
+          if (orderHolder[i].CustomerID == customerdetails[j]._id) {
+            // console.log(customerdetails[j]);
+            // console.log(orderHolder[i]);
+            dataholder = {
+              name: customerdetails[j].FirstName,
+              totalprice: orderHolder[i].TotalPrice,
+              date: orderHolder[i].TransactionDateAndTime,
+              cartID: orderHolder[i]._id,
+              customerID: customerdetails[j]._id,
+              coverID: orderHolder[i].CoverIDs,
+            };
+            tableData.push(dataholder);
+            break;
+          }
+        }
+      }
+      console.log(tableData);
+      setPaymentData(tableData);
+      document.getElementById("spinnerdiv").style.display = "none";
+      document.getElementById("maindiv").style.display = "block";
+      $("#example").DataTable();
+    }
   }
-  function modalClose() {
-    setmodelOpen(false);
+  async function getOrderedCovers(data) {
+    console.log(data);
+
+    for (let k = 0; k < data.length; k++) {
+      setmodelOpen(true);
+
+      await axios
+        .get(`http://localhost:8070/covers/getcoverbyid/${data[k]}`)
+        .then((res) => {
+          document.getElementById("spinnerdiv2").style.display = "block";
+          document.getElementById("modeldiv").style.display = "none";
+          covers.push(res.data[0]);
+        })
+        .catch((err) => {
+          console.log(err.message);
+          alert(err.message);
+        });
+    }
+    // testFunction();
+    console.log(covers);
+
+    setSelectedCovers(covers);
+    document.getElementById("spinnerdiv2").style.display = "none";
+    document.getElementById("modeldiv").style.display = "block";
   }
-  function modalClose1() {
-    setmodelOpen1(false);
+
+  function calculateDownloads(data) {
+    for (let i = 0; i < data.length; i++) {
+      downloads = downloads + Number(data[i].NoOfDownloads);
+    }
+    // console.log(downloads);
+    setDownloads(downloads);
   }
 
   function searchByDate(fromDate, toDate) {
@@ -180,25 +237,56 @@ export default function DashBoard() {
   }
   return (
     <div>
+      {/* {console.log(selectedCovers)} */}
       <div className="row">
-        <div className="col-md-3" onClick={() => modalopen()}>
+        <div className="col-md-2">
           {" "}
-          <AdminCard color="red" />
+          <AdminCard
+            color="red"
+            value="Covers"
+            num={coverlength}
+            icon={"fa fa-music"}
+          />
           <br />
         </div>
-        <div className="col-md-3" onClick={() => modelOpen12()}>
+        <div className="col-md-2">
           {" "}
-          <AdminCard color="green" />
+          <AdminCard
+            color="#8B8000"
+            value="Excercises"
+            icon={"fa fa-file"}
+            num={coverlength}
+          />
           <br />
         </div>
-        <div className="col-md-3">
+        <div className="col-md-2">
           {" "}
-          <AdminCard color="blue" />
+          <AdminCard
+            color="blue"
+            icon={"fa fa-user"}
+            value="Users"
+            num={customerlength}
+          />
           <br />
         </div>
-        <div className="col-md-3">
+        <div className="col-md-2">
           {" "}
-          <AdminCard color="purple" />
+          <AdminCard
+            color="#7CB9E8	"
+            icon={"fa fa-download"}
+            value="Downloads"
+            num={alldownloads}
+          />
+          <br />
+        </div>
+        <div className="col-md-2">
+          {" "}
+          <AdminCard
+            color="#54626F	"
+            icon={"fa fa-comments"}
+            value="Feedbacks"
+            num={feedbackLength}
+          />
           <br />
         </div>
         <div className="col-md-2">
@@ -337,7 +425,7 @@ export default function DashBoard() {
 
       <Modal show={modelOpen} size="lg">
         <Modal.Header>
-          <h4>Add Cover/Excercise</h4>
+          <h4>All ordered covers</h4>
           <button
             type="button"
             class="close"
@@ -350,155 +438,54 @@ export default function DashBoard() {
         </Modal.Header>
         <Modal.Body>
           <div className="container">
-            <div className="row">
-              <div className="col-sm-6">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Song Name*</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    placeholder="Song Name"
-                  />
-                  <label for="exampleInputEmail1">Main Category</label>
-                  <select className="form-control" id="country" name="country">
-                    <option>Select</option>
-                    <option>Covers</option>
-                    <option>Excercise</option>
-                  </select>
-                  <label for="exampleInputEmail1">YouTube Link*</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    placeholder="YouTube Link"
-                  />
-                  <label for="exampleInputEmail1">PDF File*</label>
-                  <input
-                    type="file"
-                    name="pdffile"
-                    id="pdffile"
-                    class="form-control form-control-sm"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    placeholder="Facebook Link*"
-                  />
+            <div id="spinnerdiv2" style={{ display: "block" }}>
+              <center>
+                <div class=" justify-content-center">
+                  <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
                 </div>
-              </div>
-              <div className="col-sm-6">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Instruments*</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    placeholder="Instrument"
-                  />
-                  <label for="exampleInputEmail1">Sub Category</label>
-                  <select className="form-control" id="country" name="country">
-                    <option>Select</option>
-                    <option>English</option>
-                    <option>Sinhala</option>
-                    <option>Hindi</option>
-                  </select>
-                  <label for="exampleInputEmail1">Facebook Link*</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    placeholder="Facebook Link*"
-                  />
-                  <label for="exampleInputEmail1">Preview Images*</label>
-                  <input
-                    type="file"
-                    name="sampleimages[]"
-                    id="sampleimages"
-                    class="form-control form-control-sm"
-                    multiple="true"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    placeholder="Facebook Link*"
-                  />
-                </div>
-              </div>
+              </center>
+            </div>
+            <div
+              style={{ display: "none" }}
+              id="modeldiv"
+              className="row text-center"
+            >
+              <table
+                id="example"
+                class="table table-striped table-bordered"
+                style={{ width: "100%" }}
+              >
+                <thead>
+                  <tr>
+                    <th>Cover Name</th>
+                    <th>Total Price</th>
+                    <th>Total Downloads</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedCovers.map((post) => (
+                    <tr>
+                      <td>{post.Title}</td>
+                      <td className="text-right">Rs.{post.Price}.00</td>
+                      <td>{post.NoOfDownloads}</td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th>Cover Name</th>
+                    <th>Total Price</th>
+                    <th>Total Downloads</th>
+                  </tr>
+                </tfoot>
+              </table>
             </div>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <div className="row">
-            <div className="col-md-6">
-              <center>
-                <button
-                  type="button"
-                  class="btn btn"
-                  style={{
-                    borderRadius: "10px",
-                    backgroundColor: "#28A745",
-                    color: "white",
-                  }}
-                >
-                  <strong>Submit</strong>
-                </button>
-              </center>
-            </div>
-          </div>
-        </Modal.Footer>
-      </Modal>
-
-      {/* Category model */}
-      <Modal show={modelOpen1} size="lg">
-        <Modal.Header>
-          <h4>Add Main Category</h4>
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
-            onClick={modalClose1}
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="container">
-            <div className="row">
-              <div className="col-sm-12">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Main Category*</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    placeholder="Main Name"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <div className="row">
-            <div className="col-md-6">
-              <center>
-                <button
-                  type="button"
-                  class="btn btn"
-                  style={{
-                    borderRadius: "10px",
-                    backgroundColor: "#28A745",
-                    color: "white",
-                  }}
-                >
-                  <strong>Submit</strong>
-                </button>
-              </center>
-            </div>
-          </div>
+          <div className="row"></div>
         </Modal.Footer>
       </Modal>
     </div>
