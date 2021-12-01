@@ -2,8 +2,7 @@ import React, { Component, useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Modal from "react-bootstrap/Modal";
-import $ from "jquery";
-// import "../css/toogle.css"
+// import $ from "jquery";
 
 export default function EditMainCategories(props) {
 
@@ -50,7 +49,7 @@ export default function EditMainCategories(props) {
                 setClassical(filter1);
                 setCategory(filter1[0].SubCategories)
 
-                
+                console.log(filter1[0].SubCategories)
 
                 const filter2 = res.data.filter(
                   (classic) => classic._id == "619deb0ca35d670b4e68ec3e"
@@ -59,14 +58,15 @@ export default function EditMainCategories(props) {
                   // console.log(filter2)
                   setExercise(filter2);
                   setCategory2(filter2[0].SubCategories)
+                  console.log(filter2[0].SubCategories)
 
-                $(document).ready(function () {
-                  $("#example").DataTable();
-                });  
+                // $(document).ready(function () {
+                //   $("#example").DataTable();
+                // });  
 
-                $(document).ready(function () {
-                  $("#example2").DataTable();
-                });  
+                // $(document).ready(function () {
+                //   $("#example2").DataTable();
+                // });  
             })
             .catch((err)=>{
                 alert(err);
@@ -120,7 +120,7 @@ export default function EditMainCategories(props) {
               // setabc(afterDelete);
                   Swal.fire("Deleted!", "Your file has been deleted.", "success");
                   // getClassical();
-                  // window.location.reload();
+                  window.location.reload();
                 })
                 .catch((err) => {
                   alert(err);
@@ -168,7 +168,7 @@ export default function EditMainCategories(props) {
               // let afterDelete = abc.splice(index, 1);
               // setabc(afterDelete);
                   Swal.fire("Deleted!", "Your file has been deleted.", "success");
-                  // window.location.reload();
+                  window.location.reload();
 
                 })
                 .catch((err) => {
@@ -191,21 +191,20 @@ export default function EditMainCategories(props) {
     
     function sendData() {
       console.log(SubCat)
+      if(SubCat != ""){
       axios.get("http://localhost:8070/mainCategory/get")
         .then((res)=>{
           console.log(res.data)
           for(let i = 0; i < res.data.length; i++){
-            for(let j = 0; j < res.data.length +1; j++){
+            for(let j = 0; j < res.data.length +5; j++){
               if(res.data[i].SubCategories[j] === SubCat){
                 no=1;
-                
               }
               else{
               }
               console.log(res.data[i].SubCategories[i])
             }
           }
-
           if(no==1){
             Swal.fire({
               icon: 'error',
@@ -268,6 +267,9 @@ export default function EditMainCategories(props) {
           }
         })
         console.log(value)
+      }else{
+        Swal.fire('Please fill the Sub Category')
+      }
        
       }
 
@@ -292,9 +294,13 @@ export default function EditMainCategories(props) {
                         <div class="input-group-append"></div>
                         <br />
                     </div> */}
-
-<div class="col text-right">
-                <button type="button" class="btn btn-info add-new " onClick={() => modalopen2()}><i class="fa fa-plus"></i> Add New</button>
+                    <div class="row">
+{/* <div class="col-sm text-right">
+  <h2 style={{color:'#764A34'}}>Categories</h2>
+  </div> */}
+            <div class="col-sm text-right">
+                <button type="button" class='btn' style={{backgroundColor:'#279B14', color:'white'}}onClick={() => modalopen2()}><i class="fa fa-plus"></i> Add New</button>
+            </div>
             </div>
             <br/><br/>
 <div className="row" 
@@ -455,7 +461,7 @@ export default function EditMainCategories(props) {
           <div className="row">
             <div className="col-md-6">
               <center>
-              <button type="submit" class="btn btn-primary"
+              <button type="submit" class="btn"
                   style={{ borderRadius: "10px", backgroundColor: "#28A745",color: "white",}}
                   onClick={sendData}>
                   <strong>Save</strong> 
@@ -464,6 +470,7 @@ export default function EditMainCategories(props) {
                   style={{borderRadius: "10px",backgroundColor: "#28A745",color: "white",}}
                   required
                   onClick={sendData} /> */}
+                  {/* abc */}
                   
               </center>
             </div>
@@ -475,4 +482,3 @@ export default function EditMainCategories(props) {
 </div>
   );
 }
-

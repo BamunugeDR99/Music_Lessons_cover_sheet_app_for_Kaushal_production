@@ -1,52 +1,48 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Logo from '../../images/logo.jfif';
+import Logo from "../../images/logo.jfif";
+import "../../css/initialpage.css";
+
 export default function InitialPage(props) {
+  return (
+    <div className="initp">
+      <div id="header">
+        <button
+          type="button"
+          class="login"
+          onClick = {() => {
+              props.history.push("/customer/login")
+          }}
+          style={{ float: "right", marginRight: "20px" }}
+        >
+          Login{" "}
+        </button>
+        <button
+          type="button"
+          class="register"
+          onClick = {() => {
+              props.history.push("/customer/registration")
+          }}
+          style={{ float: "right", marginRight: "20px" }}
+        >
+          Register
+        </button>
+      </div>
 
-    return(
-    <div className="container">
+      <section id="hero">
+        <div class="hero-container">
+          <img
+            src="images/KaushalOfficialLogo.jpeg"
+            alt="logo"
+            style={{ width: "120px", height: "120px", borderRadius: "35px" }}
+          ></img>
+          <h1>KAUSHAL RASHMIKA PRODUCTIONS</h1>
 
-            <div className="row justify-content-end">
-                <div className="col-xl-7">
-
-                <div className="align-bottom ">
-                    <br/>
-                    <br/>
-                    <img className="rounded  " src={Logo}  alt="" />
-                </div>
-               
-                
-                </div>
-
-                <div className="col-xl-5 justify-content-end">
-
-                <div className="justify-content-end mt-5">
-                <button type="button" class="btn btn-primary " style={{ float: 'right' , margin : "0" }} id="GPackageBtn2" >Register</button>
-                <button type="button" class="btn btn-primary " style={{ float: 'right' , margin : "0" }} id="GDisItemsBtn2" >Login</button>
-                
-                </div>
-
-               
-                </div>
-
-            </div>
-
-            <div className="row justify-content-start">
-
-                <div className="col-xl-6">
-
-                    <p style={{fontSize:"18px" , padding : "0", margin : "0"}}>Kaushal Music</p>
-                    <p style={{fontSize:"18px" , padding : "0", margin : "0"}}>Productions</p>
-                    <p style={{fontSize:"16px" , padding : "0", margin : "0"}}>Let Music Speak!</p>
-                </div>
-
-                <div className="col-xl-6">
-                <button type="button" class="btn btn-primary " style={{ float: 'right' }} id="GDisItemsBtn2" >Get Started</button>
-                
-                </div>
-
-
-            </div>
+          <Link href="#about" class="btn-get-started"  to = "/customer/registration">
+            Get Started
+          </Link>
+        </div>
+      </section>
     </div>
-    )
+  );
 }

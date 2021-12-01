@@ -1,34 +1,34 @@
-.customerHeader #searchBar:focus{
+#searchBar:focus{
     outline: none !important;
     border:1px solid #764A34;
     box-shadow: 0 0 10px #764A34;
 }
 
-.customerHeader #classicalHeader{
+#classicalHeader{
 
         font-family: Abel;
         font-size: 18px;
         color: #764A34;
   
 }
-.customerHeader #classicalHeader:hover{
+#classicalHeader:hover{
     opacity: 20%;
 }
 
-.customerHeader #SearchBtn{
+#SearchBtn{
     outline: solid #764A34;
     color: #764A34;
 }
 
-.customerHeader #SearchBtn:hover{
+#SearchBtn:hover{
    box-shadow: inset;
 }
 
-.customerHeader #Sicons:hover{
+#Sicons:hover{
     opacity: 20%;
 }
 
-.customerHeader #myAccount{
+#myAccount{
 
         font-family: Abel;
         font-size: 18px;
@@ -37,7 +37,7 @@
         margin-left: 5px;
 }
 
-.customerHeader .userProfileSpan:hover{
+.userProfileSpan:hover{
     opacity: 20%;
 }
 

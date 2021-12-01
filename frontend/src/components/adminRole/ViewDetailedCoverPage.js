@@ -3,9 +3,10 @@ import axios from "axios";
 import CurrencySelect from "./CurrencySelect";
 import Swal from "sweetalert2";
 import Modal from "react-bootstrap/Modal";
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
+import Select from "react-select";
 
 export default function ViewDetailedCoverPage(props) {
   const [covers, setCovers] = useState([]);
@@ -18,7 +19,7 @@ export default function ViewDetailedCoverPage(props) {
   let instrumentsTxt = "";
   let MainCategoryForRec = "";
   let SubCategoryForRec = "";
-  let location = useLocation();
+
 
   //   for update
   //const [covers, setCovers] = useState([]);
@@ -30,7 +31,7 @@ export default function ViewDetailedCoverPage(props) {
 
   // user inputs
   const [songName, setSongName] = useState("");
-  const [instruments, setInstrument] = useState("");
+  const [instruments, setInstrument] = useState([]);
   const [youtubeLink, setYoutubeLink] = useState("");
   const [facebookLink, setFacebookLink] = useState("");
   const [noOfPages, setNoOfPages] = useState("");
@@ -43,7 +44,7 @@ export default function ViewDetailedCoverPage(props) {
   const [youtubeLivePreview, setYoutubeLivePriview] = useState(true);
   const [lessonSubCategories, setLessonSubCategories] = useState([]);
   const [subCategoryPreview, setSubCategoryPreview] = useState(false);
-
+  const [subCategoryPreview2, setSubCategoryPreview2] = useState(false);
   // for uploading modal
   const [fileType, setFileType] = useState("");
   const [completedFiles, setCompletedFiles] = useState("0");
@@ -58,7 +59,18 @@ export default function ViewDetailedCoverPage(props) {
   let tempSubCategoryStore = "";
   let tempPdf = "";
   let tempCoverImages = [];
-  let CoverTempID = location.pathname.substring(10);
+  let CoverTempID = props.match.params.id;
+
+  const [dropMainCategory, setDropMainCategory] = useState("");
+  const [dropSubCategory, setDropSubCategory] = useState("");
+
+  const instrumentsPlayedOn = [
+    { value: "Classical Guitar", label: "Classical Guitar" },
+    { value: "Piano", label: "Piano" },
+    { value: "Ukulele", label: "Ukulele" },
+    { value: "Acoustic Guitar", label: "Acoustic Guitar" },
+  ];
+
   useEffect(() => {
     function getCovers() {
       axios
@@ -72,11 +84,16 @@ export default function ViewDetailedCoverPage(props) {
           MainCategoryForRec = res.data.MainCategory;
           SubCategoryForRec = res.data.SubCategory;
           setYoutubeLink(res.data.YoutubeLink);
-
+          //setInstrument(res.data.InstrumentsPlayedOn);
           getAllClassicalGutarMainCategories();
         })
         .catch((err) => {
-          alert(err);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+            footer: '<p style = "color : #D0193A">Currently unavailable!',
+          });
         });
     }
 
@@ -120,10 +137,9 @@ export default function ViewDetailedCoverPage(props) {
     }
     imageSlider += "</div>";
     document.getElementById("img").innerHTML = imageSlider;
-    for(let i = 0;  i < previewImages.length;i++){
+    for (let i = 0; i < previewImages.length; i++) {
       document.getElementById("img" + i).src = "/images/Imageplaceholder.png";
-        
-      }
+    }
     previewImages.map((previewImage, index) => {
       const storageRef = ref(storage, `PreviewImages/${previewImage}`);
       getDownloadURL(storageRef).then((url) => {
@@ -142,14 +158,24 @@ export default function ViewDetailedCoverPage(props) {
   function setContent() {
     setSubCategories(tempSubCategory);
     setLessonSubCategories(tempSubCategory2);
+    // console.log(MainCategoryForRec);
+    // console.log(SubCategoryForRec);
 
-    document.getElementById("MainCategory").value = MainCategoryForRec;
-    if (MainCategoryForRec == "Classical Guitar Covers") {
-      document.getElementById("subCategory1").value = SubCategoryForRec;
+    // setA(MainCategoryForRec);
+    // setB(SubCategoryForRec)
+    // document.getElementById("MainCategory").value = MainCategoryForRec;
+    setDropMainCategory(MainCategoryForRec);
+    if (MainCategoryForRec === "Classical Guitar Covers") {
+      // document.getElementById("subCategory1").value = SubCategoryForRec;
+      setDropSubCategory(SubCategoryForRec);
       setSubCategoryPreview(false);
-    } else if (MainCategoryForRec == "Guitar Technics & Lessons") {
-      document.getElementById("subCategory2").value = SubCategoryForRec;
+      setSubCategoryPreview2(true);
+      //console.log("a")
+    } else if (MainCategoryForRec === "Guitar Technics & Lessons") {
+      setDropSubCategory(SubCategoryForRec);
       setSubCategoryPreview(true);
+      setSubCategoryPreview2(false);
+      //document.getElementById("subCategory2").value = SubCategoryForRec;
     }
   }
 
@@ -161,7 +187,12 @@ export default function ViewDetailedCoverPage(props) {
         setContent();
       })
       .catch((err) => {
-        alert(err);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
   }
   function getAllClassicalGutarMainCategories() {
@@ -172,7 +203,12 @@ export default function ViewDetailedCoverPage(props) {
         GetLessonSubCategories();
       })
       .catch((err) => {
-        alert(err);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
   }
 
@@ -232,7 +268,12 @@ export default function ViewDetailedCoverPage(props) {
         }
       },
       (error) => {
-        console.log(error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       }
     );
   }
@@ -332,11 +373,15 @@ export default function ViewDetailedCoverPage(props) {
             dynamicSubCategory
           );
         } else {
-          // setClass("");
         }
       },
       (error) => {
-        console.log(error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       }
     );
   }
@@ -368,24 +413,26 @@ export default function ViewDetailedCoverPage(props) {
           let dynamicSubCategory = "";
           let previewPageList = [];
           if (
-            document.getElementById("MainCategory").value ==
-            "Guitar Technics & Lessons"
+            document.getElementById("MainCategory").value ===
+            String("Guitar Technics & Lessons")
           ) {
             dynamicSubCategory = document.getElementById("subCategory2").value;
           } else if (
-            document.getElementById("MainCategory").value ==
-            "Classical Guitar Covers"
+            document.getElementById("MainCategory").value ===
+            String("Classical Guitar Covers")
           ) {
             dynamicSubCategory = document.getElementById("subCategory1").value;
           }
-
           let InstrumentArray = [];
-          if (instruments == "") {
+
+          if (instruments.length == 0) {
             InstrumentArray = document
               .getElementById("Instruments")
               .value.split(",");
           } else {
-            InstrumentArray = instruments.split(",");
+            for (let i = 0; i < instruments.length; i++) {
+              InstrumentArray.push(instruments[i].value);
+            }
           }
 
           if (
@@ -413,7 +460,7 @@ export default function ViewDetailedCoverPage(props) {
               PreviewPages: previewPageList,
               CoverPdf: updateCoverPdf,
             };
-
+            console.log(updatedCover);
             axios
               .put(
                 "http://localhost:8070/covers/update/" + CoverTempID,
@@ -428,7 +475,12 @@ export default function ViewDetailedCoverPage(props) {
                 getCovers();
               })
               .catch((err) => {
-                alert(err);
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "Something went wrong!",
+                  footer: '<p style = "color : #D0193A">Currently unavailable!',
+                });
               });
           } else if (
             previewPages.length != 0 &&
@@ -473,31 +525,6 @@ export default function ViewDetailedCoverPage(props) {
               dynamicSubCategory
             );
           }
-
-          // if (document.getElementById("pdffile").files.length === 0) {
-          //   updateCoverPdf = document.getElementById("tPdfFile").value;
-          // } else {
-
-          // }
-
-          // console.log(updatedCover);
-
-          // axios
-          //   .put(
-          //     "http://localhost:8070/covers/update/" + CoverTempID,
-          //     updatedCover
-          //   )
-          //   .then(() => {
-          //     swalWithBootstrapButtons.fire(
-          //       "Updated!",
-          //       "Your cover has been updated.",
-          //       "success"
-          //     );
-          //     getCovers();
-          //   })
-          //   .catch((err) => {
-          //     alert(err);
-          //   });
         } else if (
           /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel
@@ -517,23 +544,29 @@ export default function ViewDetailedCoverPage(props) {
       .then((res) => {
         setCovers(res.data);
         setPreviousContent(res.data);
+        //setContent(res.data);
         preview = res.data.PreviewPages;
         printInstruments(res.data.InstrumentsPlayedOn);
         displayPreviewImageSlider(res.data.PreviewPages);
         MainCategoryForRec = res.data.MainCategory;
         SubCategoryForRec = res.data.SubCategory;
         setYoutubeLink(res.data.YoutubeLink);
-
+        //setInstrument(res.data.InstrumentsPlayedOn);
         getAllClassicalGutarMainCategories();
       })
       .catch((err) => {
-        alert(err);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
   }
 
-  function previewPdf(covername) {
+  function previewPdf(pdfName) {
     setModalOpenForPdf(true);
-    const storageRef = ref(storage, `Covers(PDF)/${covername}`);
+    const storageRef = ref(storage, `Covers(PDF)/${pdfName}`);
     getDownloadURL(storageRef)
       .then((url) => {
         // setPdfUrl(url)
@@ -878,6 +911,7 @@ export default function ViewDetailedCoverPage(props) {
               aria-label="Close"
               onClick={() => {
                 setModalOpen2(false);
+                //getCovers()
               }}
             >
               <span aria-hidden="true">&times;</span>
@@ -905,19 +939,28 @@ export default function ViewDetailedCoverPage(props) {
                     <label for="exampleInputMainCategory">Main Category</label>
                     <select
                       required
+                      value={dropMainCategory}
                       className="form-control"
-                      onChange={() => {
+                      onChange={(e) => {
                         if (subCategoryPreview == true) {
                           setSubCategoryPreview(false);
+                          setDropMainCategory(e.target.value);
+                          setSubCategoryPreview2(true);
                         } else {
+                          setDropMainCategory(e.target.value);
                           setSubCategoryPreview(true);
+                          setSubCategoryPreview2(false);
                         }
                       }}
                       id="MainCategory"
                       name="category"
                     >
-                      <option>Classical Guitar Covers</option>
-                      <option>Guitar Technics & Lessons</option>
+                      <option value="Classical Guitar Covers">
+                        Classical Guitar Covers
+                      </option>
+                      <option value="Guitar Technics & Lessons">
+                        Guitar Technics & Lessons
+                      </option>
                     </select>
                     <br />
                     <label for="exampleInputEmail1">YouTube Link*</label>
@@ -1016,40 +1059,59 @@ export default function ViewDetailedCoverPage(props) {
                 <div className="col-sm-6">
                   <div class="form-group">
                     <label for="exampleInputEmail1">Instruments*</label>
+                    <Select
+                      //value={[instrumentsPlayedOn[0]]}
+                      isMulti
+                      name="colors"
+                      options={instrumentsPlayedOn}
+                      className="basic-multi-select"
+                      classNamePrefix="select"
+                      required
+                      placeholder="Choose instruments"
+                      onChange={(val) => {
+                        setInstrument(val);
+                      }}
+                    />
+                    <br />
                     <input
                       type="text"
                       class="form-control"
                       id="Instruments"
                       Value={covers.InstrumentsPlayedOn}
                       placeholder="Instrument Exp : (Guitar,Piano)"
-                      onChange={(e) => {
-                        setInstrument(e.target.value);
-                      }}
-                      required
+                      readOnly
                     />
 
                     <br />
                     <label for="exampleInputEmail1">Sub Category</label>
                     <select
+                      value={dropSubCategory}
                       hidden={subCategoryPreview}
                       className="form-control"
                       id="subCategory1"
                       name="subCategory"
+                      onChange={(e) => {
+                        setDropSubCategory(e.target.value);
+                      }}
                       required
                     >
                       {SubCategories.map((sub) => {
-                        return <option>{sub}</option>;
+                        return <option value={sub}>{sub}</option>;
                       })}
                     </select>
                     <select
+                      value={dropSubCategory}
                       hidden={!subCategoryPreview}
                       className="form-control"
                       id="subCategory2"
                       name="subCategory"
+                      onChange={(e) => {
+                        setDropSubCategory(e.target.value);
+                      }}
                       required
                     >
                       {lessonSubCategories.map((sub) => {
-                        return <option>{sub}</option>;
+                        return <option value={sub}>{sub}</option>;
                       })}
                     </select>
                     <br />
@@ -1177,7 +1239,7 @@ export default function ViewDetailedCoverPage(props) {
                   </h3>*/}
             <h2 style={{ color: "#764A34", textAlign: "center" }}>
               {fileType}
-            </h2> 
+            </h2>
           </div>
           <div class="d-flex justify-content-center">
             <div

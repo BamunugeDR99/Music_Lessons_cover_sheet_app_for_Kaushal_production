@@ -26,7 +26,6 @@ export default function CustomerRegistration(props) {
   let [Allusername, setAllusernames] = useState([]);
   let [Allemails, setAllemails] = useState([]);
 
-
   let [UsernameError, SetUsernameError] = useState("");
   let [EmailError, SetEmailError] = useState("");
   let [ContactNumberError, SetContactNoError] = useState("");
@@ -38,7 +37,6 @@ export default function CustomerRegistration(props) {
   let [CountryError, setCountryError] = useState("");
   let [TnCError, setTnCError] = useState("");
   let [ExtraError, setExtraError] = useState("");
-
 
   const [passwordMatchDiv, setPasswordMatchDiv] = useState(true);
   const [passwordMisMatchDiv, setPasswordMisMatchDiv] = useState(true);
@@ -53,210 +51,123 @@ export default function CustomerRegistration(props) {
   const [passwordValidity, setPasswordValidity] = useState({
     minChar: null,
     number: null,
-    specialChar: null
+    specialChar: null,
   });
-
 
   const [modalOpenForLoading, setmodalOpenForLoading] = useState(false);
   useEffect(() => {
-
-
     // function getCustomers() {
-
     //   axios.get("http://localhost:8070/customer/getUsernames").then((res) => {
-
-      
     //     Allusername = res.data;
     //     setAllusernames(res.data);
-
     //     axios.get("http://localhost:8070/customer/getAllEmails").then((res)=>{
-
     //       Allemails = res.data;
     //       setAllemails(res.data);
-
     //     }).catch((err)=>{
     //       alert(err.message);
     //     })
-
-       
-
     //   }).catch((err) => {
     //     alert(err.message);
     //   })
-
     // }
-
     // getCustomers();
-     
+  }, []);
 
-
-
-  }, [])
-
-
-
-
- 
-
-  
-     
-
-
-
- 
-
-
- async  function checkUserName(username) {
-
-  await axios("http://localhost:8070/customer/getUsernames").then((res) => {
-
-         Allusername = res.data;
+  async function checkUserName(username) {
+    await axios("http://localhost:8070/customer/getUsernames")
+      .then((res) => {
+        Allusername = res.data;
         setAllusernames(res.data);
-
-
-  }).catch((err)=> {
-
-    console.log(err);
-  })
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     if (username.length == 0) {
       SetUsernameError("");
-    }
-
-    else {
-
+    } else {
       // console.log(result);
       if (Allusername.includes(username) === true) {
         flag1 = 0;
         SetUsernameError("UserName Already Exists");
-      }
-
-      else {
+      } else {
         SetUsernameError("");
       }
     }
-
   }
 
-
- async function checkEmail(email) {
-
-  await axios("http://localhost:8070/customer/getAllEmails").then((res) => {
-
-    Allemails = res.data;
-    setAllemails(res.data);
-
-
-  }).catch((err)=> {
-
-    console.log(err);
-  })
+  async function checkEmail(email) {
+    await axios("http://localhost:8070/customer/getAllEmails")
+      .then((res) => {
+        Allemails = res.data;
+        setAllemails(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     if (email.length == 0) {
       SetEmailError("");
-    }
-
-    else {
+    } else {
       if (Allemails.includes(email) === true) {
-        flag1 =0;
+        flag1 = 0;
         SetEmailError("Email Already Exists");
-      }
-
-      else {
+      } else {
         SetEmailError("");
       }
     }
-
   }
 
-
-
-
-
-
   function validate() {
-
-
     if (Password !== ConfirmPassword) {
       flag1 = 0;
       setPasswordMisMatchDiv(false);
       setPasswordMatchDiv(true);
-
-    } else if (passwordValidity.minChar !== true || passwordValidity.specialChar !== true || passwordValidity.number !== true) {
+    } else if (
+      passwordValidity.minChar !== true ||
+      passwordValidity.specialChar !== true ||
+      passwordValidity.number !== true
+    ) {
       flag1 = 0;
-      setExtraError("Please give the password in required format")
-    }
-
-    else if (Country.length === 0) {
+      setExtraError("Please give the password in required format");
+    } else if (Country.length === 0) {
       flag1 = 0;
-      setCountryError('Country is required')
-    }
-
-    else {
-
+      setCountryError("Country is required");
+    } else {
       flag1 = 1;
     }
-
-
   }
-
-
 
   function checkNamePattern(word, type) {
-
-
-
-    if ((!/[^a-zA-Z]/.test(word)) === false && type == "first") {
+    if (!/[^a-zA-Z]/.test(word) === false && type == "first") {
       setFirstNameError("First Name can only contain letters");
       flag1 = 0;
-    }
-
-    else if ((!/[^a-zA-Z]/.test(word)) === false && type == "last") {
+    } else if (!/[^a-zA-Z]/.test(word) === false && type == "last") {
       setLastNameError("Last Name can only contain letters");
       flag1 = 0;
-    }
-
-    else {
+    } else {
       flag1 = 1;
     }
-
   }
 
-
   function checkPasswords(confirmpassword) {
-
     if (Password.length !== 0 || confirmpassword.length !== 0) {
-
       if (Password === confirmpassword) {
-
         setPasswordMatchDiv(false);
         setPasswordMisMatchDiv(true);
-
-      }
-
-      else if (Password !== confirmpassword) {
+      } else if (Password !== confirmpassword) {
         setPasswordMisMatchDiv(false);
         setPasswordMatchDiv(true);
-
-      }
-
-      else {
+      } else {
         setPasswordMatchDiv(true);
         setPasswordMisMatchDiv(true);
       }
-
-    }
-
-    else {
-
+    } else {
       setPasswordMatchDiv(true);
       setPasswordMisMatchDiv(true);
     }
-
   }
 
-
   function getDetails(e) {
-
     e.preventDefault();
     validate();
     //Reconfirm Email UserName!!!!
@@ -275,99 +186,74 @@ export default function CustomerRegistration(props) {
       Country,
       Username,
       Password,
+    };
 
-    }
-
-
-    if (flag1 == 1){
-
+    if (flag1 == 1) {
       console.log("gg");
 
       setmodalOpenForLoading(true);
 
       axios
-      .post("http://localhost:8070/customer/add", newCustomer)
-      .then((res) => {
+        .post("http://localhost:8070/customer/add", newCustomer)
+        .then((res) => {
+          console.log(res.data);
+          console.log("Emal : " + Email);
 
-        console.log(res.data);
-        console.log("Emal : " + Email);
+          axios
+            .get("http://localhost:8070/customer/getEmail/" + Email)
+            .then((res) => {
+              console.log(res.data);
 
-        axios.get("http://localhost:8070/customer/getEmail/" + Email).then((res)=> {
+              const Cart = {
+                CustomerID: res.data[0]._id,
+                CoverIDs: [],
+              };
 
-        const Cart = {
-          CustomerID :res.data._id,
-          CoverIDs : [],
-        }
+              console.log(Cart);
+              axios
+                .post("http://localhost:8070/shoppingCart/createCart", Cart)
+                .then((res) => {
+                  setmodalOpenForLoading(false);
+                  Swal.fire(
+                    "You're! All Set",
+                    "You Account Has Been Created Successfully!",
+                    "success"
+                  );
 
-        console.log(Cart);
-        axios.post("http://localhost:8070/shoppingCart/createCart", Cart).then((res)=> {
+                  props.history.push("/customer/login")
 
-
-          setmodalOpenForLoading(false);
-           Swal.fire(
-              'Congratulations',
-            'You Account Has Been Created Successfully!',
-            'success'
-             )
-
-
-        }).catch((err) => {
+                })
+                .catch((err) => {
+                  console.log(err);
+                  setmodalOpenForLoading(false);
+                  Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong! Try again Later!",
+                  });
+                });
+            })
+            .catch((err) => {
+              console.log(err);
+              setmodalOpenForLoading(false);
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong! Try again Later!",
+              });
+            });
+        })
+        .catch((err) => {
           console.log(err);
           setmodalOpenForLoading(false);
           Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong! Try again Later!',
-           
-          })
-
-
-        })
-
-        }).catch((err)=> {
-          console.log(err);
-          setmodalOpenForLoading(false);
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong! Try again Later!',
-           
-          })
-        })
-      })
-      .catch((err) => {
-        console.log(err);
-        setmodalOpenForLoading(false);
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Something went wrong! Try again Later!',
-         
-        })
-        
-      });
-
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong! Try again Later!",
+          });
+        });
     }
-
-
-    
-
-
-
-
   }
-
-
-
-
-
-
-
-
-
-
-
-
 
   return (
     <div>
@@ -390,10 +276,24 @@ export default function CustomerRegistration(props) {
             <form onSubmit={getDetails}>
               <div class="text-center">
                 <h2 style={{ color: "#764A34" }}>REGISTER HERE</h2>
-                <p className=" mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{FirstNameError}</p>
-                <p className=" mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{LastNameError}</p>
-                <p className=" mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{ExtraError}</p>
-
+                <p
+                  className=" mt-1 mb-0"
+                  style={{ color: "red", fontWeight: "bold" }}
+                >
+                  {FirstNameError}
+                </p>
+                <p
+                  className=" mt-1 mb-0"
+                  style={{ color: "red", fontWeight: "bold" }}
+                >
+                  {LastNameError}
+                </p>
+                <p
+                  className=" mt-1 mb-0"
+                  style={{ color: "red", fontWeight: "bold" }}
+                >
+                  {ExtraError}
+                </p>
 
                 <div className="text-center" hidden={passwordMatchDiv}>
                   <svg
@@ -458,13 +358,16 @@ export default function CustomerRegistration(props) {
                           SetUsername(e.target.value);
                           SetUsernameError("");
                           checkUserName(e.target.value);
-
                         }}
                         required
                       />
                     </div>
-                    <p className="ml-5 mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{UsernameError}</p>
-
+                    <p
+                      className="ml-5 mt-1 mb-0"
+                      style={{ color: "red", fontWeight: "bold" }}
+                    >
+                      {UsernameError}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -497,12 +400,16 @@ export default function CustomerRegistration(props) {
                           SetEmail(e.target.value);
                           SetEmailError("");
                           checkEmail(e.target.value);
-
                         }}
                         required
                       />
                     </div>
-                    <p className="ml-5 mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{EmailError}</p>
+                    <p
+                      className="ml-5 mt-1 mb-0"
+                      style={{ color: "red", fontWeight: "bold" }}
+                    >
+                      {EmailError}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -537,14 +444,17 @@ export default function CustomerRegistration(props) {
                         onChange={(e) => {
                           SetContactNo(e.target.value);
                           SetContactNoError("");
-
                         }}
                         required
                       />
                     </div>
-                    <p className="ml-5 mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{ContactNumberError}</p>
+                    <p
+                      className="ml-5 mt-1 mb-0"
+                      style={{ color: "red", fontWeight: "bold" }}
+                    >
+                      {ContactNumberError}
+                    </p>
                   </div>
-
                 </div>
               </div>
               {/* password */}
@@ -576,25 +486,24 @@ export default function CustomerRegistration(props) {
                         class="form-control  border-right-0"
                         id="inputpassword"
                         placeholder="Password*"
-                        onFocus={
-                          () => setPasswordFocused(true)
-                        }
-                        onBlur={
-                          () => setPasswordFocused(false)
-                        }
-
+                        onFocus={() => setPasswordFocused(true)}
+                        onBlur={() => setPasswordFocused(false)}
                         onChange={(e) => {
                           SetPassword(e.target.value);
                           SetPasswordError("");
                           setExtraError("");
                           setPasswordValidity({
                             minChar: e.target.value.length >= 8 ? true : false,
-                            number: isNumberRegx.test(e.target.value) ? true : false,
-                            specialChar: specialCharacterRegx.test(e.target.value) ? true : false
-                          })
-
+                            number: isNumberRegx.test(e.target.value)
+                              ? true
+                              : false,
+                            specialChar: specialCharacterRegx.test(
+                              e.target.value
+                            )
+                              ? true
+                              : false,
+                          });
                         }}
-
                         required
                       />
 
@@ -639,8 +548,15 @@ export default function CustomerRegistration(props) {
                         </span>
                       </span>
                     </div>
-                    <p className="ml-5 mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{PasswordError}</p>
-                    {passwordFocused && <PasswordStrengthIndicator validity={passwordValidity} />}
+                    <p
+                      className="ml-5 mt-1 mb-0"
+                      style={{ color: "red", fontWeight: "bold" }}
+                    >
+                      {PasswordError}
+                    </p>
+                    {passwordFocused && (
+                      <PasswordStrengthIndicator validity={passwordValidity} />
+                    )}
                   </div>
                 </div>
               </div>
@@ -678,14 +594,10 @@ export default function CustomerRegistration(props) {
                           SetConfirmPasswordError("");
                           checkPasswords(e.target.value);
                         }}
-
-                        onBlur={
-                          () => {
-                            setPasswordMatchDiv(true);
-                            setPasswordMisMatchDiv(true);
-                          }
-                        }
-
+                        onBlur={() => {
+                          setPasswordMatchDiv(true);
+                          setPasswordMisMatchDiv(true);
+                        }}
                         required
                       />
                       <span class="input-group-append bg-white border-left-0">
@@ -729,7 +641,12 @@ export default function CustomerRegistration(props) {
                         </span>
                       </span>
                     </div>
-                    <p className="ml-5 mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{confirmPasswordError}</p>
+                    <p
+                      className="ml-5 mt-1 mb-0"
+                      style={{ color: "red", fontWeight: "bold" }}
+                    >
+                      {confirmPasswordError}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -766,12 +683,9 @@ export default function CustomerRegistration(props) {
                               setFirstNameError("");
                               checkNamePattern(e.target.value, "first");
                             }}
-
                             required
-
                           />
                         </div>
-
                       </div>
                     </div>
                   </div>
@@ -806,11 +720,9 @@ export default function CustomerRegistration(props) {
                               setLastNameError("");
                               checkNamePattern(e.target.value, "last");
                             }}
-
                             required
                           />
                         </div>
-
                       </div>
                     </div>
                   </div>
@@ -825,14 +737,10 @@ export default function CustomerRegistration(props) {
                     name="inlineRadioOptions"
                     id="RadioMale"
                     value="Male"
-
                     onChange={(e) => {
                       setGender(e.target.value);
                       setGenderError("");
-
-
                     }}
-
                     required
                   />
                   <label class="form-check-label" for="inlineRadio1">
@@ -849,15 +757,12 @@ export default function CustomerRegistration(props) {
                     onChange={(e) => {
                       setGender(e.target.value);
                       setGenderError("");
-
-
                     }}
                     required
                   />
                   <label class="form-check-label" for="inlineRadio2">
                     Female
                   </label>
-
                 </div>
                 <div class="form-check form-check-inline">
                   <input
@@ -869,17 +774,19 @@ export default function CustomerRegistration(props) {
                     onChange={(e) => {
                       setGender(e.target.value);
                       setGenderError("");
-
-
                     }}
-
                     required
                   />
                   <label class="form-check-label" for="inlineRadio3">
                     Other
                   </label>
                 </div>
-                <p className="ml-5 mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{GenderError}</p>
+                <p
+                  className="ml-5 mt-1 mb-0"
+                  style={{ color: "red", fontWeight: "bold" }}
+                >
+                  {GenderError}
+                </p>
               </div>
               <br />
               {/* country */}
@@ -900,10 +807,7 @@ export default function CustomerRegistration(props) {
                   onClick={(e) => {
                     setCountry(e.target.value);
                     setCountryError("");
-
-
                   }}
-
                   required
                   class="selectpicker countrypicker"
                   id="selectedCountry"
@@ -914,7 +818,12 @@ export default function CustomerRegistration(props) {
                     borderRadius: "2px",
                   }}
                 ></select>
-                <p className="ml-5 mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{CountryError}</p>
+                <p
+                  className="ml-5 mt-1 mb-0"
+                  style={{ color: "red", fontWeight: "bold" }}
+                >
+                  {CountryError}
+                </p>
               </div>
               <br />
               {/* terms and condition */}
@@ -926,12 +835,8 @@ export default function CustomerRegistration(props) {
                     value=""
                     id="TermsC"
                     onClick={(e) => {
-
                       setTnCError("");
-
-
                     }}
-
                     required
                   />
                   <label class="form-check-label" for="defaultCheck1">
@@ -941,7 +846,12 @@ export default function CustomerRegistration(props) {
                     </a>
                   </label>
                 </div>
-                <p className="ml-5 mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{TnCError}</p>
+                <p
+                  className="ml-5 mt-1 mb-0"
+                  style={{ color: "red", fontWeight: "bold" }}
+                >
+                  {TnCError}
+                </p>
               </div>
               <br />
               {/* submit button */}
@@ -964,7 +874,6 @@ export default function CustomerRegistration(props) {
       </div>
       <br />
 
-  
       <Modal show={modalOpenForLoading} size="md">
         <Modal.Header></Modal.Header>
 
@@ -979,21 +888,11 @@ export default function CustomerRegistration(props) {
             Please wait!
           </h1>
           <h6 style={{ textAlign: "center", color: "#764A34" }}>
-           Your Account is Being Created...
+            Your Account is Being Created...
           </h6>
         </Modal.Body>
         <Modal.Footer></Modal.Footer>
       </Modal>
-
-
-
-
-
-
-
-
-
-
     </div>
   );
 }
