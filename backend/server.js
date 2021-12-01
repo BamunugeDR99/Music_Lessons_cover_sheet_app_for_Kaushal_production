@@ -6,27 +6,23 @@ const app = express();
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
-
 const PORT = process.env.PORT || 8070;
 app.use(cors());
 
-
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 app.use(express.json());
 
 const URL = process.env.MONGODB_URL;
 
 mongoose.connect(URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  });
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-
-  const connection = mongoose.connection;
+const connection = mongoose.connection;
 connection.once("open", () => {
   console.log("MongoDB Connection successful");
 });
-
 
 const studentRouter = require("./routes/students.js");
 app.use("/student", studentRouter);
@@ -52,9 +48,9 @@ app.use("/order", orderRouter);
 const customerRouter = require("./routes/customers.js");
 app.use("/customer", customerRouter);
 
+const shoppingCartRouter = require("./routes/shoppingCarts.js");
+app.use("/shoppingCart",shoppingCartRouter); 
 
 app.listen(PORT, () => {
   console.log(`Server is up and running on PORT ${PORT}`);
 });
-
-
