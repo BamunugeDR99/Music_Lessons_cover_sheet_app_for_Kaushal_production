@@ -21,6 +21,7 @@ import PurchaseHistory from "./components/customerRole/purchaseHistory";
 import MusicCart from "./components/customerRole/music_cart";
 import LessonAndCoversDetailed from "./components/customerRole/LessonsAndCoversDetailed";
 import Footer from "./components/customerRole/footer";
+import Search from "./components/testingComponents/search";
 
 // import components (Admin)
 // import AdminLogin from "./components/adminRole/adminLogin";
@@ -60,7 +61,7 @@ function App() {
         <Route path = "/admin/viewcategories" exact component = {EditMainCategories}/>
         <Route path = "/admin" component = {Footer}/> */}
 
-
+      <Route path = "/search" exact component = {Search}/>
 
 
       </div>

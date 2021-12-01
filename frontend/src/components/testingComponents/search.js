@@ -33,6 +33,7 @@ console.log(covers)
 
 
     function getDataFromAPI(){  
+        
     }
 
 
