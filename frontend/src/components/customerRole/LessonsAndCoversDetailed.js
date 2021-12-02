@@ -9,6 +9,7 @@ import $, { ajaxPrefilter } from "jquery";
 
 export default function LessonsAndCoversDetailed(props) {
   const [covers, setCovers] = useState([]);
+  const [TempYoutubeLink, setTempYoutubeLink] = useState("");
   let preview = [];
   let instrumentsTxt = "";
   let MainCategoryForRec = "";
@@ -26,6 +27,7 @@ export default function LessonsAndCoversDetailed(props) {
           displayPreviewImageSlider(res.data.PreviewPages);
           MainCategoryForRec = res.data.MainCategory;
           SubCategoryForRec = res.data.SubCategory;
+          setTempYoutubeLink(res.data.YoutubeLink);
         })
         .catch((err) => {
           Swal.fire({
@@ -71,28 +73,20 @@ export default function LessonsAndCoversDetailed(props) {
     imageSlider += "</div>";
 
     document.getElementById("img").innerHTML = imageSlider;
-    
+
     for (let i = 0; i < previewImages.length; i++) {
       document.getElementById("img" + i).src =
         "/images/verticaLImageHolder.jpg";
     }
-   
-      previewImages.map((previewImage, index) => {
-        if(document.getElementById("img"+index) != null){
-          
-          const storageRef = ref(storage, `PreviewImages/${previewImage}`);
-          getDownloadURL(storageRef).then((url) => {
-            document.getElementById("img" + index).src = url;
-          });
-        }else if(document.getElementById("img"+index) == null){
-          alert("gg");
-        }
-    
+
+    previewImages.map((previewImage, index) => {
+      const storageRef = ref(storage, `PreviewImages/${previewImage}`);
+      getDownloadURL(storageRef).then((url) => {
+        try {
+          document.getElementById("img" + index).src = url;
+        } catch (error) {}
       });
-    
-    
-   
-  
+    });
   }
 
   function addToCart(id) {
@@ -141,10 +135,8 @@ export default function LessonsAndCoversDetailed(props) {
 
               let count = parseInt($("#countHolder").text());
               $("#countHolder").html(count + 1);
-           
-               //completedIncrements.push("#cart1");
-           
-              
+
+              //completedIncrements.push("#cart1");
             })
             .catch((err) => {
               alert(err);
@@ -244,17 +236,33 @@ export default function LessonsAndCoversDetailed(props) {
                 <br />
                 <br />
                 {/* youtube video  */}
-                <div class="embed-responsive embed-responsive-16by9">
-                  <iframe
-                    class="embed-responsive-item"
-                    // need to use embeded youtube link
-                    src={covers.YoutubeLink}
-                    title="YouTube video player"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
+                {TempYoutubeLink.toLowerCase().includes(
+                  "https://www.youtube.com/embed/"
+                ) == true ? (
+                  <div class="embed-responsive embed-responsive-16by9">
+                    <iframe
+                      class="embed-responsive-item"
+                      // need to use embeded youtube link
+                      src={covers.YoutubeLink}
+                      title="YouTube video player"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                ) : (
+                  <div class="embed-responsive embed-responsive-16by9">
+                    <iframe
+                      class="embed-responsive-item"
+                      // need to use embeded youtube link
+                      src="https://www.youtube.com/embed/"
+                      title="YouTube video player"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                )}
                 <br />
               </div>
               <div class="col-sm">
@@ -438,9 +446,7 @@ export default function LessonsAndCoversDetailed(props) {
           <b>Our Recommendations </b>
         </h3>
         {/* <DiscoverMoreCovers subCategory = "Exercises" mainCategory = "Guitar Technics & Lessons"/> */}
-        <DiscoverMoreCovers
-         CoverID = "61a247ef9508b44b96cf150e"
-        />
+        <DiscoverMoreCovers CoverID="61a247ef9508b44b96cf150e" />
       </div>
     </div>
   );

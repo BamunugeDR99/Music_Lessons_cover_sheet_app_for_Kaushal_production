@@ -74,9 +74,12 @@ export default function DiscoverMoreCovers(props) {
       await getDownloadURL(storageRef)
         .then((url) => {
           document.getElementById(index).src = url;
+          document.getElementById("temp"+index).hidden = true;
+          document.getElementById(index).hidden = false;
         })
         .catch((err) => {
           setErrorhandlingTxt("Reccomended covers are not available right now!")
+          //document.getElementById(index).src = "/images/imageplaceholder.png";
         });
     }
   }
@@ -99,10 +102,18 @@ export default function DiscoverMoreCovers(props) {
                 marginLeft: "15px",
               }}
             >
+                 <img
+                id={"temp"+index}
+                src={"/images/imageplaceholder.png" }
+                class="card-img-top"
+                alt="..."
+                style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
+              />
               <img
+              hidden
                 id={index}
                 src={
-                  displayImages(covers.PreviewPages[0], index)   ||  "/images/imageplaceholder.png" }
+                  displayImages(covers.PreviewPages[0], index) }
                 class="card-img-top"
                 alt="..."
                 style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
