@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -32,7 +33,8 @@ export default function MusicCart(props) {
     setTotal("Loading...");
     await axios
       .get(
-        "http://localhost:8070/shoppingCart/getOneCart/"+localStorage.getItem("CustomerID")
+        "http://localhost:8070/shoppingCart/getOneCart/" +
+          localStorage.getItem("CustomerID")
       )
       .then((res) => {
         console.log(res.data.CoverIDs);
@@ -101,7 +103,8 @@ export default function MusicCart(props) {
       if (result.isConfirmed) {
         axios
           .delete(
-            `http://localhost:8070/shoppingCart/deleteCartCover/${id}/`+localStorage.getItem("CustomerID")
+            `http://localhost:8070/shoppingCart/deleteCartCover/${id}/` +
+              localStorage.getItem("CustomerID")
           )
           .then((res) => {
             alert("Successfully deleted");
@@ -206,11 +209,12 @@ export default function MusicCart(props) {
                             class="mb-0 text-uppercase small"
                             style={{ color: "#764A34", fontWeight: "bold" }}
                           >
+                            <br />
                             {`Original Artist :`}{" "}
                             <span style={{ color: "#000000" }}>
                               {post.author}
                             </span>
-                          </p>
+                          </p><br />
                           <p
                             class="mb-0  text-uppercase small"
                             style={{ color: "#764A34", fontWeight: "bold" }}
@@ -218,11 +222,12 @@ export default function MusicCart(props) {
                             {`Arranged by :`}{" "}
                             <span style={{ color: "#000000" }}>
                               Kaushal Rashmika
-                            </span>
-                          </p>
+                            </span><br />
+                          </p><br />
                           <p class="mb-0" style={{ fontWeight: "bold" }}>
-                            Rs.{post.price}
+                            ${post.price}
                           </p>
+                          <br />
                           <button
                             type="button"
                             class="btn "
@@ -284,3 +289,4 @@ export default function MusicCart(props) {
     </div>
   );
 }
+

@@ -6,7 +6,6 @@ import Modal from "react-bootstrap/Modal";
 import InputRange from "react-input-range";
 import { data, post } from "jquery";
 
-
 export default function MusicCoverPage(props) {
   const [modelOpen, setmodelOpen] = useState(false);
   const [pricerange, setPriceRange] = useState("0");
@@ -338,7 +337,15 @@ export default function MusicCoverPage(props) {
                   </div>
                 </div>
               </center>
-              <div id="topcover" style={{ display: "none" }} onClick={() => {props.history.push("/customer/detailedcover/"+ populercover._id)}}>
+              <div
+                id="topcover"
+                style={{ display: "none" }}
+                onClick={() => {
+                  props.history.push(
+                    "/customer/detailedcover/" + populercover._id
+                  );
+                }}
+              >
                 <TopDownloadTemplate
                   title={populercover.Title}
                   price={populercover.Price}
@@ -358,6 +365,7 @@ export default function MusicCoverPage(props) {
             <h4 style={{ color: "#764A34" }}>
               <strong>Classical Guitar Covers - {categorytext}</strong>
             </h4>
+            <br/>
             <center>
               <h4 style={{ color: "red" }}>{nodata}</h4>
             </center>
@@ -381,17 +389,21 @@ export default function MusicCoverPage(props) {
               <div className="row">
                 {covers.map((post, index) => (
                   // console.log(post.PreviewPages[0]),
-                  <div className="col-md-4" onClick={() => {props.history.push("/customer/detailedcover/"+post._id)}}>
+                  <div
+                    className="col-md-4 bg-image hover-zoom"
+                    onClick={() => {
+                      props.history.push("/customer/detailedcover/" + post._id);
+                    }}
+                  >
                     <CoverTemplate
+                    
                       title={post.Title}
-                      coverId = {post._id}
+                      coverId={post._id}
                       artist={post.OriginalArtistName}
                       price={post.Price}
                       category={post.SubCategory}
                       id={index}
                       imageName={post.PreviewPages[0]}
-
-
                     />
                     <br />
                   </div>
@@ -407,3 +419,4 @@ export default function MusicCoverPage(props) {
     </div>
   );
 }
+

@@ -1,3 +1,4 @@
+
 import React from "react";
 import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
@@ -6,19 +7,19 @@ export default function TopDownloadTemplate(props) {
   async function displayImages(coverImageName, index) {
     console.log(coverImageName);
 
-
-    console.log(index);
-    const storageRef = ref(storage, `PreviewImages/${props.imageName}`);
-    await getDownloadURL(storageRef)
-      .then((url) => {
-        document.getElementById(index).src = url;
-        console.log(url);
-      })
-      .catch((err) => {
-        // ErrorhandlingTxt("Reccomended covers are not available right now!");
-        // alert(err);
-        console.log(err);
-      });
+      console.log(index);
+      const storageRef = ref(storage, `PreviewImages/${props.imageName}`);
+      await getDownloadURL(storageRef)
+        .then((url) => {
+          document.getElementById(index).src = url;
+          console.log(url);
+        })
+        .catch((err) => {
+          // ErrorhandlingTxt("Reccomended covers are not available right now!");
+          // alert(err);
+          console.log(err);
+        });
+   
   }
 
   return (
@@ -35,10 +36,7 @@ export default function TopDownloadTemplate(props) {
         >
           <img
             id={props.id}
-            src={
-              displayImages(props.imageName, props.id) ||
-              "/images/Imageplaceholder.png"
-            }
+            src={"/images/923d10247b982186a4ebb24b7ba6fba8.jpg"}
             class="card-img-top"
             alt="..."
             style={{ borderRadius: "15px 15px 0px 0px", height: "150px" }}
@@ -60,3 +58,4 @@ export default function TopDownloadTemplate(props) {
     </div>
   );
 }
+
