@@ -224,6 +224,7 @@ export default function CustomerForgotPassword(props) {
                   "You can log back in ",
                   "success"
                 );
+                
                 setLoading(true);
                 props.history.push("/customer/login")
                 // navigate to the login page

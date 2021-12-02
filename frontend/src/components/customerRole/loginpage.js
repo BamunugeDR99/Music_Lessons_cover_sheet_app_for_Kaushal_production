@@ -34,6 +34,8 @@ export default function Login(props) {
   // }
   // );
 
+  const [LoginStatus, setLoginStatus] = useState(false);
+
   //remember me
 
   const [rememberMe, setRememberMe] = useState(false);
@@ -89,6 +91,10 @@ export default function Login(props) {
         setCustomer(res.data.customerLogin);
         localStorage.setItem("CustomerID", res.data.customerLogin._id);
 
+        let customerID = res.data.customerLogin._id;
+
+
+        
         // sessionStorage.setItem('userID',"sss");
 
         const Toast = Swal.mixin({

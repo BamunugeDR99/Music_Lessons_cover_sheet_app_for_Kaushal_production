@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { storage } from "../../Configurations/firebaseConfigurations";
+import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
+import k from "../../images/pre.png";
 
 
 
@@ -83,6 +86,20 @@ export default function Home(props) {
       setTop4Downloads(LastArray);
   }
 
+  async function displayImages(coverImageName, index) {
+    // if (recommenedCovers.length != 0) {
+      const storageRef = ref(storage, `PreviewImages/${coverImageName}`);
+      await getDownloadURL(storageRef)
+        .then((url) => {
+          document.getElementById(index).src = url;
+        })
+        .catch((err) => {
+
+          // ErrorhandlingTxt("Reccomended covers are not available right now!")
+        });
+    // }
+  }
+
 return(
 
     <div className="home" style={{overflowX:"hidden"}}>
@@ -105,8 +122,9 @@ return(
                 </div>
         </div> */}
 
-{Top4Downloads.map((covers) => (
+{Top4Downloads.map((covers, index) => (
              <div
+
              class="card"
              style={{
                boxShadow: "rgba(0, 0, 0, 0.25) 0px 25px 50px -12px",
@@ -115,11 +133,16 @@ return(
                marginLeft: "15px",
              }}
            >
+
+             
              <img
+
+             id={index}
+             src={
+               displayImages(covers.PreviewPages[0], index) ||
+               "/images/imageplaceholder.png"
+             }
                
-               src={
-                 "Images/cover.jpg"
-                }
                class="card-img-top"
                alt="..."
                style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
@@ -138,87 +161,43 @@ return(
            </div>
 
 ))}
-{/*         
-        <div
-              class="card"
-              style={{
-                boxShadow: "rgba(0, 0, 0, 0.25) 0px 25px 50px -12px",
-                borderRadius: "15px",
-                marginRight: "15px",
-                marginLeft: "15px",
-              }}
-            >
-              <img
-               
-                img src={'/images/cover.jpg'}
-                class="card-img-top"
-                alt="..."
-                style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
-              />
-              <div class="card-body">
-                <h4 class="card-title" style={{ fontWeight: "bold" }}>
-                Attention
-                </h4>
-                <h5>By Charlie Puth</h5>
-               
-              </div>
-            </div>
-
-         <div
-              class="card"
-              style={{
-                boxShadow: "rgba(0, 0, 0, 0.25) 0px 25px 50px -12px",
-                borderRadius: "15px",
-                marginRight: "15px",
-                marginLeft: "15px",
-              }}
-            >
-              <img
-               
-                img src={'/images/cover.jpg'}
-                class="card-img-top"
-                alt="..."
-                style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
-              />
-              <div class="card-body">
-                <h4 class="card-title" style={{ fontWeight: "bold" }}>
-                Pirates of the Caribbean Theme
-                </h4>
-                <h5>By Klaus Badelt</h5>
-               
-              </div>
-            </div>
-
-      
-        <div
-              class="card"
-              style={{
-                boxShadow: "rgba(0, 0, 0, 0.25) 0px 25px 50px -12px",
-                borderRadius: "15px",
-                marginRight: "15px",
-                marginLeft: "15px",
-              }}
-            >
-              <img
-               
-                img src={'/images/cover.jpg'}
-                class="card-img-top"
-                alt="..."
-                style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
-              />
-              <div class="card-body">
-                <h4 class="card-title" style={{ fontWeight: "bold" }}>
-                Dance Monkey
-                </h4>
-                <h5>By Toni Elizabeth Watson</h5>
-               
-              </div>
-            </div> */}
 
         </div>
 
     
     </div>
+
+<br/><br/>
+
+<section class="about_section layout_padding">
+    <div class="container  ">
+
+      <div class="row">
+        <div class="col-md-6 ">
+          <div class="img-box">
+            <img src="https://images.unsplash.com/photo-1541690212779-7a48c04096cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80" alt=""/>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="detail-box">
+            <div class="heading_container">
+              <h2>
+                We Are Feane
+              </h2>
+            </div>
+            <p>
+              There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration
+              in some form, by injected humour, or randomised words which don't look even slightly believable. If you
+              are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in
+              the middle of text. All
+            </p>
+           
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 
 <br/><br/>
 
@@ -322,8 +301,62 @@ return(
     
     </div>
 
+<div class="features" style={{backgroundColor:"white"}}>
+		<div class="container">
+			<div class="row">
+				<div class="col text-center">
 
-<br/><br/>
+					<div class="section_title">
+          <h1 style={{color:'#764A34', textAlign:"center", fontWeight:"bold"}}>Our Services</h1>
+					</div>
+
+				</div>
+			</div>
+			<div class="row features_row">
+
+				<div class="col-lg-4 text-lg-right features_col order-lg-1 order-2">
+					
+				
+					<div class="features_item">
+						<h2>Responsive</h2>
+						<p>Etiam nec odio vestibulum est mattis effic iturut magna. Pel lentesque sit am et tellus.</p>
+					</div>
+
+				
+					<div class="features_item">
+						<h2>Clean code</h2>
+						<p>Nec odio vestibulum est mattis effic iturut magna. Pel lentesque sit am et tellus bla ndit.</p>
+					</div>
+
+				</div>
+        <div class="col-lg-4 d-flex flex-column align-items-center order-lg-2 order-1">
+					<div class="features_image">
+						<img src={k} alt=""/>
+					</div>
+				</div>
+
+        <div class="col-lg-4 features_col order-lg-3 order-3">
+					
+				
+					<div class="features_item">
+						<h2>Retina ready</h2>
+						<p>Nec odio vestibulum est mattis effic iturut magna. Pel lentesque sit am et tellus bla ndit.</p>
+					</div>
+
+			
+					<div class="features_item">
+						<h2>Great team</h2>
+						<p>Etiam nec odio vestibulum est mattis effic iturut magna. Pel lentesque sit am et tellus.</p>
+					</div>
+
+					
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 
 
 </div>
