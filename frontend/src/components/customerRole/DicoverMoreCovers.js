@@ -7,15 +7,15 @@ import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 export default function DiscoverMoreCovers(props) {
   const [recommenedCovers, setRecommendedCovers] = useState([]);
   const [ErrorhandlingTxt, setErrorhandlingTxt] = useState("");
-  const MainCategory = "Classical Guitar Covers";
-  const SubCategory = "Sinhala";
+  //const MainCategory = "Classical Guitar Covers";
+  //const SubCategory = "Sinhala";
   let finalFilteredCovers = [];
-  //const MainCategory = props.mainCategory;
-  //const SubCategory = props.subCategory;
+  const MainCategory = props.mainCategory;
+  const SubCategory = props.subCategory;
   useEffect(() => {
-    function getRecommendCovers() {
+    async function getRecommendCovers() {
       // console.log(MainCategory, SubCategory);
-      axios
+     await axios
         .get("http://localhost:8070/covers/getCovers")
         .then((res) => {
           let availableCovers = res.data.filter(
@@ -107,7 +107,7 @@ export default function DiscoverMoreCovers(props) {
                 src={"/images/imageplaceholder.png" }
                 class="card-img-top"
                 alt="..."
-                style={{ borderRadius: "15px 15px 0px 0px", height: "300px" }}
+                style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
               />
               <img
               hidden
@@ -116,7 +116,7 @@ export default function DiscoverMoreCovers(props) {
                   displayImages(covers.PreviewPages[0], index) }
                 class="card-img-top"
                 alt="..."
-                style={{ borderRadius: "15px 15px 0px 0px", height: "300px" }}
+                style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
               />
               <div class="card-body">
                 <h4 class="card-title" style={{ fontWeight: "bold" }}>

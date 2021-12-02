@@ -259,6 +259,7 @@ export default function MusicCoverPage(props) {
               >
                 &emsp; Loading...
               </a>
+              <br/>
               <a
                 href="#"
                 id="link1"
