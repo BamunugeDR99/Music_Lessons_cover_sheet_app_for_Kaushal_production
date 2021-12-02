@@ -277,7 +277,7 @@ export default function CustomerHeader(props) {
           axios
             .put(
               "http://localhost:8070/customer/update/" +
-                localStorage.getItem("CustomerID"),
+              localStorage.getItem("CustomerID"),
               newCustomer
             )
             .then(() => {
@@ -338,7 +338,7 @@ export default function CustomerHeader(props) {
             axios
               .delete(
                 "http://localhost:8070/customer/delete/" +
-                  localStorage.getItem("CustomerID")
+                localStorage.getItem("CustomerID")
               )
               .then((res) => {
                 swalWithBootstrapButtons.fire(
@@ -370,7 +370,7 @@ export default function CustomerHeader(props) {
     axios
       .get(
         "http://localhost:8070/customer/get/" +
-          localStorage.getItem("CustomerID")
+        localStorage.getItem("CustomerID")
       )
       .then((res) => {
         console.log(res.data);
@@ -396,7 +396,7 @@ export default function CustomerHeader(props) {
       axios
         .get(
           "http://localhost:8070/customer/get/" +
-            localStorage.getItem("CustomerID")
+          localStorage.getItem("CustomerID")
         )
         .then((res) => {
           SetCustomer(res.data);
@@ -498,12 +498,14 @@ export default function CustomerHeader(props) {
             style={{ width: "40px", borderRadius: "8px" }}
           />
           <span> </span>
-          <font style={{ fontFamily: "Old Standard TT", fontSize: "20px" }}>
+          <Link to="/customer/home" style={{textDecoration:"none", color: "#764A34"}}>
+          <font style={{ fontFamily: "Old Standard TT", fontSize: "18px" }}>
             <b>KAUSHAL</b>
           </font>{" "}
           <font style={{ fontFamily: "Old Standard TT", fontSize: "18px" }}>
             RASHMIKA
           </font>
+          </Link>
         </a>
 
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
@@ -514,7 +516,7 @@ export default function CustomerHeader(props) {
                 to="/customer/dicoversmusiccovers"
                 id="classicalHeader"
               >
-                <font>Classical Guitar Covers </font>
+                <font> Guitar Covers </font>
               </Link>
             </li>
             <li class="nav-item">
@@ -588,6 +590,16 @@ export default function CustomerHeader(props) {
                 <span class="badge badge-warning" id="countHolder">
                   0
                 </span>
+
+                <span className="userProfileSpan ml-1 mt-1" onClick={()=>{
+                  props.history.push("/customer/login");
+                  localStorage.removeItem("CustomerID");
+                }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"   fill="#764A34" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z" />
+                    <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z" />
+                  </svg>
+                </span>
               </div>
             ) : (
               <div>
@@ -623,7 +635,11 @@ export default function CustomerHeader(props) {
             class="close"
             data-dismiss="modal"
             aria-label="Close"
-            onClick={EditProfilemodalClose}
+            onClick={() => {
+              EditProfilemodalClose();
+              Profilemodalopen();
+            }
+            }
           >
             <span aria-hidden="true">&times;</span>
           </button>
@@ -1469,6 +1485,7 @@ export default function CustomerHeader(props) {
                 }}
                 onClick={() => {
                   props.history.push("/customer/purchasehistory");
+                  ProfilemodalClose();
                 }}
               >
                 <strong>Purchase History</strong>
@@ -1488,7 +1505,10 @@ export default function CustomerHeader(props) {
             class="close"
             data-dismiss="modal"
             aria-label="Close"
-            onClick={ChangePasswordmodalClose}
+            onClick={() => {
+              ChangePasswordmodalClose();
+              EditProfilemodalopen();
+            }}
           >
             <span aria-hidden="true">&times;</span>
           </button>
@@ -1525,11 +1545,6 @@ export default function CustomerHeader(props) {
                 <b>Password MisMatch</b>
               </p>
             </div>
-            {/* <div className="col-9 text-center">
-              <p className="ml-4 mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{currentPasswordError}</p>
-              <p className="ml-4 mt-1 mb-0" style={{ color: "red", fontWeight: "bold" }}>{ExtraError}</p>
-
-            </div> */}
 
             <div className="row justify-content-center">
               <div className="col-sm-6">
