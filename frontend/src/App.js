@@ -22,15 +22,15 @@ import MusicCart from "./components/customerRole/music_cart";
 import LessonAndCoversDetailed from "./components/customerRole/LessonsAndCoversDetailed";
 import Footer from "./components/customerRole/footer";
 
-// import components (Admin)
-// import AdminLogin from "./components/adminRole/adminLogin";
-// import AdminHeaderTemp from "./components/adminRole/adminHeaderTemo";
-// import Dashboard from "./components/adminRole/dashboard";
-// import ViewCovers from "./components/adminRole/ViewCovers";
-// import ViewDetailedCoverPage from "./components/adminRole/ViewDetailedCoverPage";
-// import CustomerFeedback from "./components/adminRole/CustomerFeedback";
-// import AdminVwCustomer from "./components/adminRole/AdminVwCustomer";
-// import EditMainCategories from "./components/adminRole/EditMainCategory";
+//import components (Admin)
+import AdminLogin from "./components/adminRole/adminLogin";
+import AdminHeaderTemp from "./components/adminRole/adminHeaderTemo";
+import Dashboard from "./components/adminRole/dashboard";
+import ViewCovers from "./components/adminRole/ViewCovers";
+import ViewDetailedCoverPage from "./components/adminRole/ViewDetailedCoverPage";
+import CustomerFeedback from "./components/adminRole/CustomerFeedback";
+import AdminVwCustomer from "./components/adminRole/AdminVwCustomer";
+import EditMainCategories from "./components/adminRole/EditMainCategory";
 function App() {
   return (
     <Router>
@@ -50,7 +50,7 @@ function App() {
         <Route path = "/customer"  component = {Footer}/>
 
         {/* Admin Routes  */}
-        {/* <Route path = "/admin" component = {AdminHeaderTemp}/>
+        <Route path = "/admin" component = {AdminHeaderTemp}/>
         <Route path = "/adminlogin" exact component = {AdminLogin}/>
         <Route path = "/admin/dashboard" exact component = {Dashboard}/>
         <Route path = "/admin/allcovers" exact component = {ViewCovers}/>
@@ -58,7 +58,7 @@ function App() {
         <Route path = "/admin/customerfeedbacks/:id" exact component = {CustomerFeedback}/>
         <Route path = "/admin/allcustomers" exact component = {AdminVwCustomer}/>
         <Route path = "/admin/viewcategories" exact component = {EditMainCategories}/>
-        <Route path = "/admin" component = {Footer}/> */}
+        <Route path = "/admin" component = {Footer}/>
 
 
 

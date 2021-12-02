@@ -7,12 +7,14 @@ router.route("/addAdmin").post(async (req, res) => {
   const LastName = req.body.LastName;
   const Username = req.body.Username;
   const Password = req.body.Password;
+  const Email = req.body.Email;
 
   const newAdmin = new Admin({
     FirstName,
     LastName,
     Username,
     Password,
+    Email
   });
 
   newAdmin
