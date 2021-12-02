@@ -36,7 +36,7 @@ import EditMainCategories from "./components/adminRole/EditMainCategory";
 
 // dynamic header
 function App() {
-const [loginStatus, setLoginStatus] = useState(false);
+const [loginStatus, setLoginStatus] = useState(true);
 
   return (
     <Router>
@@ -82,6 +82,11 @@ const [loginStatus, setLoginStatus] = useState(false);
         <Route path="/customer/shoppingcart" exact component={MusicCart} />
         <Route
           path="/customer/detailedcover/:id"
+          exact
+          component={LessonAndCoversDetailed}
+        />
+          <Route
+          path="/customer/discovermorecover/:id"
           exact
           component={LessonAndCoversDetailed}
         />

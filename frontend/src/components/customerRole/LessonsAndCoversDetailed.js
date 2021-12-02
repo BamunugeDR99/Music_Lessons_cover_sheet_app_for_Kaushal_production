@@ -77,6 +77,8 @@ export default function LessonsAndCoversDetailed(props) {
           (recCovers) => String(recCovers.Status) != "2"
         );
 
+      //  availableCovers = availableCovers.filter((recCovers) => recCovers._id != covers._id);
+
         finalFilteredCovers = availableCovers.filter(
           (covers) =>
             covers.MainCategory === MainCategory &&
@@ -538,6 +540,7 @@ export default function LessonsAndCoversDetailed(props) {
           return (
             <div
               class="card"
+              onClick = {() => {props.history.push("/customer/discovermorecover/"+covers._id)}}
               style={{
                 boxShadow: "rgba(0, 0, 0, 0.25) 0px 25px 50px -12px",
                 borderRadius: "15px",

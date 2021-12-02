@@ -484,7 +484,7 @@ export default function CustomerHeader(props) {
             style={{ width: "40px", borderRadius: "8px" }}
           />
           <span> </span>
-          <Link to="/customer/home" style={{textDecoration:"none", color: "#764A34"}}>
+          <Link to="/customer/home"  style={{textDecoration:"none", color: "#764A34"}}>
           <font style={{ fontFamily: "Old Standard TT", fontSize: "18px" }}>
             <b>KAUSHAL</b>
           </font>{" "}

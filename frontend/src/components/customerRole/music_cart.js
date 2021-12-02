@@ -124,6 +124,8 @@ export default function MusicCart(props) {
     await getDownloadURL(storageRef)
       .then((url) => {
         document.getElementById(index).src = url;
+        document.getElementById("temp"+index).hidden = true;
+        document.getElementById(index).hidden =false;
       })
       .catch((err) => {
         // ErrorhandlingTxt("Reccomended covers are not available right now!");
@@ -192,7 +194,16 @@ export default function MusicCart(props) {
                   <div class="card mb-3">
                     <div class="row no-gutters">
                       <div class="col-md-4 mt-3 clsImg ">
+                      <img
+
+                id={"temp"+index}
+                src={"/images/imageplaceholder.png" }
+                class="card-img-top embed-responsive-item"
+                alt="..."
+                // style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
+              />
                         <img
+                        hidden
                           alt="Card image cap"
                           class="card-img-top embed-responsive-item"
                           id={index}
