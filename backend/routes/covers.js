@@ -69,7 +69,20 @@ router.route("/add").post((req, res) => {
       console.log(err);
     });
 });
+// get recommendation
+// router.route("/getrecommendation").get(async (req, res) => {
 
+//   const {
+//     MainCategory, 
+//     SubCategory
+//   } = req.body;
+//   try {
+//     const result = await Covers.find({ MainCategory: MainCategory, Status: 1 ,SubCategory : SubCategory});
+//     res.status(200).json(result);
+//   } catch (error) {
+//     res.status(404).json({ message: error.message });
+//   }
+// });
 // retrive
 
 // route("/") this can use for fetching all the data from the DB
