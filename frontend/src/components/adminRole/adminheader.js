@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import "./../../css/adminsidebar.css";
-import "./../../js/adminsidebar.js";
-import DashBoard from "./dashboard.js";
+// import "./../../css/adminsidebar.css";
+// import "./../../js/adminsidebar.js";
+// import DashBoard from "./dashboard.js";
 import Cover from "./../customerRole/musiccoverpage";
 
 export default function AdminHeader() {

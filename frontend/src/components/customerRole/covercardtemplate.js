@@ -14,6 +14,8 @@ export default function CoverTemplate(props) {
       await getDownloadURL(storageRef)
         .then((url) => {
           document.getElementById(index).src = url;
+          document.getElementById(index).hidden = false;
+          document.getElementById("temp"+index).hidden = true;
         })
         .catch((err) => {
           // ErrorhandlingTxt("Reccomended covers are not available right now!");
@@ -32,7 +34,15 @@ export default function CoverTemplate(props) {
             marginLeft: "15px",
           }}
         >
+                <img
+                id={"temp"+props.id}
+                src={"/images/imageplaceholder.png" }
+                class="card-img-top"
+                alt="..."
+                style={{ borderRadius: "15px 15px 0px 0px", height: "300px" }}
+              />
           <img
+          hidden
             id={props.id}
             src={
               displayImages(props.imageName, props.id) ||

@@ -258,6 +258,7 @@ export default function MusicCoverPage(props) {
               >
                 &emsp; Loading...
               </a>
+              <br/>
               <a
                 href="#"
                 id="link1"
@@ -316,6 +317,7 @@ export default function MusicCoverPage(props) {
                 </div>
               </div>
               <div className="row">
+                <br/>
                 <h4 style={{ color: "#764A34" }}>
                   <strong>
                     <center>Most Downloaded Classical Guitar Cover</center>

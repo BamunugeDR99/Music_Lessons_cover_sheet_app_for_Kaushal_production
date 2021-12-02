@@ -107,7 +107,7 @@ export default function DiscoverMoreCovers(props) {
                 src={"/images/imageplaceholder.png" }
                 class="card-img-top"
                 alt="..."
-                style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
+                style={{ borderRadius: "15px 15px 0px 0px", height: "300px" }}
               />
               <img
               hidden
@@ -116,7 +116,7 @@ export default function DiscoverMoreCovers(props) {
                   displayImages(covers.PreviewPages[0], index) }
                 class="card-img-top"
                 alt="..."
-                style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
+                style={{ borderRadius: "15px 15px 0px 0px", height: "300px" }}
               />
               <div class="card-body">
                 <h4 class="card-title" style={{ fontWeight: "bold" }}>

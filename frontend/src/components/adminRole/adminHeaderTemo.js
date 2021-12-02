@@ -557,6 +557,11 @@ export default function AdminHeaderTemp(props) {
 
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
           <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+          <li class="nav-item">
+              <Link class="nav-link" to = "/admin/dashboard" id="classicalHeader">
+                <font> Dashboard </font>
+              </Link>
+            </li>
             <li class="nav-item">
               <Link class="nav-link" to = "/admin/allcovers" id="classicalHeader">
                 <font> Covers </font>
