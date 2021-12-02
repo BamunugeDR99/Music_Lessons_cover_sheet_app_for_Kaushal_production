@@ -61,6 +61,8 @@ function App() {
         <Route path = "/admin/viewcategories" exact component = {EditMainCategories}/>
         <Route path = "/admin" component = {Footer}/> */}
 
+
+        {/* Testing routes  */}
       <Route path = "/search" exact component = {Search}/>
 
 
