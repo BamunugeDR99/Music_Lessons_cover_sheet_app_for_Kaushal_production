@@ -24,7 +24,7 @@ import LessonAndCoversDetailed from "./components/customerRole/LessonsAndCoversD
 import Footer from "./components/customerRole/footer";
 // import Search from "./components/testingComponents/search";
 
-// import components (Admin)
+//import components (Admin)
 import AdminLogin from "./components/adminRole/adminLogin";
 import AdminHeaderTemp from "./components/adminRole/adminHeaderTemo";
 import Dashboard from "./components/adminRole/dashboard";
