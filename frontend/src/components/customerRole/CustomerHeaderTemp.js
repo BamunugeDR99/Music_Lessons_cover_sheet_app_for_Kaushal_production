@@ -75,6 +75,8 @@ export default function CustomerHeader(props) {
 
   let [confirmDelete, setConfirmDelete] = useState(true);
 
+  let CustomerIDTemp = "6199d490bfd483038f7067bf";
+
   function clearErrors() {
     SetCurrentPasswordError("");
     SetCurrentPasswordError2("");
@@ -276,7 +278,7 @@ export default function CustomerHeader(props) {
           axios
             .put(
               "https://kaushal-rashmika-music.herokuapp.com/customer/update/" +
-              localStorage.getItem("CustomerID"),
+              CustomerIDTemp,
               newCustomer
             )
             .then(() => {
@@ -335,7 +337,7 @@ export default function CustomerHeader(props) {
             axios
               .delete(
                 "https://kaushal-rashmika-music.herokuapp.com/customer/delete/" +
-                localStorage.getItem("CustomerID")
+                CustomerIDTemp
               )
               .then((res) => {
                 swalWithBootstrapButtons.fire(
@@ -367,7 +369,7 @@ export default function CustomerHeader(props) {
     axios
       .get(
         "https://kaushal-rashmika-music.herokuapp.com/customer/get/" +
-        localStorage.getItem("CustomerID")
+        CustomerIDTemp
       )
       .then((res) => {
        
@@ -393,7 +395,7 @@ export default function CustomerHeader(props) {
       axios
         .get(
           "https://kaushal-rashmika-music.herokuapp.com/customer/get/" +
-          localStorage.getItem("CustomerID")
+          CustomerIDTemp
         )
         .then((res) => {
           SetCustomer(res.data);
@@ -420,7 +422,7 @@ export default function CustomerHeader(props) {
     function getCartCount() {
       //const CoverID = props.match.params.id;
 
-      const CustomerID = localStorage.getItem("CustomerID");
+      const CustomerID = CustomerIDTemp;
 
       axios
 
