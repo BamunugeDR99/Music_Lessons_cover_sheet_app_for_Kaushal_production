@@ -354,7 +354,7 @@ export default function AdminTempHeader(props) {
           setmodalOpenForLoading(true);
 
           
-      axios.put("http://localhost:8070/customer/update/61a50a72a955b7198787942f", newCustomer).then(() => {
+      axios.put("https://kaushal-rashmika-music.herokuapp.com/customer/update/61a50a72a955b7198787942f", newCustomer).then(() => {
 
             setmodalOpenForLoading(false);
             Swal.fire('Saved!', '', 'success');
@@ -431,7 +431,7 @@ export default function AdminTempHeader(props) {
         if (result.isConfirmed) {
   
           axios
-            .delete("http://localhost:8070/customer/delete/61a50a72a955b7198787942f")
+            .delete("https://kaushal-rashmika-music.herokuapp.com/customer/delete/61a50a72a955b7198787942f")
             .then((res) => {
   
               swalWithBootstrapButtons.fire(
@@ -468,7 +468,7 @@ export default function AdminTempHeader(props) {
 
   function getCustomerDetails() {
 
-    axios.get("http://localhost:8070/customer/get/61a50a72a955b7198787942f").then((res) => {
+    axios.get("https://kaushal-rashmika-music.herokuapp.com/customer/get/61a50a72a955b7198787942f").then((res) => {
 
       console.log(res.data);
       SetCustomer(res.data);
@@ -493,7 +493,7 @@ export default function AdminTempHeader(props) {
 
     function getOne() {
 
-      axios.get("http://localhost:8070/customer/get/61a50a72a955b7198787942f").then((res) => {
+      axios.get("https://kaushal-rashmika-music.herokuapp.com/customer/get/61a50a72a955b7198787942f").then((res) => {
 
         SetCustomer(res.data);
 

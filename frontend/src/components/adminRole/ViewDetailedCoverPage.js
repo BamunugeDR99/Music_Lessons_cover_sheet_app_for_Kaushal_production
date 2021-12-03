@@ -74,7 +74,7 @@ export default function ViewDetailedCoverPage(props) {
   useEffect(() => {
     function getCovers() {
       axios
-        .get("http://localhost:8070/covers/get/" + CoverTempID)
+        .get("https://kaushal-rashmika-music.herokuapp.com/covers/get/" + CoverTempID)
         .then((res) => {
           setCovers(res.data);
           setPreviousContent(res.data);
@@ -181,7 +181,7 @@ export default function ViewDetailedCoverPage(props) {
 
   function GetLessonSubCategories() {
     axios
-      .get("http://localhost:8070/mainCategory/get/619deb0ca35d670b4e68ec3e")
+      .get("https://kaushal-rashmika-music.herokuapp.com/mainCategory/get/619deb0ca35d670b4e68ec3e")
       .then((res) => {
         tempSubCategory2 = res.data.SubCategories;
         setContent();
@@ -197,7 +197,7 @@ export default function ViewDetailedCoverPage(props) {
   }
   function getAllClassicalGutarMainCategories() {
     axios
-      .get("http://localhost:8070/mainCategory/get/61936e9d9ea7c21aebd01113")
+      .get("https://kaushal-rashmika-music.herokuapp.com/mainCategory/get/61936e9d9ea7c21aebd01113")
       .then((res) => {
         tempSubCategory = res.data.SubCategories;
         GetLessonSubCategories();
@@ -248,12 +248,13 @@ export default function ViewDetailedCoverPage(props) {
             YoutubeLink: document.getElementById("youtubeLink").value,
             FacebookLink: document.getElementById("facebookLink").value,
             PreviewPages: previewPageList,
+            UpdatedUser : "61a8d9f640c532967166aa70",
             CoverPdf: updateCoverPdf,
           };
 
           axios
             .put(
-              "http://localhost:8070/covers/update/" + CoverTempID,
+              "https://kaushal-rashmika-music.herokuapp.com/covers/update/" + CoverTempID,
               updatedCover
             )
             .then(() => {
@@ -326,12 +327,13 @@ export default function ViewDetailedCoverPage(props) {
           YoutubeLink: document.getElementById("youtubeLink").value,
           FacebookLink: document.getElementById("facebookLink").value,
           PreviewPages: previewPageList,
+          UpdatedUser : "61a8d9f640c532967166aa70",
           CoverPdf: updateCoverPdf,
         };
 
         axios
           .put(
-            "http://localhost:8070/covers/update/" + CoverTempID,
+            "https://kaushal-rashmika-music.herokuapp.com/covers/update/" + CoverTempID,
             updatedCover
           )
           .then(() => {
@@ -458,12 +460,13 @@ export default function ViewDetailedCoverPage(props) {
               YoutubeLink: document.getElementById("youtubeLink").value,
               FacebookLink: document.getElementById("facebookLink").value,
               PreviewPages: previewPageList,
+              UpdatedUser : "61a8d9f640c532967166aa70",
               CoverPdf: updateCoverPdf,
             };
             console.log(updatedCover);
             axios
               .put(
-                "http://localhost:8070/covers/update/" + CoverTempID,
+                "https://kaushal-rashmika-music.herokuapp.com/covers/update/" + CoverTempID,
                 updatedCover
               )
               .then(() => {
@@ -540,7 +543,7 @@ export default function ViewDetailedCoverPage(props) {
 
   function getCovers() {
     axios
-      .get("http://localhost:8070/covers/get/" + CoverTempID)
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/get/" + CoverTempID)
       .then((res) => {
         setCovers(res.data);
         setPreviousContent(res.data);

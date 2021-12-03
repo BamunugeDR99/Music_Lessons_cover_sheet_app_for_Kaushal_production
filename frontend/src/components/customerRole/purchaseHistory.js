@@ -21,7 +21,7 @@ export default function PurchaseHistory(props) {
     function getCovers() {
       
       axios
-        .get("http://localhost:8070/order/getOrders")
+        .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
         .then((res) => {
           console.log(res.data);
           const filter = res.data.filter(
@@ -32,7 +32,7 @@ export default function PurchaseHistory(props) {
             covers.push(post.CoverIDs);
           });
 
-          axios.get("http://localhost:8070/covers/getcovers").then((res) => {
+          axios.get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers").then((res) => {
             getSpecificOrderCoverDetiles(res.data);
           });
         })
@@ -65,7 +65,7 @@ export default function PurchaseHistory(props) {
     setTotal("");
     let searchResult = [];
     axios
-      .get("http://localhost:8070/order/getOrders")
+      .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
       .then((res) => {
         console.log(res.data);
         const filter = res.data.filter(
@@ -75,7 +75,7 @@ export default function PurchaseHistory(props) {
           covers.push(post.CoverIDs);
         });
 
-        axios.get("http://localhost:8070/covers/getcovers").then((res) => {
+        axios.get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers").then((res) => {
           searchResult = res.data.filter(
             (post) =>
               post.Title.toLowerCase().includes(val.toLowerCase()) ||

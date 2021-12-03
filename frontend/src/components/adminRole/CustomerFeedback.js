@@ -31,12 +31,12 @@ export default function CustomerFeedback(props) {
       let coverID = props.match.params.id;
 
       axios
-        .get("http://localhost:8070/covers/get/" + coverID)
+        .get("https://kaushal-rashmika-music.herokuapp.com/covers/get/" + coverID)
         .then((res) => {
           setCovername(res.data.Title);
 
           axios
-            .get("http://localhost:8070/feedback/getAllFeedback")
+            .get("https://kaushal-rashmika-music.herokuapp.com/feedback/getAllFeedback")
             .then((res) => {
               //Filtered feedbacks
               let AllFeedBacks = res.data.filter(
@@ -56,7 +56,7 @@ export default function CustomerFeedback(props) {
 
     function test() {
       axios
-        .get("http://localhost:8070/covers/getcovers")
+        .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers")
         .then((res) => {
           getTop4Downloads(res.data);
         })
@@ -107,7 +107,7 @@ export default function CustomerFeedback(props) {
   async function getFeedbackss(AllF) {
     for (let i = 0; i < AllF.length; i++) {
       await axios
-        .get("http://localhost:8070/customer/get/" + AllF[i].CustomerID)
+        .get("https://kaushal-rashmika-music.herokuapp.com/customer/get/" + AllF[i].CustomerID)
         .then((res) => {
           CommentDetails = {
             CustomerName: res.data.FirstName + " " + res.data.LastName,

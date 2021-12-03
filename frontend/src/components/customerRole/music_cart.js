@@ -33,7 +33,7 @@ export default function MusicCart(props) {
     setTotal("Loading...");
     await axios
       .get(
-        "http://localhost:8070/shoppingCart/getOneCart/" +
+        "https://kaushal-rashmika-music.herokuapp.com/shoppingCart/getOneCart/" +
           localStorage.getItem("CustomerID")
       )
       .then((res) => {
@@ -61,7 +61,7 @@ export default function MusicCart(props) {
 
     for (let i = 0; i < data.length; i++) {
       await axios
-        .get(`http://localhost:8070/covers/getcoverbyid/${data[i]}`)
+        .get(`https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbyid/${data[i]}`)
         .then((res) => {
           console.log(res.data[0].Price);
           // console.log("asd")
@@ -103,7 +103,7 @@ export default function MusicCart(props) {
       if (result.isConfirmed) {
         axios
           .delete(
-            `http://localhost:8070/shoppingCart/deleteCartCover/${id}/` +
+            `https://kaushal-rashmika-music.herokuapp.com/shoppingCart/deleteCartCover/${id}/` +
               localStorage.getItem("CustomerID")
           )
           .then((res) => {

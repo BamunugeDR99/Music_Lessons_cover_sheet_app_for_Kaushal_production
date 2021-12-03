@@ -35,7 +35,7 @@ export default function MusicCoverPage(props) {
     document.getElementById("topcover").style.display = "none";
 
     await axios
-      .get("http://localhost:8070/covers/getcoverbymaincover")
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbymaincover")
       .then((res) => {
         dataholdedr = res.data;
         setCovers(res.data);
@@ -53,7 +53,7 @@ export default function MusicCoverPage(props) {
 
     // Getting sub categories
     axios
-      .get("http://localhost:8070/mainCategory/get")
+      .get("https://kaushal-rashmika-music.herokuapp.com/mainCategory/get")
       .then((res) => {
         setCategories(res.data[0].SubCategories);
         document.getElementById("bufferlink").style.display = "none";
@@ -130,7 +130,7 @@ export default function MusicCoverPage(props) {
     document.getElementById("spinnerdiv").style.display = "block";
     document.getElementById("coverdiv").style.display = "none";
     await axios
-      .get("http://localhost:8070/covers/getcoverbymaincover")
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbymaincover")
       .then((res) => {
         dataholdedr = res.data;
         setCovers(res.data);
@@ -162,7 +162,7 @@ export default function MusicCoverPage(props) {
     document.getElementById("spinnerdiv").style.display = "block";
     document.getElementById("coverdiv").style.display = "none";
     await axios
-      .get("http://localhost:8070/covers/getcoverbymaincover")
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbymaincover")
       .then((res) => {
         dataholdedr = res.data;
         setCovers(res.data);

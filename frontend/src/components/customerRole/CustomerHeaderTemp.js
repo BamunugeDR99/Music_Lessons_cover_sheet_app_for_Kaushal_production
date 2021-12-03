@@ -75,6 +75,8 @@ export default function CustomerHeader(props) {
 
   let [confirmDelete, setConfirmDelete] = useState(true);
 
+  let CustomerIDTemp = "6199d490bfd483038f7067bf";
+
   function clearErrors() {
     SetCurrentPasswordError("");
     SetCurrentPasswordError2("");
@@ -275,8 +277,8 @@ export default function CustomerHeader(props) {
 
           axios
             .put(
-              "http://localhost:8070/customer/update/" +
-              localStorage.getItem("CustomerID"),
+              "https://kaushal-rashmika-music.herokuapp.com/customer/update/" +
+              CustomerIDTemp,
               newCustomer
             )
             .then(() => {
@@ -334,8 +336,8 @@ export default function CustomerHeader(props) {
           if (result.isConfirmed) {
             axios
               .delete(
-                "http://localhost:8070/customer/delete/" +
-                localStorage.getItem("CustomerID")
+                "https://kaushal-rashmika-music.herokuapp.com/customer/delete/" +
+                CustomerIDTemp
               )
               .then((res) => {
                 swalWithBootstrapButtons.fire(
@@ -366,8 +368,8 @@ export default function CustomerHeader(props) {
   function getCustomerDetails() {
     axios
       .get(
-        "http://localhost:8070/customer/get/" +
-        localStorage.getItem("CustomerID")
+        "https://kaushal-rashmika-music.herokuapp.com/customer/get/" +
+        CustomerIDTemp
       )
       .then((res) => {
        
@@ -392,8 +394,8 @@ export default function CustomerHeader(props) {
     function getOne() {
       axios
         .get(
-          "http://localhost:8070/customer/get/" +
-          localStorage.getItem("CustomerID")
+          "https://kaushal-rashmika-music.herokuapp.com/customer/get/" +
+          CustomerIDTemp
         )
         .then((res) => {
           SetCustomer(res.data);
@@ -420,11 +422,11 @@ export default function CustomerHeader(props) {
     function getCartCount() {
       //const CoverID = props.match.params.id;
 
-      const CustomerID = localStorage.getItem("CustomerID");
+      const CustomerID = CustomerIDTemp;
 
       axios
 
-        .get("http://localhost:8070/shoppingCart/getOneCart/" + CustomerID)
+        .get("https://kaushal-rashmika-music.herokuapp.com/shoppingCart/getOneCart/" + CustomerID)
 
         .then((res) => {
           document.getElementById("countHolder").innerHTML =

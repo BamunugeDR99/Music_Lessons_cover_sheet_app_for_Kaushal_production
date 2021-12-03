@@ -7,6 +7,8 @@ import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import "../../css/login.css";
 import Swal from "sweetalert2";
+import Modal from "react-bootstrap/Modal";
+
 
 const eye = <FontAwesomeIcon icon={faEye} />;
 const sleye = <FontAwesomeIcon icon={faEyeSlash} />;
@@ -33,8 +35,9 @@ export default function Login(props) {
 
   // }
   // );
+  const [modalOpenForLoading, setmodalOpenForLoading] = useState(false);
 
-  const [LoginStatus, setLoginStatus] = useState(false);
+  
 
   //remember me
 
@@ -77,6 +80,8 @@ export default function Login(props) {
   function loginUser(e) {
     e.preventDefault();
 
+    setmodalOpenForLoading(true);
+
     const loginCredentials = {
       Username,
       Password,
@@ -85,34 +90,48 @@ export default function Login(props) {
     localStorage.setItem("rememberMe", rememberMe);
     localStorage.setItem("Username", rememberMe ? Username : "");
 
+   
+
     axios
-      .post("http://localhost:8070/Customer/loginCustomer", loginCredentials)
+      .post("https://kaushal-rashmika-music.herokuapp.com/customer/loginCustomer", loginCredentials)
       .then((res) => {
         setCustomer(res.data.customerLogin);
         localStorage.setItem("CustomerID", res.data.customerLogin._id);
 
         let customerID = res.data.customerLogin._id;
+        
+        const updateloginStatus = {
+          LoginStatus: true
+        };
 
+        axios
+        .put("https://kaushal-rashmika-music.herokuapp.com/customer/loginStatus/" + customerID, updateloginStatus)
+        .then((res) => {
 
+          setmodalOpenForLoading(false);
+
+        })
+
+       
         
         // sessionStorage.setItem('userID',"sss");
 
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 1500,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.addEventListener("mouseenter", Swal.stopTimer);
-            toast.addEventListener("mouseleave", Swal.resumeTimer);
-          },
-        });
+        // const Toast = Swal.mixin({
+        //   toast: true,
+        //   position: "top-end",
+        //   showConfirmButton: false,
+        //   timer: 1500,
+        //   timerProgressBar: true,
+        //   didOpen: (toast) => {
+        //     toast.addEventListener("mouseenter", Swal.stopTimer);
+        //     toast.addEventListener("mouseleave", Swal.resumeTimer);
+        //   },
+        // });
 
-        Toast.fire({
-          icon: "success",
-          title: "Signed in successfully",
-        });
+        // Toast.fire({
+        //   icon: "success",
+        //   title: "Signed in successfully",
+        // });
 
         props.history.push("/customer/home");
         // alert("Customer loggin Successfully!");
@@ -123,7 +142,9 @@ export default function Login(props) {
       })
       .catch((err) => {
         // alert(err);
+        setmodalOpenForLoading(false);
         console.log(err);
+       
         // alert(err.response.data.error);
 
         Swal.fire({
@@ -294,6 +315,27 @@ export default function Login(props) {
       </main>
       <br />
       <br />
+
+      <Modal show={modalOpenForLoading} size="md">
+        <Modal.Header></Modal.Header>
+
+        <Modal.Body>
+          <div class="d-flex justify-content-center">
+            <div class="spinner-border text-success" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <br />
+          <h1 style={{ textAlign: "center", color: "#764A34" }}>
+            Please wait!
+          </h1>
+          {/* <h6 style={{ textAlign: "center", color: "#764A34" }}>
+            Your Successfully Logged In...
+          </h6> */}
+        </Modal.Body>
+        <Modal.Footer></Modal.Footer>
+      </Modal>
+
     </div>
   );
 }

@@ -97,7 +97,7 @@ export default function AdminLogin(props) {
         localStorage.setItem("Username", rememberMe ? Username : "");
     
         axios
-          .post("http://localhost:8070/admin/loginAdmin", loginCredentials)
+          .post("https://kaushal-rashmika-music.herokuapp.com/admin/loginAdmin", loginCredentials)
           .then((res) => {
             
             // setCustomer(res.data.adminLogin);

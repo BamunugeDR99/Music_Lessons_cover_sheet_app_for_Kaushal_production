@@ -25,7 +25,7 @@ export default function LessonsAndCoversDetailed(props) {
    async function getCovers() {
       const CoverTempID = props.match.params.id;
      await axios
-        .get("http://localhost:8070/covers/get/" + CoverTempID)
+        .get("https://kaushal-rashmika-music.herokuapp.com/covers/get/" + CoverTempID)
         .then((res) => {
           setCovers(res.data);
           preview = res.data.PreviewPages;
@@ -67,7 +67,7 @@ export default function LessonsAndCoversDetailed(props) {
   async function getRecommendCovers(MainCategory,SubCategory) {
     // console.log(MainCategory, SubCategory);
    await axios
-      .get("http://localhost:8070/covers/getCovers")
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getCovers")
       .then((res) => {
         let availableCovers = res.data.filter(
           (recCovers) => String(recCovers.Status) != "3"
@@ -143,7 +143,7 @@ export default function LessonsAndCoversDetailed(props) {
     let coverIDs = [];
     let shoppingcartId = "";
     axios
-      .get("http://localhost:8070/shoppingCart/getOneCart/" + customerID)
+      .get("https://kaushal-rashmika-music.herokuapp.com/shoppingCart/getOneCart/" + customerID)
       .then((res) => {
         console.log(res.data.CoverIDs);
         coverIDs = res.data.CoverIDs;
@@ -165,7 +165,7 @@ export default function LessonsAndCoversDetailed(props) {
         if (falgs === 0) {
           axios
             .put(
-              "http://localhost:8070/shoppingCart/updateSItem/" +
+              "https://kaushal-rashmika-music.herokuapp.com/shoppingCart/updateSItem/" +
                 shoppingcartId,
               newcoverList
             )
@@ -540,7 +540,8 @@ export default function LessonsAndCoversDetailed(props) {
           return (
             <div
               class="card"
-              onClick = {() => {props.history.push("/customer/discovermorecover/"+covers._id)}}
+              onClick = {() => {props.history.push("/customer/discovermorecover/"+covers._id)
+            window.location.reload()}}
               style={{
                 boxShadow: "rgba(0, 0, 0, 0.25) 0px 25px 50px -12px",
                 borderRadius: "15px",
