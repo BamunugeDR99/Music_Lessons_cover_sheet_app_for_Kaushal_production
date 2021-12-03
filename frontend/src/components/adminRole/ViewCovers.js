@@ -103,7 +103,9 @@ export default function ViewCovers(props) {
 
   function GetLessonSubCategories() {
     axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/mainCategory/get/619deb0ca35d670b4e68ec3e")
+      .get(
+        "https://kaushal-rashmika-music.herokuapp.com/mainCategory/get/619deb0ca35d670b4e68ec3e"
+      )
       .then((res) => {
         tempSubCategory2 = res.data.SubCategories;
         setContent();
@@ -114,7 +116,9 @@ export default function ViewCovers(props) {
   }
   function getAllClassicalGutarMainCategories() {
     axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/mainCategory/get/61936e9d9ea7c21aebd01113")
+      .get(
+        "https://kaushal-rashmika-music.herokuapp.com/mainCategory/get/61936e9d9ea7c21aebd01113"
+      )
       .then((res) => {
         tempSubCategory = res.data.SubCategories;
         GetLessonSubCategories();
@@ -143,7 +147,11 @@ export default function ViewCovers(props) {
         }
 
         axios
-          .put("https://kaushal-rashmika-music.herokuapp.com/covers/StatusUpdate/" + id, content)
+          .put(
+            "https://kaushal-rashmika-music.herokuapp.com/covers/StatusUpdate/" +
+              id,
+            content
+          )
           .then((res) => {
             if (content.Status == "1") {
               document.getElementById("toggle" + index).checked = true;
@@ -226,7 +234,11 @@ export default function ViewCovers(props) {
             Status: "3",
           };
           axios
-            .put("https://kaushal-rashmika-music.herokuapp.com/covers/StatusUpdate/" + id, content)
+            .put(
+              "https://kaushal-rashmika-music.herokuapp.com/covers/StatusUpdate/" +
+                id,
+              content
+            )
             .then((res) => {
               getAllClassicalGuitarCovers();
               swalWithBootstrapButtons.fire(
@@ -345,7 +357,10 @@ export default function ViewCovers(props) {
           UploadPdf();
 
           axios
-            .post("https://kaushal-rashmika-music.herokuapp.com/covers/add", newCover)
+            .post(
+              "https://kaushal-rashmika-music.herokuapp.com/covers/add",
+              newCover
+            )
             .then(() => {
               getAllClassicalGuitarCovers();
               $("input[type=text]").val("");
@@ -532,6 +547,7 @@ export default function ViewCovers(props) {
           </b>
         </h3>
       </div>
+
       <div className="container-xxl" style={{ overflowX: "auto" }}>
         <br />
         <table
@@ -613,8 +629,10 @@ export default function ViewCovers(props) {
                     <button
                       className="btn-sm"
                       style={{ display: "inline", border: "1px solid #279B14" }}
-                      onClick = {() => {
-                        props.history.push("/admin/customerfeedbacks/"+covers._id)
+                      onClick={() => {
+                        props.history.push(
+                          "/admin/customerfeedbacks/" + covers._id
+                        );
                       }}
                       // onClick={() => viewMoreCover(covers._id)}
                     >
@@ -837,14 +855,14 @@ export default function ViewCovers(props) {
                   <div class="form-group">
                     <label for="exampleInputEmail1">Instruments*</label>
                     <Select
-                     // defaultValue={[instrumentsPlayedOn[0]]}
+                      // defaultValue={[instrumentsPlayedOn[0]]}
                       isMulti
                       name="colors"
                       options={instrumentsPlayedOn}
                       className="basic-multi-select"
                       classNamePrefix="select"
                       required
-                      placeholder = "Choose instruments"
+                      placeholder="Choose instruments"
                       onChange={(val) => {
                         setInstrument(val);
                       }}

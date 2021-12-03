@@ -540,7 +540,8 @@ export default function LessonsAndCoversDetailed(props) {
           return (
             <div
               class="card"
-              onClick = {() => {props.history.push("/customer/discovermorecover/"+covers._id)}}
+              onClick = {() => {props.history.push("/customer/discovermorecover/"+covers._id)
+            window.location.reload()}}
               style={{
                 boxShadow: "rgba(0, 0, 0, 0.25) 0px 25px 50px -12px",
                 borderRadius: "15px",

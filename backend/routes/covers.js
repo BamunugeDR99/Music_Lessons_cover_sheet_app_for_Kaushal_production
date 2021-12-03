@@ -36,6 +36,7 @@ router.route("/add").post((req, res) => {
     YoutubeLink,
     FacebookLink,
     PreviewPages,
+    UpdatedUser,
     CoverPdf,
   });
 

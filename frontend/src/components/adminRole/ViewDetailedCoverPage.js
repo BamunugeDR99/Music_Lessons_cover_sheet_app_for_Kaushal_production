@@ -248,6 +248,7 @@ export default function ViewDetailedCoverPage(props) {
             YoutubeLink: document.getElementById("youtubeLink").value,
             FacebookLink: document.getElementById("facebookLink").value,
             PreviewPages: previewPageList,
+            UpdatedUser : "61a8d9f640c532967166aa70",
             CoverPdf: updateCoverPdf,
           };
 
@@ -326,6 +327,7 @@ export default function ViewDetailedCoverPage(props) {
           YoutubeLink: document.getElementById("youtubeLink").value,
           FacebookLink: document.getElementById("facebookLink").value,
           PreviewPages: previewPageList,
+          UpdatedUser : "61a8d9f640c532967166aa70",
           CoverPdf: updateCoverPdf,
         };
 
@@ -458,6 +460,7 @@ export default function ViewDetailedCoverPage(props) {
               YoutubeLink: document.getElementById("youtubeLink").value,
               FacebookLink: document.getElementById("facebookLink").value,
               PreviewPages: previewPageList,
+              UpdatedUser : "61a8d9f640c532967166aa70",
               CoverPdf: updateCoverPdf,
             };
             console.log(updatedCover);
