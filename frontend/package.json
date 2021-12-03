@@ -20,6 +20,7 @@
     "emailjs-com": "^3.2.0",
     "firebase": "^9.5.0",
     "install": "^0.13.0",
+    "jest-worker": "^27.4.2",
     "jquery": "^3.6.0",
     "jwt-decode": "^3.1.2",
     "material-ui": "^0.20.2",
