@@ -11,7 +11,7 @@ export default function Home(props) {
   useEffect(async () => {
     function test() {
       axios
-        .get("http://localhost:8070/covers/getcovers")
+        .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers")
         .then((res) => {
           getTop4Downloads(res.data);
         })

@@ -36,7 +36,7 @@ export default function EditCategories(props) {
     useEffect(()=>{
         function getClassical(){
             
-            axios.get("http://localhost:8070/mainCategory/get/")
+            axios.get("https://kaushal-rashmika-music.herokuapp.com/mainCategory/get/")
             .then((res)=>{
               console.log(res.data)
               const filter1 = res.data.filter(
@@ -90,7 +90,7 @@ export default function EditCategories(props) {
             }
             console.log(updatedCategory);
               axios
-                .put("http://localhost:8070/mainCategory/ClassicalUpdate/61936e9d9ea7c21aebd01113" , updatedCategory)
+                .put("https://kaushal-rashmika-music.herokuapp.com/mainCategory/ClassicalUpdate/61936e9d9ea7c21aebd01113" , updatedCategory)
                 .then((res) => {                              
                   alert("success");
                   modalClose2();
@@ -111,7 +111,7 @@ export default function EditCategories(props) {
             }
             console.log(updatedCategory);
               axios
-                .put("http://localhost:8070/mainCategory/ExerciseUpdate/619deb0ca35d670b4e68ec3e" , updatedCategory)
+                .put("https://kaushal-rashmika-music.herokuapp.com/mainCategory/ExerciseUpdate/619deb0ca35d670b4e68ec3e" , updatedCategory)
                 .then((res) => {                              
                   alert("success");
                   modalClose2();
@@ -169,7 +169,7 @@ export default function EditCategories(props) {
         // }
         // console.log(deletedCategory);
         //   axios
-        //     .put("http://localhost:8070/mainCategory/ClassicalUpdate/61936e9d9ea7c21aebd01113" , deletedCategory)
+        //     .put("https://kaushal-rashmika-music.herokuapp.com/mainCategory/ClassicalUpdate/61936e9d9ea7c21aebd01113" , deletedCategory)
         //     .then((res) => {                              
         //       // alert("success");
         //       modalClose2();
@@ -195,7 +195,7 @@ export default function EditCategories(props) {
         // }
         // console.log(deletedCategory1);
         //   axios
-        //     .put("http://localhost:8070/mainCategory/ExerciseUpdate/619deb0ca35d670b4e68ec3e" , deletedCategory1)
+        //     .put("https://kaushal-rashmika-music.herokuapp.com/mainCategory/ExerciseUpdate/619deb0ca35d670b4e68ec3e" , deletedCategory1)
         //     .then((res) => {                              
         //       alert("success");
         //       modalClose2();
@@ -237,7 +237,7 @@ export default function EditCategories(props) {
 
           console.log(updatedCategory);
             axios
-              .put("http://localhost:8070/mainCategory/update/" + id, updatedCategory)
+              .put("https://kaushal-rashmika-music.herokuapp.com/mainCategory/update/" + id, updatedCategory)
               .then((res) => {
                                
                 alert("success");
@@ -257,7 +257,7 @@ export default function EditCategories(props) {
     // function deleteMainCategory(id) {
     //     console.log(id);
     //     axios
-    //       .delete("http://localhost:8070/mainCategory/delete/" + id)
+    //       .delete("https://kaushal-rashmika-music.herokuapp.com/mainCategory/delete/" + id)
     //       .then((res) => {
     //         // let afterDelete = abc.splice(index, 1);
     //         // setabc(afterDelete);

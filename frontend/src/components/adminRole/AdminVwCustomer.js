@@ -19,7 +19,7 @@ let customer =[];
 useEffect(()=>{
     function getCustomers(){
 
-        axios.get("http://localhost:8070/customer/getAll")
+        axios.get("https://kaushal-rashmika-music.herokuapp.com/customer/getAll")
         .then((res)=>{
             console.log(res.data);
             setLength(res.data.length)

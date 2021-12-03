@@ -35,7 +35,7 @@ export default function AdminHeaderTemp(props) {
 
   function getAdminDetails() {
 
-    axios.get("http://localhost:8070/admin/getAdmin/" + localStorage.getItem("AdminID")).then((res) => {
+    axios.get("https://kaushal-rashmika-music.herokuapp.com/admin/getAdmin/" + localStorage.getItem("AdminID")).then((res) => {
 
     
       SetAdmin(res.data);
@@ -54,7 +54,7 @@ export default function AdminHeaderTemp(props) {
 
     function getOne() {
 
-      axios.get("http://localhost:8070/admin/getAdmin/" + localStorage.getItem("AdminID")).then((res) => {
+      axios.get("https://kaushal-rashmika-music.herokuapp.com/admin/getAdmin/" + localStorage.getItem("AdminID")).then((res) => {
 
         SetUsername(res.data.Username);
         setFirstName(res.data.FirstName);

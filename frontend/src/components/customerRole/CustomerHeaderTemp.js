@@ -275,7 +275,7 @@ export default function CustomerHeader(props) {
 
           axios
             .put(
-              "http://localhost:8070/customer/update/" +
+              "https://kaushal-rashmika-music.herokuapp.com/customer/update/" +
               localStorage.getItem("CustomerID"),
               newCustomer
             )
@@ -334,7 +334,7 @@ export default function CustomerHeader(props) {
           if (result.isConfirmed) {
             axios
               .delete(
-                "http://localhost:8070/customer/delete/" +
+                "https://kaushal-rashmika-music.herokuapp.com/customer/delete/" +
                 localStorage.getItem("CustomerID")
               )
               .then((res) => {
@@ -366,7 +366,7 @@ export default function CustomerHeader(props) {
   function getCustomerDetails() {
     axios
       .get(
-        "http://localhost:8070/customer/get/" +
+        "https://kaushal-rashmika-music.herokuapp.com/customer/get/" +
         localStorage.getItem("CustomerID")
       )
       .then((res) => {
@@ -392,7 +392,7 @@ export default function CustomerHeader(props) {
     function getOne() {
       axios
         .get(
-          "http://localhost:8070/customer/get/" +
+          "https://kaushal-rashmika-music.herokuapp.com/customer/get/" +
           localStorage.getItem("CustomerID")
         )
         .then((res) => {
@@ -424,7 +424,7 @@ export default function CustomerHeader(props) {
 
       axios
 
-        .get("http://localhost:8070/shoppingCart/getOneCart/" + CustomerID)
+        .get("https://kaushal-rashmika-music.herokuapp.com/shoppingCart/getOneCart/" + CustomerID)
 
         .then((res) => {
           document.getElementById("countHolder").innerHTML =

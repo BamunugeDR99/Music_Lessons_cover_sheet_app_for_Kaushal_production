@@ -16,7 +16,7 @@ export default function DiscoverMoreCovers(props) {
     async function getRecommendCovers() {
       // console.log(MainCategory, SubCategory);
      await axios
-        .get("http://localhost:8070/covers/getCovers")
+        .get("https://kaushal-rashmika-music.herokuapp.com/covers/getCovers")
         .then((res) => {
           let availableCovers = res.data.filter(
             (recCovers) => String(recCovers.Status) != "3"

@@ -40,7 +40,7 @@ export default function EditMainCategories(props) {
     useEffect(()=>{
         function getClassical(){
             
-            axios.get("http://localhost:8070/mainCategory/get/")
+            axios.get("https://kaushal-rashmika-music.herokuapp.com/mainCategory/get/")
             .then((res)=>{
               // console.log(res.data)
               const filter1 = res.data.filter(
@@ -79,7 +79,7 @@ export default function EditMainCategories(props) {
       function deleteMainCategory(classic) {
         // console.log(classic)
 
-        axios.get("http://localhost:8070/covers/getCovers/")
+        axios.get("https://kaushal-rashmika-music.herokuapp.com/covers/getCovers/")
         .then((res)=>{
           // console.log(res.data)
           
@@ -114,7 +114,7 @@ export default function EditMainCategories(props) {
                 if (result.isConfirmed) {
 
                   axios
-                  .delete(`http://localhost:8070/mainCategory/deleteSubCategory/${classic}/61936e9d9ea7c21aebd01113`)
+                  .delete(`https://kaushal-rashmika-music.herokuapp.com/mainCategory/deleteSubCategory/${classic}/61936e9d9ea7c21aebd01113`)
                   .then((res) => {
               // let afterDelete = abc.splice(index, 1);
               // setabc(afterDelete);
@@ -132,7 +132,7 @@ export default function EditMainCategories(props) {
       }
 
       function deleteMainCategory1(classic) {
-        axios.get("http://localhost:8070/covers/getCovers/")
+        axios.get("https://kaushal-rashmika-music.herokuapp.com/covers/getCovers/")
         .then((res)=>{
 
           for(let i = 0; i < res.data.length; i++){
@@ -163,7 +163,7 @@ export default function EditMainCategories(props) {
                 if (result.isConfirmed) {
 
                   axios
-                  .delete(`http://localhost:8070/mainCategory/deleteSubCategory/${classic}/619deb0ca35d670b4e68ec3e`)
+                  .delete(`https://kaushal-rashmika-music.herokuapp.com/mainCategory/deleteSubCategory/${classic}/619deb0ca35d670b4e68ec3e`)
                   .then((res) => {
               // let afterDelete = abc.splice(index, 1);
               // setabc(afterDelete);
@@ -192,7 +192,7 @@ export default function EditMainCategories(props) {
     function sendData() {
       console.log(SubCat)
       if(SubCat != ""){
-      axios.get("http://localhost:8070/mainCategory/get")
+      axios.get("https://kaushal-rashmika-music.herokuapp.com/mainCategory/get")
         .then((res)=>{
           console.log(res.data)
           for(let i = 0; i < res.data.length; i++){
@@ -225,7 +225,7 @@ export default function EditMainCategories(props) {
                 }
                 console.log(updatedCategory);
                   axios
-                    .put("http://localhost:8070/mainCategory/ClassicalUpdate/61936e9d9ea7c21aebd01113" , updatedCategory)
+                    .put("https://kaushal-rashmika-music.herokuapp.com/mainCategory/ClassicalUpdate/61936e9d9ea7c21aebd01113" , updatedCategory)
                     .then((res) => {           
                       // alert("Success")                   
                       Swal.fire("All Done!", "New Category Added", "success");
@@ -250,7 +250,7 @@ export default function EditMainCategories(props) {
                 }
                 console.log(updatedCategory);
                   axios
-                    .put("http://localhost:8070/mainCategory/ExerciseUpdate/619deb0ca35d670b4e68ec3e" , updatedCategory)
+                    .put("https://kaushal-rashmika-music.herokuapp.com/mainCategory/ExerciseUpdate/619deb0ca35d670b4e68ec3e" , updatedCategory)
                     .then((res) => {                              
                       Swal.fire("All Done!", "New Category Added", "success");
                       

@@ -58,10 +58,10 @@ export default function CustomerRegistration(props) {
   const [modalOpenForLoading, setmodalOpenForLoading] = useState(false);
   useEffect(() => {
     // function getCustomers() {
-    //   axios.get("http://localhost:8070/customer/getUsernames").then((res) => {
+    //   axios.get("https://kaushal-rashmika-music.herokuapp.com/customer/getUsernames").then((res) => {
     //     Allusername = res.data;
     //     setAllusernames(res.data);
-    //     axios.get("http://localhost:8070/customer/getAllEmails").then((res)=>{
+    //     axios.get("https://kaushal-rashmika-music.herokuapp.com/customer/getAllEmails").then((res)=>{
     //       Allemails = res.data;
     //       setAllemails(res.data);
     //     }).catch((err)=>{
@@ -75,7 +75,7 @@ export default function CustomerRegistration(props) {
   }, []);
 
   async function checkUserName(username) {
-    await axios("http://localhost:8070/customer/getUsernames")
+    await axios("https://kaushal-rashmika-music.herokuapp.com/customer/getUsernames")
       .then((res) => {
         Allusername = res.data;
         setAllusernames(res.data);
@@ -98,7 +98,7 @@ export default function CustomerRegistration(props) {
   }
 
   async function checkEmail(email) {
-    await axios("http://localhost:8070/customer/getAllEmails")
+    await axios("https://kaushal-rashmika-music.herokuapp.com/customer/getAllEmails")
       .then((res) => {
         Allemails = res.data;
         setAllemails(res.data);
@@ -200,13 +200,13 @@ export default function CustomerRegistration(props) {
       setmodalOpenForLoading(true);
 
       axios
-        .post("http://localhost:8070/customer/add", newCustomer)
+        .post("https://kaushal-rashmika-music.herokuapp.com/customer/add", newCustomer)
         .then((res) => {
           console.log(res.data);
           console.log("Emal : " + Email);
 
           axios
-            .get("http://localhost:8070/customer/getEmail/" + Email)
+            .get("https://kaushal-rashmika-music.herokuapp.com/customer/getEmail/" + Email)
             .then((res) => {
               console.log(res.data);
 
@@ -217,7 +217,7 @@ export default function CustomerRegistration(props) {
 
               console.log(Cart);
               axios
-                .post("http://localhost:8070/shoppingCart/createCart", Cart)
+                .post("https://kaushal-rashmika-music.herokuapp.com/shoppingCart/createCart", Cart)
                 .then((res) => {
                   setmodalOpenForLoading(false);
                   Swal.fire(

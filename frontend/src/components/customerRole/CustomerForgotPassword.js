@@ -50,7 +50,7 @@ export default function CustomerForgotPassword(props) {
     UserEmail = document.getElementById("userEmail").value;
 
     axios
-      .get("http://localhost:8070/customer/getEmail/" + UserEmail)
+      .get("https://kaushal-rashmika-music.herokuapp.com/customer/getEmail/" + UserEmail)
       .then((res) => {
         if (res.data.length == 0) {
           setLoading(true);
@@ -215,7 +215,7 @@ export default function CustomerForgotPassword(props) {
 
             axios
               .put(
-                "http://localhost:8070/customer/updatePassword/" + customerID,
+                "https://kaushal-rashmika-music.herokuapp.com/customer/updatePassword/" + customerID,
                 newPasswordObject
               )
               .then((res) => {
