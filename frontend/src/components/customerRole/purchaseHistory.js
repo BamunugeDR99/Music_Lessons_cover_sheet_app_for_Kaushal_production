@@ -4,6 +4,7 @@ import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 import Swal from "sweetalert2";
 import Modal from "react-bootstrap/Modal";
+import { ImageGroup, Image } from 'react-fullscreen-image'
 
 export default function PurchaseHistory(props) {
   const [cover, setCover] = useState([]);
@@ -11,6 +12,7 @@ export default function PurchaseHistory(props) {
   const [noData, setNoData] = useState([]);
   const [empty, setEmpty] = useState([]);
   const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
+  const [modalOpenForImage, setModalOpenForImage] = useState(false);
   let [total, setTotal] = useState(0);
   let covers = [];
   let array2 = [];
@@ -123,6 +125,25 @@ function previewPdf(covername) {
       });
   }
 
+  function previewImg(PreviewPages) {
+    setModalOpenForImage(true);
+    const storageRef = ref(storage, `PreviewImages/${PreviewPages}`);
+    getDownloadURL(storageRef)
+      .then((url) => {
+        window.location.href = url;
+        setModalOpenForImage(false)
+      })
+      .catch(() => {
+        setModalOpenForImage(false);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+        });
+      });
+  }
+
+
   return (
     <div className="container">
       <br />
@@ -183,10 +204,18 @@ function previewPdf(covername) {
               marginBottom: "10px", border: "2px solid sienna", }} >
             <div className="row" style={{ width: "100%", margin: "auto" }}>
               <div className="col-sm text-center">
+
+
+
+              
+
+
                 <img id={index}
                   class="rounded"
-                  style={{ width: "100%", margin: "auto" }}
-                  src={ displayImages(post.PreviewPages[0], index) || "/images/imageplaceholder.png" }/>
+                  style={{ width: "100%", margin: "auto", }}
+                  src={ displayImages(post.PreviewPages[0], index) || "/images/imageplaceholder.png" }
+                  onClick={() => { previewImg(post.PreviewPages[0]); }}
+                  />
               </div>
 
               <div className="col-sm">
@@ -270,6 +299,26 @@ function previewPdf(covername) {
           </h1>
           <h4 style={{ textAlign: "center", color: "#764A34" }}>
             PDF is Loading...
+          </h4>
+        </Modal.Body>
+        <Modal.Footer></Modal.Footer>
+      </Modal>
+
+      <Modal show={modalOpenForImage} size="lg">
+        <Modal.Header></Modal.Header>
+
+        <Modal.Body>
+            <div class="d-flex justify-content-center">
+            <div class="spinner-grow text-dark" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <br />
+          <h1 style={{ textAlign: "center", color: "#764A34" }}>
+            Please wait!
+          </h1>
+          <h4 style={{ textAlign: "center", color: "#764A34" }}>
+            Image is Loading...
           </h4>
         </Modal.Body>
         <Modal.Footer></Modal.Footer>
