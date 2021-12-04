@@ -2,7 +2,7 @@ import axios from "axios";
 class Authentication {
     constructor() {
    
-            this.authenticated = true;
+            this.authenticated = false;
        
     }
 
