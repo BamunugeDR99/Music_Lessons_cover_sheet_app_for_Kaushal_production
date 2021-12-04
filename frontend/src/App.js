@@ -34,7 +34,7 @@ import ViewDetailedCoverPage from "./components/adminRole/ViewDetailedCoverPage"
 import CustomerFeedback from "./components/adminRole/CustomerFeedback";
 import AdminVwCustomer from "./components/adminRole/AdminVwCustomer";
 import EditMainCategories from "./components/adminRole/EditMainCategory";
-import authentication from "./security/authentication";
+import NotFound from "./components/NotFound";
 
 // dynamic header
 function App() {
@@ -126,6 +126,7 @@ function App() {
         {/* <Route path = "/search" exact component = {Search}/> */}
 
         {/* <Route path = "*" component = {}/> */}
+        <Route path = "*" component = {NotFound}/>
       </div>
     </Router>
   );
