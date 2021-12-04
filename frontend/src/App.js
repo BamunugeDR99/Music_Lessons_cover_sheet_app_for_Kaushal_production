@@ -1,5 +1,5 @@
 // import doms
-import React, { Component, useState } from "react";
+import React, { Component, useState} from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import  ProtectedRoute  from "./private/ProtectedRoute";
 
@@ -34,10 +34,14 @@ import ViewDetailedCoverPage from "./components/adminRole/ViewDetailedCoverPage"
 import CustomerFeedback from "./components/adminRole/CustomerFeedback";
 import AdminVwCustomer from "./components/adminRole/AdminVwCustomer";
 import EditMainCategories from "./components/adminRole/EditMainCategory";
+import authentication from "./security/authentication";
 
 // dynamic header
 function App() {
   const [loginStatus, setLoginStatus] = useState(true);
+
+
+
 
   return (
     <Router>

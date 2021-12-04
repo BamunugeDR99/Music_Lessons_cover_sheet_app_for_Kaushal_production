@@ -189,7 +189,8 @@ export default function AdminHeaderTemp(props) {
                     authentication.logout(() => {
                       props.history.push("/adminlogin")
                       localStorage.removeItem("AdminID");
-                     
+                      localStorage.setItem("LoginStatus",false);
+
                      })
                   }}
                 >

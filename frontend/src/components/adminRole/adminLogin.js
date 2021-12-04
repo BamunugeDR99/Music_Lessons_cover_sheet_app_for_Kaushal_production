@@ -127,6 +127,7 @@ export default function AdminLogin(props) {
             //console.log("logging success");
             ///console.log(res.data);
            authentication.login(() => {
+            localStorage.setItem("LoginStatus",true);
 
             props.history.push("/admin/dashboard")
 
