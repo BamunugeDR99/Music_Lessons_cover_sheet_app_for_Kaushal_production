@@ -93,7 +93,7 @@ export default function Login(props) {
    
 
     axios
-      .post("http://localhost:8070/customer/loginCustomer", loginCredentials)
+      .post("https://kaushal-rashmika-music.herokuapp.com/customer/loginCustomer", loginCredentials)
       .then((res) => {
         setCustomer(res.data.customerLogin);
         localStorage.setItem("CustomerID", res.data.customerLogin._id);
@@ -105,7 +105,7 @@ export default function Login(props) {
         };
 
         axios
-        .put("http://localhost:8070/customer/loginStatus/" + customerID, updateloginStatus)
+        .put("https://kaushal-rashmika-music.herokuapp.com/customer/loginStatus/" + customerID, updateloginStatus)
         .then((res) => {
 
           setmodalOpenForLoading(false);

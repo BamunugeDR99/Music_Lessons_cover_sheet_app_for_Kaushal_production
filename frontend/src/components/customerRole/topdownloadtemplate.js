@@ -1,24 +1,24 @@
+
 import React from "react";
 import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 
 export default function TopDownloadTemplate(props) {
-  async function displayImages(coverImageName, index) {
-    console.log(coverImageName);
+  async function displayImages() {
 
+      const storageRef = ref(storage, `PreviewImages/${props.imageName}`);
+      await getDownloadURL(storageRef)
+        .then((url) => {
+          document.getElementById("image").src = url;
+          document.getElementById("temp").hidden = true;
+          document.getElementById("image").hidden = false;
 
-    console.log(index);
-    const storageRef = ref(storage, `PreviewImages/${props.imageName}`);
-    await getDownloadURL(storageRef)
-      .then((url) => {
-        document.getElementById(index).src = url;
-        console.log(url);
-      })
-      .catch((err) => {
-        // ErrorhandlingTxt("Reccomended covers are not available right now!");
-        // alert(err);
-        console.log(err);
-      });
+          console.log(url);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+   
   }
 
   return (
@@ -33,15 +33,20 @@ export default function TopDownloadTemplate(props) {
             marginLeft: "15px",
           }}
         >
+             <img
+                id="temp"
+                src={"/images/imageplaceholder.png" }
+                class="card-img-top"
+                alt="..."
+                style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
+              />
           <img
-            id={props.id}
-            src={
-              displayImages(props.imageName, props.id) ||
-              "/images/Imageplaceholder.png"
-            }
+            hidden
+            id="image"
+            src={displayImages()}
             class="card-img-top"
             alt="..."
-            style={{ borderRadius: "15px 15px 0px 0px", height: "150px" }}
+            style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
           />
           <div class="card-body">
             <h4 class="card-title" style={{ fontWeight: "bold" }}>
@@ -60,3 +65,4 @@ export default function TopDownloadTemplate(props) {
     </div>
   );
 }
+

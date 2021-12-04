@@ -1,11 +1,16 @@
 import React, { Component, useEffect, useState } from "react";
 import axios from "axios";
+import { storage } from "../../Configurations/firebaseConfigurations";
+import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
+import Swal from "sweetalert2";
+import Modal from "react-bootstrap/Modal";
 
 export default function PurchaseHistory(props) {
   const [cover, setCover] = useState([]);
   const [searchValue, setSearchvalue] = useState([]);
   const [noData, setNoData] = useState([]);
   const [empty, setEmpty] = useState([]);
+  const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
   let [total, setTotal] = useState(0);
   let covers = [];
   let array2 = [];
@@ -15,23 +20,19 @@ export default function PurchaseHistory(props) {
   useEffect(() => {
     function getCovers() {
       
-      // const objectId = props.match.params.id;
       axios
-        .get("http://localhost:8070/order/getOrders")
+        .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
         .then((res) => {
           console.log(res.data);
           const filter = res.data.filter(
             (cus) => cus.CustomerID == localStorage.getItem("CustomerID")
-            // objectId
           );
 
           filter.map((post) => {
             covers.push(post.CoverIDs);
           });
 
-          console.log(res.data.TransactionDateAndTime);
-
-          axios.get("http://localhost:8070/covers/getcovers").then((res) => {
+          axios.get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers").then((res) => {
             getSpecificOrderCoverDetiles(res.data);
           });
         })
@@ -52,41 +53,29 @@ export default function PurchaseHistory(props) {
           console.log(allCovers[j].Price);
           TotalPrice = TotalPrice + Number(allCovers[j].Price);
           setTotal(total + Number(allCovers[j].Price));
-          console.log(TotalPrice);
-          // console.log(array2[i])
-          // console.log(array2[j].Price)
           setNoData(array2.length);
         }
       }
     }
     document.getElementById("total").innerHTML = TotalPrice;
-    //setTotal(TotalPrice);
-
-    // console.log(array2.Price)
-
     setCover(array2);
   }
 
   function searchByName(val) {
-    //setSearchvalue(val);
     setTotal("");
     let searchResult = [];
     axios
-      .get("http://localhost:8070/order/getOrders")
+      .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
       .then((res) => {
         console.log(res.data);
         const filter = res.data.filter(
           (cus) => cus.CustomerID == localStorage.getItem("CustomerID")
-          // objectId
-        );
-
+          );
         filter.map((post) => {
           covers.push(post.CoverIDs);
         });
 
-        console.log(res.data.TransactionDateAndTime);
-
-        axios.get("http://localhost:8070/covers/getcovers").then((res) => {
+        axios.get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers").then((res) => {
           searchResult = res.data.filter(
             (post) =>
               post.Title.toLowerCase().includes(val.toLowerCase()) ||
@@ -95,11 +84,7 @@ export default function PurchaseHistory(props) {
           );
           getSpecificOrderCoverDetiles(searchResult);
           if (searchResult.length == 0) {
-            //alert("d");
-            //
-            // setCover(cover);
             setEmpty("No Covers available !");
-            // setCover([]);
           } else {
             setEmpty("");
           }
@@ -108,60 +93,35 @@ export default function PurchaseHistory(props) {
       .catch((err) => {
         alert(err);
       });
-
-    // setCover(searchResult);
-
-    // if (searchResult.length != 0) {
-    //  //
-    // }else{
-
-    // }
   }
 
-  // function filterContent(data, userSearch) {
-  //   let result = data.filter(
-  //     (post) =>
-  //       post.Item_name.toLowerCase().includes(userSearch) ||
-  //       post.Brand.toLowerCase().includes(userSearch) ||
-  //       post.Model.toLowerCase().includes(userSearch)
-  //   );
-  //   console.log(userSearch);
-  //   let x = result;
-  //   array2( x);
-  //   if (result.length != 0) {
-  //     document.getElementById("itemsTxt").innerHTML = "";
-  //   } else if (result.length == 0) {
-  //     document.getElementById("itemsTxt").innerHTML = "No Result Found!";
-  //   }
-  // }
+  async function displayImages(coverImageName, index) {
+      const storageRef = ref(storage, `PreviewImages/${coverImageName}`);
+      await getDownloadURL(storageRef)
+        .then((url) => {
+          document.getElementById(index).src = url;
+        })
+        .catch((err) => {
+        });
+    }
 
-  // // search
-  // function searchByName(e) {
-  //   let userSearch = e;
-  //   //document.getElementsByTagName("CircleLoader").loading = '{true}';
-  //   // document.getElementById("itemsTxt").innerHTML = "";
-
-  //   axios
-  //       .get("http://localhost:8070/order/getOrders")
-  //       .then((res) => {
-  //         const filter = res.data.filter(
-  //           (cus) => cus.CustomerID == "619bb6fb3d429b6f26addcba"
-  //           // objectId
-  //         );
-
-  //         filter.map((post) => {
-  //           covers.push(post.CoverIDs);
-  //         });
-
-  //         axios.get("http://localhost:8070/covers/getcovers").then((res) => {
-  //           getSpecificOrderCoverDetiles(res.data);
-  //         });
-  //       })
-  //       .catch((err) => {
-  //         alert(err);
-  //       });
-
-  // }
+function previewPdf(covername) {
+    setModalOpenForPdf(true);
+    const storageRef = ref(storage, `Covers(PDF)/${covername}`);
+    getDownloadURL(storageRef)
+      .then((url) => {
+        window.location.href = url;
+        setModalOpenForPdf(false)
+      })
+      .catch(() => {
+        setModalOpenForPdf(false);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+        });
+      });
+  }
 
   return (
     <div className="container">
@@ -181,24 +141,11 @@ export default function PurchaseHistory(props) {
           <div className="row">
             <div className="col-md-1"></div>
             <div class="col-md-10 input-group">
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Search Music Covers"
-                onChange={(e) => {
-                  searchByName(e.target.value);
-                }}
-              />
+              <input type="text" class="form-control" placeholder="Search Music Covers"
+                onChange={(e) => {searchByName(e.target.value); }}/>
               <div class="input-group-append">
                 <button className="input-group-text">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    class="bi bi-search"
-                    viewBox="0 0 16 16"
-                  >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"fill="currentColor" class="bi bi-search"viewBox="0 0 16 16" >
                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                   </svg>
                 </button>
@@ -209,38 +156,7 @@ export default function PurchaseHistory(props) {
           <br />
         </div>
         <div className="col-sm text-right">
-          {/* <div className="row"> */}
-
-          {/* <div className="col-6">
-              <div style={{backgroundColor: "white",borderRadius: "10px", borderColor: props.color,border: `solid black`, padding: "20px 20px 20px 20px", }}>
-                <div className="row">
-                  <div className="col-8">
-                    <span style={{ color: props.color }}>{noData}</span>
-                    <br />
-                    <span>No of downloads</span>
-                  </div>
-                  <div className="col">
-                    <i class={props.icon} aria-hidden="true"style={{color: props.color,fontSize: "20px", marginTop: "10px",}} ></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <br/>
-            <div className="col-6">
-              <div style={{backgroundColor: "white",borderRadius: "10px", borderColor: '#D0193A ',border: `solid black`, padding: "20px 20px 20px 20px", }}>
-                <div className="row">
-                  <div className="col-8 text-right">
-                    <span style={{ color: props.color }}>Rs. {total}/-</span>
-                    <br />
-                    <span>Total</span>
-                  </div>
-                  <div className="col">
-                    <i class={props.icon} aria-hidden="true"style={{color: props.color,fontSize: "20px", marginTop: "10px",}} ></i>
-                  </div>
-                </div>
-              </div>
-            </div> */}
-
+          
           <h6>
             <b>No of downloads : {noData}</b>
           </h6>
@@ -248,9 +164,8 @@ export default function PurchaseHistory(props) {
             <b>Total : $ </b>
           </h6>
           <h6 id="total" style={{ display: "inline" }}>
-            <b> </b>
+
           </h6>
-          {/* </div> */}
         </div>
       </div>
       <br />
@@ -258,50 +173,24 @@ export default function PurchaseHistory(props) {
         <h3 style={{ color: "#D0193A " }}>{empty}</h3>
       </center>
       <br />
-      {/* {cover2.map((post) => ( */}
-      {cover.map((post) => {
+
+      {cover.map((post,index) => {
         TotalPrice += Number(post.Price);
-        // console.log(TotalPrice)
-        // setTotal(TotalPrice)
-        // alert("asd")
         return (
-          <div
-            className="card p-3"
-            style={{
-              boxShadow: "10px 10px 6px -6px #aaaaaa",
-              borderRadius: "10px",
-              width: "90%",
-              margin: "auto",
-              marginBottom: "10px",
-              border: "2px solid sienna",
-            }}
-          >
+
+          <div className="card p-3"
+            style={{boxShadow: "10px 10px 6px -6px #aaaaaa", borderRadius: "10px", width: "90%", margin: "auto",
+              marginBottom: "10px", border: "2px solid sienna", }} >
             <div className="row" style={{ width: "100%", margin: "auto" }}>
               <div className="col-sm text-center">
-                <img
+                <img id={index}
                   class="rounded"
-                  placeholder={"images/923d10247b982186a4ebb24b7ba6fba8.jpg"}
-                  // alt={"images/test2.jpg"}
                   style={{ width: "100%", margin: "auto" }}
-                  src={"images/923d10247b982186a4ebb24b7ba6fba8.jpg"}
-                  // ref={'images/test2.jpg'} onError={
-                  //   () => this.img.src = 'images/test2.jpg'}
-                  onError={(e) => {
-                    if (
-                      e.target.src !==
-                      "images/923d10247b982186a4ebb24b7ba6fba8.jpg"
-                    ) {
-                      e.target.onerror = null;
-                      e.target.src =
-                        "images/923d10247b982186a4ebb24b7ba6fba8.jpg";
-                    }
-                  }}
-                />
+                  src={ displayImages(post.PreviewPages[0], index) || "/images/imageplaceholder.png" }/>
               </div>
 
               <div className="col-sm">
                 <br />
-
                 <div className="row">
                   <div className="col" style={{ lineHeight: "2em" }}>
                     <span>
@@ -320,28 +209,20 @@ export default function PurchaseHistory(props) {
                 <div className="row">
                   <div className="col-sm">
                     <button
-                      style={{
-                        borderRadius: "25px",
-                        backgroundColor: "#D0193A",
-                        color: "white",
-                      }}
+                      style={{borderRadius: "25px",backgroundColor: "#D0193A", color: "white",}}
                       className="btn btn-sm btn-block"
                       type="button"
-                    >
+                      onClick={() => { previewPdf(post.CoverPdf); }} >
                       Download
                     </button>
                     <br />
                   </div>
                   <div className="col-sm">
                     <button
-                      style={{
-                        borderRadius: "25px",
-                        backgroundColor: "#279B14",
-                        color: "white",
-                      }}
+                      style={{ borderRadius: "25px", backgroundColor: "#279B14",color: "white",}}
                       className="btn btn-sm btn-block"
                       type="button"
-                    >
+                      onClick={() => { props.history.push("/customer/detailedcover/" + post._id) }} >
                       View
                     </button>
                     <br />
@@ -349,10 +230,8 @@ export default function PurchaseHistory(props) {
                 </div>
               </div>
               <br />
-              <div
-                className="col-sm "
-                style={{ backgroundColor: "white", lineHeight: "2em" }}
-              >
+              <div className="col-sm "
+                style={{ backgroundColor: "white", lineHeight: "2em" }} >
                 <div className="text-right">
                   <span class="text-center">{post.TransactionDateAndTime}</span>
                 </div>
@@ -376,8 +255,27 @@ export default function PurchaseHistory(props) {
         );
       })}
 
-      {/* {console.log(TotalPrice)} */}
-      {/* {setTotal(TotalPrice)} */}
+      <Modal show={modalOpenForPdf} size="lg">
+        <Modal.Header></Modal.Header>
+
+        <Modal.Body>
+          <div class="d-flex justify-content-center">
+            <div class="spinner-grow text-dark" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <br />
+          <h1 style={{ textAlign: "center", color: "#764A34" }}>
+            Please wait!
+          </h1>
+          <h4 style={{ textAlign: "center", color: "#764A34" }}>
+            PDF is Loading...
+          </h4>
+        </Modal.Body>
+        <Modal.Footer></Modal.Footer>
+      </Modal>
     </div>
+
+    
   );
 }
