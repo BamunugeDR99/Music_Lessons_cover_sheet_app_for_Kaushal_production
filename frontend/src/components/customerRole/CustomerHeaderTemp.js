@@ -171,7 +171,6 @@ export default function CustomerHeader(props) {
     if (flag1 === 1) {
       Password = bcrypt.hashSync(Password, bcrypt.genSaltSync(12));
       SetPassword(bcrypt.hashSync(Password, bcrypt.genSaltSync(12)));
-    
 
       updateProfile();
     }
@@ -278,7 +277,7 @@ export default function CustomerHeader(props) {
           axios
             .put(
               "https://kaushal-rashmika-music.herokuapp.com/customer/update/" +
-              CustomerIDTemp,
+                CustomerIDTemp,
               newCustomer
             )
             .then(() => {
@@ -337,7 +336,7 @@ export default function CustomerHeader(props) {
             axios
               .delete(
                 "https://kaushal-rashmika-music.herokuapp.com/customer/delete/" +
-                CustomerIDTemp
+                  CustomerIDTemp
               )
               .then((res) => {
                 swalWithBootstrapButtons.fire(
@@ -369,10 +368,9 @@ export default function CustomerHeader(props) {
     axios
       .get(
         "https://kaushal-rashmika-music.herokuapp.com/customer/get/" +
-        CustomerIDTemp
+          CustomerIDTemp
       )
       .then((res) => {
-       
         SetCustomer(res.data);
 
         SetUsername(res.data.Username);
@@ -395,7 +393,7 @@ export default function CustomerHeader(props) {
       axios
         .get(
           "https://kaushal-rashmika-music.herokuapp.com/customer/get/" +
-          CustomerIDTemp
+            CustomerIDTemp
         )
         .then((res) => {
           SetCustomer(res.data);
@@ -426,7 +424,10 @@ export default function CustomerHeader(props) {
 
       axios
 
-        .get("https://kaushal-rashmika-music.herokuapp.com/shoppingCart/getOneCart/" + CustomerID)
+        .get(
+          "https://kaushal-rashmika-music.herokuapp.com/shoppingCart/getOneCart/" +
+            CustomerID
+        )
 
         .then((res) => {
           document.getElementById("countHolder").innerHTML =
@@ -478,7 +479,6 @@ export default function CustomerHeader(props) {
           </svg>
         </button>
         <a class="navbar-brand" href="#">
-      
           <img
             src={"/images/KaushalOfficialLogo.jpeg"}
             class="img-fluid"
@@ -486,13 +486,16 @@ export default function CustomerHeader(props) {
             style={{ width: "40px", borderRadius: "8px" }}
           />
           <span> </span>
-          <Link to="/customer/home"  style={{textDecoration:"none", color: "#764A34"}}>
-          <font style={{ fontFamily: "Old Standard TT", fontSize: "18px" }}>
-            <b>KAUSHAL</b>
-          </font>{" "}
-          <font style={{ fontFamily: "Old Standard TT", fontSize: "18px" }}>
-            RASHMIKA
-          </font>
+          <Link
+            to="/customer/home"
+            style={{ textDecoration: "none", color: "#764A34" }}
+          >
+            <font style={{ fontFamily: "Old Standard TT", fontSize: "18px" }}>
+              <b>KAUSHAL</b>
+            </font>{" "}
+            <font style={{ fontFamily: "Old Standard TT", fontSize: "18px" }}>
+              RASHMIKA
+            </font>
           </Link>
         </a>
 
@@ -579,13 +582,29 @@ export default function CustomerHeader(props) {
                   0
                 </span>
 
-                <span className="userProfileSpan ml-1 mt-1" onClick={()=>{
-                  props.history.push("/customer/login");
-                  localStorage.removeItem("CustomerID");
-                }}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"   fill="#764A34" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z" />
-                    <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z" />
+                <span
+                  className="userProfileSpan ml-1 mt-1"
+                  onClick={() => {
+                    props.history.push("/customer/login");
+                    localStorage.removeItem("CustomerID");
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="30"
+                    height="30"
+                    fill="#764A34"
+                    class="bi bi-box-arrow-right"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"
+                    />
+                    <path
+                      fill-rule="evenodd"
+                      d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"
+                    />
                   </svg>
                 </span>
               </div>
@@ -626,8 +645,7 @@ export default function CustomerHeader(props) {
             onClick={() => {
               EditProfilemodalClose();
               Profilemodalopen();
-            }
-            }
+            }}
           >
             <span aria-hidden="true">&times;</span>
           </button>
