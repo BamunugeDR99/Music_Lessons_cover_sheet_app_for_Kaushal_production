@@ -1069,7 +1069,6 @@ export default function ViewDetailedCoverPage(props) {
                       options={instrumentsPlayedOn}
                       className="basic-multi-select"
                       classNamePrefix="select"
-                      required
                       placeholder="Choose instruments"
                       onChange={(val) => {
                         setInstrument(val);
@@ -1121,6 +1120,7 @@ export default function ViewDetailedCoverPage(props) {
                     <label for="exampleInputEmail1">Facebook Link*</label>
                     <input
                       type="text"
+                      required
                       Value={covers.FacebookLink}
                       class="form-control"
                       id="facebookLink"

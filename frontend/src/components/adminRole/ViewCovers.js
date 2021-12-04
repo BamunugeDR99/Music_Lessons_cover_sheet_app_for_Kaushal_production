@@ -56,8 +56,10 @@ export default function ViewCovers(props) {
   ];
   // for pdf preview
   const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
+  const [coversLoadingStatus, setCoversLoadingStatus] = useState(false);
   useEffect(() => {
     function getAllClassicalGuitarCovers() {
+      setModalOpenForPdf(false);
       axios
         .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers")
         .then((res) => {
@@ -80,6 +82,7 @@ export default function ViewCovers(props) {
       $("#Covers").DataTable();
       //$('.js-example-basic-multiple').select2();
     });
+    setCoversLoadingStatus(true)
   }
 
   function previewPdf(covername) {
@@ -171,6 +174,7 @@ export default function ViewCovers(props) {
                 icon: "success",
                 title: "Cover Activated",
               });
+              getAllClassicalGuitarCovers();
             } else {
               document.getElementById("toggle" + index).checked = false;
               const Toast = Swal.mixin({
@@ -188,6 +192,7 @@ export default function ViewCovers(props) {
                 icon: "warning",
                 title: "Cover Deavtivated",
               });
+              getAllClassicalGuitarCovers();
             }
           })
           .catch((err) => {
@@ -198,6 +203,7 @@ export default function ViewCovers(props) {
               footer: '<p style = "color : #D0193A">Currently unavailable!',
             });
           });
+        getAllClassicalGuitarCovers();
       })
       .catch((err) => {
         Swal.fire({
@@ -335,7 +341,12 @@ export default function ViewCovers(props) {
           }
           //const InstrumntArray = instruments.split(",");
           let InstrumntArray = [];
+          //console.log(instruments)
+          if(instruments.length === 0){
+            InstrumntArray.push("Classical Guitar");
+          }
           for (let i = 0; i < instruments.length; i++) {
+          
             InstrumntArray.push(instruments[i].value);
           }
           const newCover = {
@@ -354,27 +365,9 @@ export default function ViewCovers(props) {
             CoverPdf: coverPDF[0].name,
           };
           //console.log(newCover);
-          UploadPdf();
+         UploadPdf(newCover);
 
-          axios
-            .post(
-              "https://kaushal-rashmika-music.herokuapp.com/covers/add",
-              newCover
-            )
-            .then(() => {
-              getAllClassicalGuitarCovers();
-              $("input[type=text]").val("");
-              $("input[type=number]").val("");
-              $("input[type=file]").val("");
-            })
-            .catch((err) => {
-              Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Something went wrong!",
-                footer: '<p style = "color : #D0193A">Currently unavailable!',
-              });
-            });
+      
         } else if (
           /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel
@@ -388,7 +381,7 @@ export default function ViewCovers(props) {
       });
   }
 
-  function UploadPdf() {
+  function UploadPdf(newCover) {
     setFileType("Uploading Pdf Cover");
     setModalUploadOpen(true);
     setModalOpen(false);
@@ -404,7 +397,7 @@ export default function ViewCovers(props) {
         setProgress(prog);
         if (prog >= 100) {
           setCompletedFiles("1");
-          UploadImages();
+          UploadImages(newCover);
         } else {
           // setClass("");
         }
@@ -419,7 +412,7 @@ export default function ViewCovers(props) {
       }
     );
   }
-  function UploadImages() {
+  function UploadImages(newCover) {
     setFileType("Uploading Preview Images");
     let storageRef = "";
     const promises = [];
@@ -452,9 +445,29 @@ export default function ViewCovers(props) {
 
     Promise.all(promises)
       .then(() => {
-        setFileType("Cover added Successfully!");
-        setCompletedFiles(previewPages.length + 1);
-        setFinalDiv(false);
+            axios
+            .post(
+              "https://kaushal-rashmika-music.herokuapp.com/covers/add",
+              newCover
+            )
+            .then(() => {
+              getAllClassicalGuitarCovers();
+              $("input[type=text]").val("");
+              $("input[type=number]").val("");
+              $("input[type=file]").val("");
+              setFileType("Cover added Successfully!");
+              setCompletedFiles(previewPages.length + 1);
+              setFinalDiv(false);
+            })
+            .catch((err) => {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+                footer: '<p style = "color : #D0193A">Currently unavailable!',
+              });
+            });
+      
       })
       .catch(() => {
         Swal.fire({
@@ -543,12 +556,17 @@ export default function ViewCovers(props) {
         <br />
         <h3 style={{ color: "#764A34", marginTop: "20px" }}>
           <b>
-            <ul>Classical Guitar Covers</ul>
+            <ul>All Covers</ul>
           </b>
         </h3>
       </div>
-
-      <div className="container-xxl" style={{ overflowX: "auto" }}>
+      <div className="d-flex justify-content-center">
+        <div class="spinner-grow" role="status" hidden={coversLoadingStatus}>
+          <span class="sr-only">Loading...</span>
+        </div>
+        
+      </div>
+      <div className="container-xxl" style={{ overflowX: "auto" }} hidden = {!coversLoadingStatus}>
         <br />
         <table
           id="Covers"
@@ -861,8 +879,7 @@ export default function ViewCovers(props) {
                       options={instrumentsPlayedOn}
                       className="basic-multi-select"
                       classNamePrefix="select"
-                      required
-                      placeholder="Choose instruments"
+                      placeholder="Choose instruments (Default classical guitar)"
                       onChange={(val) => {
                         setInstrument(val);
                       }}
@@ -896,6 +913,7 @@ export default function ViewCovers(props) {
                     <label for="exampleInputEmail1">Facebook Link*</label>
                     <input
                       type="text"
+                      required
                       class="form-control"
                       onChange={(e) => {
                         setFacebookLink(e.target.value);
@@ -927,7 +945,7 @@ export default function ViewCovers(props) {
                       required
                     />
                     <br />
-                    <label for="exampleInputEmail1">Price*</label>
+                    <label for="exampleInputEmail1">Price* (USD)</label>
                     <input
                       type="number"
                       name="price"

@@ -167,12 +167,12 @@ export default function LessonsAndCoversDetailed(props) {
           }
         }
         coverIDs.push(id);
-        console.log(coverIDs);
+        //console.log(coverIDs);
         const newcoverList = {
           CustomerID: customerID,
           CoverIDs: coverIDs,
         };
-        console.log(newcoverList);
+       // console.log(newcoverList);
         if (falgs === 0) {
           axios
             .put(
