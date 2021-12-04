@@ -126,7 +126,7 @@ function App() {
         {/* <Route path = "/search" exact component = {Search}/> */}
 
         {/* <Route path = "*" component = {}/> */}
-        <Route path = "*" component = {NotFound}/>
+        {/* <Route path = "*" component = {NotFound}/> */}
       </div>
     </Router>
   );
