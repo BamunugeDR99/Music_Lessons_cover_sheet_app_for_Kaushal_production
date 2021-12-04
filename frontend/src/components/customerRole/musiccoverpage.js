@@ -12,6 +12,7 @@ export default function MusicCoverPage(props) {
   const [downloadrange, setDownloadRange] = useState("0");
   const [nodata, setNoData] = useState("");
   const [covers, setCovers] = useState([]);
+  const [populernodata, setPopulernodata] = useState("");
   const [filtercover, setfilterCover] = useState([]);
   const [categorycover, setCategoryCover] = useState([]);
   // const [filtercovers, setFilterCovers] = useState([]);
@@ -24,7 +25,7 @@ export default function MusicCoverPage(props) {
 
   let pcover = {};
   let max = 0;
-
+  
   useEffect(async () => {
     document.getElementById("bufferlink").style.display = "block";
     document.getElementById("link").style.display = "none";
@@ -37,13 +38,23 @@ export default function MusicCoverPage(props) {
     await axios
       .get("http://localhost:8070/covers/getcoverbymaincover")
       .then((res) => {
-        dataholdedr = res.data;
-        setCovers(res.data);
-        setfilterCover(res.data);
-        setCategoryCover(res.data);
-        setCovers(res.data);
-        document.getElementById("spinnerdiv").style.display = "none";
-        document.getElementById("coverdiv").style.display = "block";
+        if (res.data.length > 0) {
+          setNoData("");
+          dataholdedr = res.data;
+          setCovers(res.data);
+          setfilterCover(res.data);
+          setCategoryCover(res.data);
+          setCovers(res.data);
+          document.getElementById("spinnerdiv").style.display = "none";
+          document.getElementById("coverdiv").style.display = "block";
+        } else {
+          setNoData("No Covers available");
+          setPopulernodata("No populer covers available");
+          setCovers([]);
+          document.getElementById("spinnerdiv").style.display = "none";
+          document.getElementById("spinnerdiv2").style.display = "none";
+          document.getElementById("coverdiv").style.display = "block";
+        }
 
         // console.log(res.data);
       })
@@ -70,21 +81,23 @@ export default function MusicCoverPage(props) {
 
   async function populercovers() {
     // console.log(dataholdedr);
-    for (let i = 0; i < dataholdedr.length; i++) {
-      // console.log(dataholdedr[i].NoOfDownloads)
-      if (Number(dataholdedr[i].NoOfDownloads) >= max) {
-        max = dataholdedr[i].NoOfDownloads;
-        console.log(max);
-        pcover = dataholdedr[i];
+    if (dataholdedr.length > 0) {
+      for (let i = 0; i < dataholdedr.length; i++) {
+        // console.log(dataholdedr[i].NoOfDownloads)
+        if (Number(dataholdedr[i].NoOfDownloads) >= max) {
+          max = dataholdedr[i].NoOfDownloads;
+          console.log(max);
+          pcover = dataholdedr[i];
+        }
       }
-    }
-    // console.log(pcover.PreviewPages[0]);
-    setpopulercover(pcover);
-    setpopulerimage(pcover.PreviewPages[0]);
+      // console.log(pcover.PreviewPages[0]);
+      setpopulercover(pcover);
+      setpopulerimage(pcover.PreviewPages[0]);
 
-    console.log(pcover);
-    document.getElementById("spinnerdiv2").style.display = "none";
-    document.getElementById("topcover").style.display = "block";
+      console.log(pcover);
+      document.getElementById("spinnerdiv2").style.display = "none";
+      document.getElementById("topcover").style.display = "block";
+    }
   }
   function modalopen() {
     // alert("This is alert");
@@ -132,20 +145,26 @@ export default function MusicCoverPage(props) {
     await axios
       .get("http://localhost:8070/covers/getcoverbymaincover")
       .then((res) => {
-        dataholdedr = res.data;
-        setCovers(res.data);
-        setfilterCover(res.data);
-        document.getElementById("spinnerdiv").style.display = "none";
-        document.getElementById("coverdiv").style.display = "block";
-
-        let searchResult = filtercover.filter(
-          (post) =>
-            post.Title.toLowerCase().includes(val.toLowerCase()) ||
-            post.OriginalArtistName.toLowerCase().includes(val.toLowerCase())
-        );
-        if (searchResult.length != 0) {
-          setCovers(searchResult);
+        if (res.data.length > 0) {
           setNoData("");
+          dataholdedr = res.data;
+          setCovers(res.data);
+          setfilterCover(res.data);
+          document.getElementById("spinnerdiv").style.display = "none";
+          document.getElementById("coverdiv").style.display = "block";
+
+          let searchResult = filtercover.filter(
+            (post) =>
+              post.Title.toLowerCase().includes(val.toLowerCase()) ||
+              post.OriginalArtistName.toLowerCase().includes(val.toLowerCase())
+          );
+          if (searchResult.length != 0) {
+            setCovers(searchResult);
+            setNoData("");
+          } else {
+            setNoData("No Covers available");
+            setCovers([]);
+          }
         } else {
           setNoData("No Covers available");
           setCovers([]);
@@ -258,7 +277,7 @@ export default function MusicCoverPage(props) {
               >
                 &emsp; Loading...
               </a>
-              <br/>
+              <br />
               <a
                 href="#"
                 id="link1"
@@ -317,7 +336,7 @@ export default function MusicCoverPage(props) {
                 </div>
               </div>
               <div className="row">
-                <br/>
+                <br />
                 <h4 style={{ color: "#764A34" }}>
                   <strong>
                     <center>Most Downloaded Classical Guitar Cover</center>
@@ -338,6 +357,9 @@ export default function MusicCoverPage(props) {
                     </div>
                   </div>
                 </div>
+              </center>
+                <center>
+                <h4 style={{ color: "red" }}>{populernodata}</h4>
               </center>
               <div
                 id="topcover"
@@ -367,7 +389,7 @@ export default function MusicCoverPage(props) {
             <h4 style={{ color: "#764A34" }}>
               <strong>Classical Guitar Covers - {categorytext}</strong>
             </h4>
-            <br/>
+            <br />
             <center>
               <h4 style={{ color: "red" }}>{nodata}</h4>
             </center>
@@ -398,7 +420,6 @@ export default function MusicCoverPage(props) {
                     }}
                   >
                     <CoverTemplate
-                    
                       title={post.Title}
                       coverId={post._id}
                       artist={post.OriginalArtistName}
@@ -421,4 +442,3 @@ export default function MusicCoverPage(props) {
     </div>
   );
 }
-
