@@ -7,11 +7,6 @@ import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 import k from "../../images/pre.png";
 
 export default function Home(props) {
-<<<<<<< HEAD
-
- 
-=======
->>>>>>> 39f88be36a626793befaa378f1c4ef6731c25023
   let [Top4Downloads, setTop4Downloads] = useState([]);
 
   useEffect(async () => {
