@@ -10,6 +10,7 @@ import "../../css/adminLogin.css";
 import Swal from 'sweetalert2';
 import k from "../../images/admin.jpg";
 import authentication from "../../security/authentication";
+import Modal from "react-bootstrap/Modal";
 
 const eye = <FontAwesomeIcon icon={faEye} />;
 const sleye = <FontAwesomeIcon icon={faEyeSlash}/>;
