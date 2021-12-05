@@ -32,18 +32,24 @@ export default function LessonsAndCoversDetailed(props) {
             CoverTempID
         )
         .then((res) => {
-          setCovers(res.data);
-          preview = res.data.PreviewPages;
-          printInstruments(res.data.InstrumentsPlayedOn);
-          displayPreviewImageSlider(res.data.PreviewPages);
-          MainCategoryForRec = res.data.MainCategory;
-          SubCategoryForRec = res.data.SubCategory;
-          setTempYoutubeLink(res.data.YoutubeLink);
-          getRecommendCovers(
-            res.data.MainCategory,
-            res.data.SubCategory,
-            res.data._id
-          );
+          console.log(res.data)
+          if(res.data != null){
+            setCovers(res.data);
+            preview = res.data.PreviewPages;
+            printInstruments(res.data.InstrumentsPlayedOn);
+            displayPreviewImageSlider(res.data.PreviewPages);
+            MainCategoryForRec = res.data.MainCategory;
+            SubCategoryForRec = res.data.SubCategory;
+            setTempYoutubeLink(res.data.YoutubeLink);
+            getRecommendCovers(
+              res.data.MainCategory,
+              res.data.SubCategory,
+              res.data._id
+            );
+          }else{
+            props.history.push("/notfound")
+          }
+        
         })
         .catch((err) => {
           Swal.fire({

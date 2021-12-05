@@ -14,7 +14,9 @@ export default function NotFound(props) {
   <span class="zero"><span class="screen-reader-text">0</span></span>
   <span class="four"><span class="screen-reader-text">4</span></span>
 </section>
-</div>)
+<div class="link-container">
+  <Link  to = "/customer/home" class="more-link">Visit to the Home Page</Link>
+</div></div>)
 }
 
 // export default AddStudent;

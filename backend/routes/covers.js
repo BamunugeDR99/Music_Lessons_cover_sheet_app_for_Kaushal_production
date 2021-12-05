@@ -219,7 +219,12 @@ router.route("/get/:id").get(async (req, res) => {
   let coverID = req.params.id;
   const covers = await Covers.findById(coverID)
     .then((coverss) => {
-      res.json(coverss);
+      if(coverss.Status === "1"){
+        res.json(coverss);
+
+      }else{
+        res.json(null)
+      }
     })
     .catch((err) => {
       console.log(err.message);
