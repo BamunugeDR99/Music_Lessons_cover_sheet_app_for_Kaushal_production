@@ -1,6 +1,7 @@
 // import doms
-import React, { Component, useState } from "react";
+import React, { Component, useState} from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import  ProtectedRoute  from "./private/ProtectedRoute";
 
 // import css
 import "./App.css";
@@ -33,10 +34,14 @@ import ViewDetailedCoverPage from "./components/adminRole/ViewDetailedCoverPage"
 import CustomerFeedback from "./components/adminRole/CustomerFeedback";
 import AdminVwCustomer from "./components/adminRole/AdminVwCustomer";
 import EditMainCategories from "./components/adminRole/EditMainCategory";
+import NotFound from "./components/NotFound";
 
 // dynamic header
 function App() {
-const [loginStatus, setLoginStatus] = useState(true);
+  const [loginStatus, setLoginStatus] = useState(true);
+
+
+
 
   return (
     <Router>
@@ -85,38 +90,43 @@ const [loginStatus, setLoginStatus] = useState(true);
           exact
           component={LessonAndCoversDetailed}
         />
-          <Route
+        <Route
           path="/customer/discovermorecover/:id"
           exact
           component={LessonAndCoversDetailed}
         />
         <Route path="/customer" component={Footer} />
 
+
+
         {/* Admin Routes  */}
-        <Route path="/admin" component={AdminHeaderTemp} />
+        <ProtectedRoute path="/admin" component={AdminHeaderTemp} />
         <Route path="/adminlogin" exact component={AdminLogin} />
-        <Route path="/admin/dashboard" exact component={Dashboard} />
-        <Route path="/admin/allcovers" exact component={ViewCovers} />
-        <Route
+        <ProtectedRoute path="/admin/dashboard" exact component={Dashboard} />
+        <ProtectedRoute path="/admin/allcovers" exact component={ViewCovers} />
+        <ProtectedRoute
           path="/admin/viewmorecover/:id"
           exact
           component={ViewDetailedCoverPage}
         />
-        <Route
+        <ProtectedRoute
           path="/admin/customerfeedbacks/:id"
           exact
           component={CustomerFeedback}
         />
-        <Route path="/admin/allcustomers" exact component={AdminVwCustomer} />
-        <Route
+        <ProtectedRoute path="/admin/allcustomers" exact component={AdminVwCustomer} />
+        <ProtectedRoute
           path="/admin/viewcategories"
           exact
           component={EditMainCategories}
         />
-        <Route path="/admin" component={Footer} />
+        <ProtectedRoute path="/admin" component={Footer} />
 
         {/* Testing routes  */}
         {/* <Route path = "/search" exact component = {Search}/> */}
+
+        {/* <Route path = "*" component = {}/> */}
+        {/* <Route path = "*" component = {NotFound}/> */}
       </div>
     </Router>
   );

@@ -9,7 +9,7 @@ import {faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import "../../css/adminLogin.css";
 import Swal from 'sweetalert2';
 import k from "../../images/admin.jpg";
-import Modal from "react-bootstrap/Modal";
+import authentication from "../../security/authentication";
 
 const eye = <FontAwesomeIcon icon={faEye} />;
 const sleye = <FontAwesomeIcon icon={faEyeSlash}/>;
@@ -117,7 +117,11 @@ export default function AdminLogin(props) {
             // alert("Customer loggin Successfully!");
             //console.log("logging success");
             ///console.log(res.data);
+           authentication.login(() => {
+
             props.history.push("/admin/dashboard")
+
+           })
             setErrorMsg("");
             // props.history.push("/Customer/Home");
     
