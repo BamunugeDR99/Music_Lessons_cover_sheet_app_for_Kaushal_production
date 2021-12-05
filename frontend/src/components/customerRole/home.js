@@ -2,13 +2,37 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { storage } from "../../Configurations/firebaseConfigurations";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 
 import k from "../../images/pre.png";
-
+import z from "../../images/s.png";
 export default function Home(props) {
 
- 
+  const responsive = {
+    superLargeDesktop: {
+      // the naming can be any, depends on you.
+      breakpoint: { max: 4000, min: 3000 },
+      items: 5,
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 4,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+    },
+  };
+
+
+  
   let [Top4Downloads, setTop4Downloads] = useState([]);
 
   useEffect(async () => {
@@ -91,12 +115,18 @@ export default function Home(props) {
 
   return (
     <div className="home" style={{ overflowX: "hidden" }}>
-      <img
+      {/* <img
         src={"/images/hm.jpeg"}
         class="img-fluid"
         alt="Cover Image"
         style={{ borderRadius: "0px", width: "100%" }}
-      />{" "}
+      />{" "} */}
+
+    <div class="hero_area">
+    <div class="bg-box">
+      <img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt=""/>
+    </div>{" "}
+</div>
       <br />
       <br />
       <h1 style={{ color: "#764A34", textAlign: "center", fontWeight: "bold" }}>
@@ -109,10 +139,12 @@ export default function Home(props) {
         </h2>
         <br />
 
-        <div
+      
+
+        {/* <div
           class="card-deck"
           style={{ paddingRight: "50px", paddingLeft: "50px" }}
-        >
+        > */}
           {/* <div class="card" style={{boxShadow: "rgba(0, 0, 0, 0.25) 0px 25px 50px -12px", borderRadius:"15px"}}>
             <img src={'/images/cover.jpg'} class="card-img-top" alt="..."  style={{borderRadius:"15px 15px 0px 0px"}}/>
                 <div class="card-body">
@@ -120,9 +152,12 @@ export default function Home(props) {
                     <h5>By Toni Elizabeth Watson</h5>
                 </div>
         </div> */}
-        
+         <Carousel responsive={responsive}>
 
-          {Top4Downloads.map((covers, index) => (
+          {Top4Downloads.map((covers, index) => {
+            
+           return(
+              
             <div
             onClick = {() => {props.history.push("/customer/detailedcover/"+covers._id)}}
               class="card"
@@ -163,8 +198,15 @@ export default function Home(props) {
                 </h3>
               </div>
             </div>
-          ))}
-        </div>
+
+
+
+           )
+
+           })}
+             </Carousel>
+        {/* </div> */}
+      
       </div>
       <br />
       <br />
@@ -172,13 +214,16 @@ export default function Home(props) {
         <div class="container  ">
           <div class="row">
             <div class="col-md-6 ">
+              <br/><br/><br/>
               <div class="img-box">
                 <img
-                  src="https://images.unsplash.com/photo-1541690212779-7a48c04096cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
+                  src={z}
                   alt=""
                 />
               </div>
+              <br/><br/><br/>
             </div>
+            
             <div class="col-md-6">
               <div class="detail-box">
                 <div class="heading_container">
