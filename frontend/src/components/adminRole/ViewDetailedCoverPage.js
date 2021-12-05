@@ -53,6 +53,7 @@ export default function ViewDetailedCoverPage(props) {
   const [cancelOrCloseBtn, setCancelOrCloseBtn] = useState("Close");
   const [finalDiv, setFinalDiv] = useState(true);
   const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
+  const [imageSlider, setImageSlider] = useState(false);
 
   const [cover, setCover] = useState([]);
   let tempMainCategoryStore = "";
@@ -138,8 +139,10 @@ export default function ViewDetailedCoverPage(props) {
     imageSlider += "</div>";
     document.getElementById("img").innerHTML = imageSlider;
     for (let i = 0; i < previewImages.length; i++) {
-      document.getElementById("img" + i).src = "/images/Imageplaceholder.png";
+      document.getElementById("img" + i).src = "/images/verticaLImageHolder.jpg";
     }
+
+    setImageSlider(true)
     previewImages.map((previewImage, index) => {
       const storageRef = ref(storage, `PreviewImages/${previewImage}`);
       getDownloadURL(storageRef).then((url) => {
@@ -592,9 +595,15 @@ export default function ViewDetailedCoverPage(props) {
           <div class="container">
             <div class="row">
               <div class="col-sm">
+              <div className="d-flex justify-content-center">
+                  <div class="spinner-grow" role="status" hidden={imageSlider}>
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
                 {/* image carousel */}
                 <div
                   id="carouselExampleIndicators"
+                  hidden = {!imageSlider}
                   class="carousel slide"
                   data-ride="carousel"
                 >
@@ -1069,7 +1078,6 @@ export default function ViewDetailedCoverPage(props) {
                       options={instrumentsPlayedOn}
                       className="basic-multi-select"
                       classNamePrefix="select"
-                      required
                       placeholder="Choose instruments"
                       onChange={(val) => {
                         setInstrument(val);
@@ -1121,6 +1129,7 @@ export default function ViewDetailedCoverPage(props) {
                     <label for="exampleInputEmail1">Facebook Link*</label>
                     <input
                       type="text"
+                      required
                       Value={covers.FacebookLink}
                       class="form-control"
                       id="facebookLink"

@@ -195,8 +195,8 @@ export default function CustomerForgotPassword(props) {
   function changePassword(e) {
     e.preventDefault();
     setLoading(false);
-    const newPassword = document.getElementById("newPassword").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
+    const newPassword = document.getElementById("newPassword").value.trim();
+    const confirmPassword = document.getElementById("confirmPassword").value.trim();
     if (newPassword != null || confirmPassword != null) {
       if (newPassword === confirmPassword) {
         Swal.fire({
@@ -206,11 +206,11 @@ export default function CustomerForgotPassword(props) {
           showCancelButton: true,
           confirmButtonColor: "#3085d6",
           cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, delete it!",
+          confirmButtonText: "Yes, update it!",
         }).then((result) => {
           if (result.isConfirmed) {
             const newPasswordObject = {
-              Password: bcrypt.hashSync(newPassword, bcrypt.genSaltSync(12)),
+              Password: bcrypt.hashSync(newPassword.trim(), bcrypt.genSaltSync(12)),
             };
 
             axios
@@ -389,6 +389,7 @@ export default function CustomerForgotPassword(props) {
                   Verify Code
                 </button>
                 <br />
+                <br/>
                 <button
                   type="button"
                   class="btn btn-block"
