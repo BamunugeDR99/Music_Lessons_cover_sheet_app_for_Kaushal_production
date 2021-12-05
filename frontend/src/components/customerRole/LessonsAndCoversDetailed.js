@@ -8,6 +8,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 import $, { ajaxPrefilter } from "jquery";
 import { async } from "@firebase/util";
 import Carousel from "react-multi-carousel";
+import Modal from "react-bootstrap/Modal";
 import "react-multi-carousel/lib/styles.css";
 
 export default function LessonsAndCoversDetailed(props) {
@@ -23,6 +24,8 @@ export default function LessonsAndCoversDetailed(props) {
   const [discoverMoreLoadingStatus, setDiscoverMoreStatus] = useState(false);
   const [imageSlider, setImageSlider] = useState(false);
   const [addToCartStatus,setAddToCartStatus] = useState(true);
+  const [modalOpenForImage, setModalOpenForImage] = useState(false);
+
   useEffect(() => {
     async function getCovers() {
       const CoverTempID = props.match.params.id;
@@ -255,6 +258,24 @@ export default function LessonsAndCoversDetailed(props) {
     },
   };
 
+  function previewImg(PreviewPages) {
+    setModalOpenForImage(true);
+    const storageRef = ref(storage, `PreviewImages/${PreviewPages}`);
+    getDownloadURL(storageRef)
+      .then((url) => {
+        window.location.href = url;
+        setModalOpenForImage(false)
+      })
+      .catch(() => {
+        setModalOpenForImage(false);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+        });
+      });
+  }
+
   return (
     <div>
       <div class="card container-xxl" style={{ border: "solid #764A34" }}>
@@ -274,7 +295,10 @@ export default function LessonsAndCoversDetailed(props) {
                   class="carousel slide"
                   data-ride="carousel"
                 >
-                  <div id="img"></div>
+                  <div id="img"
+                  onClick={() => { previewImg(covers.PreviewPages[0]); }}
+                  ></div>
+                  
                   {/* controls  */}
                   <a
                     class="carousel-control-prev"
@@ -634,6 +658,27 @@ export default function LessonsAndCoversDetailed(props) {
               );
             })}
           </Carousel>
+
+          <Modal show={modalOpenForImage} size="lg">
+        <Modal.Header></Modal.Header>
+
+        <Modal.Body>
+            <div class="d-flex justify-content-center">
+            <div class="spinner-grow text-dark" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <br />
+          <h1 style={{ textAlign: "center", color: "#764A34" }}>
+            Please wait!
+          </h1>
+          <h4 style={{ textAlign: "center", color: "#764A34" }}>
+            Image is Loading...
+          </h4>
+        </Modal.Body>
+        <Modal.Footer></Modal.Footer>
+      </Modal>
+
         </div>
       </div>
     </div>
