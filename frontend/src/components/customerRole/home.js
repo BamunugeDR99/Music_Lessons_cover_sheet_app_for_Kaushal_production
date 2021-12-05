@@ -202,6 +202,7 @@ export default function Home(props) {
               <img
                 id={"temp" + index}
                 src={"/images/imageplaceholder.png"}
+               
                 class="card-img-top"
                 alt="..."
                 style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
@@ -210,9 +211,11 @@ export default function Home(props) {
               hidden
                 id={index}
                 src={
-                  displayImages(covers.PreviewPages[0], index) ||
-                  "/images/imageplaceholder.png"
+                  displayImages(covers.PreviewPages[0], index) 
+                  
                 }
+                onError={(e)=>{e.target.onerror = null; e.target.src="/images/imageplaceholder.png"}}
+               
                 class="card-img-top"
                 alt="..."
                 style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}

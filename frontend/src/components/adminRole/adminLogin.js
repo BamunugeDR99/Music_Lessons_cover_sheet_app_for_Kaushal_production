@@ -9,6 +9,7 @@ import "../../css/adminLogin.css";
 import Swal from "sweetalert2";
 import k from "../../images/admin.jpg";
 import authentication from "../../security/authentication";
+import Modal from "react-bootstrap/Modal";
 
 const eye = <FontAwesomeIcon icon={faEye} />;
 const sleye = <FontAwesomeIcon icon={faEyeSlash} />;
@@ -39,6 +40,8 @@ export default function AdminLogin(props) {
 
   // }
   // );
+
+  const [modalOpenForLoading, setmodalOpenForLoading] = useState(false);
 
   //remember me
 
@@ -79,6 +82,8 @@ export default function AdminLogin(props) {
   function loginAdmin(e) {
     e.preventDefault();
 
+    setmodalOpenForLoading(true);
+
     const loginCredentials = {
       Username,
       Password,
@@ -95,22 +100,24 @@ export default function AdminLogin(props) {
       .then((res) => {
         localStorage.setItem("AdminID", res.data.adminLogin._id);
 
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 1500,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.addEventListener("mouseenter", Swal.stopTimer);
-            toast.addEventListener("mouseleave", Swal.resumeTimer);
-          },
-        });
+       
 
-        Toast.fire({
-          icon: "success",
-          title: "Signed in successfully",
-        });
+        // const Toast = Swal.mixin({
+        //   toast: true,
+        //   position: "top-end",
+        //   showConfirmButton: false,
+        //   timer: 1500,
+        //   timerProgressBar: true,
+        //   didOpen: (toast) => {
+        //     toast.addEventListener("mouseenter", Swal.stopTimer);
+        //     toast.addEventListener("mouseleave", Swal.resumeTimer);
+        //   },
+        // });
+
+        // Toast.fire({
+        //   icon: "success",
+        //   title: "Signed in successfully",
+        // });
 
         const updateloginStatus = {
           LoginStatus: true,
@@ -123,6 +130,8 @@ export default function AdminLogin(props) {
           )
           .then((res) => {
             authentication.login(() => {
+
+              setmodalOpenForLoading(false);
               props.history.push("/admin/dashboard");
             });
           }).catch((err)=>{
@@ -134,6 +143,7 @@ export default function AdminLogin(props) {
       })
       .catch((err) => {
         // alert(err);
+        setmodalOpenForLoading(false);
         console.log(err);
         // alert(err.response.data.error);
 
@@ -281,6 +291,26 @@ export default function AdminLogin(props) {
       </main>
       <br />
       <br />
+
+      <Modal show={modalOpenForLoading} size="md">
+        <Modal.Header></Modal.Header>
+
+        <Modal.Body>
+          <div class="d-flex justify-content-center">
+            <div class="spinner-border text-success" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <br />
+          <h1 style={{ textAlign: "center", color: "#764A34" }}>
+            Please wait!
+          </h1>
+          {/* <h6 style={{ textAlign: "center", color: "#764A34" }}>
+            Your Successfully Logged In...
+          </h6> */}
+        </Modal.Body>
+        <Modal.Footer></Modal.Footer>
+      </Modal>
     </div>
   );
 }
