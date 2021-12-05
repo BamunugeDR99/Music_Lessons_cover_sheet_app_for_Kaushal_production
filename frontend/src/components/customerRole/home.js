@@ -124,9 +124,52 @@ export default function Home(props) {
 
     <div class="hero_area">
     <div class="bg-box">
-      <img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt=""/>
-    </div>{" "}
-</div>
+      <img src="https://images.unsplash.com/photo-1605020419798-46652aa15452?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt=""/>
+    </div>
+
+
+<section class="slider_section ">
+
+<div class="container ">
+              <div class="row">
+                <div class="col-md-7 col-lg-6 ">
+                  <div class="detail-box">
+                    <h1>
+                      EXPLORE MORE THAN 8 <br/> CATEGORIES TO MUSIC NOTES
+                    </h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+  </section>
+
+  <section class="text_section ">
+
+<div class="container ">
+              
+                {/* <div class="col-md-6"> */}
+                  <div class="detail-box">
+                    <h3>
+                     "Music Is The Art of<br/> Thinking With Sounds"
+                     
+                    </h3>
+                    <p>~ Jules Combarieu ~</p>
+                  {/* </div> */}
+                </div>
+              </div>
+           
+  </section>
+
+
+
+
+  </div>
+
+  
+
+
+
       <br />
       <br />
       <h1 style={{ color: "#764A34", textAlign: "center", fontWeight: "bold" }}>
