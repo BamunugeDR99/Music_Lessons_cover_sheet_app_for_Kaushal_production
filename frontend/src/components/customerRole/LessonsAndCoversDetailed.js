@@ -104,7 +104,7 @@ export default function LessonsAndCoversDetailed(props) {
       });
   }
 
-  function displayPreviewImageSlider(previewImages) {
+   function displayPreviewImageSlider(previewImages) {
     let imageSlider = '<div class="carousel-inner">';
     for (let i = 0; i < previewImages.length; i++) {
       if (i == 0) {
@@ -142,7 +142,7 @@ export default function LessonsAndCoversDetailed(props) {
     });
   }
 
-  function addToCart(id) {
+  async function addToCart(id) {
     //alert(id);
     setAddToCartStatus(false);
     //let customerID = localStorage.getItem("CustomerID");
@@ -150,7 +150,7 @@ export default function LessonsAndCoversDetailed(props) {
     const customerID = localStorage.getItem("CustomerID");
     let coverIDs = [];
     let shoppingcartId = "";
-    axios
+    await axios
       .get(
         "https://kaushal-rashmika-music.herokuapp.com/shoppingCart/getOneCart/" +
           customerID

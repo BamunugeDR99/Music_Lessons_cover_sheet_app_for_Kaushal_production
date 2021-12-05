@@ -58,9 +58,9 @@ export default function ViewCovers(props) {
   const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
   const [coversLoadingStatus, setCoversLoadingStatus] = useState(false);
   useEffect(() => {
-    function getAllClassicalGuitarCovers() {
+    async function getAllClassicalGuitarCovers() {
       setModalOpenForPdf(false);
-      axios
+      await axios
         .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers")
         .then((res) => {
           tempCovers = res.data;
@@ -85,10 +85,10 @@ export default function ViewCovers(props) {
     setCoversLoadingStatus(true)
   }
 
-  function previewPdf(covername) {
+  async function previewPdf(covername) {
     setModalOpenForPdf(true);
     const storageRef = ref(storage, `Covers(PDF)/${covername}`);
-    getDownloadURL(storageRef)
+    await getDownloadURL(storageRef)
       .then((url) => {
         // setPdfUrl(url)
         window.location.href = url;
@@ -104,8 +104,8 @@ export default function ViewCovers(props) {
       });
   }
 
-  function GetLessonSubCategories() {
-    axios
+ async  function GetLessonSubCategories() {
+    await axios
       .get(
         "https://kaushal-rashmika-music.herokuapp.com/mainCategory/get/619deb0ca35d670b4e68ec3e"
       )
@@ -117,8 +117,8 @@ export default function ViewCovers(props) {
         alert(err);
       });
   }
-  function getAllClassicalGutarMainCategories() {
-    axios
+  async function getAllClassicalGutarMainCategories() {
+   await axios
       .get(
         "https://kaushal-rashmika-music.herokuapp.com/mainCategory/get/61936e9d9ea7c21aebd01113"
       )
@@ -130,9 +130,9 @@ export default function ViewCovers(props) {
         alert(err);
       });
   }
-  function changeCoverStatus(id, index) {
+  async function changeCoverStatus(id, index) {
     let status = "";
-    axios
+    await axios
       .get("https://kaushal-rashmika-music.herokuapp.com/covers/get/" + id)
       .then((res) => {
         let content = "";
@@ -149,7 +149,7 @@ export default function ViewCovers(props) {
           };
         }
 
-        axios
+         axios
           .put(
             "https://kaushal-rashmika-music.herokuapp.com/covers/StatusUpdate/" +
               id,
@@ -277,8 +277,8 @@ export default function ViewCovers(props) {
     props.history.push("/admin/viewmorecover/" + id);
   }
 
-  function getAllClassicalGuitarCovers() {
-    axios
+  async function getAllClassicalGuitarCovers() {
+    await axios
       .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers")
       .then((res) => {
         tempCovers = res.data;
