@@ -32,7 +32,7 @@ import Dashboard from "./components/adminRole/dashboard";
 import ViewCovers from "./components/adminRole/ViewCovers";
 import ViewDetailedCoverPage from "./components/adminRole/ViewDetailedCoverPage";
 import CustomerFeedback from "./components/adminRole/CustomerFeedback";
-// import AdminVwCustomer from "./components/adminRole/AdminVwCustomer";
+import AdminVwCustomer from "./components/adminRole/AdminVwCustomer";
 import EditMainCategories from "./components/adminRole/EditMainCategory";
 import NotFound from "./components/NotFound";
 
@@ -114,7 +114,7 @@ function App() {
           exact
           component={CustomerFeedback}
         />
-        {/* <ProtectedRoute path="/admin/allcustomers" exact component={AdminVwCustomer} /> */}
+        <ProtectedRoute path="/admin/allcustomers" exact component={AdminVwCustomer} />
         <ProtectedRoute
           path="/admin/viewcategories"
           exact
