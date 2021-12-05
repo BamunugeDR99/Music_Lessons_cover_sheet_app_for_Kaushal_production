@@ -27,6 +27,12 @@ const adminSchema = new Schema({
     type: String,
     required: true,
   },
+
+  LoginStatus : {
+    type : Boolean,
+    required : true,
+    default : false
+  }
 });
 
 const Admin = mongoose.model("Admin", adminSchema);

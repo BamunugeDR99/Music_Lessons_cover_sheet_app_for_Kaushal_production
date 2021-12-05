@@ -417,12 +417,12 @@ export default function CustomerHeader(props) {
   }, []);
 
   useEffect(() => {
-    function getCartCount() {
+    async function getCartCount() {
       //const CoverID = props.match.params.id;
 
       const CustomerID = CustomerIDTemp;
 
-      axios
+     await axios
 
         .get(
           "https://kaushal-rashmika-music.herokuapp.com/shoppingCart/getOneCart/" +

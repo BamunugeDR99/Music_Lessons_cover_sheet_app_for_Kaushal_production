@@ -42,14 +42,14 @@ export default function CustomerForgotPassword(props) {
 
 
   let c = "";
-  function sendEmail(e) {
+  async function sendEmail(e) {
     e.preventDefault();
     setCodeVerification("");
     setResendEmailBtn(true);
     setLoading(false);
     UserEmail = document.getElementById("userEmail").value;
 
-    axios
+    await axios
       .get("https://kaushal-rashmika-music.herokuapp.com/customer/getEmail/" + UserEmail)
       .then((res) => {
         if (res.data.length == 0) {
@@ -83,7 +83,7 @@ export default function CustomerForgotPassword(props) {
     return result;
   }
 
-  function emailConfiguration() {
+  async function emailConfiguration() {
     const hidEmail = hideEmail(UserEmail);
     const generatedCode = generateCode(8);
     setCode(generatedCode);
@@ -91,7 +91,7 @@ export default function CustomerForgotPassword(props) {
       email: UserEmail,
       code: generatedCode,
     };
-    emailjs
+    await emailjs
       .send(
         "service_d2vcq28", //your service id
         "template_pcwlvj6", // template id
@@ -213,7 +213,7 @@ export default function CustomerForgotPassword(props) {
               Password: bcrypt.hashSync(newPassword.trim(), bcrypt.genSaltSync(12)),
             };
 
-            axios
+             axios
               .put(
                 "https://kaushal-rashmika-music.herokuapp.com/customer/updatePassword/" + customerID,
                 newPasswordObject

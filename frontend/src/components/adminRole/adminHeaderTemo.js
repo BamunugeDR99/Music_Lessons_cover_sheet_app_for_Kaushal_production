@@ -186,11 +186,28 @@ export default function AdminHeaderTemp(props) {
           <span
                   className="userProfileSpan ml-1 mt-1"
                   onClick={() => {
-                    authentication.logout(() => {
-                      props.history.push("/adminlogin")
-                      localStorage.removeItem("AdminID");
 
-                     })
+                    const updateloginStatus = {
+                      LoginStatus: false,
+                    };
+            
+                    axios
+                      .put(
+                        "http://localhost:8070/admin/loginStatus/" + localStorage.getItem("AdminID"),
+                        updateloginStatus
+                      )
+                      .then((res) => {
+
+
+                        authentication.logout(() => {
+                          props.history.push("/adminlogin")
+                          localStorage.removeItem("AdminID");
+    
+                         })
+                      }).catch((err)=>{
+            
+                      });
+
                   }}
                 >
                   <svg
