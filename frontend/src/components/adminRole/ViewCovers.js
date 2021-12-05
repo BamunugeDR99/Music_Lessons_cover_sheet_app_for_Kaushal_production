@@ -56,10 +56,12 @@ export default function ViewCovers(props) {
   ];
   // for pdf preview
   const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
+  const [coversLoadingStatus, setCoversLoadingStatus] = useState(false);
   useEffect(() => {
-    function getAllClassicalGuitarCovers() {
-      axios
-        .get("http://localhost:8070/covers/getcovers")
+    async function getAllClassicalGuitarCovers() {
+      setModalOpenForPdf(false);
+      await axios
+        .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers")
         .then((res) => {
           tempCovers = res.data;
           getAllClassicalGutarMainCategories();
@@ -80,12 +82,13 @@ export default function ViewCovers(props) {
       $("#Covers").DataTable();
       //$('.js-example-basic-multiple').select2();
     });
+    setCoversLoadingStatus(true)
   }
 
-  function previewPdf(covername) {
+  async function previewPdf(covername) {
     setModalOpenForPdf(true);
     const storageRef = ref(storage, `Covers(PDF)/${covername}`);
-    getDownloadURL(storageRef)
+    await getDownloadURL(storageRef)
       .then((url) => {
         // setPdfUrl(url)
         window.location.href = url;
@@ -101,9 +104,11 @@ export default function ViewCovers(props) {
       });
   }
 
-  function GetLessonSubCategories() {
-    axios
-      .get("http://localhost:8070/mainCategory/get/619deb0ca35d670b4e68ec3e")
+ async  function GetLessonSubCategories() {
+    await axios
+      .get(
+        "https://kaushal-rashmika-music.herokuapp.com/mainCategory/get/619deb0ca35d670b4e68ec3e"
+      )
       .then((res) => {
         tempSubCategory2 = res.data.SubCategories;
         setContent();
@@ -112,9 +117,11 @@ export default function ViewCovers(props) {
         alert(err);
       });
   }
-  function getAllClassicalGutarMainCategories() {
-    axios
-      .get("http://localhost:8070/mainCategory/get/61936e9d9ea7c21aebd01113")
+  async function getAllClassicalGutarMainCategories() {
+   await axios
+      .get(
+        "https://kaushal-rashmika-music.herokuapp.com/mainCategory/get/61936e9d9ea7c21aebd01113"
+      )
       .then((res) => {
         tempSubCategory = res.data.SubCategories;
         GetLessonSubCategories();
@@ -123,10 +130,10 @@ export default function ViewCovers(props) {
         alert(err);
       });
   }
-  function changeCoverStatus(id, index) {
+  async function changeCoverStatus(id, index) {
     let status = "";
-    axios
-      .get("http://localhost:8070/covers/get/" + id)
+    await axios
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/get/" + id)
       .then((res) => {
         let content = "";
         status = res.data.Status;
@@ -142,8 +149,12 @@ export default function ViewCovers(props) {
           };
         }
 
-        axios
-          .put("http://localhost:8070/covers/StatusUpdate/" + id, content)
+         axios
+          .put(
+            "https://kaushal-rashmika-music.herokuapp.com/covers/StatusUpdate/" +
+              id,
+            content
+          )
           .then((res) => {
             if (content.Status == "1") {
               document.getElementById("toggle" + index).checked = true;
@@ -163,6 +174,7 @@ export default function ViewCovers(props) {
                 icon: "success",
                 title: "Cover Activated",
               });
+              getAllClassicalGuitarCovers();
             } else {
               document.getElementById("toggle" + index).checked = false;
               const Toast = Swal.mixin({
@@ -180,6 +192,7 @@ export default function ViewCovers(props) {
                 icon: "warning",
                 title: "Cover Deavtivated",
               });
+              getAllClassicalGuitarCovers();
             }
           })
           .catch((err) => {
@@ -190,6 +203,7 @@ export default function ViewCovers(props) {
               footer: '<p style = "color : #D0193A">Currently unavailable!',
             });
           });
+        getAllClassicalGuitarCovers();
       })
       .catch((err) => {
         Swal.fire({
@@ -226,7 +240,11 @@ export default function ViewCovers(props) {
             Status: "3",
           };
           axios
-            .put("http://localhost:8070/covers/StatusUpdate/" + id, content)
+            .put(
+              "https://kaushal-rashmika-music.herokuapp.com/covers/StatusUpdate/" +
+                id,
+              content
+            )
             .then((res) => {
               getAllClassicalGuitarCovers();
               swalWithBootstrapButtons.fire(
@@ -259,9 +277,9 @@ export default function ViewCovers(props) {
     props.history.push("/admin/viewmorecover/" + id);
   }
 
-  function getAllClassicalGuitarCovers() {
-    axios
-      .get("http://localhost:8070/covers/getcovers")
+  async function getAllClassicalGuitarCovers() {
+    await axios
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers")
       .then((res) => {
         tempCovers = res.data;
         getAllClassicalGutarMainCategories();
@@ -323,7 +341,12 @@ export default function ViewCovers(props) {
           }
           //const InstrumntArray = instruments.split(",");
           let InstrumntArray = [];
+          //console.log(instruments)
+          if(instruments.length === 0){
+            InstrumntArray.push("Classical Guitar");
+          }
           for (let i = 0; i < instruments.length; i++) {
+          
             InstrumntArray.push(instruments[i].value);
           }
           const newCover = {
@@ -342,24 +365,9 @@ export default function ViewCovers(props) {
             CoverPdf: coverPDF[0].name,
           };
           //console.log(newCover);
-          UploadPdf();
+         UploadPdf(newCover);
 
-          axios
-            .post("http://localhost:8070/covers/add", newCover)
-            .then(() => {
-              getAllClassicalGuitarCovers();
-              $("input[type=text]").val("");
-              $("input[type=number]").val("");
-              $("input[type=file]").val("");
-            })
-            .catch((err) => {
-              Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Something went wrong!",
-                footer: '<p style = "color : #D0193A">Currently unavailable!',
-              });
-            });
+      
         } else if (
           /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel
@@ -373,7 +381,7 @@ export default function ViewCovers(props) {
       });
   }
 
-  function UploadPdf() {
+  function UploadPdf(newCover) {
     setFileType("Uploading Pdf Cover");
     setModalUploadOpen(true);
     setModalOpen(false);
@@ -389,7 +397,7 @@ export default function ViewCovers(props) {
         setProgress(prog);
         if (prog >= 100) {
           setCompletedFiles("1");
-          UploadImages();
+          UploadImages(newCover);
         } else {
           // setClass("");
         }
@@ -404,7 +412,7 @@ export default function ViewCovers(props) {
       }
     );
   }
-  function UploadImages() {
+  function UploadImages(newCover) {
     setFileType("Uploading Preview Images");
     let storageRef = "";
     const promises = [];
@@ -437,9 +445,29 @@ export default function ViewCovers(props) {
 
     Promise.all(promises)
       .then(() => {
-        setFileType("Cover added Successfully!");
-        setCompletedFiles(previewPages.length + 1);
-        setFinalDiv(false);
+            axios
+            .post(
+              "https://kaushal-rashmika-music.herokuapp.com/covers/add",
+              newCover
+            )
+            .then(() => {
+              getAllClassicalGuitarCovers();
+              $("input[type=text]").val("");
+              $("input[type=number]").val("");
+              $("input[type=file]").val("");
+              setFileType("Cover added Successfully!");
+              setCompletedFiles(previewPages.length + 1);
+              setFinalDiv(false);
+            })
+            .catch((err) => {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+                footer: '<p style = "color : #D0193A">Currently unavailable!',
+              });
+            });
+      
       })
       .catch(() => {
         Swal.fire({
@@ -528,11 +556,17 @@ export default function ViewCovers(props) {
         <br />
         <h3 style={{ color: "#764A34", marginTop: "20px" }}>
           <b>
-            <ul>Classical Guitar Covers</ul>
+            <ul>All Covers</ul>
           </b>
         </h3>
       </div>
-      <div className="container-xxl" style={{ overflowX: "auto" }}>
+      <div className="d-flex justify-content-center">
+        <div class="spinner-grow" role="status" hidden={coversLoadingStatus}>
+          <span class="sr-only">Loading...</span>
+        </div>
+        
+      </div>
+      <div className="container-xxl" style={{ overflowX: "auto" }} hidden = {!coversLoadingStatus}>
         <br />
         <table
           id="Covers"
@@ -613,8 +647,10 @@ export default function ViewCovers(props) {
                     <button
                       className="btn-sm"
                       style={{ display: "inline", border: "1px solid #279B14" }}
-                      onClick = {() => {
-                        props.history.push("/admin/customerfeedbacks/"+covers._id)
+                      onClick={() => {
+                        props.history.push(
+                          "/admin/customerfeedbacks/" + covers._id
+                        );
                       }}
                       // onClick={() => viewMoreCover(covers._id)}
                     >
@@ -837,14 +873,13 @@ export default function ViewCovers(props) {
                   <div class="form-group">
                     <label for="exampleInputEmail1">Instruments*</label>
                     <Select
-                     // defaultValue={[instrumentsPlayedOn[0]]}
+                      // defaultValue={[instrumentsPlayedOn[0]]}
                       isMulti
                       name="colors"
                       options={instrumentsPlayedOn}
                       className="basic-multi-select"
                       classNamePrefix="select"
-                      required
-                      placeholder = "Choose instruments"
+                      placeholder="Choose instruments (Default classical guitar)"
                       onChange={(val) => {
                         setInstrument(val);
                       }}
@@ -878,6 +913,7 @@ export default function ViewCovers(props) {
                     <label for="exampleInputEmail1">Facebook Link*</label>
                     <input
                       type="text"
+                      required
                       class="form-control"
                       onChange={(e) => {
                         setFacebookLink(e.target.value);
@@ -909,7 +945,7 @@ export default function ViewCovers(props) {
                       required
                     />
                     <br />
-                    <label for="exampleInputEmail1">Price*</label>
+                    <label for="exampleInputEmail1">Price* (USD)</label>
                     <input
                       type="number"
                       name="price"

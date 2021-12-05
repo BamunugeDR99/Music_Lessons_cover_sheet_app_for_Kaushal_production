@@ -5,20 +5,32 @@ import DiscoverMoreCovers from "./DicoverMoreCovers";
 import Swal from "sweetalert2";
 import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
-import $ from "jquery";
+import $, { ajaxPrefilter } from "jquery";
+import { async } from "@firebase/util";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 
 export default function LessonsAndCoversDetailed(props) {
   const [covers, setCovers] = useState([]);
+  const [TempYoutubeLink, setTempYoutubeLink] = useState("");
   let preview = [];
   let instrumentsTxt = "";
   let MainCategoryForRec = "";
   let SubCategoryForRec = "";
-
+  const [recommenedCovers, setRecommendedCovers] = useState([]);
+  const [ErrorhandlingTxt, setErrorhandlingTxt] = useState("");
+  let finalFilteredCovers = [];
+  const [discoverMoreLoadingStatus, setDiscoverMoreStatus] = useState(false);
+  const [imageSlider, setImageSlider] = useState(false);
+  const [addToCartStatus,setAddToCartStatus] = useState(true);
   useEffect(() => {
-    function getCovers() {
+    async function getCovers() {
       const CoverTempID = props.match.params.id;
-      axios
-        .get("http://localhost:8070/covers/get/" + CoverTempID)
+      await axios
+        .get(
+          "https://kaushal-rashmika-music.herokuapp.com/covers/get/" +
+            CoverTempID
+        )
         .then((res) => {
           setCovers(res.data);
           preview = res.data.PreviewPages;
@@ -26,6 +38,12 @@ export default function LessonsAndCoversDetailed(props) {
           displayPreviewImageSlider(res.data.PreviewPages);
           MainCategoryForRec = res.data.MainCategory;
           SubCategoryForRec = res.data.SubCategory;
+          setTempYoutubeLink(res.data.YoutubeLink);
+          getRecommendCovers(
+            res.data.MainCategory,
+            res.data.SubCategory,
+            res.data._id
+          );
         })
         .catch((err) => {
           Swal.fire({
@@ -51,7 +69,42 @@ export default function LessonsAndCoversDetailed(props) {
     document.getElementById("instruments").innerHTML = instrumentsTxt;
   }
 
-  function displayPreviewImageSlider(previewImages) {
+  async function getRecommendCovers(MainCategory, SubCategory, ID) {
+    // console.log(MainCategory, SubCategory);
+    await axios
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getCovers")
+      .then((res) => {
+        let availableCovers = res.data.filter(
+          (recCovers) => String(recCovers.Status) != "3"
+        );
+
+        availableCovers = availableCovers.filter(
+          (recCovers) => String(recCovers.Status) != "2"
+        );
+
+        //  availableCovers = availableCovers.filter((recCovers) => recCovers._id != covers._id);
+
+        finalFilteredCovers = availableCovers.filter(
+          (covers) =>
+            covers.MainCategory === MainCategory &&
+            covers.SubCategory === SubCategory &&
+            covers._id != ID
+        );
+
+        if (finalFilteredCovers.length === 0) {
+          setErrorhandlingTxt("No more Reccomendations found!");
+        } else {
+          setErrorhandlingTxt("");
+        }
+        setRecommendedCovers(finalFilteredCovers);
+        setDiscoverMoreStatus(true);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }
+
+   function displayPreviewImageSlider(previewImages) {
     let imageSlider = '<div class="carousel-inner">';
     for (let i = 0; i < previewImages.length; i++) {
       if (i == 0) {
@@ -71,28 +124,37 @@ export default function LessonsAndCoversDetailed(props) {
     imageSlider += "</div>";
 
     document.getElementById("img").innerHTML = imageSlider;
+
     for (let i = 0; i < previewImages.length; i++) {
       document.getElementById("img" + i).src =
         "/images/verticaLImageHolder.jpg";
     }
+
+    setImageSlider(true);
+
     previewImages.map((previewImage, index) => {
       const storageRef = ref(storage, `PreviewImages/${previewImage}`);
       getDownloadURL(storageRef).then((url) => {
-        document.getElementById("img" + index).src = url;
+        try {
+          document.getElementById("img" + index).src = url;
+        } catch (error) {}
       });
     });
   }
 
-  function addToCart(id) {
+  async function addToCart(id) {
     //alert(id);
-
+    setAddToCartStatus(false);
     //let customerID = localStorage.getItem("CustomerID");
     let newItems = []; /// Change this later
     const customerID = localStorage.getItem("CustomerID");
     let coverIDs = [];
     let shoppingcartId = "";
-    axios
-      .get("http://localhost:8070/shoppingCart/getOneCart/" + customerID)
+    await axios
+      .get(
+        "https://kaushal-rashmika-music.herokuapp.com/shoppingCart/getOneCart/" +
+          customerID
+      )
       .then((res) => {
         console.log(res.data.CoverIDs);
         coverIDs = res.data.CoverIDs;
@@ -105,16 +167,16 @@ export default function LessonsAndCoversDetailed(props) {
           }
         }
         coverIDs.push(id);
-        console.log(coverIDs);
+        //console.log(coverIDs);
         const newcoverList = {
           CustomerID: customerID,
           CoverIDs: coverIDs,
         };
-        console.log(newcoverList);
+       // console.log(newcoverList);
         if (falgs === 0) {
           axios
             .put(
-              "http://localhost:8070/shoppingCart/updateSItem/" +
+              "https://kaushal-rashmika-music.herokuapp.com/shoppingCart/updateSItem/" +
                 shoppingcartId,
               newcoverList
             )
@@ -129,22 +191,63 @@ export default function LessonsAndCoversDetailed(props) {
 
               let count = parseInt($("#countHolder").text());
               $("#countHolder").html(count + 1);
-           
-               //completedIncrements.push("#cart1");
-           
-              
+
+              setAddToCartStatus(true)
+
+              //completedIncrements.push("#cart1");
             })
             .catch((err) => {
-              alert(err);
+              console.log(err);
+              setAddToCartStatus(true);
             });
         } else if (falgs === 1) {
           Swal.fire("Cover Already in Your shopping cart.");
+          setAddToCartStatus(true);
         }
       })
       .catch((err) => {
-        alert(err);
+        console.log(err);
+        setAddToCartStatus(true);
       });
   }
+
+  async function displayImages(coverImageName, index) {
+    if (recommenedCovers.length != 0) {
+      const storageRef = ref(storage, `PreviewImages/${coverImageName}`);
+      await getDownloadURL(storageRef)
+        .then((url) => {
+          document.getElementById(index).src = url;
+          document.getElementById("temp" + index).hidden = true;
+          document.getElementById(index).hidden = false;
+        })
+        .catch((err) => {
+          setErrorhandlingTxt(
+            "Reccomended covers are not available right now!"
+          );
+          //document.getElementById(index).src = "/images/imageplaceholder.png";
+        });
+    }
+  }
+
+  const responsive = {
+    superLargeDesktop: {
+      // the naming can be any, depends on you.
+      breakpoint: { max: 4000, min: 3000 },
+      items: 5,
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 3,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+    },
+  };
 
   return (
     <div>
@@ -154,7 +257,13 @@ export default function LessonsAndCoversDetailed(props) {
             <div class="row">
               <div class="col-sm">
                 {/* image carousel */}
+                <div className="d-flex justify-content-center">
+                  <div class="spinner-grow" role="status" hidden={imageSlider}>
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
                 <div
+                  hidden={!imageSlider}
                   id="carouselExampleIndicators"
                   class="carousel slide"
                   data-ride="carousel"
@@ -232,17 +341,33 @@ export default function LessonsAndCoversDetailed(props) {
                 <br />
                 <br />
                 {/* youtube video  */}
-                <div class="embed-responsive embed-responsive-16by9">
-                  <iframe
-                    class="embed-responsive-item"
-                    // need to use embeded youtube link
-                    src={covers.YoutubeLink}
-                    title="YouTube video player"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
+                {TempYoutubeLink.toLowerCase().includes(
+                  "https://www.youtube.com/embed/"
+                ) == true ? (
+                  <div class="embed-responsive embed-responsive-16by9">
+                    <iframe
+                      class="embed-responsive-item"
+                      // need to use embeded youtube link
+                      src={covers.YoutubeLink}
+                      title="YouTube video player"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                ) : (
+                  <div class="embed-responsive embed-responsive-16by9">
+                    <iframe
+                      class="embed-responsive-item"
+                      // need to use embeded youtube link
+                      src="https://www.youtube.com/embed/"
+                      title="YouTube video player"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                )}
                 <br />
               </div>
               <div class="col-sm">
@@ -384,7 +509,13 @@ export default function LessonsAndCoversDetailed(props) {
                   >
                     Add to cart
                   </button>
-                  <br />
+                  <br/>
+                  <br/>
+                  <div className = "d-flex justify-content-center">
+                    <div class="spinner-border text-success" role="status" hidden = {addToCartStatus}>
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </div>
                   <br />
                   <div className="container-sm">
                     {/* directly going to the payment gateway */}
@@ -425,10 +556,78 @@ export default function LessonsAndCoversDetailed(props) {
         <h3>
           <b>Our Recommendations </b>
         </h3>
-        {/* <DiscoverMoreCovers subCategory = "Exercises" mainCategory = "Guitar Technics & Lessons"/> */}
-        <DiscoverMoreCovers
-         CoverID = "61a247ef9508b44b96cf150e"
-        />
+        {/* <DiscoverMoreCovers subCategory = {covers.SubCategory} mainCategory = {covers.MainCategory}/> */}
+        {/* <DiscoverMoreCovers CoverID="61a247ef9508b44b96cf150e" /> */}
+
+        <div>
+          <div className="d-flex justify-content-center">
+            <div
+              class="spinner-border "
+              role="status"
+              hidden={discoverMoreLoadingStatus}
+            >
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <h5 style={{ textAlign: "center", color: "#D0193A" }}>
+            {ErrorhandlingTxt}
+          </h5>
+          <br />
+          <Carousel responsive={responsive}>
+            {recommenedCovers.map((covers, index) => {
+              return (
+                <div
+                  class="card"
+                  onClick={() => {
+                    props.history.push(
+                      "/customer/discovermorecover/" + covers._id
+                    );
+                    window.location.reload();
+                  }}
+                  style={{
+                    boxShadow: "rgba(0, 0, 0, 0.25) 0px 25px 50px -12px",
+                    borderRadius: "15px",
+                    marginRight: "15px",
+                    marginLeft: "15px",
+                  }}
+                >
+                  <img
+                    id={"temp" + index}
+                    src={"/images/imageplaceholder.png"}
+                    class="card-img-top"
+                    alt="..."
+                    style={{
+                      borderRadius: "15px 15px 0px 0px",
+                      height: "350px",
+                    }}
+                  />
+                  <img
+                    hidden
+                    id={index}
+                    src={displayImages(covers.PreviewPages[0], index)}
+                    class="card-img-top"
+                    alt="..."
+                    style={{
+                      borderRadius: "15px 15px 0px 0px",
+                      height: "350px",
+                    }}
+                  />
+                  <div class="card-body">
+                    <h4 class="card-title" style={{ fontWeight: "bold" }}>
+                      {covers.Title}
+                    </h4>
+                    <h5>{covers.OriginalArtistName}</h5>
+                    <h5>{covers.MainCategory}</h5>
+                    <h5>{covers.SubCategory}</h5>
+                    <h3 style={{ float: "right", color: "#764A34" }}>
+                      <b>US$ {covers.Price}</b>
+                    </h3>
+                  </div>
+                </div>
+              );
+            })}
+          </Carousel>
+        </div>
       </div>
     </div>
   );

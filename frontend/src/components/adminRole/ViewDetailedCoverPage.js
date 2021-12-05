@@ -53,6 +53,7 @@ export default function ViewDetailedCoverPage(props) {
   const [cancelOrCloseBtn, setCancelOrCloseBtn] = useState("Close");
   const [finalDiv, setFinalDiv] = useState(true);
   const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
+  const [imageSlider, setImageSlider] = useState(false);
 
   const [cover, setCover] = useState([]);
   let tempMainCategoryStore = "";
@@ -74,7 +75,7 @@ export default function ViewDetailedCoverPage(props) {
   useEffect(() => {
     function getCovers() {
       axios
-        .get("http://localhost:8070/covers/get/" + CoverTempID)
+        .get("https://kaushal-rashmika-music.herokuapp.com/covers/get/" + CoverTempID)
         .then((res) => {
           setCovers(res.data);
           setPreviousContent(res.data);
@@ -138,8 +139,10 @@ export default function ViewDetailedCoverPage(props) {
     imageSlider += "</div>";
     document.getElementById("img").innerHTML = imageSlider;
     for (let i = 0; i < previewImages.length; i++) {
-      document.getElementById("img" + i).src = "/images/Imageplaceholder.png";
+      document.getElementById("img" + i).src = "/images/verticaLImageHolder.jpg";
     }
+
+    setImageSlider(true)
     previewImages.map((previewImage, index) => {
       const storageRef = ref(storage, `PreviewImages/${previewImage}`);
       getDownloadURL(storageRef).then((url) => {
@@ -181,7 +184,7 @@ export default function ViewDetailedCoverPage(props) {
 
   function GetLessonSubCategories() {
     axios
-      .get("http://localhost:8070/mainCategory/get/619deb0ca35d670b4e68ec3e")
+      .get("https://kaushal-rashmika-music.herokuapp.com/mainCategory/get/619deb0ca35d670b4e68ec3e")
       .then((res) => {
         tempSubCategory2 = res.data.SubCategories;
         setContent();
@@ -195,9 +198,9 @@ export default function ViewDetailedCoverPage(props) {
         });
       });
   }
-  function getAllClassicalGutarMainCategories() {
-    axios
-      .get("http://localhost:8070/mainCategory/get/61936e9d9ea7c21aebd01113")
+  async function getAllClassicalGutarMainCategories() {
+    await axios
+      .get("https://kaushal-rashmika-music.herokuapp.com/mainCategory/get/61936e9d9ea7c21aebd01113")
       .then((res) => {
         tempSubCategory = res.data.SubCategories;
         GetLessonSubCategories();
@@ -248,12 +251,13 @@ export default function ViewDetailedCoverPage(props) {
             YoutubeLink: document.getElementById("youtubeLink").value,
             FacebookLink: document.getElementById("facebookLink").value,
             PreviewPages: previewPageList,
+            UpdatedUser : "61a8d9f640c532967166aa70",
             CoverPdf: updateCoverPdf,
           };
 
           axios
             .put(
-              "http://localhost:8070/covers/update/" + CoverTempID,
+              "https://kaushal-rashmika-music.herokuapp.com/covers/update/" + CoverTempID,
               updatedCover
             )
             .then(() => {
@@ -326,12 +330,13 @@ export default function ViewDetailedCoverPage(props) {
           YoutubeLink: document.getElementById("youtubeLink").value,
           FacebookLink: document.getElementById("facebookLink").value,
           PreviewPages: previewPageList,
+          UpdatedUser : "61a8d9f640c532967166aa70",
           CoverPdf: updateCoverPdf,
         };
 
         axios
           .put(
-            "http://localhost:8070/covers/update/" + CoverTempID,
+            "https://kaushal-rashmika-music.herokuapp.com/covers/update/" + CoverTempID,
             updatedCover
           )
           .then(() => {
@@ -458,12 +463,13 @@ export default function ViewDetailedCoverPage(props) {
               YoutubeLink: document.getElementById("youtubeLink").value,
               FacebookLink: document.getElementById("facebookLink").value,
               PreviewPages: previewPageList,
+              UpdatedUser : "61a8d9f640c532967166aa70",
               CoverPdf: updateCoverPdf,
             };
             console.log(updatedCover);
             axios
               .put(
-                "http://localhost:8070/covers/update/" + CoverTempID,
+                "https://kaushal-rashmika-music.herokuapp.com/covers/update/" + CoverTempID,
                 updatedCover
               )
               .then(() => {
@@ -538,9 +544,9 @@ export default function ViewDetailedCoverPage(props) {
       });
   }
 
-  function getCovers() {
-    axios
-      .get("http://localhost:8070/covers/get/" + CoverTempID)
+  async function getCovers() {
+    await axios
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/get/" + CoverTempID)
       .then((res) => {
         setCovers(res.data);
         setPreviousContent(res.data);
@@ -564,10 +570,10 @@ export default function ViewDetailedCoverPage(props) {
       });
   }
 
-  function previewPdf(pdfName) {
+  async function previewPdf(pdfName) {
     setModalOpenForPdf(true);
     const storageRef = ref(storage, `Covers(PDF)/${pdfName}`);
-    getDownloadURL(storageRef)
+    await getDownloadURL(storageRef)
       .then((url) => {
         // setPdfUrl(url)
         window.location.href = url;
@@ -589,9 +595,15 @@ export default function ViewDetailedCoverPage(props) {
           <div class="container">
             <div class="row">
               <div class="col-sm">
+              <div className="d-flex justify-content-center">
+                  <div class="spinner-grow" role="status" hidden={imageSlider}>
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
                 {/* image carousel */}
                 <div
                   id="carouselExampleIndicators"
+                  hidden = {!imageSlider}
                   class="carousel slide"
                   data-ride="carousel"
                 >
@@ -1066,7 +1078,6 @@ export default function ViewDetailedCoverPage(props) {
                       options={instrumentsPlayedOn}
                       className="basic-multi-select"
                       classNamePrefix="select"
-                      required
                       placeholder="Choose instruments"
                       onChange={(val) => {
                         setInstrument(val);
@@ -1118,6 +1129,7 @@ export default function ViewDetailedCoverPage(props) {
                     <label for="exampleInputEmail1">Facebook Link*</label>
                     <input
                       type="text"
+                      required
                       Value={covers.FacebookLink}
                       class="form-control"
                       id="facebookLink"

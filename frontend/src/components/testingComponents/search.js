@@ -15,7 +15,7 @@ let number=0;
 useEffect(()=>{
     function getData(){
         axios
-            .get("http://localhost:8070/covers/getcovers")
+            .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers")
             .then((res) => {
                 // console.log(res.data)
                 setCovers(res.data)
@@ -104,6 +104,6 @@ return (
 );
 }
 
-// "http://localhost:8070/covers/getcovers"
+// "https://kaushal-rashmika-music.herokuapp.com/covers/getcovers"
 
 // export default App

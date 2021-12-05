@@ -42,15 +42,15 @@ export default function CustomerForgotPassword(props) {
 
 
   let c = "";
-  function sendEmail(e) {
+  async function sendEmail(e) {
     e.preventDefault();
     setCodeVerification("");
     setResendEmailBtn(true);
     setLoading(false);
     UserEmail = document.getElementById("userEmail").value;
 
-    axios
-      .get("http://localhost:8070/customer/getEmail/" + UserEmail)
+    await axios
+      .get("https://kaushal-rashmika-music.herokuapp.com/customer/getEmail/" + UserEmail)
       .then((res) => {
         if (res.data.length == 0) {
           setLoading(true);
@@ -83,7 +83,7 @@ export default function CustomerForgotPassword(props) {
     return result;
   }
 
-  function emailConfiguration() {
+  async function emailConfiguration() {
     const hidEmail = hideEmail(UserEmail);
     const generatedCode = generateCode(8);
     setCode(generatedCode);
@@ -91,7 +91,7 @@ export default function CustomerForgotPassword(props) {
       email: UserEmail,
       code: generatedCode,
     };
-    emailjs
+    await emailjs
       .send(
         "service_d2vcq28", //your service id
         "template_pcwlvj6", // template id
@@ -195,8 +195,8 @@ export default function CustomerForgotPassword(props) {
   function changePassword(e) {
     e.preventDefault();
     setLoading(false);
-    const newPassword = document.getElementById("newPassword").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
+    const newPassword = document.getElementById("newPassword").value.trim();
+    const confirmPassword = document.getElementById("confirmPassword").value.trim();
     if (newPassword != null || confirmPassword != null) {
       if (newPassword === confirmPassword) {
         Swal.fire({
@@ -206,16 +206,16 @@ export default function CustomerForgotPassword(props) {
           showCancelButton: true,
           confirmButtonColor: "#3085d6",
           cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, delete it!",
+          confirmButtonText: "Yes, update it!",
         }).then((result) => {
           if (result.isConfirmed) {
             const newPasswordObject = {
-              Password: bcrypt.hashSync(newPassword, bcrypt.genSaltSync(12)),
+              Password: bcrypt.hashSync(newPassword.trim(), bcrypt.genSaltSync(12)),
             };
 
-            axios
+             axios
               .put(
-                "http://localhost:8070/customer/updatePassword/" + customerID,
+                "https://kaushal-rashmika-music.herokuapp.com/customer/updatePassword/" + customerID,
                 newPasswordObject
               )
               .then((res) => {
@@ -224,6 +224,7 @@ export default function CustomerForgotPassword(props) {
                   "You can log back in ",
                   "success"
                 );
+                
                 setLoading(true);
                 props.history.push("/customer/login")
                 // navigate to the login page
@@ -388,6 +389,7 @@ export default function CustomerForgotPassword(props) {
                   Verify Code
                 </button>
                 <br />
+                <br/>
                 <button
                   type="button"
                   class="btn btn-block"

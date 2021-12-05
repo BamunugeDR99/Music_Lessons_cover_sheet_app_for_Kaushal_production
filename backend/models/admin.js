@@ -18,10 +18,21 @@ const adminSchema = new Schema({
     required: true,
   },
 
+  Email: {
+    type: String,
+    required: true,
+  },
+  
   Password: {
     type: String,
     required: true,
   },
+
+  LoginStatus : {
+    type : Boolean,
+    required : true,
+    default : false
+  }
 });
 
 const Admin = mongoose.model("Admin", adminSchema);

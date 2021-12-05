@@ -6,7 +6,6 @@ import Modal from "react-bootstrap/Modal";
 import InputRange from "react-input-range";
 import { data, post } from "jquery";
 
-
 export default function MusicCoverPage(props) {
   const [modelOpen, setmodelOpen] = useState(false);
   const [pricerange, setPriceRange] = useState("0");
@@ -36,7 +35,7 @@ export default function MusicCoverPage(props) {
     document.getElementById("topcover").style.display = "none";
 
     await axios
-      .get("http://localhost:8070/covers/getcoverbymaincover")
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbymaincover")
       .then((res) => {
         dataholdedr = res.data;
         setCovers(res.data);
@@ -54,7 +53,7 @@ export default function MusicCoverPage(props) {
 
     // Getting sub categories
     axios
-      .get("http://localhost:8070/mainCategory/get")
+      .get("https://kaushal-rashmika-music.herokuapp.com/mainCategory/get")
       .then((res) => {
         setCategories(res.data[0].SubCategories);
         document.getElementById("bufferlink").style.display = "none";
@@ -131,7 +130,7 @@ export default function MusicCoverPage(props) {
     document.getElementById("spinnerdiv").style.display = "block";
     document.getElementById("coverdiv").style.display = "none";
     await axios
-      .get("http://localhost:8070/covers/getcoverbymaincover")
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbymaincover")
       .then((res) => {
         dataholdedr = res.data;
         setCovers(res.data);
@@ -163,7 +162,7 @@ export default function MusicCoverPage(props) {
     document.getElementById("spinnerdiv").style.display = "block";
     document.getElementById("coverdiv").style.display = "none";
     await axios
-      .get("http://localhost:8070/covers/getcoverbymaincover")
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbymaincover")
       .then((res) => {
         dataholdedr = res.data;
         setCovers(res.data);
@@ -259,6 +258,7 @@ export default function MusicCoverPage(props) {
               >
                 &emsp; Loading...
               </a>
+              <br/>
               <a
                 href="#"
                 id="link1"
@@ -317,6 +317,7 @@ export default function MusicCoverPage(props) {
                 </div>
               </div>
               <div className="row">
+                <br/>
                 <h4 style={{ color: "#764A34" }}>
                   <strong>
                     <center>Most Downloaded Classical Guitar Cover</center>
@@ -338,7 +339,15 @@ export default function MusicCoverPage(props) {
                   </div>
                 </div>
               </center>
-              <div id="topcover" style={{ display: "none" }} onClick={() => {props.history.push("/customer/detailedcover/"+ populercover._id)}}>
+              <div
+                id="topcover"
+                style={{ display: "none" }}
+                onClick={() => {
+                  props.history.push(
+                    "/customer/detailedcover/" + populercover._id
+                  );
+                }}
+              >
                 <TopDownloadTemplate
                   title={populercover.Title}
                   price={populercover.Price}
@@ -358,6 +367,7 @@ export default function MusicCoverPage(props) {
             <h4 style={{ color: "#764A34" }}>
               <strong>Classical Guitar Covers - {categorytext}</strong>
             </h4>
+            <br/>
             <center>
               <h4 style={{ color: "red" }}>{nodata}</h4>
             </center>
@@ -381,17 +391,21 @@ export default function MusicCoverPage(props) {
               <div className="row">
                 {covers.map((post, index) => (
                   // console.log(post.PreviewPages[0]),
-                  <div className="col-md-4" onClick={() => {props.history.push("/customer/detailedcover/"+post._id)}}>
+                  <div
+                    className="col-md-4 bg-image hover-zoom"
+                    onClick={() => {
+                      props.history.push("/customer/detailedcover/" + post._id);
+                    }}
+                  >
                     <CoverTemplate
+                    
                       title={post.Title}
-                      coverId = {post._id}
+                      coverId={post._id}
                       artist={post.OriginalArtistName}
                       price={post.Price}
                       category={post.SubCategory}
                       id={index}
                       imageName={post.PreviewPages[0]}
-
-
                     />
                     <br />
                   </div>
@@ -407,3 +421,4 @@ export default function MusicCoverPage(props) {
     </div>
   );
 }
+

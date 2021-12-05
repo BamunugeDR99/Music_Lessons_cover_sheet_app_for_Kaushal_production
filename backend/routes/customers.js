@@ -382,6 +382,33 @@ router.route("/updatePassword/:id").put(async (req, res) => {
     });
 });
 
+// update login Status
+router.route("/loginStatus/:id").put(async (req, res) => {
+  let userID = req.params.id;
+
+  const { LoginStatus } = req.body;
+
+  const updateC = await Customer.updateOne(
+    { _id: userID },
+    {
+      $set: {
+        LoginStatus: LoginStatus,
+      },
+    }
+  )
+    .then(() => {
+      res.status(200).send({ status: "Login Status Updated" });
+    })
+    .catch((err) => {
+      console.log(err);
+      res
+        .status(500)
+        .send({ status: "Error with updating data", error: err.message });
+    });
+});
+
+
+
 // get email
 router.route("/getEmail/:email").get(async (req, res) => {
   let email = req.params.email;

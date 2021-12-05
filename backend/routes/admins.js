@@ -7,12 +7,14 @@ router.route("/addAdmin").post(async (req, res) => {
   const LastName = req.body.LastName;
   const Username = req.body.Username;
   const Password = req.body.Password;
+  const Email = req.body.Email;
 
   const newAdmin = new Admin({
     FirstName,
     LastName,
     Username,
     Password,
+    Email
   });
 
   newAdmin
@@ -120,6 +122,47 @@ router.post("/loginAdmin", async (req, res) => {
   } catch (err) {
     console.log(err);
   }
+});
+
+// update login status 
+router.route("/loginStatus/:id").put(async (req, res) => {
+  let userID = req.params.id;
+
+  const { LoginStatus } = req.body;
+
+  const updateC = await Admin.updateOne(
+    { _id: userID },
+    {
+      $set: {
+        LoginStatus: LoginStatus,
+      },
+    }
+  )
+    .then(() => {
+      res.status(200).send({ status: "Login Status Updated" });
+    })
+    .catch((err) => {
+      console.log(err);
+      res
+        .status(500)
+        .send({ status: "Error with updating data", error: err.message });
+    });
+});
+
+// get login status 
+router.route("/getAdminLoginStatus/:id").get(async (req, res) => {
+  let userID = req.params.id;
+  const user = await Admin.findById(userID)
+    .then((adminss) => {
+      // res.status(200).send({status:"User fetched"});
+      res.json(adminss.LoginStatus);
+    })
+    .catch((err) => {
+      console.log(err.message);
+      res
+        .status(500)
+        .send({ status: "Error with get user", error: err.message });
+    });
 });
 
 module.exports = router;

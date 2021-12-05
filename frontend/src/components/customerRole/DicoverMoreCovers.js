@@ -7,16 +7,16 @@ import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 export default function DiscoverMoreCovers(props) {
   const [recommenedCovers, setRecommendedCovers] = useState([]);
   const [ErrorhandlingTxt, setErrorhandlingTxt] = useState("");
-  const MainCategory = "Classical Guitar Covers";
-  const SubCategory = "Sinhala";
+  //const MainCategory = "Classical Guitar Covers";
+  //const SubCategory = "Sinhala";
   let finalFilteredCovers = [];
-  //const MainCategory = props.mainCategory;
-  //const SubCategory = props.subCategory;
+  const MainCategory = props.mainCategory;
+  const SubCategory = props.subCategory;
   useEffect(() => {
-    function getRecommendCovers() {
+    async function getRecommendCovers() {
       // console.log(MainCategory, SubCategory);
-      axios
-        .get("http://localhost:8070/covers/getCovers")
+     await axios
+        .get("https://kaushal-rashmika-music.herokuapp.com/covers/getCovers")
         .then((res) => {
           let availableCovers = res.data.filter(
             (recCovers) => String(recCovers.Status) != "3"
@@ -74,9 +74,12 @@ export default function DiscoverMoreCovers(props) {
       await getDownloadURL(storageRef)
         .then((url) => {
           document.getElementById(index).src = url;
+          document.getElementById("temp"+index).hidden = true;
+          document.getElementById(index).hidden = false;
         })
         .catch((err) => {
-          ErrorhandlingTxt("Reccomended covers are not available right now!")
+          setErrorhandlingTxt("Reccomended covers are not available right now!")
+          //document.getElementById(index).src = "/images/imageplaceholder.png";
         });
     }
   }
@@ -99,12 +102,18 @@ export default function DiscoverMoreCovers(props) {
                 marginLeft: "15px",
               }}
             >
+                 <img
+                id={"temp"+index}
+                src={"/images/imageplaceholder.png" }
+                class="card-img-top"
+                alt="..."
+                style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
+              />
               <img
+              hidden
                 id={index}
                 src={
-                  displayImages(covers.PreviewPages[0], index) ||
-                  "/images/imageplaceholder.png"
-                }
+                  displayImages(covers.PreviewPages[0], index) }
                 class="card-img-top"
                 alt="..."
                 style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}

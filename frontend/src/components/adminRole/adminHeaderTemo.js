@@ -4,486 +4,48 @@ import "../../css/CustomerHeaderStyles.css";
 import Modal from "react-bootstrap/Modal";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
-// import PasswordStrengthIndicator from "./passwordStrength";
+import authentication from "../../security/authentication";
+
 
 const bcrypt = require("bcryptjs");
 export default function AdminHeaderTemp(props) {
 
   const [profilemodelOpen, setProfilemodelOpen] = useState(false);
-  const [editProfilemodelOpen, setEditProfilemodelOpen] = useState(false);
-  const [changePasswordmodelOpen, setchangePasswordmodelOpen] = useState(false);
-
-  let [ContactNumberError, SetContactNoError] = useState("");
-  let [PasswordError, SetPasswordError] = useState("");
-  let [confirmPasswordError, SetConfirmPasswordError] = useState("");
-  let [currentPasswordError, SetCurrentPasswordError] = useState("");
-  let [currentPasswordError2, SetCurrentPasswordError2] = useState("");
-  let [FirstNameError, setFirstNameError] = useState("");
-  let [LastNameError, setLastNameError] = useState("");
-  let [GenderError, setGenderError] = useState("");
-  let [CountryError, setCountryError] = useState("");
-  let [ConfirmDeleteError, setConfirmDeleteError] = useState("");
-
-
-  const [passwordShown, setPasswordShown] = useState(false);
-  const [CpasswordShown, setCPasswordShown] = useState(false);
-  const [CurrentpasswordShown, setCurrentPasswordShown] = useState(false);
-  const [CurrentpasswordShown2, setCurrentPasswordShown2] = useState(false);
-
-  const [eyeSlashIcon, setEyeSlashIcon] = useState(false);
-  const [eyeIcon, setEyeIcon] = useState(true);
-  const [CeyeSlashIcon, setCEyeSlashIcon] = useState(false);
-  const [CeyeIcon, setCEyeIcon] = useState(true);
-  const [CurrenteyeSlashIcon, setCurrentEyeSlashIcon] = useState(false);
-  const [CurrenteyeIcon, setCurrentEyeIcon] = useState(true);
-
-  const [CurrenteyeSlashIcon2, setCurrentEyeSlashIcon2] = useState(false);
-  const [CurrenteyeIcon2, setCurrentEyeIcon2] = useState(true);
-
-
-  const [modalOpenForLoading, setmodalOpenForLoading] = useState(false);
-  const [passwordFocused, setPasswordFocused] = useState(false);
-
-  let [ExtraError, setExtraError] = useState("");
-
-
-
-  const [passwordMatchDiv, setPasswordMatchDiv] = useState(true);
-  const [passwordMisMatchDiv, setPasswordMisMatchDiv] = useState(true);
-
-  const isNumberRegx = /\d/;
-  const specialCharacterRegx = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
-
-  const [passwordValidity, setPasswordValidity] = useState({
-    minChar: null,
-    number: null,
-    specialChar: null
-  });
-
-  let flag1 = 0;
-
-
+ 
   //useStates to store user inputs
   let [Username, SetUsername] = useState("");
   let [Email, SetEmail] = useState("");
-  let [ContactNumber, SetContactNo] = useState("");
-  let [Password, SetPassword] = useState("");
-  let [ConfirmPassword, SetConfirmPassword] = useState("");
-  let [CurrentPassword, SetCurrentPassword] = useState("");
-  let [CurrentPassword2, SetCurrentPassword2] = useState("");
   let [FirstName, setFirstName] = useState("");
   let [LastName, setLastName] = useState("");
-  let [Gender, setGender] = useState("");
-  let [Country, setCountry] = useState("");
+ 
 
-  let [Customer, SetCustomer] = useState([]);
+  let [Admin, SetAdmin] = useState([]);
 
-  let [confirmDelete, setConfirmDelete] = useState(true);
-
-
-  function clearErrors(){
-
-    SetCurrentPasswordError("");
-    SetCurrentPasswordError2("");
-    SetPasswordError("");
-    SetConfirmPasswordError("");
-    setExtraError("");
-    setFirstNameError("");
-    setLastNameError("");
-    setGenderError("");
-    setCountryError("");
-    SetContactNoError("");
-    setConfirmDeleteError("");
-
-  }
-
-  function checkPasswords(confirmpassword) {
-
-    if (Password.length !== 0 || confirmpassword.length !== 0) {
-
-      if (Password === confirmpassword) {
-
-        flag1 = 1;
-        setPasswordMatchDiv(false);
-        setPasswordMisMatchDiv(true);
-
-      }
-
-      else if (Password !== confirmpassword) {
-        flag1 = 0;
-        setPasswordMisMatchDiv(false);
-        setPasswordMatchDiv(true);
-
-      }
-
-      else {
-        flag1 = 0;
-        setPasswordMatchDiv(true);
-        setPasswordMisMatchDiv(true);
-      }
-
-    }
-
-    else {
-      flag1 = 0;
-      setPasswordMatchDiv(true);
-      setPasswordMisMatchDiv(true);
-    }
-
-  }
-
-
-  function checkCurrentPassword() {
-
-
-    let nCopsw = document.getElementById("CurrentPassword").value;
-    console.log(CurrentPassword);
-
-    if (nCopsw.length !== 0) {
-
-      const isMatch = bcrypt.compareSync(nCopsw, CurrentPassword);
-      console.log("Password Match : " + isMatch);
-      if (!isMatch) {
-        flag1 = 0;
-        SetCurrentPasswordError("Invalid Current Password!");
-      }
-
-      else {
-        flag1 = 1;
-        SetCurrentPasswordError("");
-      }
-
-    }
-
-
-
-  }
-
-  function validatePasswords() {
-
-    let Password = document.getElementById("CPPassword").value;
-    let ConfirmPassword = document.getElementById("CPConfirmPassword").value;
-    console.log(CurrentPassword2.length);
-    console.log(Password.length);
-    console.log(ConfirmPassword.length);
-    if (CurrentPassword2.length === 0) {
-
-      flag1 = 0;
-      SetCurrentPasswordError2("Current password is required !");
-    }
-
-    
-    else if (Password.length === 0) {
-
-      flag1 = 0;
-      SetPasswordError("New password is required !");
-    }
-
-    else if (ConfirmPassword.length === 0) {
-
-      flag1 = 0;
-      SetConfirmPasswordError("Confirm password is required !");
-    }
-
-
-
-
-    else if (Password !== ConfirmPassword) {
-      flag1 = 0;
-      setPasswordMisMatchDiv(false);
-      setPasswordMatchDiv(true);
-
-    } else if (passwordValidity.minChar !== true || passwordValidity.specialChar !== true || passwordValidity.number !== true) {
-      flag1 = 0;
-      setExtraError("Please give the password in required format")
-    }
-
-    else {
-
-      flag1 = 1;
-    }
-
-
-  }
-
-  function changePassword(e) {
-    e.preventDefault();
-    checkCurrentPassword();
-    validatePasswords();
-
-    console.log(flag1);
-
-    if (flag1 === 1) {
-
-      console.log(Password);
-      Password = bcrypt.hashSync(Password, bcrypt.genSaltSync(12));
-      SetPassword( bcrypt.hashSync(Password, bcrypt.genSaltSync(12)));
-      console.log("Password : " + Password);
-
-      updateProfile();
-
-
-    }
-  }
-
-
-
+ 
   function Profilemodalopen() {
     // alert("This is alert");
-    getCustomerDetails();
+    getAdminDetails();
 
     setProfilemodelOpen(true);
   }
   function ProfilemodalClose() {
     setProfilemodelOpen(false);
-    clearErrors();
-  }
-
-
-
-
-  function EditProfilemodalopen() {
-    // alert("This is alert");
-    getCustomerDetails();
-    setEditProfilemodelOpen(true);
-  }
-  function EditProfilemodalClose() {
-    setEditProfilemodelOpen(false);
-    setConfirmDelete(true);
-    setConfirmDeleteError("");
-    SetCurrentPasswordError("");
-    clearErrors();
-
-  }
-
-  function ChangePasswordmodalopen() {
-    getCustomerDetails();
-    setchangePasswordmodelOpen(true)
-  }
-
-  function ChangePasswordmodalClose() {
-    setchangePasswordmodelOpen(false);
-    setConfirmDeleteError("");
-  
-  }
-
-
-  function goToEditProfile() {
-
-    ProfilemodalClose();
-    EditProfilemodalopen();
-  }
-
-  function goToChangePassword() {
-    EditProfilemodalClose();
-    ChangePasswordmodalopen();
-
-  }
-  //Navigation Variable
-
-
-
-
-
-
-  function validate() {
-
-    if (FirstName.length === 0) {
-      flag1 = 0
-      setFirstNameError("First name is required ! ");
-    }
-    else if (LastName.length === 0) {
-      flag1 = 0
-      setLastNameError("Last name is required !");
-    }
-    else if (ContactNumber.length === 0) {
-      flag1 = 0
-      SetContactNoError("Contact number is required !");
-    }
-    else if (Gender.length === 0) {
-      flag1 = 0
-      setGenderError("Gender is required !")
-    }
-    else if (Country.length === 0) {
-      flag1 = 0
-      setCountryError("Country is required !")
-    }
-
-    else {
-      flag1 = 1;
-    }
-  }
-
-  function updateProfile() {
-
-
-    console.log("Password : " + Password);
-
-
-    const newCustomer = {
-      FirstName,
-      LastName,
-      Email,
-      ContactNumber,
-      Gender,
-      Country,
-      Username,
-      Password,
-
-    }
-
-    console.log(newCustomer);
-
-    validate();
-    console.log(flag1);
-
-    if (flag1 === 1) {
-
-
-
-      Swal.fire({
-        title: 'Do you want to save the changes?',
-        showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: 'Save',
-        denyButtonText: `Don't save`,
-      }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
-        if (result.isConfirmed) {
-
-          setmodalOpenForLoading(true);
-
-          
-      axios.put("http://localhost:8070/customer/update/61a50a72a955b7198787942f", newCustomer).then(() => {
-
-            setmodalOpenForLoading(false);
-            Swal.fire('Saved!', '', 'success');
-
-            ChangePasswordmodalClose();
-      }).catch((err) => {
-
-        console.log(err);
-        setmodalOpenForLoading(false);
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Something went wrong! Try again Later!',
-         
-        })
-      })
-
-        } else if (result.isDenied) {
-          Swal.fire('Changes are not saved', '', 'info')
-        }
-      })
-
-
-
-
-
-
-
-
-
-
-
-
-    }
-
-
-  }
-
-
-
-
-  function deleteProfile() {
-
-    checkCurrentPassword();
-    console.log(flag1);
-
-
-    if (confirmDelete === true) {
-      setConfirmDeleteError("Enter the Current Password");
-    }
-
-    setConfirmDelete(false);
-
-    if (flag1 === 1) {
-      console.log("Delete Karamu");
-
-      const swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-          confirmButton: 'btn btn-success',
-          cancelButton: 'btn btn-danger'
-        },
-        buttonsStyling: false
-      })
-  
-      swalWithBootstrapButtons.fire({
-        title: 'Are you sure?',
-        text: "Don't you enjoy our music anymore?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Delete Profile',
-        cancelButtonText: 'Cancel',
-        reverseButtons: true
-      }).then((result) => {
-        if (result.isConfirmed) {
-  
-          axios
-            .delete("http://localhost:8070/customer/delete/61a50a72a955b7198787942f")
-            .then((res) => {
-  
-              swalWithBootstrapButtons.fire(
-                'Deleted!',
-                'Your Profile has been deleted.',
-                'success'
-              )
-              EditProfilemodalClose();
-           
-  
-  
-            }).catch((err) => {
-  
-              console.log(err);
-            })
-  
-  
-  
-  
-        } else if (
-          /* Read more about handling dismissals below */
-          result.dismiss === Swal.DismissReason.cancel
-        ) {
-          swalWithBootstrapButtons.fire(
-            'Cancelled',
-            'Thank you for staying with us !',
-            'error'
-          )
-        }
-      })
-    }
    
   }
 
-  function getCustomerDetails() {
 
-    axios.get("http://localhost:8070/customer/get/61a50a72a955b7198787942f").then((res) => {
+  function getAdminDetails() {
 
-      console.log(res.data);
-      SetCustomer(res.data);
+    axios.get("https://kaushal-rashmika-music.herokuapp.com/admin/getAdmin/" + localStorage.getItem("AdminID")).then((res) => {
+
+    
+      SetAdmin(res.data);
 
       SetUsername(res.data.Username);
       setFirstName(res.data.FirstName);
       setLastName(res.data.LastName);
       SetEmail(res.data.Email);
-      SetContactNo(res.data.ContactNumber);
-      setGender(res.data.Gender);
-      setCountry(res.data.Country);
-      SetCurrentPassword(res.data.Password);
-      SetPassword(res.data.Password);
-
-
+    
     }).catch((err) => {
       alert(err.message);
     })
@@ -493,19 +55,13 @@ export default function AdminHeaderTemp(props) {
 
     function getOne() {
 
-      axios.get("http://localhost:8070/customer/get/61a50a72a955b7198787942f").then((res) => {
-
-        SetCustomer(res.data);
+      axios.get("https://kaushal-rashmika-music.herokuapp.com/admin/getAdmin/" + localStorage.getItem("AdminID")).then((res) => {
 
         SetUsername(res.data.Username);
         setFirstName(res.data.FirstName);
         setLastName(res.data.LastName);
         SetEmail(res.data.Email);
-        SetContactNo(res.data.ContactNumber);
-        setGender(res.data.Gender);
-        setCountry(res.data.Country);
-        SetCurrentPassword(res.data.Password);
-        SetPassword(res.data.Password);
+     
 
 
       }).catch((err) => {
@@ -557,6 +113,11 @@ export default function AdminHeaderTemp(props) {
 
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
           <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+          <li class="nav-item">
+              <Link class="nav-link" to = "/admin/dashboard" id="classicalHeader">
+                <font> Dashboard </font>
+              </Link>
+            </li>
             <li class="nav-item">
               <Link class="nav-link" to = "/admin/allcovers" id="classicalHeader">
                 <font> Covers </font>
@@ -620,6 +181,53 @@ export default function AdminHeaderTemp(props) {
             </span>
      
           </div>
+
+
+          <span
+                  className="userProfileSpan ml-1 mt-1"
+                  onClick={() => {
+
+                    const updateloginStatus = {
+                      LoginStatus: false,
+                    };
+            
+                    axios
+                      .put(
+                        "http://localhost:8070/admin/loginStatus/" + localStorage.getItem("AdminID"),
+                        updateloginStatus
+                      )
+                      .then((res) => {
+
+
+                        authentication.logout(() => {
+                          props.history.push("/adminlogin")
+                          localStorage.removeItem("AdminID");
+    
+                         })
+                      }).catch((err)=>{
+            
+                      });
+
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="30"
+                    height="30"
+                    fill="#764A34"
+                    class="bi bi-box-arrow-right"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"
+                    />
+                    <path
+                      fill-rule="evenodd"
+                      d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"
+                    />
+                  </svg>
+                </span>
         </div>
       </nav>
 
@@ -650,7 +258,7 @@ export default function AdminHeaderTemp(props) {
                   <br />
                   <div className="col-md-9 col-sm-6 input-group-append">
                     <h6 style={{ color: "#764A34" }} >
-                      <strong>User Name</strong>: {Customer.Username}
+                      <strong>User Name</strong>: {Admin.Username}
                     </h6>
                   </div>
                   <br />
@@ -686,7 +294,7 @@ export default function AdminHeaderTemp(props) {
                     <h6 style={{ color: "#764A34" }}>
                       <strong>Email</strong>:{" "}
                       <a href="">
-                        <u>{Customer.Email}</u>
+                        <u>{Admin.Email}</u>
                       </a>
                     </h6>
                   </div>

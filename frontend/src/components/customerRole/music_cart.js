@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -32,7 +33,8 @@ export default function MusicCart(props) {
     setTotal("Loading...");
     await axios
       .get(
-        "http://localhost:8070/shoppingCart/getOneCart/"+localStorage.getItem("CustomerID")
+        "https://kaushal-rashmika-music.herokuapp.com/shoppingCart/getOneCart/" +
+          localStorage.getItem("CustomerID")
       )
       .then((res) => {
         console.log(res.data.CoverIDs);
@@ -59,7 +61,7 @@ export default function MusicCart(props) {
 
     for (let i = 0; i < data.length; i++) {
       await axios
-        .get(`http://localhost:8070/covers/getcoverbyid/${data[i]}`)
+        .get(`https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbyid/${data[i]}`)
         .then((res) => {
           console.log(res.data[0].Price);
           // console.log("asd")
@@ -101,7 +103,8 @@ export default function MusicCart(props) {
       if (result.isConfirmed) {
         axios
           .delete(
-            `http://localhost:8070/shoppingCart/deleteCartCover/${id}/`+localStorage.getItem("CustomerID")
+            `https://kaushal-rashmika-music.herokuapp.com/shoppingCart/deleteCartCover/${id}/` +
+              localStorage.getItem("CustomerID")
           )
           .then((res) => {
             alert("Successfully deleted");
@@ -121,6 +124,8 @@ export default function MusicCart(props) {
     await getDownloadURL(storageRef)
       .then((url) => {
         document.getElementById(index).src = url;
+        document.getElementById("temp"+index).hidden = true;
+        document.getElementById(index).hidden =false;
       })
       .catch((err) => {
         // ErrorhandlingTxt("Reccomended covers are not available right now!");
@@ -189,7 +194,16 @@ export default function MusicCart(props) {
                   <div class="card mb-3">
                     <div class="row no-gutters">
                       <div class="col-md-4 mt-3 clsImg ">
+                      <img
+
+                id={"temp"+index}
+                src={"/images/imageplaceholder.png" }
+                class="card-img-top embed-responsive-item"
+                alt="..."
+                // style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
+              />
                         <img
+                        hidden
                           alt="Card image cap"
                           class="card-img-top embed-responsive-item"
                           id={index}
@@ -206,11 +220,12 @@ export default function MusicCart(props) {
                             class="mb-0 text-uppercase small"
                             style={{ color: "#764A34", fontWeight: "bold" }}
                           >
+                            <br />
                             {`Original Artist :`}{" "}
                             <span style={{ color: "#000000" }}>
                               {post.author}
                             </span>
-                          </p>
+                          </p><br />
                           <p
                             class="mb-0  text-uppercase small"
                             style={{ color: "#764A34", fontWeight: "bold" }}
@@ -218,11 +233,12 @@ export default function MusicCart(props) {
                             {`Arranged by :`}{" "}
                             <span style={{ color: "#000000" }}>
                               Kaushal Rashmika
-                            </span>
-                          </p>
+                            </span><br />
+                          </p><br />
                           <p class="mb-0" style={{ fontWeight: "bold" }}>
-                            Rs.{post.price}
+                            ${post.price}
                           </p>
+                          <br />
                           <button
                             type="button"
                             class="btn "
@@ -284,3 +300,4 @@ export default function MusicCart(props) {
     </div>
   );
 }
+
