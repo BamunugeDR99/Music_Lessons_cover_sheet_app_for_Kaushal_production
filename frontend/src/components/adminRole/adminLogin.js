@@ -9,6 +9,7 @@ import {faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import "../../css/adminLogin.css";
 import Swal from 'sweetalert2';
 import k from "../../images/admin.jpg";
+import Modal from "react-bootstrap/Modal";
 
 const eye = <FontAwesomeIcon icon={faEye} />;
 const sleye = <FontAwesomeIcon icon={faEyeSlash}/>;
@@ -16,6 +17,8 @@ const sleye = <FontAwesomeIcon icon={faEyeSlash}/>;
 
 
 export default function AdminLogin(props) {
+
+  const [modalOpenForLoading, setmodalOpenForLoading] = useState(false);
 
 
     // const refreshToken = async () =>{
@@ -87,6 +90,8 @@ export default function AdminLogin(props) {
 
       function loginAdmin(e) {
         e.preventDefault();
+
+        setmodalOpenForLoading(true);
     
         const loginCredentials = {
           Username,
@@ -102,25 +107,12 @@ export default function AdminLogin(props) {
             
             // setCustomer(res.data.adminLogin);
             localStorage.setItem("AdminID", res.data.adminLogin._id);
+
+            setmodalOpenForLoading(false);
     
             // sessionStorage.setItem('userID',"sss");
 
-            const Toast = Swal.mixin({
-              toast: true,
-              position: 'top-end',
-              showConfirmButton: false,
-              timer: 1500,
-              timerProgressBar: true,
-              didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-              }
-            })
             
-            Toast.fire({
-              icon: 'success',
-              title: 'Signed in successfully'
-            })
     
             // alert("Customer loggin Successfully!");
             //console.log("logging success");
@@ -132,6 +124,7 @@ export default function AdminLogin(props) {
           })
           .catch((err) => {
             // alert(err);
+            setmodalOpenForLoading(false);
             console.log(err);
             // alert(err.response.data.error);
     
@@ -255,6 +248,27 @@ export default function AdminLogin(props) {
      
   </main>
 <br/><br/>
+
+<Modal show={modalOpenForLoading} size="md">
+        <Modal.Header></Modal.Header>
+
+        <Modal.Body>
+          <div class="d-flex justify-content-center">
+            <div class="spinner-border text-success" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <br />
+          <h1 style={{ textAlign: "center", color: "#764A34" }}>
+            Please wait!
+          </h1>
+          {/* <h6 style={{ textAlign: "center", color: "#764A34" }}>
+            Your Successfully Logged In...
+          </h6> */}
+        </Modal.Body>
+        <Modal.Footer></Modal.Footer>
+      </Modal>
+
 </div>
 
 

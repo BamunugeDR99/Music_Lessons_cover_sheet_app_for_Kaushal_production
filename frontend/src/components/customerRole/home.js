@@ -2,11 +2,15 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { storage } from "../../Configurations/firebaseConfigurations";
+
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 
 import k from "../../images/pre.png";
 
 export default function Home(props) {
+
+
+  
   let [Top4Downloads, setTop4Downloads] = useState([]);
 
   useEffect(async () => {
@@ -107,6 +111,8 @@ export default function Home(props) {
         </h2>
         <br />
 
+      
+
         <div
           class="card-deck"
           style={{ paddingRight: "50px", paddingLeft: "50px" }}
@@ -121,6 +127,7 @@ export default function Home(props) {
         
 
           {Top4Downloads.map((covers, index) => (
+            
             <div
             onClick = {() => {props.history.push("/customer/detailedcover/"+covers._id)}}
               class="card"
@@ -163,6 +170,7 @@ export default function Home(props) {
             </div>
           ))}
         </div>
+      
       </div>
       <br />
       <br />
