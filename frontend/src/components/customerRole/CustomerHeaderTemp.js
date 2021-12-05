@@ -553,7 +553,7 @@ export default function CustomerHeader(props) {
 
   // async function checkCustomerID(customerID) {
   //   await axios
-  //     .get("http://localhost:8070/customer/getAll/")
+  //     .get("https://kaushal-rashmika-music.herokuapp.com/customer/getAll/")
   //     .then((res) => {
   //       for (let i = 0; i < res.data.length; i++) {
   //         console.log(res.data[i]._id);

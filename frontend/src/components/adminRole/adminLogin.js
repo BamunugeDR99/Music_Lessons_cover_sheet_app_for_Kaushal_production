@@ -125,7 +125,7 @@ export default function AdminLogin(props) {
 
         axios
           .put(
-            "http://localhost:8070/admin/loginStatus/" + res.data.adminLogin._id,
+            "https://kaushal-rashmika-music.herokuapp.com/admin/loginStatus/" + res.data.adminLogin._id,
             updateloginStatus
           )
           .then((res) => {

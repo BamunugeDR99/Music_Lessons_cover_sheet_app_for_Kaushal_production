@@ -53,7 +53,7 @@ export default function DashBoard() {
     setspinner(false);
 
     axios
-      .get("http://localhost:8070/covers/getactivecovers")
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getactivecovers")
       .then((res) => {
         setCoverLength(res.data.length);
         // calculateDownloads(res.data);
@@ -63,7 +63,7 @@ export default function DashBoard() {
       });
 
     axios
-      .get("http://localhost:8070/covers/getactiveExcercices")
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getactiveExcercices")
       .then((res) => {
         setExcercisesLength(res.data.length);
         // calculateDownloads(res.data);
@@ -73,7 +73,7 @@ export default function DashBoard() {
       });
 
     axios
-      .get("http://localhost:8070/covers/getcovers")
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers")
       .then((res) => {
         // setCoverLength(res.data.length);
         calculateDownloads(res.data);

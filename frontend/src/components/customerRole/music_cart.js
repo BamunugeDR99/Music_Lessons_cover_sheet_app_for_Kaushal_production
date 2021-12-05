@@ -61,7 +61,7 @@ export default function MusicCart(props) {
     if (data.length > 0) {
       for (let i = 0; i < data.length; i++) {
         await axios
-          .get(`http://localhost:8070/covers/getcoverbyid/${data[i]}`)
+          .get(`https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbyid/${data[i]}`)
           .then((res) => {
             console.log(res.data[0].Price);
             // console.log("asd")
@@ -98,7 +98,7 @@ export default function MusicCart(props) {
     axios
 
       .get(
-        "http://localhost:8070/shoppingCart/getOneCart/" +
+        "https://kaushal-rashmika-music.herokuapp.com/shoppingCart/getOneCart/" +
           localStorage.getItem("CustomerID")
       )
 
@@ -148,7 +148,7 @@ export default function MusicCart(props) {
             setTotal("Loading...");
             axios
               .get(
-                "http://localhost:8070/shoppingCart/getOneCart/" +
+                "https://kaushal-rashmika-music.herokuapp.com/shoppingCart/getOneCart/" +
                   localStorage.getItem("CustomerID")
               )
               .then((res) => {
@@ -258,7 +258,7 @@ export default function MusicCart(props) {
                       <div class="col-md-4 mt-3 clsImg ">
                         <img
                           id={"temp" + index}
-                          src={"/images/imageplaceholder.png"}
+                          src={"/images/verticaLImageHolder.jpg"}
                           class="card-img-top embed-responsive-item"
                           alt="..."
                           // style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
@@ -269,12 +269,12 @@ export default function MusicCart(props) {
                           class="card-img-top embed-responsive-item"
                           id={index}
                           src={
-                            displayImages(post.images[0], index) ||
-                            "/images/Imageplaceholder.png"
+                            displayImages(post.images[0], index) 
+                    
                           }
                           onError={(e) => {
                             e.target.onerror = null;
-                            e.target.src = "/images/imageplaceholder.png";
+                            e.target.src = "/images/verticaLImageHolder.jpg";
                           }}
                         />
                       </div>
