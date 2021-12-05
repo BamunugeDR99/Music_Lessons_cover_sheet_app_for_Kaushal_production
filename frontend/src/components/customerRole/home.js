@@ -128,41 +128,29 @@ export default function Home(props) {
     </div>
 
 
-<section class="slider_section ">
+ <section class="slider_section ">
 
 <div class="container ">
               <div class="row">
                 <div class="col-md-7 col-lg-6 ">
                   <div class="detail-box">
+                  <br/>    <br/> <br/>
                     <h1>
-                      EXPLORE MORE THAN 8 <br/> CATEGORIES TO MUSIC NOTES
+                      EXPLORE MORE THAN 8 CATEGORIES TO MUSIC NOTES
                     </h1>
+                    <br/>    <br/>  <br/>
+                    <p style={{fontWeight:"bold"}}>
+                    "Music Is the Art of Thinking With Sounds"
+                    </p>
+                    <p>
+                    ~ Jules Cambarieu 
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
 
   </section>
-
-  <section class="text_section ">
-
-<div class="container ">
-              
-                {/* <div class="col-md-6"> */}
-                  <div class="detail-box">
-                    <h3>
-                     "Music Is The Art of<br/> Thinking With Sounds"
-                     
-                    </h3>
-                    <p>~ Jules Combarieu ~</p>
-                  {/* </div> */}
-                </div>
-              </div>
-           
-  </section>
-
-
-
 
   </div>
 
