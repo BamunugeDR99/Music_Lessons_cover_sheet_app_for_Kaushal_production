@@ -573,7 +573,7 @@ export default function ViewCovers(props) {
           class="table table-striped table-bordered table-hover"
           style={{ width: "100%" }}
         >
-          <thead>
+          <thead className = "thead-dark">
             <tr>
               <th>Title</th>
               <th>Original Artist Name</th>
