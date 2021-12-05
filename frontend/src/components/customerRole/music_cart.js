@@ -272,8 +272,10 @@ export default function MusicCart(props) {
                             displayImages(post.images[0], index) ||
                             "/images/Imageplaceholder.png"
                           }
-                         
-
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "/images/imageplaceholder.png";
+                          }}
                         />
                       </div>
                       <div class="col-md-8">
@@ -334,11 +336,6 @@ export default function MusicCart(props) {
                 The Total Amount of
               </h5>
               <ul class="list-group list-group-flush">
-                {/* Temporary Amount */}
-                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
-                  Temporary Amount: ${total}
-                </li>
-
                 {/* Sub Total */}
                 <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                   <div>

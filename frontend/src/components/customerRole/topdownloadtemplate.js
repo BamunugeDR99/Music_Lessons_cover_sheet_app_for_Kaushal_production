@@ -1,24 +1,22 @@
-
 import React from "react";
 import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 
 export default function TopDownloadTemplate(props) {
   async function displayImages() {
+    const storageRef = ref(storage, `PreviewImages/${props.imageName}`);
 
-      const storageRef = ref(storage, `PreviewImages/${props.imageName}`);
-      await getDownloadURL(storageRef)
-        .then((url) => {
-          document.getElementById("image").src = url;
-          document.getElementById("temp").hidden = true;
-          document.getElementById("image").hidden = false;
+    await getDownloadURL(storageRef)
+      .then((url) => {
+        document.getElementById("image").src = url;
+        document.getElementById("temp").hidden = true;
+        document.getElementById("image").hidden = false;
 
-          console.log(url);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-   
+        console.log(url);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   return (
@@ -33,7 +31,7 @@ export default function TopDownloadTemplate(props) {
             marginLeft: "15px",
           }}
         >
-             <img
+          <img
                 id="temp"
                 src={"/images/imageplaceholder.png" }
                 class="card-img-top"
@@ -43,6 +41,10 @@ export default function TopDownloadTemplate(props) {
           <img
             hidden
             id="image"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/images/imageplaceholder.png";
+            }}
             src={displayImages()}
             class="card-img-top"
             alt="..."
@@ -65,4 +67,3 @@ export default function TopDownloadTemplate(props) {
     </div>
   );
 }
-

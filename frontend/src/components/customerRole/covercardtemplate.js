@@ -1,26 +1,22 @@
-
 import React from "react";
 import "./../../css/covercard.css";
 import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 
 export default function CoverTemplate(props) {
-
   async function displayImages(coverImageName, index) {
     // console.log(coverImageName);
     // console.log(index);
 
-      const storageRef = ref(storage, `PreviewImages/${coverImageName}`);
-      await getDownloadURL(storageRef)
-        .then((url) => {
-          document.getElementById(index).src = url;
-          document.getElementById(index).hidden = false;
-          document.getElementById("temp"+index).hidden = true;
-        })
-        .catch((err) => {
-          // ErrorhandlingTxt("Reccomended covers are not available right now!");
-        });
- 
+    const storageRef = ref(storage, `PreviewImages/${coverImageName}`);
+    await getDownloadURL(storageRef)
+      .then((url) => {
+        document.getElementById(index).src = url;
+        document.getElementById(index).hidden = false;
+      })
+      .catch((err) => {
+        // ErrorhandlingTxt("Reccomended covers are not available right now!");
+      });
   }
   return (
     <div>
@@ -34,20 +30,12 @@ export default function CoverTemplate(props) {
             marginLeft: "15px",
           }}
         >
-                <img
-                id={"temp"+props.id}
-                src={"/images/imageplaceholder.png" }
-                class="card-img-top"
-                alt="..."
-                style={{ borderRadius: "15px 15px 0px 0px", height: "300px" }}
-              />
+ 
+
           <img
-          hidden
             id={props.id}
-            src={
-              displayImages(props.imageName, props.id) ||
-              "/images/Imageplaceholder.png"
-            }
+            src={displayImages(props.imageName, props.id)}
+            onError={(e)=>{e.target.onerror = null; e.target.src="/images/imageplaceholder.png"}}
             class="card-img-top"
             alt="..."
             style={{ borderRadius: "15px 15px 0px 0px", height: "300px" }}
@@ -68,4 +56,3 @@ export default function CoverTemplate(props) {
     </div>
   );
 }
-

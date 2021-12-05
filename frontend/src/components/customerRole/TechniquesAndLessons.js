@@ -5,14 +5,16 @@ import TopDownloadTemplate from "./topdownloadtemplate";
 import Modal from "react-bootstrap/Modal";
 import InputRange from "react-input-range";
 import { data, post } from "jquery";
+import "react-multi-carousel/lib/styles.css";
+import Carousel from "react-multi-carousel";
 
 export default function MusicCoverPage(props) {
   const [modelOpen, setmodelOpen] = useState(false);
   const [pricerange, setPriceRange] = useState("0");
   const [downloadrange, setDownloadRange] = useState("0");
   const [nodata, setNoData] = useState("");
-  const [populernodata, setPopulernodata] = useState("");
   const [covers, setCovers] = useState([]);
+  const [populernodata, setPopulernodata] = useState("");
   const [filtercover, setfilterCover] = useState([]);
   const [categorycover, setCategoryCover] = useState([]);
   // const [filtercovers, setFilterCovers] = useState([]);
@@ -22,9 +24,30 @@ export default function MusicCoverPage(props) {
   const [populercover, setpopulercover] = useState([]);
   const [populerimage, setpopulerimage] = useState();
   let dataholdedr = [];
+  let populercoverholder = [];
 
   let pcover = {};
   let max = 0;
+
+  const responsive = {
+    superLargeDesktop: {
+      // the naming can be any, depends on you.
+      breakpoint: { max: 4000, min: 3000 },
+      items: 5,
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 3,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+    },
+  };
 
   useEffect(async () => {
     document.getElementById("bufferlink").style.display = "block";
@@ -41,6 +64,7 @@ export default function MusicCoverPage(props) {
         if (res.data.length > 0) {
           setNoData("");
           dataholdedr = res.data;
+          populercoverholder = res.data;
           setCovers(res.data);
           setfilterCover(res.data);
           setCategoryCover(res.data);
@@ -51,8 +75,8 @@ export default function MusicCoverPage(props) {
           setNoData("No Covers available");
           setPopulernodata("No populer covers available");
           setCovers([]);
-          document.getElementById("spinnerdiv2").style.display = "none";
           document.getElementById("spinnerdiv").style.display = "none";
+          document.getElementById("spinnerdiv2").style.display = "none";
           document.getElementById("coverdiv").style.display = "block";
         }
 
@@ -75,19 +99,16 @@ export default function MusicCoverPage(props) {
       .catch((err) => {
         alert(err.message);
       });
-
     populercovers();
   }, []);
 
   async function populercovers() {
-    // console.log(dataholdedr);
-    if (dataholdedr.length > 0) {
-      for (let i = 0; i < dataholdedr.length; i++) {
-        // console.log(dataholdedr[i].NoOfDownloads)
-        if (Number(dataholdedr[i].NoOfDownloads) >= max) {
-          max = dataholdedr[i].NoOfDownloads;
+    if (populercoverholder.length > 0) {
+      for (let i = 0; i < populercoverholder.length; i++) {
+        if (Number(populercoverholder[i].NoOfDownloads) >= max) {
+          max = populercoverholder[i].NoOfDownloads;
           console.log(max);
-          pcover = dataholdedr[i];
+          pcover = populercoverholder[i];
         }
       }
       // console.log(pcover.PreviewPages[0]);
@@ -410,30 +431,67 @@ export default function MusicCoverPage(props) {
               </div>
             </div>{" "}
             <span id="coverdiv">
-              <div className="row">
-                {covers.map((post, index) => (
-                  // console.log(post.PreviewPages[0]),
-                  <div
-                    className="col-md-4 bg-image hover-zoom"
-                    onClick={() => {
-                      props.history.push("/customer/detailedcover/" + post._id);
-                    }}
-                  >
-                    <CoverTemplate
-                      title={post.Title}
-                      coverId={post._id}
-                      artist={post.OriginalArtistName}
-                      price={post.Price}
-                      category={post.SubCategory}
-                      id={index}
-                      imageName={post.PreviewPages[0]}
-                    />
-                    <br />
-                  </div>
-                ))}
+              <div className="d-block d-sm-none">
+                <Carousel responsive={responsive}>
+                  {covers.map((post, index) => (
+                    // console.log(post.PreviewPages[0]),
+                    <div
+                      className="col-md bg-image hover-zoom"
+                      onClick={() => {
+                        props.history.push(
+                          "/customer/detailedcover/" + post._id
+                        );
+                      }}
+                    >
+                      <CoverTemplate
+                        title={post.Title}
+                        coverId={post._id}
+                        artist={post.OriginalArtistName}
+                        price={post.Price}
+                        category={post.SubCategory}
+                        id={index}
+                        imageName={post.PreviewPages[0]}
+                      />
+                      <br />
+                    </div>
+                  ))}
+                </Carousel>
 
                 <br />
                 <br />
+              </div>
+              <div
+                style={{ maxHeight: "870px", overflowY: "scroll" }}
+              
+                className="d-none d-sm-block"
+              >
+                <div className="row">
+                  {covers.map((post, index) => (
+                    // console.log(post.PreviewPages[0]),
+                    <div
+                      className="col-md-4 bg-image hover-zoom"
+                      onClick={() => {
+                        props.history.push(
+                          "/customer/detailedcover/" + post._id
+                        );
+                      }}
+                    >
+                      <CoverTemplate
+                        title={post.Title}
+                        coverId={post._id}
+                        artist={post.OriginalArtistName}
+                        price={post.Price}
+                        category={post.SubCategory}
+                        id={index}
+                        imageName={post.PreviewPages[0]}
+                      />
+                      <br />
+                    </div>
+                  ))}
+
+                  <br />
+                  <br />
+                </div>
               </div>
             </span>
           </div>
