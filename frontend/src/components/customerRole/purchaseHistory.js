@@ -11,6 +11,7 @@ export default function PurchaseHistory(props) {
   const [searchValue, setSearchvalue] = useState([]);
   const [noData, setNoData] = useState([]);
   const [empty, setEmpty] = useState([]);
+  const [orderDate, setOrderDate] = useState([]);
   const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
   const [modalOpenForImage, setModalOpenForImage] = useState(false);
   let [total, setTotal] = useState(0);
@@ -25,10 +26,14 @@ export default function PurchaseHistory(props) {
       axios
         .get("http://localhost:8070/order/getOrders")
         .then((res) => {
-          console.log(res.data);
           const filter = res.data.filter(
             (cus) => cus.CustomerID == localStorage.getItem("CustomerID")
           );
+          for(let i=0; i<filter.length;i++){
+            console.log(filter[i].TransactionDateAndTime);
+            setOrderDate(filter[i].TransactionDateAndTime)
+          }
+         
 
           filter.map((post) => {
             covers.push(post.CoverIDs);
@@ -47,6 +52,7 @@ export default function PurchaseHistory(props) {
 
   function getSpecificOrderCoverDetiles(allCovers) {
     setTotal(0);
+    setNoData(0);
     TotalPrice = 0;
     for (let j = 0; j < allCovers.length; j++) {
       for (let i = 0; i < covers[0].length; i++) {
@@ -179,7 +185,7 @@ function previewPdf(covername) {
         <div className="col-sm text-right">
           
           <h6>
-            <b>No of downloads : {noData}</b>
+            <b>No of purchases : {noData}</b>
           </h6>
           <h6 style={{ display: "inline" }}>
             <b>Total : $ </b>
@@ -262,9 +268,9 @@ function previewPdf(covername) {
               <div className="col-sm "
                 style={{ backgroundColor: "white", lineHeight: "2em" }} >
                 <div className="text-right">
-                  <span class="text-center">{post.TransactionDateAndTime}</span>
+                  <span class="text-center">{orderDate}</span>
                 </div>
-
+                <br/>
                 <span style={{ color: " #764A34" }}>
                   Original Artist&ensp;:
                 </span>

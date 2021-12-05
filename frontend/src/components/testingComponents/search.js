@@ -17,12 +17,12 @@ useEffect(()=>{
         axios
             .get("http://localhost:8070/covers/getcovers")
             .then((res) => {
-                console.log(res.data)
+                // console.log(res.data)
                 setCovers(res.data)
                 for (var i = 0; i < res.data.length; i++) {
                     myOptions.push(res.data[i].Title)
                     opID.push(res.data[i]._id)
-                    console.log(res.data[i]._id)
+                    // console.log(res.data[i]._id)
                 }
                  setMyOptions(myOptions)
 
@@ -35,41 +35,42 @@ getData();
 },[])
 
 
-console.log(covers)
+// console.log(covers)
 
 
-    function getDataFromAPI(value){  
+    function getDataFromAPI(value, id){  
         console.log(value)
-        console.log(myOptions)
+        // console.log(myOptions)
         // axios.get("http://localhost:8070/covers/getcovers")
         // .then((res)=>{
           // console.log(res.data)
           
           for(let i = 0; i < myOptions.length; i++){
               if(myOptions[i] == value){
-                number=1;
+                // number=1;
+                console.log("Successful")
               }
               else{
-                // number=2;
+                console.log('Unsuccesful')
               }
           }
-          if(number==1){
-            console.log("XXXXXXXXXXXXXXXXXXXX")
-          }
-          else{
-            console.log('aaaaaaaaaaaaaaaaaaaa')
-          }
+          // if(number==1){
+          //   console.log("Successful")
+          // }
+          // else{
+          //   console.log('Unsuccesful')
+          // }
         // })
     }
 
     
-    // function getDataFromAPI(){
-    //   console.log("Options Fetched from API")
-    
-    //   fetch(myOptions).then((response) => {
-    //     return response.json()
-    //   })
-        
+    // function searched(){
+    //    if(number==1){
+    //         console.log("Successful")
+    //       }
+    //       else{
+    //         console.log('Unsuccesful')
+    //       }
     // }
 
 
@@ -92,8 +93,8 @@ return (
 		)}
         
 	/>
-     <button class="btn  " type="submit" style={{color:"#764A34", border: "2px solid #764A34"}} 
-    //   onClick={() => {selectCover(value); }}
+     <button class="btn" type="submit" style={{color:"#764A34", border: "2px solid #764A34"}} 
+    onClick={() => { props.history.push("/customer/detailedcover/" + opID) }}
       >Search</button>
     <br/><br/>
     
