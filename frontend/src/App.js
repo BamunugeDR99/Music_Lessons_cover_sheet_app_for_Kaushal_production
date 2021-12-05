@@ -75,7 +75,7 @@ function App() {
       <Switch>
         <div>
           {/* Customer Routes */}
-          <Route path="/" exact component={InitialPage} />
+          <Route exact path="/" exact component={InitialPage} />
           {loginStatus == true ? (
             <div>
               <Route path="/customer" component={CustomerHeaderTemp} />
@@ -127,7 +127,6 @@ function App() {
             component={LessonAndCoversDetailed}
           />
           <Route path="/customer" component={Footer} />
-
           {/* Admin Routes  */}
 
           <ProtectedRoute path="/admin" component={AdminHeaderTemp} />
@@ -162,10 +161,12 @@ function App() {
 
           {/* Testing routes  */}
           {/* <Route path = "/search" exact component = {Search}/> */}
+          <Route path="/notfound" component={NotFound} />
 
           {/* <Route path = "*" component = {}/> */}
+          {/* <Route path="/admin/*" exact component={NotFound} /> */}
           {/* <Route path="*" exact component={NotFound} /> */}
-        </div>
+       </div>
       </Switch>
     </Router>
   );
