@@ -401,8 +401,7 @@ export default function CustomerForgotPassword(props) {
                 >
                   Verify Code
                 </button>
-                <br />
-                <br />
+              <br/>
                 <button
                   type="button"
                   class="btn btn-block"
