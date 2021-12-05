@@ -87,11 +87,12 @@ const customerSchema = new Schema({
 
 //hashing password
 customerSchema.pre("save", async function (next) {
-  // console.log("hi")
+  console.log("hi")
 
-  if (this.isModified("password")) {
+  if (this.isModified("Password")) {
     var salt = bcrypt.genSaltSync(12);
-    this.password = bcrypt.hashSync(this.password, salt);
+    this.Password = bcrypt.hashSync(this.Password, salt);
+    console.log(this.Password);
     // this.confirmPassword = bcrypt.hashSync(this.confirmPassword, salt);
   }
 

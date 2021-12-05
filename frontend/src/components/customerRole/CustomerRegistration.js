@@ -4,6 +4,9 @@ import PasswordStrengthIndicator from "./passwordStrength";
 import Swal from "sweetalert2";
 import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
+import { connectStorageEmulator } from "@firebase/storage";
+
+const bcrypt = require("bcryptjs");
 
 export default function CustomerRegistration(props) {
   const [passwordShown, setPasswordShown] = useState(false);
@@ -42,7 +45,7 @@ export default function CustomerRegistration(props) {
   const [passwordMatchDiv, setPasswordMatchDiv] = useState(true);
   const [passwordMisMatchDiv, setPasswordMisMatchDiv] = useState(true);
 
-  let flag1 = 0;
+  let flaguser,flagmail, flagpassword, flagfname, flaglname = 0;
 
   const [passwordFocused, setPasswordFocused] = useState(false);
 
@@ -57,73 +60,108 @@ export default function CustomerRegistration(props) {
 
   const [modalOpenForLoading, setmodalOpenForLoading] = useState(false);
   useEffect(() => {
-    // function getCustomers() {
-    //   axios.get("https://kaushal-rashmika-music.herokuapp.com/customer/getUsernames").then((res) => {
-    //     Allusername = res.data;
-    //     setAllusernames(res.data);
-    //     axios.get("https://kaushal-rashmika-music.herokuapp.com/customer/getAllEmails").then((res)=>{
-    //       Allemails = res.data;
-    //       setAllemails(res.data);
-    //     }).catch((err)=>{
-    //       alert(err.message);
-    //     })
-    //   }).catch((err) => {
-    //     alert(err.message);
-    //   })
-    // }
-    // getCustomers();
-  }, []);
-
-  async function checkUserName(username) {
-    await axios("https://kaushal-rashmika-music.herokuapp.com/customer/getUsernames")
-      .then((res) => {
+    function getCustomers() {
+      axios.get("https://kaushal-rashmika-music.herokuapp.com/customer/getUsernames").then((res) => {
         Allusername = res.data;
         setAllusernames(res.data);
+        axios.get("https://kaushal-rashmika-music.herokuapp.com/customer/getAllEmails").then((res)=>{
+          Allemails = res.data;
+          setAllemails(res.data);
+        }).catch((err)=>{
+          alert(err.message);
+        })
+      }).catch((err) => {
+        alert(err.message);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+    }
+    getCustomers();
+  }, []);
 
-    if (username.length == 0) {
+  function hasWhiteSpace(s) {
+    return (/\s/).test(s);
+  }
+
+  function getCustomers2() {
+    axios.get("https://kaushal-rashmika-music.herokuapp.com/customer/getUsernames").then((res) => {
+      Allusername = res.data;
+      setAllusernames(res.data);
+      axios.get("https://kaushal-rashmika-music.herokuapp.com/customer/getAllEmails").then((res)=>{
+        Allemails = res.data;
+        setAllemails(res.data);
+      }).catch((err)=>{
+        alert(err.message);
+      })
+    }).catch((err) => {
+      alert(err.message);
+    })
+  }
+
+
+  async function checkUserName(username) {
+    
+    // let username2 = document.getElementById("inputUsername").value;
+
+    // console.log(username2);
+
+    if (checkUserName.length == 0) {
       SetUsernameError("");
     } else {
       // console.log(result);
-      if (Allusername.includes(username) === true) {
-        flag1 = 0;
+      
+     if(hasWhiteSpace(username) == true ){
+       flaguser = 0;
+        console.log("Fired");
+        SetUsernameError("Username Cannot Contain WhiteSpaces");
+    }
+      else if (Allusername.includes(username) === true) {
+        flaguser = 0;
         SetUsernameError("UserName Already Exists");
-      } else {
+      }
+      
+      else {
         SetUsernameError("");
+        flaguser = 1;
       }
     }
   }
 
   async function checkEmail(email) {
-    await axios("https://kaushal-rashmika-music.herokuapp.com/customer/getAllEmails")
-      .then((res) => {
-        Allemails = res.data;
-        setAllemails(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  
     if (email.length == 0) {
       SetEmailError("");
     } else {
       if (Allemails.includes(email) === true) {
-        flag1 = 0;
+        flagmail = 0;
         SetEmailError("Email Already Exists");
       } else {
         SetEmailError("");
+        flagmail = 1;
       }
     }
   }
 
   function validate() {
 
+  
     Country = document.getElementById("selectedCountry").value;
+  
+   
+    let Password = document.getElementById("inputpassword").value;
+    let ConfirmPassword=document.getElementById("inputConfirmPassword").value
+    console.log(Password);
+    console.log(hasWhiteSpace(Password));
 
-    if (Password !== ConfirmPassword) {
-      flag1 = 0;
+
+    if(hasWhiteSpace(Password) == true ){
+      flagpassword = 0;
+       console.log("Fired");
+       SetPasswordError("Password Cannot Contain WhiteSpaces");
+   }
+
+     else  if (Password !== ConfirmPassword) {
+
+      console.log("Validate Fuction Error");
+      flagpassword = 0;
       setPasswordMisMatchDiv(false);
       setPasswordMatchDiv(true);
     } else if (
@@ -131,34 +169,49 @@ export default function CustomerRegistration(props) {
       passwordValidity.specialChar !== true ||
       passwordValidity.number !== true
     ) {
-      flag1 = 0;
+      flagpassword = 0;
       setExtraError("Please give the password in required format");
-    } else if (Country.length === 0) {
-      flag1 = 0;
-      setCountryError("Country is required");
+   
     } else {
-      flag1 = 1;
+      flagpassword = 1;
     }
   }
 
-  function checkNamePattern(word, type) {
-    if (!/[^a-zA-Z]/.test(word) === false && type == "first") {
+  function checkFNamePattern(word) {
+    if (!/[^a-zA-Z]/.test(word) === false) {
       setFirstNameError("First Name can only contain letters");
-      flag1 = 0;
-    } else if (!/[^a-zA-Z]/.test(word) === false && type == "last") {
-      setLastNameError("Last Name can only contain letters");
-      flag1 = 0;
+      flagfname = 0;
+    
     } else {
-      flag1 = 1;
+      flagfname = 1;
+     
+    }
+  }
+
+  function checkLNamePattern(word) {
+    if (!/[^a-zA-Z]/.test(word) === false) {
+      setLastNameError("Last Name can only contain letters");
+     
+      flaglname = 0;
+    } else {
+   
+      flaglname = 1;
     }
   }
 
   function checkPasswords(confirmpassword) {
+
+    let Password = document.getElementById("inputpassword").value;
+    // console.log(Password);
+    // console.log(confirmpassword);
+    // console.log(Password === confirmpassword);
     if (Password.length !== 0 || confirmpassword.length !== 0) {
       if (Password === confirmpassword) {
         setPasswordMatchDiv(false);
         setPasswordMisMatchDiv(true);
       } else if (Password !== confirmpassword) {
+
+        console.log("checkPasswords function Error");
         setPasswordMisMatchDiv(false);
         setPasswordMatchDiv(true);
       } else {
@@ -175,13 +228,18 @@ export default function CustomerRegistration(props) {
     e.preventDefault();
     validate();
     //Reconfirm Email UserName!!!!
-    console.log(Username);
-    console.log(Email);
+    getCustomers2();
     checkUserName(Username);
     checkEmail(Email);
-    console.log(flag1);
-  
+    checkFNamePattern(FirstName);
+    checkLNamePattern(LastName);
+    checkPasswords(ConfirmPassword);
+   
     Country = document.getElementById("selectedCountry").value;
+
+    Password = bcrypt.hashSync(Password, bcrypt.genSaltSync(12));
+    SetPassword(bcrypt.hashSync(Password, bcrypt.genSaltSync(12)));
+
 
     const newCustomer = {
       FirstName,
@@ -194,7 +252,13 @@ export default function CustomerRegistration(props) {
       Password,
     };
 
-    if (flag1 == 1) {
+    console.log(`Username flag : ${flaguser}`);
+    console.log(`Email flag : ${flagmail}`);
+    console.log(`Password flag : ${flagpassword}`);
+    console.log(`Firstname flag : ${flagfname}`);
+    console.log(`Lastname flag : ${flaglname}`);
+    console.log(newCustomer);
+    if (flaguser == 1 && flagmail == 1 && flagpassword == 1 & flagfname == 1 && flaglname == 1) {
       console.log("gg");
 
       setmodalOpenForLoading(true);
@@ -261,6 +325,9 @@ export default function CustomerRegistration(props) {
     }
   }
 
+
+
+
   return (
     <div>
       <br />
@@ -283,6 +350,18 @@ export default function CustomerRegistration(props) {
               <div class="text-center">
                 <h2 style={{ color: "#764A34" }}>REGISTER HERE</h2>
                 <p
+                      className="mt-1 mb-0"
+                      style={{ color: "red", fontWeight: "bold" }}
+                    >
+                      {UsernameError}
+                    </p>
+                    <p
+                      className=" mt-1 mb-0"
+                      style={{ color: "red", fontWeight: "bold" }}
+                    >
+                      {EmailError}
+                    </p>
+                <p
                   className=" mt-1 mb-0"
                   style={{ color: "red", fontWeight: "bold" }}
                 >
@@ -300,6 +379,15 @@ export default function CustomerRegistration(props) {
                 >
                   {ExtraError}
                 </p>
+
+                <p
+                      className=" mt-1 mb-0"
+                      style={{ color: "red", fontWeight: "bold" }}
+                    >
+                      {PasswordError}
+                    </p>
+
+                 
 
                 <div className="text-center" hidden={passwordMatchDiv}>
                   <svg
@@ -361,19 +449,16 @@ export default function CustomerRegistration(props) {
                         id="inputUsername"
                         placeholder="Username*"
                         onChange={(e) => {
-                          SetUsername(e.target.value);
+
                           SetUsernameError("");
+                          SetUsername(e.target.value);
+                        
                           checkUserName(e.target.value);
                         }}
                         required
                       />
                     </div>
-                    <p
-                      className="ml-5 mt-1 mb-0"
-                      style={{ color: "red", fontWeight: "bold" }}
-                    >
-                      {UsernameError}
-                    </p>
+                  
                   </div>
                 </div>
               </div>
@@ -410,12 +495,7 @@ export default function CustomerRegistration(props) {
                         required
                       />
                     </div>
-                    <p
-                      className="ml-5 mt-1 mb-0"
-                      style={{ color: "red", fontWeight: "bold" }}
-                    >
-                      {EmailError}
-                    </p>
+                  
                   </div>
                 </div>
               </div>
@@ -493,22 +573,39 @@ export default function CustomerRegistration(props) {
                         id="inputpassword"
                         placeholder="Password*"
                         onFocus={() => setPasswordFocused(true)}
-                        onBlur={() => setPasswordFocused(false)}
+                        onBlur={() =>{setPasswordFocused(false);
+                        
+                          setPasswordMatchDiv(true);
+                          setPasswordMisMatchDiv(true);
+                        
+                        }}
+
                         onChange={(e) => {
-                          SetPassword(e.target.value);
+
                           SetPasswordError("");
-                          setExtraError("");
-                          setPasswordValidity({
-                            minChar: e.target.value.length >= 8 ? true : false,
-                            number: isNumberRegx.test(e.target.value)
-                              ? true
-                              : false,
-                            specialChar: specialCharacterRegx.test(
-                              e.target.value
-                            )
-                              ? true
-                              : false,
-                          });
+
+                          if(hasWhiteSpace(e.target.value) === true){
+                            SetPasswordError("Password Cannot Contain White Spaces");
+                          }
+                           
+                         
+
+                            SetPassword(e.target.value);
+                          
+                            setExtraError("");
+                            setPasswordValidity({
+                              minChar: e.target.value.length >= 8 ? true : false,
+                              number: isNumberRegx.test(e.target.value.trim())
+                                ? true
+                                : false,
+                              specialChar: specialCharacterRegx.test(
+                                e.target.value
+                              )
+                                ? true
+                                : false,
+                            });
+                          
+                     
                         }}
                         required
                       />
@@ -554,15 +651,14 @@ export default function CustomerRegistration(props) {
                         </span>
                       </span>
                     </div>
-                    <p
-                      className="ml-5 mt-1 mb-0"
-                      style={{ color: "red", fontWeight: "bold" }}
-                    >
-                      {PasswordError}
-                    </p>
+               
+
                     {passwordFocused && (
                       <PasswordStrengthIndicator validity={passwordValidity} />
                     )}
+                 
+            
+                  
                   </div>
                 </div>
               </div>
@@ -687,7 +783,7 @@ export default function CustomerRegistration(props) {
                             onChange={(e) => {
                               setFirstName(e.target.value);
                               setFirstNameError("");
-                              checkNamePattern(e.target.value, "first");
+                              checkFNamePattern(e.target.value);
                             }}
                             required
                           />
@@ -724,7 +820,7 @@ export default function CustomerRegistration(props) {
                             onChange={(e) => {
                               setLastName(e.target.value);
                               setLastNameError("");
-                              checkNamePattern(e.target.value, "last");
+                              checkLNamePattern(e.target.value);
                             }}
                             required
                           />

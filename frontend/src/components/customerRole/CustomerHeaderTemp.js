@@ -56,8 +56,9 @@ export default function CustomerHeader(props) {
     specialChar: null,
   });
 
-  let flag1 = 0;
+ 
 
+  let flagcountry,flaggender,flagphone, flagpassword, flagfname, flaglname, flagcpassword = 0;
   //useStates to store user inputs
   let [Username, SetUsername] = useState("");
   let [Email, SetEmail] = useState("");
@@ -75,7 +76,7 @@ export default function CustomerHeader(props) {
 
   let [confirmDelete, setConfirmDelete] = useState(true);
 
-  let CustomerIDTemp = "6199d490bfd483038f7067bf";
+  let CustomerIDTemp = localStorage.getItem("CustomerID");
 
   function clearErrors() {
     SetCurrentPasswordError("");
@@ -91,23 +92,57 @@ export default function CustomerHeader(props) {
     setConfirmDeleteError("");
   }
 
+  function hasWhiteSpace(s) {
+    return (/\s/).test(s);
+  }
+
+
+  function checkFNamePattern(word) {
+    if (!/[^a-zA-Z]/.test(word) === false) {
+      setFirstNameError("First Name can only contain letters");
+      flagfname = 0;
+    
+    } else {
+      flagfname = 1;
+     
+    }
+  }
+
+  function checkLNamePattern(word) {
+    if (!/[^a-zA-Z]/.test(word) === false) {
+      setLastNameError("Last Name can only contain letters");
+     
+      flaglname = 0;
+    } else {
+   
+      flaglname = 1;
+    }
+  }
+
   function checkPasswords(confirmpassword) {
     if (Password.length !== 0 || confirmpassword.length !== 0) {
-      if (Password === confirmpassword) {
-        flag1 = 1;
+
+      if(hasWhiteSpace(Password) == true ){
+        flagpassword = 0;
+         console.log("Fired");
+         SetPasswordError("Password Cannot Contain WhiteSpaces");
+     }
+
+      else if (Password === confirmpassword) {
+        flagpassword = 1;
         setPasswordMatchDiv(false);
         setPasswordMisMatchDiv(true);
       } else if (Password !== confirmpassword) {
-        flag1 = 0;
+        flagpassword = 0;
         setPasswordMisMatchDiv(false);
         setPasswordMatchDiv(true);
       } else {
-        flag1 = 0;
+        flagpassword = 0;
         setPasswordMatchDiv(true);
         setPasswordMisMatchDiv(true);
       }
     } else {
-      flag1 = 0;
+      flagpassword = 0;
       setPasswordMatchDiv(true);
       setPasswordMisMatchDiv(true);
     }
@@ -121,10 +156,10 @@ export default function CustomerHeader(props) {
       const isMatch = bcrypt.compareSync(nCopsw, CurrentPassword);
       console.log("Password Match : " + isMatch);
       if (!isMatch) {
-        flag1 = 0;
+        flagcpassword = 0;
         SetCurrentPasswordError("Invalid Current Password!");
       } else {
-        flag1 = 1;
+        flagcpassword = 1;
         SetCurrentPasswordError("");
       }
     }
@@ -136,17 +171,24 @@ export default function CustomerHeader(props) {
     console.log(CurrentPassword2.length);
     console.log(Password.length);
     console.log(ConfirmPassword.length);
-    if (CurrentPassword2.length === 0) {
-      flag1 = 0;
+
+      if(hasWhiteSpace(Password) == true ){
+        flagpassword = 0;
+       console.log("Fired");
+       SetPasswordError("Password Cannot Contain WhiteSpaces");
+     }
+
+    else if (CurrentPassword2.length === 0) {
+      flagpassword = 0;
       SetCurrentPasswordError2("Current password is required !");
     } else if (Password.length === 0) {
-      flag1 = 0;
+      flagpassword = 0;
       SetPasswordError("New password is required !");
     } else if (ConfirmPassword.length === 0) {
-      flag1 = 0;
+      flagpassword = 0;
       SetConfirmPasswordError("Confirm password is required !");
     } else if (Password !== ConfirmPassword) {
-      flag1 = 0;
+      flagpassword = 0;
       setPasswordMisMatchDiv(false);
       setPasswordMatchDiv(true);
     } else if (
@@ -154,10 +196,10 @@ export default function CustomerHeader(props) {
       passwordValidity.specialChar !== true ||
       passwordValidity.number !== true
     ) {
-      flag1 = 0;
+      flagpassword = 0;
       setExtraError("Please give the password in required format");
     } else {
-      flag1 = 1;
+      flagpassword = 1;
     }
   }
 
@@ -166,9 +208,13 @@ export default function CustomerHeader(props) {
     checkCurrentPassword();
     validatePasswords();
 
-    console.log(flag1);
+    console.log(`Confirm Password Flag : `);
+    console.log(flagcpassword);
+    console.log(`Password Flag : `);
+    console.log(flagpassword);
 
-    if (flag1 === 1) {
+
+    if (flagpassword === 1 && flagcpassword === 1) {
       Password = bcrypt.hashSync(Password, bcrypt.genSaltSync(12));
       SetPassword(bcrypt.hashSync(Password, bcrypt.genSaltSync(12)));
 
@@ -208,6 +254,7 @@ export default function CustomerHeader(props) {
   function ChangePasswordmodalClose() {
     setchangePasswordmodelOpen(false);
     setConfirmDeleteError("");
+    clearErrors();
   }
 
   function goToEditProfile() {
@@ -223,27 +270,69 @@ export default function CustomerHeader(props) {
   // let navigate = useNavigate();
 
   function validate() {
-    if (FirstName.length === 0) {
-      flag1 = 0;
+    console.log ("Validate Running");
+    console.log(FirstName);
+    console.log(LastName);
+    console.log(Gender);
+    console.log(Country);
+    console.log(ContactNumber);
+
+   
+    if (FirstName.length == 0) {
+      flagfname = 0;
       setFirstNameError("First name is required ! ");
-    } else if (LastName.length === 0) {
-      flag1 = 0;
+    } 
+    else if (!/[^a-zA-Z]/.test(FirstName) === false) {
+      setFirstNameError("First Name can only contain letters");
+      flagfname = 0;
+    
+    }
+    else {
+   
+      flagfname = 1;
+    }
+    
+    
+    if (LastName.length == 0) {
+      flaglname = 0;
       setLastNameError("Last name is required !");
-    } else if (ContactNumber.length === 0) {
-      flag1 = 0;
+    }
+    else if (!/[^a-zA-Z]/.test(LastName) === false) {
+      setLastNameError("Last Name can only contain letters");
+      flaglname = 0;
+    
+    }
+    else{
+      flaglname = 1;
+    } 
+    
+    
+    if (ContactNumber.length == 0) {
+      flagphone = 0;
       SetContactNoError("Contact number is required !");
-    } else if (Gender.length === 0) {
-      flag1 = 0;
+    } else{
+      flagphone = 1;
+    } 
+    
+    
+    if (Gender.length == 0) {
+      flaggender = 0;
       setGenderError("Gender is required !");
-    } else if (Country.length === 0) {
-      flag1 = 0;
+    } else{
+    
+      flaggender = 1;
+    }
+    
+    
+    if (Country.length == 0) {
+      flagcountry = 0;
       setCountryError("Country is required !");
-    } else {
-      flag1 = 1;
+    } else { 
+        flagcountry = 1;
     }
   }
 
-  function updateProfile() {
+  async function updateProfile() {
     console.log("Password : " + Password);
 
     const newCustomer = {
@@ -257,12 +346,20 @@ export default function CustomerHeader(props) {
       Password,
     };
 
+
+
     console.log(newCustomer);
 
-    validate();
-    console.log(flag1);
-
-    if (flag1 === 1) {
+    await validate();
+    checkLNamePattern(LastName);
+    checkFNamePattern(FirstName);
+    console.log(`ContactNo flag : ${flagphone}`);
+    console.log(`Country flag : ${flagcountry}`);
+    console.log(`Gender flag : `);
+    console.log(flaggender);
+    console.log(`Firstname flag : ${flagfname}`);
+    console.log(`Lastname flag : ${flaglname}`);
+    if (flagphone == 1 && flagcountry == 1 && flaggender == 1 & flagfname == 1 && flaglname == 1 && FirstName.length !== 0 && LastName.length !== 0) {
       Swal.fire({
         title: "Do you want to save the changes?",
         showDenyButton: true,
@@ -304,15 +401,15 @@ export default function CustomerHeader(props) {
 
   function deleteProfile() {
     checkCurrentPassword();
-    console.log(flag1);
+    console.log(flagcpassword);
 
     if (confirmDelete === true) {
       setConfirmDeleteError("Enter the Current Password");
     }
 
     setConfirmDelete(false);
-
-    if (flag1 === 1) {
+    console.log(flagcpassword);
+    if (flagcpassword === 1) {
       const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
           confirmButton: "btn btn-success",
@@ -660,10 +757,8 @@ export default function CustomerHeader(props) {
               </div>
               <div className="col-sm-6">
                 <h6 style={{ color: "#764A34" }}>
-                  <strong>Email</strong>:{" "}
-                  <a href="">
-                    <u>{Customer.Email}</u>
-                  </a>
+                  <strong>Email</strong> <u>{Customer.Email}</u>
+           
                 </h6>
               </div>
             </div>
@@ -696,6 +791,7 @@ export default function CustomerHeader(props) {
                       onChange={(e) => {
                         setFirstName(e.target.value);
                         setFirstNameError("");
+                        checkFNamePattern(e.target.value)
                       }}
                       Value={Customer.FirstName}
                     />
@@ -814,6 +910,7 @@ export default function CustomerHeader(props) {
                       onChange={(e) => {
                         setLastName(e.target.value);
                         setLastNameError("");
+                        checkLNamePattern(e.target.value);
                       }}
                       Value={Customer.LastName}
                       required
@@ -1390,10 +1487,9 @@ export default function CustomerHeader(props) {
                   <br />
                   <div className="col-md-9 col-sm-6 input-group-append">
                     <h6 style={{ color: "#764A34" }}>
-                      <strong>Email</strong>:{" "}
-                      <a href="">
-                        <u>{Customer.Email}</u>
-                      </a>
+                  
+                      <strong>Email</strong> <u>{Customer.Email}</u>
+                    
                     </h6>
                   </div>
                   <br />
@@ -1681,8 +1777,12 @@ export default function CustomerHeader(props) {
                           onFocus={() => setPasswordFocused(true)}
                           onBlur={() => setPasswordFocused(false)}
                           onChange={(e) => {
-                            SetPassword(e.target.value);
+                           
                             SetPasswordError("");
+                            if(hasWhiteSpace(e.target.value) === true){
+                              SetPasswordError("Password Cannot Contain White Spaces");
+                            }
+                            SetPassword(e.target.value);
                             setExtraError("");
                             setPasswordValidity({
                               minChar:
