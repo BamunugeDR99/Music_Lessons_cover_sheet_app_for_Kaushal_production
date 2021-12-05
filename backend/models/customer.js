@@ -87,7 +87,7 @@ const customerSchema = new Schema({
 
 //hashing password
 customerSchema.pre("save", async function (next) {
-  // console.log("hi")
+  console.log("hi")
 
   if (this.isModified("Password")) {
     var salt = bcrypt.genSaltSync(12);
