@@ -589,17 +589,18 @@ export default function CustomerHeader(props) {
                     const updateloginStatus = {
                       LoginStatus: false
                     };
-                    
-
-                    let CustomerID = CustomerIDTemp;
+                  
+                   let customerID =   localStorage.getItem("CustomerID");
 
                     axios
-                    .put("https://kaushal-rashmika-music.herokuapp.com/customer/loginStatus/" + CustomerID , updateloginStatus)
+                    .put("https://kaushal-rashmika-music.herokuapp.com/customer/loginStatus/" + customerID , updateloginStatus)
                     .then((res) => {
-            
+                      
+                      props.history.push("/customer/login");
+                      localStorage.removeItem("CustomerID");
+                      
                     })
-                    props.history.push("/customer/login");
-                    localStorage.removeItem("CustomerID");
+                   
                   }}
                 >
                   <svg
