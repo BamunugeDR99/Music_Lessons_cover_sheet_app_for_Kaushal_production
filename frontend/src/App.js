@@ -1,7 +1,10 @@
 // import doms
 import React, { Component, useState } from "react";
+import axios from "axios";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import ProtectedRoute from "./private/ProtectedRoute";
+import authentication from "./security/authentication";
+
 
 // import css
 import "./App.css";
@@ -35,13 +38,40 @@ import CustomerFeedback from "./components/adminRole/CustomerFeedback";
 import AdminVwCustomer from "./components/adminRole/AdminVwCustomer";
 import EditMainCategories from "./components/adminRole/EditMainCategory";
 import NotFound from "./components/NotFound";
+import IdelTimer from "./components/timeRelatedComponents/IdelTimer";
 
 // dynamic header
 function App() {
+
+  // window.onload = function gg(){
+  //     //localStorage.getItem("AdminID")
+  //     // let loginStatus = false;
+  //       if(localStorage.getItem("AdminID") != null){
+  //         axios
+  //         .get(
+  //           "http://localhost:8070/admin/getAdminLoginStatus/61ac56a585716235690b414b"
+              
+  //         )
+  //         .then((res) => {
+  //           if(res.data){
+  //             authentication.login(()=>{});
+  //           }else{
+  //             authentication.logout(()=>{});
+  //           }
+            
+  //         })
+  //         .catch((err) => {
+  //           alert(err);
+  //         });
+  //       }else if(localStorage.getItem("AdminID") == null){
+  //           return this.authenticated
+  //       }
+  // }
   const [loginStatus, setLoginStatus] = useState(true);
 
   return (
     <Router>
+      <IdelTimer/>
       <Switch>
         <div>
           {/* Customer Routes */}
