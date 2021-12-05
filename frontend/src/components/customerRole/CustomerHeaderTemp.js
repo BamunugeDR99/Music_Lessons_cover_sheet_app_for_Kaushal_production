@@ -585,6 +585,19 @@ export default function CustomerHeader(props) {
                 <span
                   className="userProfileSpan ml-1 mt-1"
                   onClick={() => {
+
+                    const updateloginStatus = {
+                      LoginStatus: false
+                    };
+                    
+
+                    let CustomerID = CustomerIDTemp;
+
+                    axios
+                    .put("https://kaushal-rashmika-music.herokuapp.com/customer/loginStatus/" + CustomerID , updateloginStatus)
+                    .then((res) => {
+            
+                    })
                     props.history.push("/customer/login");
                     localStorage.removeItem("CustomerID");
                   }}
