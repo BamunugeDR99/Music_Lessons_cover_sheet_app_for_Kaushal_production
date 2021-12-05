@@ -124,9 +124,40 @@ export default function Home(props) {
 
     <div class="hero_area">
     <div class="bg-box">
-      <img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt=""/>
-    </div>{" "}
-</div>
+      <img src="https://images.unsplash.com/photo-1605020419798-46652aa15452?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt=""/>
+    </div>
+
+
+ <section class="slider_section ">
+
+<div class="container ">
+              <div class="row">
+                <div class="col-md-7 col-lg-6 ">
+                  <div class="detail-box">
+                  <br/>    <br/> <br/>
+                    <h1>
+                      EXPLORE MORE THAN 8 CATEGORIES TO MUSIC NOTES
+                    </h1>
+                    <br/>    <br/>  <br/>
+                    <p style={{fontWeight:"bold"}}>
+                    "Music Is the Art of Thinking With Sounds"
+                    </p>
+                    <p>
+                    ~ Jules Cambarieu 
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+  </section>
+
+  </div>
+
+  
+
+
+
       <br />
       <br />
       <h1 style={{ color: "#764A34", textAlign: "center", fontWeight: "bold" }}>
@@ -171,6 +202,7 @@ export default function Home(props) {
               <img
                 id={"temp" + index}
                 src={"/images/imageplaceholder.png"}
+               
                 class="card-img-top"
                 alt="..."
                 style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
@@ -179,9 +211,11 @@ export default function Home(props) {
               hidden
                 id={index}
                 src={
-                  displayImages(covers.PreviewPages[0], index) ||
-                  "/images/imageplaceholder.png"
+                  displayImages(covers.PreviewPages[0], index) 
+                  
                 }
+                onError={(e)=>{e.target.onerror = null; e.target.src="/images/imageplaceholder.png"}}
+               
                 class="card-img-top"
                 alt="..."
                 style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}

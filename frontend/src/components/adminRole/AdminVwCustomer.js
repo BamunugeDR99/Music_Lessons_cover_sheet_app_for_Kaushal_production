@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from "react";
 import axios from "axios";
 import DataTable from "datatables.net";
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import 'jquery/dist/jquery.min.js';
 //Datatable Modules
 import "datatables.net-dt/js/dataTables.dataTables"
