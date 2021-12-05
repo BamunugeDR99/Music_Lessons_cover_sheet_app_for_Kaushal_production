@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -59,37 +58,67 @@ export default function MusicCart(props) {
     console.log(data.length);
     console.log(data);
 
-    for (let i = 0; i < data.length; i++) {
-      await axios
-        .get(`https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbyid/${data[i]}`)
-        .then((res) => {
-          console.log(res.data[0].Price);
-          // console.log("asd")
-          cover = {
-            price: res.data[0].Price,
-            title: res.data[0].Title,
-            id: res.data[0]._id,
-            author: res.data[0].OriginalArtistName,
-            images: res.data[0].PreviewPages,
-          };
+    if (data.length > 0) {
+      for (let i = 0; i < data.length; i++) {
+        await axios
+          .get(`http://localhost:8070/covers/getcoverbyid/${data[i]}`)
+          .then((res) => {
+            console.log(res.data[0].Price);
+            // console.log("asd")
+            cover = {
+              price: res.data[0].Price,
+              title: res.data[0].Title,
+              id: res.data[0]._id,
+              author: res.data[0].OriginalArtistName,
+              images: res.data[0].PreviewPages,
+            };
 
-          tot = Number(tot) + Number(res.data[0].Price);
-          coverdetails.push(cover);
-          // console.log(cover);
-        })
-        .catch((err) => {
-          alert(err.message);
-        });
+            tot = Number(tot) + Number(res.data[0].Price);
+            coverdetails.push(cover);
+            // console.log(cover);
+          })
+          .catch((err) => {
+            alert(err.message);
+          });
+      }
+
+      setCartItems();
+      console.log(coverdetails);
+      setCovers(coverdetails);
+      document.getElementById("spinnerdiv").style.display = "none";
+      document.getElementById("cartdiv").style.display = "block";
+    } else {
+      setCovers([]);
     }
-
-    console.log(coverdetails);
-    setCovers(coverdetails);
-    document.getElementById("spinnerdiv").style.display = "none";
-    document.getElementById("cartdiv").style.display = "block";
 
     setTotal(tot);
   }
 
+  function setCartItems() {
+    axios
+
+      .get(
+        "http://localhost:8070/shoppingCart/getOneCart/" +
+          localStorage.getItem("CustomerID")
+      )
+
+      .then((res) => {
+        document.getElementById("countHolder").innerHTML =
+          res.data.CoverIDs.length;
+      })
+
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+
+          title: "Oops...",
+
+          text: "Somethi went wrong!",
+
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
+      });
+  }
   function removeBtn(id) {
     Swal.fire({
       title: "Are you sure?",
@@ -107,12 +136,45 @@ export default function MusicCart(props) {
               localStorage.getItem("CustomerID")
           )
           .then((res) => {
-            alert("Successfully deleted");
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Cover has been deleted successfully!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            document.getElementById("spinnerdiv").style.display = "block";
+            document.getElementById("cartdiv").style.display = "none";
+            setTotal("Loading...");
+            axios
+              .get(
+                "http://localhost:8070/shoppingCart/getOneCart/" +
+                  localStorage.getItem("CustomerID")
+              )
+              .then((res) => {
+                console.log(res.data.CoverIDs);
+                if (res.data.CoverIDs != "") {
+                  setDataholder(res.data.CoverIDs);
+                  // console.log(res.data);
+                  setTotal("Loading...");
+                  callData(res.data.CoverIDs);
+                } else {
+                  setDataholder("");
+                  callData("");
+                  document.getElementById("spinnerdiv").style.display = "none";
+                  document.getElementById("cartdiv").style.display = "block";
+                  setTotal("0");
+                  setEmptyText("No covers Available In the cart");
+                }
+                setCartItems();
+              })
+              .catch((err) => {
+                alert(err.message);
+              });
           })
           .catch((err) => {
             alert(err.message);
           });
-        window.location.reload(true);
       }
     });
   }
@@ -124,8 +186,8 @@ export default function MusicCart(props) {
     await getDownloadURL(storageRef)
       .then((url) => {
         document.getElementById(index).src = url;
-        document.getElementById("temp"+index).hidden = true;
-        document.getElementById(index).hidden =false;
+        document.getElementById("temp" + index).hidden = true;
+        document.getElementById(index).hidden = false;
       })
       .catch((err) => {
         // ErrorhandlingTxt("Reccomended covers are not available right now!");
@@ -194,16 +256,15 @@ export default function MusicCart(props) {
                   <div class="card mb-3">
                     <div class="row no-gutters">
                       <div class="col-md-4 mt-3 clsImg ">
-                      <img
-
-                id={"temp"+index}
-                src={"/images/imageplaceholder.png" }
-                class="card-img-top embed-responsive-item"
-                alt="..."
-                // style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
-              />
                         <img
-                        hidden
+                          id={"temp" + index}
+                          src={"/images/imageplaceholder.png"}
+                          class="card-img-top embed-responsive-item"
+                          alt="..."
+                          // style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
+                        />
+                        <img
+                          hidden
                           alt="Card image cap"
                           class="card-img-top embed-responsive-item"
                           id={index}
@@ -211,6 +272,10 @@ export default function MusicCart(props) {
                             displayImages(post.images[0], index) ||
                             "/images/Imageplaceholder.png"
                           }
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "/images/imageplaceholder.png";
+                          }}
                         />
                       </div>
                       <div class="col-md-8">
@@ -225,7 +290,8 @@ export default function MusicCart(props) {
                             <span style={{ color: "#000000" }}>
                               {post.author}
                             </span>
-                          </p><br />
+                          </p>
+                          <br />
                           <p
                             class="mb-0  text-uppercase small"
                             style={{ color: "#764A34", fontWeight: "bold" }}
@@ -233,8 +299,10 @@ export default function MusicCart(props) {
                             {`Arranged by :`}{" "}
                             <span style={{ color: "#000000" }}>
                               Kaushal Rashmika
-                            </span><br />
-                          </p><br />
+                            </span>
+                            <br />
+                          </p>
+                          <br />
                           <p class="mb-0" style={{ fontWeight: "bold" }}>
                             ${post.price}
                           </p>
@@ -268,11 +336,6 @@ export default function MusicCart(props) {
                 The Total Amount of
               </h5>
               <ul class="list-group list-group-flush">
-                {/* Temporary Amount */}
-                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
-                  Temporary Amount: ${total}
-                </li>
-
                 {/* Sub Total */}
                 <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                   <div>
@@ -300,4 +363,3 @@ export default function MusicCart(props) {
     </div>
   );
 }
-

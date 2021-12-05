@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 
 const bcrypt = require("bcryptjs");
 export default function CustomerHeader(props) {
+  let status = 0;
   const [profilemodelOpen, setProfilemodelOpen] = useState(false);
   const [editProfilemodelOpen, setEditProfilemodelOpen] = useState(false);
   const [changePasswordmodelOpen, setchangePasswordmodelOpen] = useState(false);
@@ -23,6 +24,7 @@ export default function CustomerHeader(props) {
   let [GenderError, setGenderError] = useState("");
   let [CountryError, setCountryError] = useState("");
   let [ConfirmDeleteError, setConfirmDeleteError] = useState("");
+  let [loggedin, setLoggedIn] = useState(true);
 
   const [passwordShown, setPasswordShown] = useState(false);
   const [CpasswordShown, setCPasswordShown] = useState(false);
@@ -389,6 +391,8 @@ export default function CustomerHeader(props) {
   }
 
   useEffect(() => {
+    let customerID = localStorage.getItem("CustomerID");
+    // checkCustomerID(customerID);
     function getOne() {
       axios
         .get(
@@ -449,6 +453,40 @@ export default function CustomerHeader(props) {
 
     getCartCount();
   }, []);
+
+  // async function checkCustomerID(customerID) {
+  //   await axios
+  //     .get("http://localhost:8070/customer/getAll/")
+  //     .then((res) => {
+  //       for (let i = 0; i < res.data.length; i++) {
+  //         console.log(res.data[i]._id);
+  //         if (res.data[i]._id == customerID) {
+  //           console.log("Success");
+  //           status = 1;
+  //         } else {
+  //         }
+  //       }
+  //     })
+
+  //     .catch((err) => {
+  //       Swal.fire({
+  //         icon: "error",
+
+  //         title: "Oops...",
+
+  //         text: "Somethi went wrong!",
+
+  //         // footer: '<p style = "color : #D0193A">Currently unavailable!',
+  //       });
+  //     });
+
+  //   if (status == 1) {
+  //     setLoggedIn(true);
+  //   } else {
+  //     setLoggedIn(false);
+  //     // props.history.push("/customer/login")
+  //   }
+  // }
   return (
     <div className="customerHeader">
       <nav
@@ -548,7 +586,7 @@ export default function CustomerHeader(props) {
           </form>
 
           <div>
-            {statusHolder == 1 ? (
+            {loggedin == true ? (
               <div>
                 <span className="userProfileSpan" onClick={Profilemodalopen}>
                   <svg
