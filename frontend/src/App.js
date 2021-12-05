@@ -1,7 +1,7 @@
 // import doms
-import React, { Component, useState} from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import  ProtectedRoute  from "./private/ProtectedRoute";
+import React, { Component, useState } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import ProtectedRoute from "./private/ProtectedRoute";
 
 // import css
 import "./App.css";
@@ -40,94 +40,103 @@ import NotFound from "./components/NotFound";
 function App() {
   const [loginStatus, setLoginStatus] = useState(true);
 
-
-
-
   return (
     <Router>
-      <div>
-        {/* Customer Routes */}
-        <Route path="/" exact component={InitialPage} />
-        {loginStatus == true ? (
-          <div>
-            <Route path="/customer" component={CustomerHeaderTemp} />
-          </div>
-        ) : (
-          <div>
-            <Route path="/customer" component={CustomerHeaderTempBeforeLogin} />
-          </div>
-        )}
-        <Route path="/customer/login" exact component={Loginpage} />
-        <Route
-          path="/customer/registration"
-          exact
-          component={CustomerRegistration}
-        />
-        <Route
-          path="/customer/forgotpassword"
-          exact
-          component={CustomerForgotPassword}
-        />
-        <Route path="/customer/home" exact component={Home} />
-        <Route
-          path="/customer/dicoversmusiccovers"
-          exact
-          component={MusicCoverPage}
-        />
-        <Route
-          path="/customer/discovertechniquesandlessons"
-          exact
-          component={TechniquesAndLessons}
-        />
-        <Route
-          path="/customer/purchasehistory"
-          exact
-          component={PurchaseHistory}
-        />
-        <Route path="/customer/shoppingcart" exact component={MusicCart} />
-        <Route
-          path="/customer/detailedcover/:id"
-          exact
-          component={LessonAndCoversDetailed}
-        />
-        <Route
-          path="/customer/discovermorecover/:id"
-          exact
-          component={LessonAndCoversDetailed}
-        />
-        <Route path="/customer" component={Footer} />
+      <Switch>
+        <div>
+          {/* Customer Routes */}
+          <Route path="/" exact component={InitialPage} />
+          {loginStatus == true ? (
+            <div>
+              <Route path="/customer" component={CustomerHeaderTemp} />
+            </div>
+          ) : (
+            <div>
+              <Route
+                path="/customer"
+                component={CustomerHeaderTempBeforeLogin}
+              />
+            </div>
+          )}
+          <Route path="/customer/login" exact component={Loginpage} />
+          <Route
+            path="/customer/registration"
+            exact
+            component={CustomerRegistration}
+          />
+          <Route
+            path="/customer/forgotpassword"
+            exact
+            component={CustomerForgotPassword}
+          />
+          <Route path="/customer/home" exact component={Home} />
+          <Route
+            path="/customer/dicoversmusiccovers"
+            exact
+            component={MusicCoverPage}
+          />
+          <Route
+            path="/customer/discovertechniquesandlessons"
+            exact
+            component={TechniquesAndLessons}
+          />
+          <Route
+            path="/customer/purchasehistory"
+            exact
+            component={PurchaseHistory}
+          />
+          <Route path="/customer/shoppingcart" exact component={MusicCart} />
+          <Route
+            path="/customer/detailedcover/:id"
+            exact
+            component={LessonAndCoversDetailed}
+          />
+          <Route
+            path="/customer/discovermorecover/:id"
+            exact
+            component={LessonAndCoversDetailed}
+          />
+          <Route path="/customer" component={Footer} />
 
+          {/* Admin Routes  */}
 
+          <ProtectedRoute path="/admin" component={AdminHeaderTemp} />
+          <Route path="/adminlogin" exact component={AdminLogin} />
+          <ProtectedRoute path="/admin/dashboard" exact component={Dashboard} />
+          <ProtectedRoute
+            path="/admin/allcovers"
+            exact
+            component={ViewCovers}
+          />
+          <ProtectedRoute
+            path="/admin/viewmorecover/:id"
+            exact
+            component={ViewDetailedCoverPage}
+          />
+          <ProtectedRoute
+            path="/admin/customerfeedbacks/:id"
+            exact
+            component={CustomerFeedback}
+          />
+          <ProtectedRoute
+            path="/admin/allcustomers"
+            exact
+            component={AdminVwCustomer}
+          />
+          <ProtectedRoute
+            path="/admin/viewcategories"
+            exact
+            component={EditMainCategories}
+          />
+          <ProtectedRoute path="/admin" component={Footer} />
 
-        {/* Admin Routes  */}
-        <ProtectedRoute path="/admin" component={AdminHeaderTemp} />
-        <Route path="/adminlogin" exact component={AdminLogin} />
-        <ProtectedRoute path="/admin/dashboard" exact component={Dashboard} />
-        <ProtectedRoute path="/admin/allcovers" exact component={ViewCovers} />
-        <ProtectedRoute
-          path="/admin/viewmorecover/:id"
-          exact
-          component={ViewDetailedCoverPage}
-        />
-        <ProtectedRoute
-          path="/admin/customerfeedbacks/:id"
-          exact
-          component={CustomerFeedback}
-        />
-        <ProtectedRoute path="/admin/allcustomers" exact component={AdminVwCustomer} />
-        <ProtectedRoute
-          path="/admin/viewcategories"
-          exact
-          component={EditMainCategories}
-        />
-        <ProtectedRoute path="/admin" component={Footer} />
+          {/* Testing routes  */}
+          {/* <Route path = "/search" exact component = {Search}/> */}
 
-        {/* Testing routes  */}
-        {/* <Route path = "/search" exact component = {Search}/> */}
-
-        {/* <Route path = "*" component = {}/> */}
-        {/* <Route path = "*" component = {NotFound}/> */}
-      </div>
+          {/* <Route path = "*" component = {}/> */}
+          {/* <Route path="*" exact component={NotFound} /> */}
+        </div>
+      </Switch>
     </Router>
   );
 }
