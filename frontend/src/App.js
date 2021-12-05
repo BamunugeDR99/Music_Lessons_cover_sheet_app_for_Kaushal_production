@@ -22,7 +22,13 @@ import PurchaseHistory from "./components/customerRole/purchaseHistory";
 import MusicCart from "./components/customerRole/music_cart";
 import LessonAndCoversDetailed from "./components/customerRole/LessonsAndCoversDetailed";
 import Footer from "./components/customerRole/footer";
+
+//import Test Components
+import TestLogin from "./components/testingComponents/LoginTest";
+import TestCustomerRegistration from "./components/testingComponents/RegisterTest";
+
 // import Search from "./components/testingComponents/search";
+
 
 //import components (Admin)
 import AdminLogin from "./components/adminRole/adminLogin";
@@ -53,6 +59,14 @@ const [loginStatus, setLoginStatus] = useState(true);
           </div>
         )}
         <Route path="/customer/login" exact component={Loginpage} />
+
+        <Route path="/customer/testlogin" exact component={TestLogin} />
+
+        
+        <Route path="/customer/testregister" exact component={TestCustomerRegistration} />
+
+
+
         <Route
           path="/customer/registration"
           exact

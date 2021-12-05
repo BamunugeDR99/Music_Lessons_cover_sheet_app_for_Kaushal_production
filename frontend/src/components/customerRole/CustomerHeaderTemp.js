@@ -756,9 +756,10 @@ export default function CustomerHeader(props) {
                       value={Gender}
                       required
                     >
-                      <option>Select Gender</option>
+                     
                       <option>Male</option>
                       <option>Female</option>
+                      <option>Other</option>
                     </select>
                   </div>
                   <p
@@ -824,7 +825,7 @@ export default function CustomerHeader(props) {
                     </div>
                     <select
                       required
-                      value={Country}
+                      Value={Country}
                       className="form-control"
                       id="country"
                       name="country"
@@ -834,7 +835,7 @@ export default function CustomerHeader(props) {
                       }}
                       required
                     >
-                      <option>Select Country</option>
+                     
                       <option value="Afganistan">Afghanistan</option>
                       <option value="Albania">Albania</option>
                       <option value="Algeria">Algeria</option>
