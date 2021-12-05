@@ -4,7 +4,7 @@ import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 import Swal from "sweetalert2";
 import Modal from "react-bootstrap/Modal";
-import { ImageGroup, Image } from 'react-fullscreen-image'
+// import { ImageGroup, Image } from 'react-fullscreen-image'
 
 export default function PurchaseHistory(props) {
   const [cover, setCover] = useState([]);
@@ -14,6 +14,7 @@ export default function PurchaseHistory(props) {
   const [orderDate, setOrderDate] = useState([]);
   const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
   const [modalOpenForImage, setModalOpenForImage] = useState(false);
+  const [load, setLoad] = useState(true);
   let [total, setTotal] = useState(0);
   let covers = [];
   let array2 = [];
@@ -22,7 +23,7 @@ export default function PurchaseHistory(props) {
 
   useEffect(() => {
     function getCovers() {
-      
+      setLoad(false)
       axios
         .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
         .then((res) => {
@@ -42,6 +43,7 @@ export default function PurchaseHistory(props) {
           axios.get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers").then((res) => {
             getSpecificOrderCoverDetiles(res.data);
           });
+          setLoad(true)
         })
         .catch((err) => {
           alert(err);
@@ -131,30 +133,32 @@ function previewPdf(covername) {
       });
   }
 
-  function previewImg(PreviewPages) {
-    setModalOpenForImage(true);
-    const storageRef = ref(storage, `PreviewImages/${PreviewPages}`);
-    getDownloadURL(storageRef)
-      .then((url) => {
-        window.location.href = url;
-        setModalOpenForImage(false)
-      })
-      .catch(() => {
-        setModalOpenForImage(false);
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Something went wrong!",
-        });
-      });
-  }
+  // function previewImg(PreviewPages) {
+  //   setModalOpenForImage(true);
+  //   const storageRef = ref(storage, `PreviewImages/${PreviewPages}`);
+  //   getDownloadURL(storageRef)
+  //     .then((url) => {
+  //       window.location.href = url;
+  //       setModalOpenForImage(false)
+  //     })
+  //     .catch(() => {
+  //       setModalOpenForImage(false);
+  //       Swal.fire({
+  //         icon: "error",
+  //         title: "Oops...",
+  //         text: "Something went wrong!",
+  //       });
+  //     });
+  // }
 
 
   return (
     <div className="container">
       <br />
       <br />
+         
       <div className="row">
+        
         <div className="col-sm">
           <h3 style={{ color: "#764A34" }}>
             {" "}
@@ -198,9 +202,12 @@ function previewPdf(covername) {
       <br />
       <center>
         <h3 style={{ color: "#D0193A " }}>{empty}</h3>
+        <div class="spinner-border" id="loadingBar" hidden={load} role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
       </center>
       <br />
-
+      
       {cover.map((post,index) => {
         TotalPrice += Number(post.Price);
         return (
@@ -212,15 +219,12 @@ function previewPdf(covername) {
               <div className="col-sm text-center">
 
 
-
-              
-
-
                 <img id={index}
                   class="rounded"
                   style={{ width: "100%", margin: "auto", }}
                   src={ displayImages(post.PreviewPages[0], index) || "/images/imageplaceholder.png" }
-                  onClick={() => { previewImg(post.PreviewPages[0]); }}
+                  onError={(e)=>{e.target.onerror = null; e.target.src="/images/imageplaceholder.png"}}
+                  // onClick={() => { previewImg(post.PreviewPages[0]); }}
                   />
               </div>
 
@@ -310,7 +314,7 @@ function previewPdf(covername) {
         <Modal.Footer></Modal.Footer>
       </Modal>
 
-      <Modal show={modalOpenForImage} size="lg">
+      {/* <Modal show={modalOpenForImage} size="lg">
         <Modal.Header></Modal.Header>
 
         <Modal.Body>
@@ -328,7 +332,7 @@ function previewPdf(covername) {
           </h4>
         </Modal.Body>
         <Modal.Footer></Modal.Footer>
-      </Modal>
+      </Modal> */}
     </div>
 
     
