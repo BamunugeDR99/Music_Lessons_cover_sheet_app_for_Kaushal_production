@@ -611,6 +611,7 @@ export default function LessonsAndCoversDetailed(props) {
                     hidden
                     id={index}
                     src={displayImages(covers.PreviewPages[0], index)}
+                    onError={(e)=>{e.target.onerror = null; e.target.src="/images/imageplaceholder.png"}}
                     class="card-img-top"
                     alt="..."
                     style={{
