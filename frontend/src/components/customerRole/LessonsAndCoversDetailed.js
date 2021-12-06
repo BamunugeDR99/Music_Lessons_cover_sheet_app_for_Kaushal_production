@@ -27,11 +27,17 @@ export default function LessonsAndCoversDetailed(props) {
   const [modalOpenForImage, setModalOpenForImage] = useState(false);
   const [customer, setCustomer] = useState([]);
 
-  const [purchased, setPurchased] = useState(true);
   const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
   const [modalOpenForFeedback, setModalOpenOfrFeedback] = useState(false);
-  const [feedback,setFeedback] = useState("");
-  const [feedbackSumitted,setFeedbackSubmitted] = useState(true);
+  const [modalOpenForFeedbackUpdate, setModalOpenForFeedbackUpdate] =
+    useState(false);
+  const [feedback, setFeedback] = useState("");
+  const [eFeedback, setEFeedback] = useState("");
+  const [feedbackObject, setFeedbackObject] = useState("");
+
+  const [feedbackSumitted, setFeedbackSubmitted] = useState(false);
+  const [coverStauts, setCoverStatus] = useState(false);
+  const [purchased, setPurchased] = useState(false);
 
   useEffect(() => {
     async function getCovers() {
@@ -42,7 +48,7 @@ export default function LessonsAndCoversDetailed(props) {
             CoverTempID
         )
         .then((res) => {
-          console.log(res.data);
+          //console.log(res.data);
           if (res.data != null) {
             setCovers(res.data);
             preview = res.data.PreviewPages;
@@ -56,6 +62,7 @@ export default function LessonsAndCoversDetailed(props) {
               res.data.SubCategory,
               res.data._id
             );
+            setButtons(res.data._id);
           } else {
             props.history.push("/notfound");
           }
@@ -88,6 +95,44 @@ export default function LessonsAndCoversDetailed(props) {
     getCustomerDetails();
   }, []);
 
+  function setButtons(coverID) {
+    axios
+      .get(
+        `http://localhost:8070/customer/checkPurchaseCovers/${localStorage.getItem(
+          "CustomerID"
+        )}/${coverID}`
+      )
+      .then((res) => {
+        if (res.data == true) {
+          axios
+            .get(
+              `http://localhost:8070/feedback/checkFeedBack/${localStorage.getItem(
+                "CustomerID"
+              )}/${coverID}`
+            )
+            .then((res) => {
+              if (res.data == true) {
+                setPurchased(true);
+                setCoverStatus(true);
+                setFeedbackSubmitted(true);
+              } else if (res.data == false) {
+                setPurchased(true);
+                setCoverStatus(true);
+                setFeedbackSubmitted(false);
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else if (res.data == false) {
+          setPurchased(false);
+          setCoverStatus(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   function printInstruments(instruments) {
     for (let i = 0; i < instruments.length; i++) {
       if (instruments.length == i + 1) {
@@ -424,22 +469,74 @@ export default function LessonsAndCoversDetailed(props) {
     e.preventDefault();
     const CustomerID = localStorage.getItem("CustomerID");
     const newFeedBack = {
-      Comment : feedback,
-      CustomerID : CustomerID,
-      CoverID : covers._id
-    }
+      Comment: feedback,
+      CustomerID: CustomerID,
+      CoverID: covers._id,
+    };
     await axios
-    .post(
-      "http://localhost:8070/feedback/addFeedback",newFeedBack
-    )
-    .then((res) => {
-      alert("gg")
-    })
-    .catch((err) => {
-      alert(err.message);
-    });
-    
+      .post("http://localhost:8070/feedback/addFeedback", newFeedBack)
+      .then((res) => {
+        setFeedbackSubmitted(true);
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
   }
+
+  function updateFeedBack(e) {
+    e.preventDefault();
+    const feedbackID = feedbackObject._id;
+
+    const updatedFeedBack = {
+      Comment: eFeedback,
+      CustomerID: localStorage.getItem("CustomerID"),
+      CoverID: covers._id,
+    };
+    axios
+      .put(
+        "http://localhost:8070/feedback//updateFeedback/" + feedbackID,
+        updatedFeedBack
+      )
+      .then((res) => {
+        alert("gg");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function getFeedBack(coverID) {
+    //const CustomerID = localStorage.getItem("CustomerID");
+    axios
+      .get(
+        `http://localhost:8070/feedback/getOneFeedBack/${localStorage.getItem(
+          "CustomerID"
+        )}/${coverID}`
+      )
+      .then((res) => {
+        setFeedbackObject(res.data);
+        setEFeedback(res.data.Comment);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function deleteFeedback() {
+    axios
+      .delete(
+        "http://localhost:8070/feedback/deleteFeedback/" + feedbackObject._id
+      )
+      .then((res) => {
+        setFeedbackSubmitted(false);
+        setModalOpenForFeedbackUpdate(false);
+
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   return (
     <div>
       <div class="card container-xxl" style={{ border: "solid #764A34" }}>
@@ -698,61 +795,77 @@ export default function LessonsAndCoversDetailed(props) {
                     </div>
                   </div>
                   <br />
-                  <div hidden={purchased}>
-                    <button
-                      type="button"
-                      class="btn btn-success btn-block rounded"
-                      onClick={() => addToCart(covers._id)}
+                  <div className="d-flex justify-content-center">
+                    <div
+                      class="spinner-border"
+                      role="status"
+                      hidden={coverStauts}
                     >
-                      Add to cart
-                    </button>
-                    <br />
-                    <br />
-                    <div className="d-flex justify-content-center">
-                      <div
-                        class="spinner-border text-success"
-                        role="status"
-                        hidden={addToCartStatus}
-                      >
-                        <span class="sr-only">Loading...</span>
-                      </div>
-                    </div>
-                    <br />
-                    <div className="container-sm">
-                      {/* directly going to the payment gateway */}
-                      <button
-                        type="button"
-                        id="payhere-payment"
-                        class="btn btn-success btn-block rounded"
-                        onClick={purchasingProcess}
-                      >
-                        Buy it now
-                      </button>
+                      <span class="sr-only">Loading...</span>
                     </div>
                   </div>
+                  <br />
+                  <div hidden={!coverStauts}>
+                    <div hidden={purchased}>
+                      <button
+                        type="button"
+                        class="btn btn-success btn-block rounded"
+                        onClick={() => addToCart(covers._id)}
+                      >
+                        Add to cart
+                      </button>
+                      <br />
+                      <br />
+                      <div className="d-flex justify-content-center">
+                        <div
+                          class="spinner-border text-success"
+                          role="status"
+                          hidden={addToCartStatus}
+                        >
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      </div>
+                      <br />
+                      <div className="container-sm">
+                        {/* directly going to the payment gateway */}
+                        <button
+                          type="button"
+                          id="payhere-payment"
+                          class="btn btn-success btn-block rounded"
+                          onClick={purchasingProcess}
+                        >
+                          Buy it now
+                        </button>
+                      </div>
+                    </div>
 
-                  {/* feedback and preview  */}
+                    {/* feedback and preview  */}
 
-                  <div hidden={!purchased}>
-                    <button
-                      type="button"
-                      hidden = {feedbackSumitted}
-                      class="btn btn-success btn-block rounded"
-                      onClick={() => {setModalOpenOfrFeedback(true)}}
-                    >
-                      send feedback
-                    </button>
-                    <button
-                      type="button"
-                      hidden = {!feedbackSumitted}
-                      class="btn btn-success btn-block rounded"
-                      onClick={() => {setModalOpenOfrFeedback(true)}}
-                    >
-                      View my Feedback
-                    </button>
-                    <br />
-                    <br />
-                    {/* <div className="d-flex justify-content-center">
+                    <div hidden={!purchased}>
+                      <button
+                        type="button"
+                        hidden={feedbackSumitted}
+                        class="btn btn-success btn-block rounded"
+                        onClick={() => {
+                          setModalOpenOfrFeedback(true);
+                        }}
+                      >
+                        send feedback
+                      </button>
+                      <button
+                        type="button"
+                        hidden={!feedbackSumitted}
+                        class="btn btn-success btn-block rounded"
+                        onClick={() => {
+                          setModalOpenForFeedbackUpdate(true);
+                          getFeedBack(covers._id);
+                        }}
+                      >
+                        View my Feedback
+                      </button>
+                      <br />
+                      <br />
+                      {/* <div className="d-flex justify-content-center">
                       <div
                         class="spinner-border text-success"
                         role="status"
@@ -761,18 +874,19 @@ export default function LessonsAndCoversDetailed(props) {
                         <span class="sr-only">Loading...</span>
                       </div>
                     </div> */}
-                    <br />
-                    <div className="container-sm">
-                      {/* directly going to the pdf previewer */}
-                      <button
-                        type="button"
-                        id="preview"
-                        style={{ backgroundColor: "#D0193A", color: "#ffff" }}
-                        class="btn btn-block rounded"
-                        onClick={() => previewPdf(covers.CoverPdf)}
-                      >
-                        preview
-                      </button>
+                      <br />
+                      <div className="container-sm">
+                        {/* directly going to the pdf previewer */}
+                        <button
+                          type="button"
+                          id="preview"
+                          style={{ backgroundColor: "#D0193A", color: "#ffff" }}
+                          class="btn btn-block rounded"
+                          onClick={() => previewPdf(covers.CoverPdf)}
+                        >
+                          preview
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -791,7 +905,6 @@ export default function LessonsAndCoversDetailed(props) {
         <h3>
           <b>Our Recommendations </b>
         </h3>
-    
 
         <div>
           <div className="d-flex justify-content-center">
@@ -915,36 +1028,98 @@ export default function LessonsAndCoversDetailed(props) {
           <div class="d-flex justify-content-center">
             <h2>Leave us a feedback</h2>
             <br />
-          </div><div><form onSubmit = {submitFeedBack}>
-          <div class="form-group">
-            {/* <label for="exampleInput1">Email address</label> */}
-            <input
-              type="text"
-              onChange = {(e)=>{
-                setFeedback(e.target.value);
-              }}
-              required
-              class="form-control"
-              placeholder="Your feedback..."
-            />
           </div>
+          <div>
+            <form onSubmit={submitFeedBack}>
+              <div class="form-group">
+                {/* <label for="exampleInput1">Email address</label> */}
+                <input
+                  type="text"
+                  onChange={(e) => {
+                    setFeedback(e.target.value);
+                  }}
+                  required
+                  class="form-control"
+                  placeholder="Your feedback..."
+                />
+              </div>
+              <div class="d-flex justify-content-center">
+                <button
+                  type="submit"
+                  class="btn rounded"
+                  style={{ color: "#ffffff", backgroundColor: "#764A34" }}
+                >
+                  Submit
+                </button>
+                <button
+                  type="button"
+                  class="btn rounded"
+                  style={{ color: "#ffffff", backgroundColor: "#D0193A" }}
+                  onClick={() => {
+                    setModalOpenOfrFeedback(false);
+                  }}
+                >
+                  cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </Modal.Body>
+        <Modal.Footer></Modal.Footer>
+      </Modal>
+
+      {/* feedback update and delete modal  */}
+      <Modal show={modalOpenForFeedbackUpdate} size="lg">
+        <Modal.Header></Modal.Header>
+
+        <Modal.Body>
           <div class="d-flex justify-content-center">
-            <button
-              type="submit"
-              class="btn rounded"
-              style={{ color: "#ffffff", backgroundColor: "#764A34" }}
-            >
-              Submit
-            </button>
-            <button
-              type="button"
-              class="btn rounded"
-              style={{ color: "#ffffff", backgroundColor: "#D0193A" }}
-              onClick = {()=> {setModalOpenOfrFeedback(false)}}
-            >
-              cancel
-            </button>
-          </div></form>
+            <h2>My feedback</h2>
+            <br />
+          </div>
+          <div>
+            <form onSubmit={updateFeedBack}>
+              <div class="form-group">
+                {/* <label for="exampleInput1">Email address</label> */}
+                <input
+                  type="text"
+                  Value={eFeedback}
+                  onChange={(e) => {
+                    setEFeedback(e.target.value);
+                  }}
+                  required
+                  class="form-control"
+                  placeholder="Your feedback..."
+                />
+              </div>
+              <div class="d-flex justify-content-center">
+                <button
+                  type="submit"
+                  class="btn rounded"
+                  style={{ color: "#ffffff", backgroundColor: "#764A34" }}
+                >
+                  Update
+                </button>
+                <button
+                  type="submit"
+                  class="btn rounded"
+                  style={{ color: "#ffffff", backgroundColor: "#D0193A" }}
+                  onClick = {()=>{deleteFeedback()}}
+                >
+                  Delete
+                </button>
+                <button
+                  type="button"
+                  class="btn rounded"
+                  style={{ color: "#ffffff", backgroundColor: "#D0193A" }}
+                  onClick={() => {
+                    setModalOpenForFeedbackUpdate(false);
+                  }}
+                >
+                  cancel
+                </button>
+              </div>
+            </form>
           </div>
         </Modal.Body>
         <Modal.Footer></Modal.Footer>

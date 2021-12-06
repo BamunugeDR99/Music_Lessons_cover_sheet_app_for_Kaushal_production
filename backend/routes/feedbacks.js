@@ -121,5 +121,23 @@ router.route("/checkFeedBack/:customerid/:coverid").get(async (req, res) => {
 });
 
 
+// get specific feedback
+router.route("/getOneFeedBack/:customerid/:coverid").get(async (req, res) => {
+  let CustomerID = req.params.customerid;
+  let CoverID = req.params.coverid;
+
+  const user = await Feedback.findOne({ CustomerID : CustomerID, CoverID : CoverID })
+    .then((feedback) => {
+      res.json(feedback); 
+    })
+    .catch((err) => {
+      console.log(err.message);
+      res
+        .status(500)
+        .send({ status: "Error with get user", error: err.message });
+    });
+});
+
+
 
 module.exports = router;
