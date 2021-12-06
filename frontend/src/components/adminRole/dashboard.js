@@ -11,6 +11,7 @@ import CoverTemplate from "../customerRole/covercardtemplate";
 export default function DashBoard() {
   const [modelOpen, setmodelOpen] = useState(false);
   const [coverlength, setCoverLength] = useState("Loading...");
+  const [excercisesLength, setExcercisesLength] = useState("Loading...");
   const [customerlength, setCustomersLength] = useState("Loading...");
   const [orders, setOrders] = useState([]);
   const [total, setTotal] = useState("Loading...");
@@ -21,6 +22,8 @@ export default function DashBoard() {
   const [fromValue, setFromValue] = useState("");
   const [toValue, setToValue] = useState("");
   const [error, setError] = useState("");
+  let [spinner, setspinner] = useState(true);
+  let [main, setmain] = useState(true);
 
   let tableData = [];
   let covers = [];
@@ -46,13 +49,33 @@ export default function DashBoard() {
   };
 
   useEffect(() => {
-    document.getElementById("spinnerdiv").style.display = "block";
-    document.getElementById("maindiv").style.display = "none";
+    setmain(true);
+    setspinner(false);
+
+    axios
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getactivecovers")
+      .then((res) => {
+        setCoverLength(res.data.length);
+        // calculateDownloads(res.data);
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
+
+    axios
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getactiveExcercices")
+      .then((res) => {
+        setExcercisesLength(res.data.length);
+        // calculateDownloads(res.data);
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
 
     axios
       .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers")
       .then((res) => {
-        setCoverLength(res.data.length);
+        // setCoverLength(res.data.length);
         calculateDownloads(res.data);
       })
       .catch((err) => {
@@ -147,9 +170,10 @@ export default function DashBoard() {
       }
       console.log(tableData);
       setPaymentData(tableData);
-      document.getElementById("spinnerdiv").style.display = "none";
-      document.getElementById("maindiv").style.display = "block";
+      setmain(false);
+      setspinner(true);
       $("#example").DataTable();
+      $("#example2").DataTable();
     }
   }
   async function getOrderedCovers(data) {
@@ -190,8 +214,8 @@ export default function DashBoard() {
     setFromValue(fromDate);
     setToValue(toDate);
     if (fromDate != "" && toDate != "") {
-      document.getElementById("spinnerdiv").style.display = "block";
-      document.getElementById("maindiv").style.display = "none";
+      setmain(true);
+      setspinner(false);
 
       axios
         .get(`https://kaushal-rashmika-music.herokuapp.com/order/getbyyear/${fromDate}/${toDate}`)
@@ -201,14 +225,15 @@ export default function DashBoard() {
             console.log(res.data);
             orderHolder = res.data;
             loadIncome(res.data);
-            document.getElementById("spinnerdiv").style.display = "none";
-            document.getElementById("maindiv").style.display = "block";
+            setmain(false);
+            setspinner(true);
           } else {
             setError("No Data available");
             setPaymentData([]);
             setTotal("0");
-            document.getElementById("spinnerdiv").style.display = "none";
-            document.getElementById("maindiv").style.display = "block";
+
+            setmain(false);
+            setspinner(true);
           }
         })
         .catch((err) => {
@@ -218,8 +243,8 @@ export default function DashBoard() {
   }
 
   function refresh() {
-    document.getElementById("spinnerdiv").style.display = "block";
-    document.getElementById("maindiv").style.display = "none";
+    setmain(true);
+    setspinner(false);
     axios
       .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
       .then((res) => {
@@ -227,8 +252,9 @@ export default function DashBoard() {
         // console.log(res.data);
         orderHolder = res.data;
         loadIncome(res.data);
-        document.getElementById("spinnerdiv").style.display = "none";
-        document.getElementById("maindiv").style.display = "block";
+
+        setmain(false);
+        setspinner(true);
       })
       .catch((err) => {
         alert(err.message);
@@ -236,7 +262,7 @@ export default function DashBoard() {
   }
   return (
     <div>
-      <br/>
+      <br />
       {/* {console.log(selectedCovers)} */}
       <div className="row">
         <div className="col-md-2">
@@ -255,7 +281,7 @@ export default function DashBoard() {
             color="#8B8000"
             value="Excercises"
             icon={"fa fa-file"}
-            num={coverlength}
+            num={excercisesLength}
           />
           <br />
         </div>
@@ -301,7 +327,7 @@ export default function DashBoard() {
         </div>
       </div>
       <hr />
-      <div id="spinnerdiv" style={{ display: "block" }}>
+      <div id="spinnerdiv" hidden={spinner}>
         <center>
           <div className=" justify-content-center">
             <div className="spinner-border" role="status">
@@ -326,7 +352,8 @@ export default function DashBoard() {
       <div
         className="container"
         id="maindiv"
-        style={{ overflowX: "scroll", display: "none" }}
+        hidden={main}
+        style={{ overflowX: "scroll" }}
       >
         <div className="row">
           <div className="col-md-4">
@@ -340,6 +367,8 @@ export default function DashBoard() {
                 onChange={(e) => searchByDate(e.target.value, toValue)}
                 aria-describedby="emailHelp"
                 placeholder="Enter email"
+                max={new Date().toISOString().split("T")[0]}
+
               />
             </div>{" "}
           </div>
@@ -350,6 +379,7 @@ export default function DashBoard() {
                 type="date"
                 class="form-control"
                 id="to"
+                max={new Date().toISOString().split("T")[0]}
                 value={toValue}
                 onChange={(e) => searchByDate(fromValue, e.target.value)}
                 aria-describedby="emailHelp"
@@ -374,10 +404,10 @@ export default function DashBoard() {
         </h4>
         <table
           id="example"
-          class="table table-striped table-bordered"
+          class="table table-striped table-bordered text-center"
           style={{ width: "100%" }}
         >
-          <thead>
+             <thead class="thead-dark">
             <tr>
               <th>Customer Name</th>
               <th>Total Price</th>
@@ -430,7 +460,7 @@ export default function DashBoard() {
         </Modal.Header>
         <Modal.Body>
           <div className="container">
-            <div id="spinnerdiv2" style={{ display: "block" }}>
+            <div id="spinnerdiv2" hidden={true} style={{ display: "block" }}>
               <center>
                 <div class=" justify-content-center">
                   <div class="spinner-border" role="status">
@@ -445,11 +475,11 @@ export default function DashBoard() {
               className="row text-center"
             >
               <table
-                id="example"
-                class="table table-striped table-bordered"
+                id="example2"
+                class="table table-striped table-bordered text-center"
                 style={{ width: "100%" }}
               >
-                <thead>
+              <thead class="thead-dark">
                   <tr>
                     <th>Cover Name</th>
                     <th>Total Price</th>

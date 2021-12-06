@@ -223,6 +223,7 @@ function previewPdf(covername) {
                   class="rounded"
                   style={{ width: "100%", margin: "auto", }}
                   src={ displayImages(post.PreviewPages[0], index) || "/images/imageplaceholder.png" }
+                  onError={(e)=>{e.target.onerror = null; e.target.src="/images/verticaLImageHolder.jpg"}}
                   // onClick={() => { previewImg(post.PreviewPages[0]); }}
                   />
               </div>

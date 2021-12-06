@@ -5,34 +5,29 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import "../../css/adminLogin.css";
+import "../../css/login.css";
 import Swal from "sweetalert2";
-import k from "../../images/admin.jpg";
-import authentication from "../../security/authentication";
 import Modal from "react-bootstrap/Modal";
+
 
 const eye = <FontAwesomeIcon icon={faEye} />;
 const sleye = <FontAwesomeIcon icon={faEyeSlash} />;
 
-export default function AdminLogin(props) {
-  // const refreshToken = async () =>{
-
-  //     try{
-
-  //         const res = await axios.post("/refresh",{token: customer.refreshToken});
-  //         setCustomer({
-
-  //             ...customer,
-  //             accessToken: res.data.accessToken,
-  //             refreshToken: res.data.refreshToken,
-
-  //         })
-  //     }catch (err){
-
-  //         console.log(err);
-  //     }
-
-  // }
+export default function TestLogin(props) {
+  const refreshToken = async () => {
+    try {
+      const res = await axios.post("/refresh", {
+        token: customer.refreshToken,
+      });
+      setCustomer({
+        ...customer,
+        accessToken: res.data.accessToken,
+        refreshToken: res.data.refreshToken,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   // axios.interceptors.request.use( async(config)=>{
 
@@ -40,8 +35,9 @@ export default function AdminLogin(props) {
 
   // }
   // );
-
   const [modalOpenForLoading, setmodalOpenForLoading] = useState(false);
+
+  
 
   //remember me
 
@@ -56,12 +52,14 @@ export default function AdminLogin(props) {
 
   const [passwordShown, setPasswordShown] = useState(false);
 
+
+
   // Password toggle handler
   const togglePasswordVisiblity = () => {
     setPasswordShown(passwordShown ? false : true);
   };
 
-  // let[customer, setCustomer] = useState(null);
+  let [customer, setCustomer] = useState(null);
   let [Username, setUsername] = useState("");
   let [Password, setPassword] = useState("");
   let [errorMsg, setErrorMsg] = useState("");
@@ -79,7 +77,7 @@ export default function AdminLogin(props) {
     // displayStudentdetails();
   }, []);
 
-  function loginAdmin(e) {
+  function loginUser(e) {
     e.preventDefault();
 
     setmodalOpenForLoading(true);
@@ -92,15 +90,31 @@ export default function AdminLogin(props) {
     localStorage.setItem("rememberMe", rememberMe);
     localStorage.setItem("Username", rememberMe ? Username : "");
 
+   
+
     axios
-      .post(
-        "https://kaushal-rashmika-music.herokuapp.com/admin/loginAdmin",
-        loginCredentials
-      )
+      .post("https://kaushal-rashmika-music.herokuapp.com/customer/loginCustomer", loginCredentials)
       .then((res) => {
-        localStorage.setItem("AdminID", res.data.adminLogin._id);
+        setCustomer(res.data.customerLogin);
+        localStorage.setItem("CustomerID", res.data.customerLogin._id);
+
+        let customerID = res.data.customerLogin._id;
+        
+        const updateloginStatus = {
+          LoginStatus: true
+        };
+
+        axios
+        .put("https://kaushal-rashmika-music.herokuapp.com/customer/loginStatus/" + customerID, updateloginStatus)
+        .then((res) => {
+
+          setmodalOpenForLoading(false);
+
+        })
 
        
+        
+        // sessionStorage.setItem('userID',"sss");
 
         // const Toast = Swal.mixin({
         //   toast: true,
@@ -119,25 +133,10 @@ export default function AdminLogin(props) {
         //   title: "Signed in successfully",
         // });
 
-        const updateloginStatus = {
-          LoginStatus: true,
-        };
-
-        axios
-          .put(
-            "https://kaushal-rashmika-music.herokuapp.com/admin/loginStatus/" + res.data.adminLogin._id,
-            updateloginStatus
-          )
-          .then((res) => {
-            authentication.login(() => {
-
-              setmodalOpenForLoading(false);
-              props.history.push("/admin/dashboard");
-            });
-          }).catch((err)=>{
-
-          });
-    
+        props.history.push("/customer/home");
+        // alert("Customer loggin Successfully!");
+        //console.log("logging success");
+        ///console.log(res.data);
         setErrorMsg("");
         // props.history.push("/Customer/Home");
       })
@@ -145,6 +144,7 @@ export default function AdminLogin(props) {
         // alert(err);
         setmodalOpenForLoading(false);
         console.log(err);
+       
         // alert(err.response.data.error);
 
         Swal.fire({
@@ -168,50 +168,50 @@ export default function AdminLogin(props) {
   // }
 
   return (
-    <div className="adminLogin">
+    <div className="loginpage">
       <main class="d-flex align-items-center min-vh-100 py-3 py-md-0">
         <div class="container">
           <div class="card login-card">
             <div class="row no-gutters">
               <div class="col-md-5">
                 <img
-                  src="https://images.unsplash.com/photo-1522717203870-8c708be70b30?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80"
+                  src="https://images.unsplash.com/photo-1598233845720-008543fa485c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=363&q=80"
                   alt="login"
                   class="login-card-img"
-                  style={{ objectFit: "fill" }}
                 />
               </div>
               <div class="col-md-7">
                 <div class="card-body">
-                  {/* <h2 style={{textAlign:"center", fontWeight:"bold"}}>ADMINISTRATOR</h2> */}
                   <div class="brand-wrapper" style={{ display: "flex" }}>
                     <img
                       src={"/images/KaushalOfficialLogo.jpeg"}
                       alt="logo"
                       class="logo"
                     ></img>
-                    <h4
+                    <h5
                       style={{
+                        fontWeight: "bold",
                         paddingLeft: "8px",
                         paddingTop: "6px",
-                        fontWeight: "bold",
                       }}
                     >
-                      Admin
-                    </h4>
+                      KAUSHAL RASHMIKA
+                    </h5>
                   </div>
-                  <p class="login-card-description">Sign In</p>
+                  <p class="login-card-description">Sign into your account</p>
                   <h6
                     id="CusLoginError"
                     style={{ color: "red", fontWeight: "bold" }}
                   >
                     {errorMsg}
                   </h6>
-                  <form onSubmit={loginAdmin}>
+                  <form onSubmit={loginUser}>
                     {/* Username label & input field  */}
 
                     <div class="form-group">
-                      <label for="email">Username</label>
+                      <label for="email" className="sr-only">
+                        Username
+                      </label>
                       <input
                         type="text"
                         class="form-control"
@@ -229,7 +229,9 @@ export default function AdminLogin(props) {
                     {/* Password label & input field  */}
 
                     <div class="form-group mb-4">
-                      <label for="password">Password</label>
+                      <label for="password" className="sr-only">
+                        Password
+                      </label>
                       <input
                         type="password"
                         name="password"
@@ -282,7 +284,29 @@ export default function AdminLogin(props) {
                     />
                   </form>
 
-                  {/* <p class="forgot-password-link" > <Link to="/CustomerForgotPassword" style={{ color: "#764A34", fontWeight: "bold" }}>Forgot Password?</Link></p> */}
+                  {/* forgot password */}
+
+                  <p class="forgot-password-link">
+                    {" "}
+                    <Link
+                      to="/customer/forgotpassword"
+                      style={{ color: "#764A34", fontWeight: "bold" }}
+                    >
+                      Forgot Password?
+                    </Link>
+                  </p>
+
+                  {/* Not a member link */}
+
+                  <p class="login-card-footer-text">
+                    Don't have an account?{" "}
+                    <Link
+                      to="/customer/registration"
+                      style={{ color: "#764A34" }}
+                    >
+                      Create One
+                    </Link>
+                  </p>
                 </div>
               </div>
             </div>
@@ -311,6 +335,7 @@ export default function AdminLogin(props) {
         </Modal.Body>
         <Modal.Footer></Modal.Footer>
       </Modal>
+
     </div>
   );
 }

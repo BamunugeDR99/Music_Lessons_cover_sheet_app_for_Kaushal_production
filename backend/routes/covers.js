@@ -74,7 +74,7 @@ router.route("/add").post((req, res) => {
 // router.route("/getrecommendation").get(async (req, res) => {
 
 //   const {
-//     MainCategory, 
+//     MainCategory,
 //     SubCategory
 //   } = req.body;
 //   try {
@@ -96,6 +96,17 @@ router.route("/getcovers").get((reg, res) => {
       console.log(err);
       res.status(404).json({ message: error.message });
     });
+});
+
+//Get all active covers
+router.route("/getactive/").get(async (req, res) => {
+  let value = "Classical Guitar Covers";
+  try {
+    const result = await Covers.find({ Status: 1 });
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 });
 
 //Get covers by main category
@@ -219,7 +230,12 @@ router.route("/get/:id").get(async (req, res) => {
   let coverID = req.params.id;
   const covers = await Covers.findById(coverID)
     .then((coverss) => {
-      res.json(coverss);
+      if(coverss.Status === "1"){
+        res.json(coverss);
+
+      }else{
+        res.json(null)
+      }
     })
     .catch((err) => {
       console.log(err.message);
@@ -266,9 +282,6 @@ router.route("/getRecommendations").get(async (req, res) => {
     });
 });
 
-
-
-
 // Update by Chamodh
 //Get covers by main category
 router.route("/getcoverbymaincover/").get(async (req, res) => {
@@ -308,6 +321,34 @@ router.route("/getcoverbypricerange/:price").get(async (req, res) => {
   let pricerange = req.params.price;
   try {
     const result = await Covers.find({ Price: { $gte: 150 } });
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+});
+
+//getActive and deactive covers
+router.route("/getactivecovers/").get(async (req, res) => {
+  let value = "Classical Guitar Covers";
+  try {
+    const result = await Covers.find({
+      $or: [{ Status: 1 }, { Status: 2 }],
+      $and: [{ MainCategory: value }],
+    });
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+});
+
+//getActive and deactive Exvercises
+router.route("/getactiveExcercices/").get(async (req, res) => {
+  let value = "Guitar Technics & Lessons";
+  try {
+    const result = await Covers.find({
+      $or: [{ Status: 1 }, { Status: 2 }],
+      $and: [{ MainCategory: value }],
+    });
     res.status(200).json(result);
   } catch (error) {
     res.status(404).json({ message: error.message });

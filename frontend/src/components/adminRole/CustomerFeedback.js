@@ -25,9 +25,11 @@ export default function CustomerFeedback(props) {
   let [finalFeedback, setfinalFeedback] = useState([]);
   let [TopDownloads, setTopDownloads] = useState([]);
   let [Top4Downloads, setTop4Downloads] = useState([]);
+  let [Loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function getFeedbacks() {
+      setLoading(false);
       let coverID = props.match.params.id;
 
       axios
@@ -109,9 +111,11 @@ export default function CustomerFeedback(props) {
       await axios
         .get("https://kaushal-rashmika-music.herokuapp.com/customer/get/" + AllF[i].CustomerID)
         .then((res) => {
+          console.log(AllF[i].AddedDateAndTime);
           CommentDetails = {
             CustomerName: res.data.FirstName + " " + res.data.LastName,
-            CommentDate: String(AllF[i].AddedDateAndTime.substr(0, 10)),
+            CommentDate: (AllF[i].AddedDateAndTime),
+          
             Comment: AllF[i].Comment,
           };
 
@@ -124,6 +128,7 @@ export default function CustomerFeedback(props) {
     console.log(AllComments[0]);
     setfinalFeedback(AllComments);
 
+    setLoading(true);
     $(document).ready(function () {
       $("#example").DataTable();
     });
@@ -131,10 +136,16 @@ export default function CustomerFeedback(props) {
 
   return (
     <div className="container justify-content-center">
+  
       <h1>FeedBack</h1>
 
       <h3>{`Cover Name : ${CoverName}`}</h3>
 
+      <center>
+      <div class="spinner-grow text-secondary  justify-content-center" role="status" hidden={Loading}>
+      <span class="sr-only">Loading...</span>
+    </div>
+    </center>
       <table className="table table-bordered display" id="example">
         <thead>
           <tr>

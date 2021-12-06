@@ -30,7 +30,14 @@ import Search from "./components/testingComponents/search";
 import Search2 from "./components/testingComponents/search2";
 import SearchBar from "./components/testingComponents/searchBar";
 
-// import components (Admin)
+//import Test Components
+import TestLogin from "./components/testingComponents/LoginTest";
+import TestCustomerRegistration from "./components/testingComponents/RegisterTest";
+
+// import Search from "./components/testingComponents/search";
+
+
+//import components (Admin)
 import AdminLogin from "./components/adminRole/adminLogin";
 import AdminHeaderTemp from "./components/adminRole/adminHeaderTemo";
 import Dashboard from "./components/adminRole/dashboard";
@@ -51,7 +58,7 @@ function App() {
   //       if(localStorage.getItem("AdminID") != null){
   //         axios
   //         .get(
-  //           "http://localhost:8070/admin/getAdminLoginStatus/61ac56a585716235690b414b"
+  //           "https://kaushal-rashmika-music.herokuapp.com/admin/getAdminLoginStatus/61ac56a585716235690b414b"
               
   //         )
   //         .then((res) => {
@@ -77,7 +84,7 @@ function App() {
       <Switch>
         <div>
           {/* Customer Routes */}
-          <Route path="/" exact component={InitialPage} />
+          <Route exact path="/" exact component={InitialPage} />
           {loginStatus == true ? (
             <div>
               <Route path="/customer" component={CustomerHeaderTemp} />
@@ -129,7 +136,6 @@ function App() {
             component={LessonAndCoversDetailed}
           />
           <Route path="/customer" component={Footer} />
-
           {/* Admin Routes  */}
 
           <ProtectedRoute path="/admin" component={AdminHeaderTemp} />
@@ -166,10 +172,13 @@ function App() {
            <Route path = "/search" exact component = {Search}/>
           <Route path = "/search2" exact component = {Search2}/>
            <Route path = "/searchBar" exact component = {SearchBar}/>
+          {/* <Route path = "/search" exact component = {Search}/> */}
+          <Route path="/notfound" component={NotFound} />
 
           {/* <Route path = "*" component = {}/> */}
+          {/* <Route path="/admin/*" exact component={NotFound} /> */}
           {/* <Route path="*" exact component={NotFound} /> */}
-        </div>
+       </div>
       </Switch>
     </Router>
   );

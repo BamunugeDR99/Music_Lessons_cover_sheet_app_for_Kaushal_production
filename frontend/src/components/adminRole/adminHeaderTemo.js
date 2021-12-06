@@ -193,7 +193,7 @@ export default function AdminHeaderTemp(props) {
             
                     axios
                       .put(
-                        "http://localhost:8070/admin/loginStatus/" + localStorage.getItem("AdminID"),
+                        "https://kaushal-rashmika-music.herokuapp.com/admin/loginStatus/" + localStorage.getItem("AdminID"),
                         updateloginStatus
                       )
                       .then((res) => {

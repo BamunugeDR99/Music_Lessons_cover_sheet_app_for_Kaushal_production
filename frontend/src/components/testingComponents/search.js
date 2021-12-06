@@ -44,7 +44,7 @@ getData();
     function getDataFromAPI(value, id){  
         console.log(value)
         // console.log(myOptions)
-        // axios.get("http://localhost:8070/covers/getcovers")
+        // axios.get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers")
         // .then((res)=>{
           // console.log(res.data)
           
