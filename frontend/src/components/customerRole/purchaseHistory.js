@@ -4,7 +4,7 @@ import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 import Swal from "sweetalert2";
 import Modal from "react-bootstrap/Modal";
-// import { ImageGroup, Image } from 'react-fullscreen-image'
+import { ImageGroup, Image } from 'react-fullscreen-image'
 
 export default function PurchaseHistory(props) {
   const [cover, setCover] = useState([]);
@@ -223,7 +223,6 @@ function previewPdf(covername) {
                   class="rounded"
                   style={{ width: "100%", margin: "auto", }}
                   src={ displayImages(post.PreviewPages[0], index) || "/images/imageplaceholder.png" }
-                  onError={(e)=>{e.target.onerror = null; e.target.src="/images/imageplaceholder.png"}}
                   // onClick={() => { previewImg(post.PreviewPages[0]); }}
                   />
               </div>

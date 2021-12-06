@@ -26,7 +26,9 @@ import PurchaseHistory from "./components/customerRole/purchaseHistory";
 import MusicCart from "./components/customerRole/music_cart";
 import LessonAndCoversDetailed from "./components/customerRole/LessonsAndCoversDetailed";
 import Footer from "./components/customerRole/footer";
-// import Search from "./components/testingComponents/search";
+import Search from "./components/testingComponents/search";
+import Search2 from "./components/testingComponents/search2";
+import SearchBar from "./components/testingComponents/searchBar";
 
 // import components (Admin)
 import AdminLogin from "./components/adminRole/adminLogin";
@@ -161,7 +163,9 @@ function App() {
           <ProtectedRoute path="/admin" component={Footer} />
 
           {/* Testing routes  */}
-          {/* <Route path = "/search" exact component = {Search}/> */}
+           <Route path = "/search" exact component = {Search}/>
+          <Route path = "/search2" exact component = {Search2}/>
+           <Route path = "/searchBar" exact component = {SearchBar}/>
 
           {/* <Route path = "*" component = {}/> */}
           {/* <Route path="*" exact component={NotFound} /> */}
