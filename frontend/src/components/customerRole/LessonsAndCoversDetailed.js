@@ -27,6 +27,12 @@ export default function LessonsAndCoversDetailed(props) {
   const [modalOpenForImage, setModalOpenForImage] = useState(false);
   const [customer, setCustomer] = useState([]);
 
+  const [purchased, setPurchased] = useState(true);
+  const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
+  const [modalOpenForFeedback, setModalOpenOfrFeedback] = useState(false);
+  const [feedback,setFeedback] = useState("");
+  const [feedbackSumitted,setFeedbackSubmitted] = useState(true);
+
   useEffect(() => {
     async function getCovers() {
       const CoverTempID = props.match.params.id;
@@ -291,6 +297,24 @@ export default function LessonsAndCoversDetailed(props) {
       });
   }
 
+  async function previewPdf(covername) {
+    setModalOpenForPdf(true);
+    const storageRef = ref(storage, `Covers(PDF)/${covername}`);
+    await getDownloadURL(storageRef)
+      .then((url) => {
+        // setPdfUrl(url)
+        window.location.href = url;
+        //setModalOpenForPdf(false)
+      })
+      .catch(() => {
+        setModalOpenForPdf(false);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+        });
+      });
+  }
   function purchasingProcess() {
     // Put the payment variables here
     var payment = {
@@ -353,7 +377,7 @@ export default function LessonsAndCoversDetailed(props) {
     });
   };
 
-   async function postOrder(orderID) {
+  async function postOrder(orderID) {
     const newOrder = {
       CoverIDs: [covers._id],
       CustomerID: customer._id,
@@ -361,23 +385,60 @@ export default function LessonsAndCoversDetailed(props) {
       ReferenceNo: orderID,
     };
 
-// console.log(newOrder);
+    // console.log(newOrder);
     await axios
-      .post(
-        "http://localhost:8070/order/addOrder",newOrder)
+      .post("http://localhost:8070/order/addOrder", newOrder)
       .then((res) => {
-        Swal.fire({
-          position: 'center',
-          icon: 'success',
-          title: 'Thank you for your purchase',
-          showConfirmButton: false,
-          timer: 1500
-        })
-        window.location.reload();
+        let purchasedcovers = customer.PurchasedCovers;
+        purchasedcovers.push(covers._id);
+        const newPurchasedCovers = {
+          PurchasedCovers: purchasedcovers,
+        };
+        // console.log(newPurchasedCovers);
+        axios
+          .put(
+            "http://localhost:8070/customer/addPurchasedCover/" +
+              localStorage.getItem("CustomerID"),
+            newPurchasedCovers
+          )
+          .then((res) => {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Thank you for your purchase",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            setPurchased(true);
+          })
+          .catch((err) => {
+            alert(err.message);
+          });
       })
       .catch((err) => {
         alert(err.message);
       });
+  }
+
+  async function submitFeedBack(e) {
+    e.preventDefault();
+    const CustomerID = localStorage.getItem("CustomerID");
+    const newFeedBack = {
+      Comment : feedback,
+      CustomerID : CustomerID,
+      CoverID : covers._id
+    }
+    await axios
+    .post(
+      "http://localhost:8070/feedback/addFeedback",newFeedBack
+    )
+    .then((res) => {
+      alert("gg")
+    })
+    .catch((err) => {
+      alert(err.message);
+    });
+    
   }
   return (
     <div>
@@ -637,50 +698,82 @@ export default function LessonsAndCoversDetailed(props) {
                     </div>
                   </div>
                   <br />
-
-                  <button
-                    type="button"
-                    class="btn btn-success btn-block rounded"
-                    onClick={() => addToCart(covers._id)}
-                  >
-                    Add to cart
-                  </button>
-                  <br />
-                  <br />
-                  <div className="d-flex justify-content-center">
-                    <div
-                      class="spinner-border text-success"
-                      role="status"
-                      hidden={addToCartStatus}
-                    >
-                      <span class="sr-only">Loading...</span>
-                    </div>
-                  </div>
-                  <br />
-                  <div className="container-sm">
-                    {/* directly going to the payment gateway */}
+                  <div hidden={purchased}>
                     <button
                       type="button"
-                      id="payhere-payment"
                       class="btn btn-success btn-block rounded"
-                      onClick={purchasingProcess}
-                      // onClick={() => {
-                      //   Swal.fire({
-                      //     title: "Are you sure?",
-                      //     icon: "warning",
-                      //     showCancelButton: true,
-                      //     confirmButtonColor: "#764A34",
-                      //     cancelButtonColor: "#D0193A",
-                      //     confirmButtonText: "Yes",
-                      //   }).then((result) => {
-                      //     if (result.isConfirmed) {
-                      //       alert("Bought");
-                      //     }
-                      //   });
-                      // }}
+                      onClick={() => addToCart(covers._id)}
                     >
-                      Buy it now
+                      Add to cart
                     </button>
+                    <br />
+                    <br />
+                    <div className="d-flex justify-content-center">
+                      <div
+                        class="spinner-border text-success"
+                        role="status"
+                        hidden={addToCartStatus}
+                      >
+                        <span class="sr-only">Loading...</span>
+                      </div>
+                    </div>
+                    <br />
+                    <div className="container-sm">
+                      {/* directly going to the payment gateway */}
+                      <button
+                        type="button"
+                        id="payhere-payment"
+                        class="btn btn-success btn-block rounded"
+                        onClick={purchasingProcess}
+                      >
+                        Buy it now
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* feedback and preview  */}
+
+                  <div hidden={!purchased}>
+                    <button
+                      type="button"
+                      hidden = {feedbackSumitted}
+                      class="btn btn-success btn-block rounded"
+                      onClick={() => {setModalOpenOfrFeedback(true)}}
+                    >
+                      send feedback
+                    </button>
+                    <button
+                      type="button"
+                      hidden = {!feedbackSumitted}
+                      class="btn btn-success btn-block rounded"
+                      onClick={() => {setModalOpenOfrFeedback(true)}}
+                    >
+                      View my Feedback
+                    </button>
+                    <br />
+                    <br />
+                    {/* <div className="d-flex justify-content-center">
+                      <div
+                        class="spinner-border text-success"
+                        role="status"
+                        hidden={addToCartStatus}
+                      >
+                        <span class="sr-only">Loading...</span>
+                      </div>
+                    </div> */}
+                    <br />
+                    <div className="container-sm">
+                      {/* directly going to the pdf previewer */}
+                      <button
+                        type="button"
+                        id="preview"
+                        style={{ backgroundColor: "#D0193A", color: "#ffff" }}
+                        class="btn btn-block rounded"
+                        onClick={() => previewPdf(covers.CoverPdf)}
+                      >
+                        preview
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -698,8 +791,7 @@ export default function LessonsAndCoversDetailed(props) {
         <h3>
           <b>Our Recommendations </b>
         </h3>
-        {/* <DiscoverMoreCovers subCategory = {covers.SubCategory} mainCategory = {covers.MainCategory}/> */}
-        {/* <DiscoverMoreCovers CoverID="61a247ef9508b44b96cf150e" /> */}
+    
 
         <div>
           <div className="d-flex justify-content-center">
@@ -795,6 +887,68 @@ export default function LessonsAndCoversDetailed(props) {
           </Modal>
         </div>
       </div>
+      {/* pdf loading modal  */}
+      <Modal show={modalOpenForPdf} size="lg">
+        <Modal.Header></Modal.Header>
+
+        <Modal.Body>
+          <div class="d-flex justify-content-center">
+            <div class="spinner-grow text-dark" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <br />
+          <h1 style={{ textAlign: "center", color: "#764A34" }}>
+            Please wait!
+          </h1>
+          <h4 style={{ textAlign: "center", color: "#764A34" }}>
+            PDF is Loading...
+          </h4>
+        </Modal.Body>
+        <Modal.Footer></Modal.Footer>
+      </Modal>
+      {/* feedback submission modal  */}
+      <Modal show={modalOpenForFeedback} size="lg">
+        <Modal.Header></Modal.Header>
+
+        <Modal.Body>
+          <div class="d-flex justify-content-center">
+            <h2>Leave us a feedback</h2>
+            <br />
+          </div><div><form onSubmit = {submitFeedBack}>
+          <div class="form-group">
+            {/* <label for="exampleInput1">Email address</label> */}
+            <input
+              type="text"
+              onChange = {(e)=>{
+                setFeedback(e.target.value);
+              }}
+              required
+              class="form-control"
+              placeholder="Your feedback..."
+            />
+          </div>
+          <div class="d-flex justify-content-center">
+            <button
+              type="submit"
+              class="btn rounded"
+              style={{ color: "#ffffff", backgroundColor: "#764A34" }}
+            >
+              Submit
+            </button>
+            <button
+              type="button"
+              class="btn rounded"
+              style={{ color: "#ffffff", backgroundColor: "#D0193A" }}
+              onClick = {()=> {setModalOpenOfrFeedback(false)}}
+            >
+              cancel
+            </button>
+          </div></form>
+          </div>
+        </Modal.Body>
+        <Modal.Footer></Modal.Footer>
+      </Modal>
     </div>
   );
 }

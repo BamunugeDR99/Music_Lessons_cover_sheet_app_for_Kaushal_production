@@ -471,4 +471,7 @@ router.route("/addPurchasedCover/:id").put(async (req, res) => {
         .send({ status: "Error with updating data", error: err.message });
     });
 });
+
+
+
 module.exports = router;
