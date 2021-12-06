@@ -95,4 +95,31 @@ router.route("/deleteFeedback/:id").delete(async (req, res) => {
     });
 });
 
+
+// check whether customer submitted a feedback oor not 
+
+router.route("/checkFeedBack/:customerid/:coverid").get(async (req, res) => {
+  let CustomerID = req.params.customerid;
+  let CoverID = req.params.coverid;
+
+  const user = await Feedback.findOne({ CustomerID : CustomerID, CoverID : CoverID })
+    .then((feedback) => {
+      // res.status(200).send({status:"User fetched"});
+      if(feedback == null){
+        res.json(false); // no feedback
+      }else{
+        res.json(true); // has feedback
+      }
+      
+    })
+    .catch((err) => {
+      console.log(err.message);
+      res
+        .status(500)
+        .send({ status: "Error with get user", error: err.message });
+    });
+});
+
+
+
 module.exports = router;

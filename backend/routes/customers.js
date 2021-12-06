@@ -427,7 +427,7 @@ router.route("/getEmail/:email").get(async (req, res) => {
 // check purchased cover
 
 router
-  .route("/getPurchaseCovers/:customerid/:coverid")
+  .route("/checkPurchaseCovers/:customerid/:coverid")
   .get(async (req, res) => {
     let CustomerID = req.params.customerid;
     let CoverID = req.params.coverid;
