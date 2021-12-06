@@ -25,7 +25,7 @@ export default function LessonsAndCoversDetailed(props) {
   const [imageSlider, setImageSlider] = useState(false);
   const [addToCartStatus, setAddToCartStatus] = useState(true);
   const [modalOpenForImage, setModalOpenForImage] = useState(false);
-  const [customer,setCustomer] = useState([]);
+  const [customer, setCustomer] = useState([]);
 
   useEffect(() => {
     async function getCovers() {
@@ -64,20 +64,19 @@ export default function LessonsAndCoversDetailed(props) {
         });
     }
 
-
-  async function getCustomerDetails() {
-    await axios
-      .get(
-        "https://kaushal-rashmika-music.herokuapp.com/customer/get/" +
-          localStorage.getItem("CustomerID")
-      )
-      .then((res) => {
-        setCustomer(res.data);
-      })
-      .catch((err) => {
-        alert(err.message);
-      });
-  }
+    async function getCustomerDetails() {
+      await axios
+        .get(
+          "https://kaushal-rashmika-music.herokuapp.com/customer/get/" +
+            localStorage.getItem("CustomerID")
+        )
+        .then((res) => {
+          setCustomer(res.data);
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+    }
 
     getCovers();
     getCustomerDetails();
@@ -293,17 +292,15 @@ export default function LessonsAndCoversDetailed(props) {
   }
 
   function purchasingProcess() {
-
-
     // Put the payment variables here
     var payment = {
-      // whether it is a testing environment or not 
+      // whether it is a testing environment or not
       sandbox: true,
       merchant_id: "1219390", // Replace your Merchant ID
       return_url: undefined, // Important
       cancel_url: undefined, // Important
       notify_url: "http://sample.com/notify",
-      order_id: "KRP"+ new Date().valueOf(),
+      order_id: "KRP" + new Date().valueOf(),
       items: covers.Title,
       amount: covers.Price,
       currency: "USD",
@@ -322,23 +319,15 @@ export default function LessonsAndCoversDetailed(props) {
     };
 
     // Show the payhere.js popup, when "PayHere Pay" is clicked
- 
- 
-      window.payhere.startPayment(payment);
-    
+
+    window.payhere.startPayment(payment);
   }
 
-  // Called when user completed the payment. 
-  
+  // Called when user completed the payment.
+
   //It can be a successful payment or failure (problem)
   window.payhere.onCompleted = function onCompleted(orderId) {
-
     postOrder(orderId);
-   
-
-
-
-
 
     //Note: validate the payment and show success or failure page to the customer
   };
@@ -346,37 +335,36 @@ export default function LessonsAndCoversDetailed(props) {
   // Called when error happens when initializing payment such as invalid parameters
   window.payhere.onError = function onError(error) {
     // Note: show an error page
+    console.log(error);
     Swal.fire({
-      icon: 'error',
-      title: 'Oops...',
-      text: 'Something went wrong!',
-    })
+      icon: "error",
+      title: "Oops...",
+      text: "Something went wrong!",
+    });
   };
 
   // Called when user closes the payment without completing
   window.payhere.onDismissed = function onDismissed() {
     //Note: Prompt user to pay again or show an error page
     Swal.fire({
-      icon: 'warning',
-      title: 'Oops...',
-      text: 'Payment dismissed!',
-
-    })
-
-
+      icon: "warning",
+      title: "Oops...",
+      text: "Payment dismissed!",
+    });
   };
 
-
-  async function postOrder(ordeID) {
-
+   async function postOrder(orderID) {
     const newOrder = {
+      CoverIDs: [covers._id],
+      CustomerID: customer._id,
+      TotalPrice: covers.Price,
+      ReferenceNo: orderID,
+    };
 
-    }
+// console.log(newOrder);
     await axios
       .post(
-        "https://kaushal-rashmika-music.herokuapp.com/customer/get/" +
-          localStorage.getItem("CustomerID")
-      )
+        "http://localhost:8070/order/addOrder",newOrder)
       .then((res) => {
         Swal.fire({
           position: 'center',

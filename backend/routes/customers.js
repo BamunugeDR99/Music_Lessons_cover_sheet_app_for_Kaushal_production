@@ -407,8 +407,6 @@ router.route("/loginStatus/:id").put(async (req, res) => {
     });
 });
 
-
-
 // get email
 router.route("/getEmail/:email").get(async (req, res) => {
   let email = req.params.email;
@@ -426,4 +424,51 @@ router.route("/getEmail/:email").get(async (req, res) => {
     });
 });
 
+// check purchased cover
+
+router
+  .route("/getPurchaseCovers/:customerid/:coverid")
+  .get(async (req, res) => {
+    let CustomerID = req.params.customerid;
+    let CoverID = req.params.coverid;
+    let status = false;
+    const user = await Customer.find({ _id: CustomerID })
+      .then((customer) => {
+        // res.status(200).send({status:"User fetched"});
+
+        for (let i = 0; i < customer[0].PurchasedCovers.length; i++) {
+          if (CoverID == customer[0].PurchasedCovers[i]) {
+            status = true;
+          }
+        }
+        res.json(status);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        res
+          .status(500)
+          .send({ status: "Error with get user", error: err.message });
+      });
+  });
+
+// update purchased covers
+router.route("/addPurchasedCover/:id").put(async (req, res) => {
+  let CustomerID = req.params.id;
+  const { PurchasedCovers } = req.body;
+
+  const updatedArray = {
+    PurchasedCovers,
+  };
+
+  const update = await Customer.findByIdAndUpdate(CustomerID, updatedArray)
+    .then(() => {
+      res.status(200).send({ status: "updated" });
+    })
+    .catch((err) => {
+      console.log(err);
+      res
+        .status(500)
+        .send({ status: "Error with updating data", error: err.message });
+    });
+});
 module.exports = router;
