@@ -23,8 +23,9 @@ export default function LessonsAndCoversDetailed(props) {
   let finalFilteredCovers = [];
   const [discoverMoreLoadingStatus, setDiscoverMoreStatus] = useState(false);
   const [imageSlider, setImageSlider] = useState(false);
-  const [addToCartStatus,setAddToCartStatus] = useState(true);
+  const [addToCartStatus, setAddToCartStatus] = useState(true);
   const [modalOpenForImage, setModalOpenForImage] = useState(false);
+  const [customer,setCustomer] = useState([]);
 
   useEffect(() => {
     async function getCovers() {
@@ -35,8 +36,8 @@ export default function LessonsAndCoversDetailed(props) {
             CoverTempID
         )
         .then((res) => {
-          console.log(res.data)
-          if(res.data != null){
+          console.log(res.data);
+          if (res.data != null) {
             setCovers(res.data);
             preview = res.data.PreviewPages;
             printInstruments(res.data.InstrumentsPlayedOn);
@@ -49,10 +50,9 @@ export default function LessonsAndCoversDetailed(props) {
               res.data.SubCategory,
               res.data._id
             );
-          }else{
-            props.history.push("/notfound")
+          } else {
+            props.history.push("/notfound");
           }
-        
         })
         .catch((err) => {
           Swal.fire({
@@ -64,7 +64,23 @@ export default function LessonsAndCoversDetailed(props) {
         });
     }
 
+
+  async function getCustomerDetails() {
+    await axios
+      .get(
+        "https://kaushal-rashmika-music.herokuapp.com/customer/get/" +
+          localStorage.getItem("CustomerID")
+      )
+      .then((res) => {
+        setCustomer(res.data);
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
+  }
+
     getCovers();
+    getCustomerDetails();
   }, []);
 
   function printInstruments(instruments) {
@@ -113,7 +129,7 @@ export default function LessonsAndCoversDetailed(props) {
       });
   }
 
-   function displayPreviewImageSlider(previewImages) {
+  function displayPreviewImageSlider(previewImages) {
     let imageSlider = '<div class="carousel-inner">';
     for (let i = 0; i < previewImages.length; i++) {
       if (i == 0) {
@@ -181,7 +197,7 @@ export default function LessonsAndCoversDetailed(props) {
           CustomerID: customerID,
           CoverIDs: coverIDs,
         };
-       // console.log(newcoverList);
+        // console.log(newcoverList);
         if (falgs === 0) {
           axios
             .put(
@@ -201,7 +217,7 @@ export default function LessonsAndCoversDetailed(props) {
               let count = parseInt($("#countHolder").text());
               $("#countHolder").html(count + 1);
 
-              setAddToCartStatus(true)
+              setAddToCartStatus(true);
 
               //completedIncrements.push("#cart1");
             })
@@ -264,7 +280,7 @@ export default function LessonsAndCoversDetailed(props) {
     getDownloadURL(storageRef)
       .then((url) => {
         window.location.href = url;
-        setModalOpenForImage(false)
+        setModalOpenForImage(false);
       })
       .catch(() => {
         setModalOpenForImage(false);
@@ -276,6 +292,105 @@ export default function LessonsAndCoversDetailed(props) {
       });
   }
 
+  function purchasingProcess() {
+
+
+    // Put the payment variables here
+    var payment = {
+      // whether it is a testing environment or not 
+      sandbox: true,
+      merchant_id: "1219390", // Replace your Merchant ID
+      return_url: undefined, // Important
+      cancel_url: undefined, // Important
+      notify_url: "http://sample.com/notify",
+      order_id: "KRP"+ new Date().valueOf(),
+      items: covers.Title,
+      amount: covers.Price,
+      currency: "USD",
+      first_name: customer.FirstName,
+      last_name: customer.LastName,
+      email: customer.Email,
+      phone: customer.ContactNumber,
+      address: "",
+      city: "",
+      country: customer.Country,
+      delivery_address: "",
+      delivery_city: "",
+      delivery_country: "",
+      custom_1: "",
+      custom_2: "",
+    };
+
+    // Show the payhere.js popup, when "PayHere Pay" is clicked
+ 
+ 
+      window.payhere.startPayment(payment);
+    
+  }
+
+  // Called when user completed the payment. 
+  
+  //It can be a successful payment or failure (problem)
+  window.payhere.onCompleted = function onCompleted(orderId) {
+
+    postOrder(orderId);
+   
+
+
+
+
+
+    //Note: validate the payment and show success or failure page to the customer
+  };
+
+  // Called when error happens when initializing payment such as invalid parameters
+  window.payhere.onError = function onError(error) {
+    // Note: show an error page
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Something went wrong!',
+    })
+  };
+
+  // Called when user closes the payment without completing
+  window.payhere.onDismissed = function onDismissed() {
+    //Note: Prompt user to pay again or show an error page
+    Swal.fire({
+      icon: 'warning',
+      title: 'Oops...',
+      text: 'Payment dismissed!',
+
+    })
+
+
+  };
+
+
+  async function postOrder(ordeID) {
+
+    const newOrder = {
+
+    }
+    await axios
+      .post(
+        "https://kaushal-rashmika-music.herokuapp.com/customer/get/" +
+          localStorage.getItem("CustomerID")
+      )
+      .then((res) => {
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Thank you for your purchase',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        window.location.reload();
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
+  }
   return (
     <div>
       <div class="card container-xxl" style={{ border: "solid #764A34" }}>
@@ -295,10 +410,13 @@ export default function LessonsAndCoversDetailed(props) {
                   class="carousel slide"
                   data-ride="carousel"
                 >
-                  <div id="img"
-                  onClick={() => { previewImg(covers.PreviewPages[0]); }}
+                  <div
+                    id="img"
+                    onClick={() => {
+                      previewImg(covers.PreviewPages[0]);
+                    }}
                   ></div>
-                  
+
                   {/* controls  */}
                   <a
                     class="carousel-control-prev"
@@ -539,10 +657,14 @@ export default function LessonsAndCoversDetailed(props) {
                   >
                     Add to cart
                   </button>
-                  <br/>
-                  <br/>
-                  <div className = "d-flex justify-content-center">
-                    <div class="spinner-border text-success" role="status" hidden = {addToCartStatus}>
+                  <br />
+                  <br />
+                  <div className="d-flex justify-content-center">
+                    <div
+                      class="spinner-border text-success"
+                      role="status"
+                      hidden={addToCartStatus}
+                    >
                       <span class="sr-only">Loading...</span>
                     </div>
                   </div>
@@ -551,21 +673,23 @@ export default function LessonsAndCoversDetailed(props) {
                     {/* directly going to the payment gateway */}
                     <button
                       type="button"
+                      id="payhere-payment"
                       class="btn btn-success btn-block rounded"
-                      onClick={() => {
-                        Swal.fire({
-                          title: "Are you sure?",
-                          icon: "warning",
-                          showCancelButton: true,
-                          confirmButtonColor: "#764A34",
-                          cancelButtonColor: "#D0193A",
-                          confirmButtonText: "Yes",
-                        }).then((result) => {
-                          if (result.isConfirmed) {
-                            alert("Bought");
-                          }
-                        });
-                      }}
+                      onClick={purchasingProcess}
+                      // onClick={() => {
+                      //   Swal.fire({
+                      //     title: "Are you sure?",
+                      //     icon: "warning",
+                      //     showCancelButton: true,
+                      //     confirmButtonColor: "#764A34",
+                      //     cancelButtonColor: "#D0193A",
+                      //     confirmButtonText: "Yes",
+                      //   }).then((result) => {
+                      //     if (result.isConfirmed) {
+                      //       alert("Bought");
+                      //     }
+                      //   });
+                      // }}
                     >
                       Buy it now
                     </button>
@@ -635,7 +759,10 @@ export default function LessonsAndCoversDetailed(props) {
                     hidden
                     id={index}
                     src={displayImages(covers.PreviewPages[0], index)}
-                    onError={(e)=>{e.target.onerror = null; e.target.src="/images/imageplaceholder.png"}}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/images/imageplaceholder.png";
+                    }}
                     class="card-img-top"
                     alt="..."
                     style={{
@@ -660,25 +787,24 @@ export default function LessonsAndCoversDetailed(props) {
           </Carousel>
 
           <Modal show={modalOpenForImage} size="lg">
-        <Modal.Header></Modal.Header>
+            <Modal.Header></Modal.Header>
 
-        <Modal.Body>
-            <div class="d-flex justify-content-center">
-            <div class="spinner-grow text-dark" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
-          </div>
-          <br />
-          <h1 style={{ textAlign: "center", color: "#764A34" }}>
-            Please wait!
-          </h1>
-          <h4 style={{ textAlign: "center", color: "#764A34" }}>
-            Image is Loading...
-          </h4>
-        </Modal.Body>
-        <Modal.Footer></Modal.Footer>
-      </Modal>
-
+            <Modal.Body>
+              <div class="d-flex justify-content-center">
+                <div class="spinner-grow text-dark" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>
+              <br />
+              <h1 style={{ textAlign: "center", color: "#764A34" }}>
+                Please wait!
+              </h1>
+              <h4 style={{ textAlign: "center", color: "#764A34" }}>
+                Image is Loading...
+              </h4>
+            </Modal.Body>
+            <Modal.Footer></Modal.Footer>
+          </Modal>
         </div>
       </div>
     </div>
