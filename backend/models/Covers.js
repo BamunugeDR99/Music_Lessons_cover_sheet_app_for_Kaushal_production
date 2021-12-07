@@ -46,9 +46,9 @@ const CoversSchema = new Schema({
     },
     
     NoOfDownloads : {
-        type : String,
+        type : Number,
         required : false,
-        default : "0"
+        default : 0
         
     },
 

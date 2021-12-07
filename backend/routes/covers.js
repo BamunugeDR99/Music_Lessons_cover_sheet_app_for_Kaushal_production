@@ -355,4 +355,45 @@ router.route("/getactiveExcercices/").get(async (req, res) => {
   }
 });
 
+
+
+
+
+// increment NoOfDownloads by one 
+
+router.route("/incrementCount/:id").put(async (req, res) => {
+  let coverID = req.params.id;
+
+  const covers = await Covers.findById(coverID)
+  .then((coverss) => {
+
+   
+    const update =  Covers.updateOne(
+      { _id: coverID },
+      { $set: { NoOfDownloads: coverss.NoOfDownloads + 1} }
+    )
+      .then(() => {
+        res.status(200).send({ status: "Status updated" });
+      })
+      .catch((err) => {
+        console.log(err);
+        res
+          .status(500)
+          .send({ status: "Error with updating data", error: err.message });
+      });
+  })
+  .catch((err) => {
+    console.log(err.message);
+    res
+      .status(500)
+      .send({ status: "Error with get user", error: err.message });
+  });
+
+
+
+
+
+  
+});
+
 module.exports = router;
