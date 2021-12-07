@@ -4,7 +4,7 @@ import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 import Swal from "sweetalert2";
 import Modal from "react-bootstrap/Modal";
-import { ImageGroup, Image } from 'react-fullscreen-image'
+// import { ImageGroup, Image } from 'react-fullscreen-image'
 
 export default function PurchaseHistory(props) {
   const [cover, setCover] = useState([]);
