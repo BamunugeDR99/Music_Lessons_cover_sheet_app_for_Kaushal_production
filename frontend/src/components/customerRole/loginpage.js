@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import Modal from "react-bootstrap/Modal";
 
 
+
 const eye = <FontAwesomeIcon icon={faEye} />;
 const sleye = <FontAwesomeIcon icon={faEyeSlash} />;
 
@@ -37,8 +38,6 @@ export default function Login(props) {
   // );
   const [modalOpenForLoading, setmodalOpenForLoading] = useState(false);
 
-  
-
   //remember me
 
   const [rememberMe, setRememberMe] = useState(false);
@@ -51,8 +50,6 @@ export default function Login(props) {
   };
 
   const [passwordShown, setPasswordShown] = useState(false);
-
-
 
   // Password toggle handler
   const togglePasswordVisiblity = () => {
@@ -90,61 +87,43 @@ export default function Login(props) {
     localStorage.setItem("rememberMe", rememberMe);
     localStorage.setItem("Username", rememberMe ? Username : "");
 
-   
-
     axios
-      .post("https://kaushal-rashmika-music.herokuapp.com/customer/loginCustomer", loginCredentials)
+      .post(
+        "https://kaushal-rashmika-music.herokuapp.com/customer/loginCustomer",
+        loginCredentials
+      )
       .then((res) => {
         setCustomer(res.data.customerLogin);
         localStorage.setItem("CustomerID", res.data.customerLogin._id);
 
         let customerID = res.data.customerLogin._id;
-        
+
         const updateloginStatus = {
-          LoginStatus: true
+          LoginStatus: true,
         };
 
         axios
-        .put("https://kaushal-rashmika-music.herokuapp.com/customer/loginStatus/" + customerID, updateloginStatus)
-        .then((res) => {
+          .put(
+            "https://kaushal-rashmika-music.herokuapp.com/customer/loginStatus/" +
+              customerID,
+            updateloginStatus
+          )
+          .then((res) => {
+            setmodalOpenForLoading(false);
+          });
 
-          setmodalOpenForLoading(false);
-
-        })
-
-       
         
-        // sessionStorage.setItem('userID',"sss");
-
-        // const Toast = Swal.mixin({
-        //   toast: true,
-        //   position: "top-end",
-        //   showConfirmButton: false,
-        //   timer: 1500,
-        //   timerProgressBar: true,
-        //   didOpen: (toast) => {
-        //     toast.addEventListener("mouseenter", Swal.stopTimer);
-        //     toast.addEventListener("mouseleave", Swal.resumeTimer);
-        //   },
-        // });
-
-        // Toast.fire({
-        //   icon: "success",
-        //   title: "Signed in successfully",
-        // });
 
         props.history.push("/customer/home");
-        // alert("Customer loggin Successfully!");
-        //console.log("logging success");
-        ///console.log(res.data);
+      
         setErrorMsg("");
-        // props.history.push("/Customer/Home");
+      
       })
       .catch((err) => {
         // alert(err);
         setmodalOpenForLoading(false);
         console.log(err);
-       
+
         // alert(err.response.data.error);
 
         Swal.fire({
@@ -335,7 +314,6 @@ export default function Login(props) {
         </Modal.Body>
         <Modal.Footer></Modal.Footer>
       </Modal>
-
     </div>
   );
 }

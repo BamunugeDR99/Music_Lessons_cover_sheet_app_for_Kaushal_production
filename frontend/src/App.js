@@ -75,8 +75,11 @@ function App() {
   return (
     <Router>
       <IdelTimer />
+
       <Switch>
         <div>
+
+        
           {/* Customer Routes */}
           <Route exact path="/" exact component={InitialPage} />
           {loginStatus == true ? (
