@@ -272,7 +272,12 @@ export default function LessonsAndCoversDetailed(props) {
               //completedIncrements.push("#cart1");
             })
             .catch((err) => {
-              console.log(err);
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+                footer: '<p style = "color : #D0193A">Currently unavailable!',
+              });
               setAddToCartStatus(true);
             });
         } else if (falgs === 1) {
@@ -281,7 +286,12 @@ export default function LessonsAndCoversDetailed(props) {
         }
       })
       .catch((err) => {
-        console.log(err);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
         setAddToCartStatus(true);
       });
   }
@@ -349,9 +359,9 @@ export default function LessonsAndCoversDetailed(props) {
       .then((url) => {
         window.open(
           url,
-          '_blank' // <- This is what makes it open in a new window.
+          "_blank" // <- This is what makes it open in a new window.
         );
-        setModalOpenForPdf(false)
+        setModalOpenForPdf(false);
       })
       .catch(() => {
         setModalOpenForPdf(false);
@@ -398,7 +408,6 @@ export default function LessonsAndCoversDetailed(props) {
 
   //It can be a successful payment or failure (problem)
   window.payhere.onCompleted = function onCompleted(orderId) {
-    
     postOrder(orderId);
 
     //Note: validate the payment and show success or failure page to the customer
@@ -460,52 +469,117 @@ export default function LessonsAndCoversDetailed(props) {
             setPurchased(true);
           })
           .catch((err) => {
-            alert(err.message);
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+              footer: '<p style = "color : #D0193A">Currently unavailable!',
+            });
           });
       })
       .catch((err) => {
-        alert(err.message);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
   }
 
   async function submitFeedBack(e) {
     e.preventDefault();
-    const CustomerID = localStorage.getItem("CustomerID");
-    const newFeedBack = {
-      Comment: feedback,
-      CustomerID: CustomerID,
-      CoverID: covers._id,
-    };
-    await axios
-      .post("http://localhost:8070/feedback/addFeedback", newFeedBack)
-      .then((res) => {
-        setFeedbackSubmitted(true);
-      })
-      .catch((err) => {
-        alert(err.message);
-      });
+
+    Swal.fire({
+      title: "Do you want to save the changes?",
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Save",
+      denyButtonText: `Don't save`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        const CustomerID = localStorage.getItem("CustomerID");
+        const newFeedBack = {
+          Comment: feedback,
+          CustomerID: CustomerID,
+          CoverID: covers._id,
+        };
+        axios
+          .post("http://localhost:8070/feedback/addFeedback", newFeedBack)
+          .then((res) => {
+            setFeedbackSubmitted(true);
+            setModalOpenOfrFeedback(false);
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Your feedback has been saved",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          })
+          .catch((err) => {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+              footer: '<p style = "color : #D0193A">Currently unavailable!',
+            });
+          });
+      } else if (result.isDenied) {
+        Swal.fire("Changes are not saved", "", "info");
+      }
+    });
   }
 
   function updateFeedBack(e) {
     e.preventDefault();
-    const feedbackID = feedbackObject._id;
 
-    const updatedFeedBack = {
-      Comment: eFeedback,
-      CustomerID: localStorage.getItem("CustomerID"),
-      CoverID: covers._id,
-    };
-    axios
-      .put(
-        "http://localhost:8070/feedback//updateFeedback/" + feedbackID,
-        updatedFeedBack
-      )
-      .then((res) => {
-        alert("gg");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    Swal.fire({
+      title: "Do you want to save the changes?",
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Save",
+      denyButtonText: `Don't save`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        const feedbackID = feedbackObject._id;
+
+        const updatedFeedBack = {
+          Comment: eFeedback,
+          CustomerID: localStorage.getItem("CustomerID"),
+          CoverID: covers._id,
+        };
+        axios
+          .put(
+            "http://localhost:8070/feedback//updateFeedback/" + feedbackID,
+            updatedFeedBack
+          )
+          .then((res) => {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Your feedback has been updated",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+
+            setModalOpenForFeedbackUpdate(false);
+          })
+
+          .catch((err) => {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+              footer: '<p style = "color : #D0193A">Currently unavailable!',
+            });
+          });
+      } else if (result.isDenied) {
+        Swal.fire("Changes are not saved", "", "info");
+      }
+    });
   }
 
   function getFeedBack(coverID) {
@@ -526,17 +600,53 @@ export default function LessonsAndCoversDetailed(props) {
   }
 
   function deleteFeedback() {
-    axios
-      .delete(
-        "http://localhost:8070/feedback/deleteFeedback/" + feedbackObject._id
-      )
-      .then((res) => {
-        setFeedbackSubmitted(false);
-        setModalOpenForFeedbackUpdate(false);
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger",
+      },
+      buttonsStyling: false,
+    });
 
+    swalWithBootstrapButtons
+      .fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true,
       })
-      .catch((err) => {
-        console.log(err);
+      .then((result) => {
+        if (result.isConfirmed) {
+          axios
+            .delete(
+              "http://localhost:8070/feedback/deleteFeedback/" +
+                feedbackObject._id
+            )
+            .then((res) => {
+              swalWithBootstrapButtons.fire(
+                "Deleted!",
+                "Your feedback has been deleted.",
+                "success"
+              );
+              setFeedbackSubmitted(false);
+              setModalOpenForFeedbackUpdate(false);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire(
+            "Cancelled",
+            "Your feedback is safe :)",
+            "error"
+          );
+        }
       });
   }
 
@@ -1104,10 +1214,12 @@ export default function LessonsAndCoversDetailed(props) {
                   Update
                 </button>
                 <button
-                  type="submit"
+                  type="button"
                   class="btn rounded"
                   style={{ color: "#ffffff", backgroundColor: "#D0193A" }}
-                  onClick = {()=>{deleteFeedback()}}
+                  onClick={() => {
+                    deleteFeedback();
+                  }}
                 >
                   Delete
                 </button>

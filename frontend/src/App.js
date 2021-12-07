@@ -45,6 +45,7 @@ import AdminVwCustomer from "./components/adminRole/AdminVwCustomer";
 import EditMainCategories from "./components/adminRole/EditMainCategory";
 import NotFound from "./components/NotFound";
 import IdelTimer from "./components/timeRelatedComponents/IdelTimer";
+import ThnakYouModalTest from "./components/testingComponents/ThankYouModalTest";
 
 // dynamic header
 function App() {
@@ -164,14 +165,17 @@ function App() {
             component={EditMainCategories}
           />
           <ProtectedRoute path="/admin" component={Footer} />
+          
+          {/* 404 not found route  */}
+          <Route path="/notfound" component={NotFound} />
+
 
           {/* Testing routes  */}
           {/* <Route path = "/search" exact component = {Search}/> */}
-          <Route path="/notfound" component={NotFound} />
-
-          {/* <Route path = "*" component = {}/> */}
-          {/* <Route path="/admin/*" exact component={NotFound} /> */}
-          {/* <Route path="*" exact component={NotFound} /> */}
+          <Route path="/T" component={ThnakYouModalTest} />
+          
+            
+ 
        </div>
       </Switch>
     </Router>
