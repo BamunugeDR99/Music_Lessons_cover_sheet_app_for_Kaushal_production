@@ -133,6 +133,7 @@ export default function AdminLogin(props) {
 
               setmodalOpenForLoading(false);
               props.history.push("/admin/dashboard");
+              sessionStorage.setItem("IsAuth",true);
             });
           }).catch((err)=>{
 

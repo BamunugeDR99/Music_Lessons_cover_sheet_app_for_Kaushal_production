@@ -396,6 +396,7 @@ export default function LessonsAndCoversDetailed(props) {
 
   //It can be a successful payment or failure (problem)
   window.payhere.onCompleted = function onCompleted(orderId) {
+    
     postOrder(orderId);
 
     //Note: validate the payment and show success or failure page to the customer
