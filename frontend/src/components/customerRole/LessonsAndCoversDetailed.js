@@ -467,6 +467,34 @@ export default function LessonsAndCoversDetailed(props) {
               timer: 1500,
             });
             setPurchased(true);
+
+            axios
+              .get(
+                `http://localhost:8070/shoppingCart/checkCartItem/${localStorage.getItem(
+                  "CustomerID"
+                )}/${covers._id}`
+              )
+              .then((res) => {
+                if (res.data) {
+                  // delete item from the cart
+                  axios
+                    .delete(
+                      `http://localhost:8070/shoppingCart/deleteCartCover/${covers._id}/` +
+                        localStorage.getItem("CustomerID")
+                    )
+                    .then((res) => {
+                      let count = parseInt($("#countHolder").text());
+                      $("#countHolder").html(count - 1);
+                      //alert("ss")
+                      //console.log(res.data);
+                    })
+                    .catch((err) => {
+                      // alert("gg");
+                    });
+                } else {
+                }
+              })
+              .catch((err) => {});
           })
           .catch((err) => {
             Swal.fire({

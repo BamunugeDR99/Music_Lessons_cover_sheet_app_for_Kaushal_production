@@ -176,4 +176,25 @@ router.route("/updateSItem/:id").put(async (req, res) => {
 //       });
 //   });
 
+// check whether the cover is in the cart or not
+router.route("/checkCartItem/:customerid/:coverid").get((req, res) => {
+  let customerID = req.params.customerid;
+  let coverID = req.params.coverid;
+  let status = false;
+  const getOne = Cart.findOne({ CustomerID: customerID }).exec((err, post) => {
+    if (err) {
+      console.log(err);
+    } else {
+      for(let i = 0; i < post.CoverIDs.length; i++){
+        if(post.CoverIDs[i] == coverID){
+          status = true; // already in the cart
+        }else if(post.CoverIDs[i] != coverID){
+          status = false; // not in the cart
+        }
+      }
+      res.send(status);
+    }
+  });
+});
+
 module.exports = router;
