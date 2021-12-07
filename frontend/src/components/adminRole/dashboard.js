@@ -22,8 +22,10 @@ export default function DashBoard() {
   const [fromValue, setFromValue] = useState("");
   const [toValue, setToValue] = useState("");
   const [error, setError] = useState("");
+  let [tablediv, setTablediv] = useState();
   let [spinner, setspinner] = useState(true);
   let [main, setmain] = useState(true);
+  let count = 1;
 
   let tableData = [];
   let covers = [];
@@ -134,17 +136,18 @@ export default function DashBoard() {
   async function loadCovers(customerid) {
     // console.log(customerid);
 
+    // console.log(orderHolder);
+
     await axios
       .get(`http://localhost:8070/customer/get/${customerid}`)
       .then((res) => {
         // console.log(res.data);
         customerdetails.push(res.data);
+         setContent();
       })
       .catch((err) => {
         alert(err.message);
       });
-
-    assignData();
   }
   async function assignData() {
     if (customerdetails.length == orderHolder.length) {
@@ -167,14 +170,47 @@ export default function DashBoard() {
             break;
           }
         }
+        if (count == orderHolder.length) {
+          // setPaymentData(tableData);
+          await setTablediv(
+            <tbody>
+              {tableData.map((post) => (
+                <tr>
+                  <td>{post.name}</td>
+                  <td className="text-right">Rs.{post.totalprice}.00</td>
+                  <td>{post.date.substr(0, 10)}</td>
+                  <td>
+                    {" "}
+                    <button
+                      type="button"
+                      onClick={() => getOrderedCovers(post.coverID)}
+                      class="btn btn-outline-secondary waves-effect btn-sm px-2"
+                    >
+                      <i class="fas fa-eye" aria-hidden="true"></i>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          );
+        }
+        //
+
+        count = count + 1;
+        // await setContent()
       }
-      console.log(tableData);
-      setPaymentData(tableData);
+      console.log("Lenth " + orderHolder.length);
       setmain(false);
       setspinner(true);
-      $("#example").DataTable();
-      $("#example2").DataTable();
+      // await sleep(10000);
+      // console.log(tableData);
     }
+  }
+
+  async function setContent() {
+    await assignData();
+    $("#example").DataTable();
+    $("#example2").DataTable();
   }
   async function getOrderedCovers(data) {
     console.log(data);
@@ -210,14 +246,18 @@ export default function DashBoard() {
     setDownloads(downloads);
   }
 
-  function searchByDate(fromDate, toDate) {
+  function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  async function searchByDate(fromDate, toDate) {
     setFromValue(fromDate);
     setToValue(toDate);
     if (fromDate != "" && toDate != "") {
       setmain(true);
       setspinner(false);
 
-      axios
+      await axios
         .get(`http://localhost:8070/order/getbyyear/${fromDate}/${toDate}`)
         .then((res) => {
           if (res.data.length > 0) {
@@ -229,7 +269,8 @@ export default function DashBoard() {
             setspinner(true);
           } else {
             setError("No Data available");
-            setPaymentData([]);
+
+            setTablediv();
             setTotal("0");
 
             setmain(false);
@@ -243,6 +284,8 @@ export default function DashBoard() {
   }
 
   function refresh() {
+    setToValue("");
+    setFromValue("");
     setmain(true);
     setspinner(false);
     axios
@@ -255,11 +298,13 @@ export default function DashBoard() {
 
         setmain(false);
         setspinner(true);
+        // console.log(orderHolder);
       })
       .catch((err) => {
         alert(err.message);
       });
   }
+
   return (
     <div>
       <br />
@@ -368,7 +413,6 @@ export default function DashBoard() {
                 aria-describedby="emailHelp"
                 placeholder="Enter email"
                 max={new Date().toISOString().split("T")[0]}
-
               />
             </div>{" "}
           </div>
@@ -407,7 +451,7 @@ export default function DashBoard() {
           class="table table-striped table-bordered text-center"
           style={{ width: "100%" }}
         >
-             <thead class="thead-dark">
+          <thead class="thead-dark">
             <tr>
               <th>Customer Name</th>
               <th>Total Price</th>
@@ -415,25 +459,7 @@ export default function DashBoard() {
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody>
-            {paymentdata.map((post) => (
-              <tr>
-                <td>{post.name}</td>
-                <td className="text-right">Rs.{post.totalprice}.00</td>
-                <td>{post.date.substr(0, 10)}</td>
-                <td>
-                  {" "}
-                  <button
-                    type="button"
-                    onClick={() => getOrderedCovers(post.coverID)}
-                    class="btn btn-outline-secondary waves-effect btn-sm px-2"
-                  >
-                    <i class="fas fa-eye" aria-hidden="true"></i>
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+          {tablediv}
           <tfoot>
             <tr>
               <th>Customer Name</th>
@@ -479,7 +505,7 @@ export default function DashBoard() {
                 class="table table-striped table-bordered text-center"
                 style={{ width: "100%" }}
               >
-              <thead class="thead-dark">
+                <thead class="thead-dark">
                   <tr>
                     <th>Cover Name</th>
                     <th>Total Price</th>
