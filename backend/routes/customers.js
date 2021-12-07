@@ -8,6 +8,27 @@ app.use(express.json());
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
+// update purchased covers
+router.route("/addPurchasedCover/:id").put(async (req, res) => {
+  let CustomerID = req.params.id;
+  const { PurchasedCovers } = req.body;
+
+  const updatedArray = {
+    PurchasedCovers,
+  };
+
+  const update = await Customer.findByIdAndUpdate(CustomerID, updatedArray)
+    .then(() => {
+      res.status(200).send({ status: "updated" });
+    })
+    .catch((err) => {
+      console.log(err);
+      res
+        .status(500)
+        .send({ status: "Error with updating data", error: err.message });
+    });
+});
+
 //Customer SignUp
 router.route("/add").post(async (req, res) => {
   const FirstName = req.body.FirstName;

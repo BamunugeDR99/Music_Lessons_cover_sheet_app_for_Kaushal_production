@@ -1,67 +1,47 @@
 const router = require("express").Router();
 let Cart = require("../models/shoppingCart");
 
-router.route("/createCart").post((req, res)=>{
+router.route("/createCart").post((req, res) => {
+  const CustomerID = req.body.CustomerID;
+  const CoverIDs = req.body.CoverIDs;
 
-    const CustomerID  = req.body.CustomerID;
-    const CoverIDs     = req.body.CoverIDs;
+  const newCart = new Cart({
+    CustomerID,
+    CoverIDs,
+  });
 
-
-    const newCart = new Cart({
-
-        CustomerID,
-        CoverIDs,
+  //Insert the created object to the DB //.save()->pass the obeject to the mongo DB through the schema in the model
+  newCart
+    .save()
+    .then(() => {
+      res.json("Cart Created"); //Pass to the frontend as response in json format
     })
-
-    //Insert the created object to the DB //.save()->pass the obeject to the mongo DB through the schema in the model
-    newCart.save().then(() => {
-
-        res.json("Cart Created"); //Pass to the frontend as response in json format
-    }).catch((err) => {
-
-        console.log(err); //Display the error in console
-    })
-
-
-})
-
-
+    .catch((err) => {
+      console.log(err); //Display the error in console
+    });
+});
 
 router.route("/getAllCarts").get((req, res) => {
-
-    //Variable declared at line 5
-    Cart.find().then((carts) => {
-
-        res.json(carts);
-    }).catch((err) => {
-
-        console.log(err);
+  //Variable declared at line 5
+  Cart.find()
+    .then((carts) => {
+      res.json(carts);
     })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 
-
-})
-
-
+// Update cart
 router.route("/updateCartCovers/:id").put(async (req, res) => {
-    let customerID = req.params.id;
-    const{
-            CoverIDs
-       
-         } = req.body;
-  
-    const UpdatedCart  = {
-        CoverIDs
-    }
-  
- 
-    const update = await Cart.updateOne(
-  
-      {CustomerID : customerID },
-      {$set : { CoverIDs : CoverIDs}},
-  
-  
-    ).then(() => {
-  
+  let customerID = req.params.id;
+
+
+  const update = await Cart.updateOne(
+    { CustomerID: customerID },
+    { $set: { CoverIDs: [] } }
+  )
+    .then(() => {
       res.status(200).send({ status: "Cart updated" });
     })
     .catch((err) => {
