@@ -468,6 +468,16 @@ export default function LessonsAndCoversDetailed(props) {
             });
             setPurchased(true);
 
+            // increment noofdownloads by one
+            axios
+              .put(`http://localhost:8070/covers/incrementCount/${covers._id}`)
+              .then((res) => {
+               
+              })
+              .catch((err) => {
+              console.log(err);
+              });
+
             axios
               .get(
                 `http://localhost:8070/shoppingCart/checkCartItem/${localStorage.getItem(
@@ -490,6 +500,7 @@ export default function LessonsAndCoversDetailed(props) {
                     })
                     .catch((err) => {
                       // alert("gg");
+                      console.log(err)
                     });
                 } else {
                 }

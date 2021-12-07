@@ -373,7 +373,7 @@ router.route("/incrementCount/:id").put(async (req, res) => {
       { $set: { NoOfDownloads: coverss.NoOfDownloads + 1} }
     )
       .then(() => {
-        res.status(200).send({ status: "Status updated" });
+        res.status(200).send({ status: "Count updated" });
       })
       .catch((err) => {
         console.log(err);
