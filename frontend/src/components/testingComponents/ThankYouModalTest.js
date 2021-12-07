@@ -5,10 +5,9 @@ export default function ThnakYouModalTest(props) {
 
  
     
-
+const [modal,setModal] = useState(true);
   return (
     <div>
-   
      
     </div>
   );
