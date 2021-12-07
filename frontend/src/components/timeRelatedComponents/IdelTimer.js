@@ -18,7 +18,7 @@ export default function IdelTimer(props) {
     //   }
     
       const { getRemainingTime, getLastActiveTime } = useIdleTimer({
-        timeout: 1800 * 1000,
+        timeout: 1800 * 10000,
         onIdle: handleOnIdle,
         // onActive: handleOnActive,
         // onAction: handleOnAction,

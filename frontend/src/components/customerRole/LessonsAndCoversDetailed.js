@@ -347,9 +347,11 @@ export default function LessonsAndCoversDetailed(props) {
     const storageRef = ref(storage, `Covers(PDF)/${covername}`);
     await getDownloadURL(storageRef)
       .then((url) => {
-        // setPdfUrl(url)
-        window.location.href = url;
-        //setModalOpenForPdf(false)
+        window.open(
+          url,
+          '_blank' // <- This is what makes it open in a new window.
+        );
+        setModalOpenForPdf(false)
       })
       .catch(() => {
         setModalOpenForPdf(false);
