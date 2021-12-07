@@ -9,25 +9,28 @@ import "../../css/login.css";
 import Swal from "sweetalert2";
 import Modal from "react-bootstrap/Modal";
 
+import Cookies from "js-cookie";
+
 
 const eye = <FontAwesomeIcon icon={faEye} />;
 const sleye = <FontAwesomeIcon icon={faEyeSlash} />;
 
 export default function Login(props) {
-  const refreshToken = async () => {
-    try {
-      const res = await axios.post("/refresh", {
-        token: customer.refreshToken,
-      });
-      setCustomer({
-        ...customer,
-        accessToken: res.data.accessToken,
-        refreshToken: res.data.refreshToken,
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  };
+ 
+  // const refreshToken = async () => {
+  //   try {
+  //     const res = await axios.post("/refresh", {
+  //       token: customer.refreshToken,
+  //     });
+  //     setCustomer({
+  //       ...customer,
+  //       accessToken: res.data.accessToken,
+  //       refreshToken: res.data.refreshToken,
+  //     });
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   // axios.interceptors.request.use( async(config)=>{
 
@@ -77,6 +80,101 @@ export default function Login(props) {
     // displayStudentdetails();
   }, []);
 
+  const [err, setErr] = useState("");
+
+  function refresh(refreshToken){
+
+    console.log("Refreshing token!");
+
+    return new Promise((resolve, reject) => {
+      axios
+          .post("https://kaushal-rashmika-music.herokuapp.com/customer/refresh", { token: refreshToken })
+          .then((res) => {
+
+              if (res.data.success === false) {
+                  setErr("Login again");
+                  // set message and return.
+                  resolve(false);
+
+              } else {
+                  const { accessToken } = res.data.customerLogin;
+                  Cookies.set("access", accessToken);
+                  resolve(accessToken);
+              }
+          });
+  });
+
+
+  };
+
+  async function hasAccess(accessToken, refreshToken){
+
+    if (!refreshToken) return null;
+
+    if (accessToken === undefined) {
+        // generate new accessToken
+        accessToken = await refresh(refreshToken);
+        return accessToken;
+    }
+
+    return accessToken;
+
+
+  };
+
+  async function requestLogin(accessToken, refreshToken){
+
+    console.log(accessToken, refreshToken);
+
+
+    return new Promise((resolve, reject) => {
+      axios
+          .post(
+              "https://kaushal-rashmika-music.herokuapp.com/customer/protected",
+              {},
+              { headers: { authorization: "Bearer" + accessToken } }
+          )
+          .then(async (res) => {
+              if (res.data.success === false) {
+                  if (res.data.message === "User not authenticated") {
+                      setErr("Login again");
+                      // set err message to login again.
+                  } else if (
+                      res.data.message === "Access token expired"
+                  ) {
+                      const accessToken = await refresh(refreshToken);
+                      return await requestLogin(
+                          accessToken,
+                          refreshToken,
+                      );
+                  }
+
+                  resolve(false);
+              } else {
+                  // protected route has been accessed, response can be used.
+                  setErr("Protected route accessed!");
+                  resolve(true);
+              }
+          });
+  });
+  }
+
+
+  async function protect(e) {
+
+    let accessToken = Cookies.get("access");
+    let refreshToken = Cookies.get("refresh");
+
+    accessToken = await hasAccess(accessToken, refreshToken);
+
+    if (!accessToken) {
+      // Set message saying login again.
+  } else {
+      await requestLogin(accessToken, refreshToken);
+  }
+
+  };
+
   function loginUser(e) {
     e.preventDefault();
 
@@ -96,6 +194,13 @@ export default function Login(props) {
       .post("https://kaushal-rashmika-music.herokuapp.com/customer/loginCustomer", loginCredentials)
       .then((res) => {
         setCustomer(res.data.customerLogin);
+
+        const { accessToken, refreshToken} = res.data.customerLogin;
+
+             Cookies.set("access", accessToken);
+             Cookies.set("refresh", refreshToken);
+
+        // Cookies.set()
         localStorage.setItem("CustomerID", res.data.customerLogin._id);
 
         let customerID = res.data.customerLogin._id;
@@ -204,6 +309,7 @@ export default function Login(props) {
                     style={{ color: "red", fontWeight: "bold" }}
                   >
                     {errorMsg}
+                    {err}
                   </h6>
                   <form onSubmit={loginUser}>
                     {/* Username label & input field  */}
@@ -281,6 +387,7 @@ export default function Login(props) {
                       class="btn btn-block login-btn mb-4"
                       type="submit"
                       value="Login"
+                    
                     />
                   </form>
 
@@ -337,5 +444,6 @@ export default function Login(props) {
       </Modal>
 
     </div>
+
   );
 }

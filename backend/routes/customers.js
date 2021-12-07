@@ -204,7 +204,7 @@ router.post("/refresh", (req, res) => {
     refreshTokens.push(newRefreshToken);
 
     res.status(200).json({
-      accsessToken: newAccessToken,
+      accessToken: newAccessToken,
       refreshToken: newRefreshToken,
     });
   });
@@ -245,22 +245,22 @@ router.post("/loginCustomer", async (req, res) => {
 
         //Generate access token
 
-        const accsessToken = generateAccessToken(customerLogin);
+        const accessToken = generateAccessToken(customerLogin);
         const refreshToken = generateRefreshToken(customerLogin);
 
         refreshTokens.push(refreshToken);
 
-        res.cookie("jwt", accsessToken, {
-          expires: new Date(Date.now() + 30000),
-          httpOnly: true,
-        });
+        // res.cookie("jwt", accessToken, {
+        //   expires: new Date(Date.now() + 30000),
+        //   httpOnly: true,
+        // });
 
         // console.log(`this is the cookie ${req.cookies.jwt}`);
 
         res.json({
           customerLogin: {
             _id: customerLogin._id,
-            accsessToken: accsessToken,
+            accessToken: accessToken,
             refreshToken: refreshToken,
           },
         });
@@ -311,6 +311,11 @@ router.delete("/deleteUser/:id", verify, async (req, res) => {
   } else {
     res.status(403).json("You can not delete this profile.");
   }
+});
+
+// Protected route, can only be accessed when user is logged-in
+router.post("/protected", verify, (req, res) => {
+  return res.json({ message: "Protected content!" });
 });
 
 //Logout
