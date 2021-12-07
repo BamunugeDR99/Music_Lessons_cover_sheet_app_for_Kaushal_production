@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import React, { useEffect, useState , Component} from 'react'
+// import TextField from '@material-ui/core/TextField';
+// import Autocomplete from '@material-ui/lab/Autocomplete';
+import ReactSearchBox from "react-search-box";
 import axios from 'axios';
 
 export default function Search(props){
@@ -9,6 +10,8 @@ const [myOptions, setMyOptions] = useState([])
 const [opID, setMyOpID] = useState([])
 const [covers, setCovers] = useState([])
 let [value, setValue]=useState([]);
+
+let data=[];
 
 let number=0;
     
@@ -47,19 +50,19 @@ getData();
           
           for(let i = 0; i < myOptions.length; i++){
               if(myOptions[i] == value){
-                // number=1;
-                console.log("Successful")
+                number=1;
+                // console.log("Successful")
               }
               else{
-                console.log('Unsuccesful')
+                // console.log('Unsuccesful')
               }
           }
-          // if(number==1){
-          //   console.log("Successful")
-          // }
-          // else{
-          //   console.log('Unsuccesful')
-          // }
+          if(number==1){
+            console.log("Successful")
+          }
+          else{
+            console.log('Unsuccesful')
+          }
         // })
     }
 
@@ -73,18 +76,41 @@ getData();
     //       }
     // }
 
+    // data = [
+    //     {
+    //       key: "john",
+    //       value: "John Doe",
+    //     },
+    //     {
+    //       key: "jane",
+    //       value: "Jane Doe",
+    //     },
+    //     {
+    //       key: "mary",
+    //       value: "Mary Phillips",
+    //     },
+    //     {
+    //       key: "robert",
+    //       value: "Robert",
+    //     },
+    //     {
+    //       key: "karius",
+    //       value: "Karius",
+    //     },
+    //   ];
+
 
 return (
     // <div className="row">
 	<div style={{margin:'20px'}}>
-	<Autocomplete
+	<input
 		style={{ width: 500 }}
 		freeSolo
 		autoComplete
 		autoHighlight
 		options={myOptions}
 		renderInput={(params) => (
-		<TextField {...params}
+		<textarea {...params}
         onChange={(e) => {getDataFromAPI(e.target.value);}}
 			// onClick={getDataFromAPI}
 			variant="outlined"
@@ -93,15 +119,23 @@ return (
 		)}
         
 	/>
-     <button class="btn" type="submit" style={{color:"#764A34", border: "2px solid #764A34"}} 
+
+        
+
+
+
+     {/* <button class="btn" type="submit" style={{color:"#764A34", border: "2px solid #764A34"}} 
     onClick={() => { props.history.push("/customer/detailedcover/" + opID) }}
       >Search</button>
-    <br/><br/>
+    <br/><br/> */}
     
 	</div>
     
     /* </div> */
 );
+
+
+
 }
 
 // "https://kaushal-rashmika-music.herokuapp.com/covers/getcovers"
