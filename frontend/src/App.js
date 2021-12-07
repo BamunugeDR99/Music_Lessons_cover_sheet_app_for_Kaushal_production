@@ -77,7 +77,7 @@ function App() {
 
   return (
     <Router>
-      {/* <IdelTimer/> */}
+      <IdelTimer/>
       <Switch>
         <div>
           {/* Customer Routes */}
