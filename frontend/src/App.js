@@ -5,7 +5,6 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import ProtectedRoute from "./private/ProtectedRoute";
 import authentication from "./security/authentication";
 
-
 // import css
 import "./App.css";
 import "./css/DiscoverMoreCoversStyles.css";
@@ -33,7 +32,6 @@ import TestCustomerRegistration from "./components/testingComponents/RegisterTes
 
 // import Search from "./components/testingComponents/search";
 
-
 //import components (Admin)
 import AdminLogin from "./components/adminRole/adminLogin";
 import AdminHeaderTemp from "./components/adminRole/adminHeaderTemo";
@@ -45,11 +43,9 @@ import AdminVwCustomer from "./components/adminRole/AdminVwCustomer";
 import EditMainCategories from "./components/adminRole/EditMainCategory";
 import NotFound from "./components/NotFound";
 import IdelTimer from "./components/timeRelatedComponents/IdelTimer";
-import ThnakYouModalTest from "./components/testingComponents/ThankYouModalTest";
 
 // dynamic header
 function App() {
-
   // window.onload = function gg(){
   //     //localStorage.getItem("AdminID")
   //     // let loginStatus = false;
@@ -57,7 +53,7 @@ function App() {
   //         axios
   //         .get(
   //           "https://kaushal-rashmika-music.herokuapp.com/admin/getAdminLoginStatus/61ac56a585716235690b414b"
-              
+
   //         )
   //         .then((res) => {
   //           if(res.data){
@@ -65,7 +61,7 @@ function App() {
   //           }else{
   //             authentication.logout(()=>{});
   //           }
-            
+
   //         })
   //         .catch((err) => {
   //           alert(err);
@@ -78,7 +74,7 @@ function App() {
 
   return (
     <Router>
-      <IdelTimer/>
+      <IdelTimer />
       <Switch>
         <div>
           {/* Customer Routes */}
@@ -165,18 +161,13 @@ function App() {
             component={EditMainCategories}
           />
           <ProtectedRoute path="/admin" component={Footer} />
-          
+
           {/* 404 not found route  */}
           <Route path="/notfound" component={NotFound} />
 
-
           {/* Testing routes  */}
           {/* <Route path = "/search" exact component = {Search}/> */}
-          <Route path="/T" component={ThnakYouModalTest} />
-          
-            
- 
-       </div>
+        </div>
       </Switch>
     </Router>
   );
