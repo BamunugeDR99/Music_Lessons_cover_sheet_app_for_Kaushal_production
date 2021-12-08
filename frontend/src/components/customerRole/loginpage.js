@@ -115,6 +115,8 @@ export default function Login(props) {
         
 
         props.history.push("/customer/home");
+        sessionStorage.setItem("IsAuth",true);
+        window.location.reload()
       
         setErrorMsg("");
       

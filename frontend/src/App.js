@@ -44,33 +44,9 @@ import EditMainCategories from "./components/adminRole/EditMainCategory";
 import NotFound from "./components/NotFound";
 import IdelTimer from "./components/timeRelatedComponents/IdelTimer";
 
-// dynamic header
 function App() {
-  // window.onload = function gg(){
-  //     //localStorage.getItem("AdminID")
-  //     // let loginStatus = false;
-  //       if(localStorage.getItem("AdminID") != null){
-  //         axios
-  //         .get(
-  //           "https://kaushal-rashmika-music.herokuapp.com/admin/getAdminLoginStatus/61ac56a585716235690b414b"
 
-  //         )
-  //         .then((res) => {
-  //           if(res.data){
-  //             authentication.login(()=>{});
-  //           }else{
-  //             authentication.logout(()=>{});
-  //           }
-
-  //         })
-  //         .catch((err) => {
-  //           alert(err);
-  //         });
-  //       }else if(localStorage.getItem("AdminID") == null){
-  //           return this.authenticated
-  //       }
-  // }
-  const [loginStatus, setLoginStatus] = useState(true);
+ 
 
   return (
     <Router>
@@ -78,11 +54,9 @@ function App() {
 
       <Switch>
         <div>
-
-        
           {/* Customer Routes */}
           <Route exact path="/" exact component={InitialPage} />
-          {loginStatus == true ? (
+          {sessionStorage.getItem("IsAuth") ? (
             <div>
               <Route path="/customer" component={CustomerHeaderTemp} />
             </div>
