@@ -23,6 +23,16 @@ export default function MusicCoverPage(props) {
   const [categories, setCategories] = useState([]);
   const [populercover, setpopulercover] = useState([]);
   const [populerimage, setpopulerimage] = useState();
+
+  let [spinner, setspinner] = useState(true);
+  let [spinner2, setspinner2] = useState(true);
+  let [main, setmain] = useState(true);
+  let [coverdiv, setCoverdiv] = useState(true);
+  let [topcoverdiv, setTopCoverDiv] = useState(true);
+  let [link, setLink] = useState(true);
+  let [link1, setLink1] = useState(true);
+  let [bufferLink, setBufferLink] = useState(true);
+
   let dataholdedr = [];
   let populercoverholder = [];
 
@@ -50,16 +60,28 @@ export default function MusicCoverPage(props) {
   };
 
   useEffect(async () => {
-    document.getElementById("bufferlink").style.display = "block";
-    document.getElementById("link").style.display = "none";
-    document.getElementById("link1").style.display = "none";
-    document.getElementById("spinnerdiv").style.display = "block";
-    document.getElementById("coverdiv").style.display = "none";
-    document.getElementById("spinnerdiv2").style.display = "block";
-    document.getElementById("topcover").style.display = "none";
+    // document.getElementById("bufferlink").style.display = "block";
+    // document.getElementById("link").style.display = "none";
+    // document.getElementById("link1").style.display = "none";
+
+    // document.getElementById("coverdiv").style.display = "none";
+    // document.getElementById("topcover").style.display = "none";
+    // document.getElementById("spinnerdiv2").style.display = "block";
+    // document.getElementById("spinnerdiv").style.display = "block";
+
+    setBufferLink(false);
+    setLink(true);
+    setLink1(true);
+
+    setCoverdiv(true);
+    setTopCoverDiv(true);
+    setspinner2(false);
+    setspinner(false);
 
     await axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbymainexcercise")
+      .get(
+        "https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbymainexcercise"
+      )
       .then((res) => {
         if (res.data.length > 0) {
           setNoData("");
@@ -69,15 +91,22 @@ export default function MusicCoverPage(props) {
           setfilterCover(res.data);
           setCategoryCover(res.data);
           setCovers(res.data);
-          document.getElementById("spinnerdiv").style.display = "none";
-          document.getElementById("coverdiv").style.display = "block";
+          // document.getElementById("spinnerdiv").style.display = "none";
+          // document.getElementById("coverdiv").style.display = "block";
+
+          setspinner(true);
+          setCoverdiv(false);
         } else {
           setNoData("No Covers available");
           setPopulernodata("No populer covers available");
           setCovers([]);
-          document.getElementById("spinnerdiv").style.display = "none";
-          document.getElementById("spinnerdiv2").style.display = "none";
-          document.getElementById("coverdiv").style.display = "block";
+          // document.getElementById("spinnerdiv").style.display = "none";
+          // document.getElementById("spinnerdiv2").style.display = "none";
+          // document.getElementById("coverdiv").style.display = "block";
+
+          setspinner(true);
+          setspinner2(true);
+          setCoverdiv(false);
         }
 
         // console.log(res.data);
@@ -91,10 +120,14 @@ export default function MusicCoverPage(props) {
       .get("https://kaushal-rashmika-music.herokuapp.com/mainCategory/get")
       .then((res) => {
         setCategories(res.data[1].SubCategories);
-        document.getElementById("bufferlink").style.display = "none";
-        document.getElementById("link").style.display = "block";
-        document.getElementById("link1").style.display = "block";
+        // document.getElementById("bufferlink").style.display = "none";
+        // document.getElementById("link").style.display = "block";
+        // document.getElementById("link1").style.display = "block";
         // console.log(res.data[0].SubCategories);
+
+        setBufferLink(true);
+        setLink(false);
+        setLink1(false);
       })
       .catch((err) => {
         alert(err.message);
@@ -116,8 +149,11 @@ export default function MusicCoverPage(props) {
       setpopulerimage(pcover.PreviewPages[0]);
 
       console.log(pcover);
-      document.getElementById("spinnerdiv2").style.display = "none";
-      document.getElementById("topcover").style.display = "block";
+      // document.getElementById("spinnerdiv2").style.display = "none";
+      // document.getElementById("topcover").style.display = "block";
+
+      setspinner2(true);
+      setTopCoverDiv(false);
     }
   }
   function modalopen() {
@@ -161,18 +197,25 @@ export default function MusicCoverPage(props) {
 
   async function searchByName(val) {
     setSerchvalue(val);
-    document.getElementById("spinnerdiv").style.display = "block";
-    document.getElementById("coverdiv").style.display = "none";
+    // document.getElementById("spinnerdiv").style.display = "block";
+    // document.getElementById("coverdiv").style.display = "none";
+
+    setspinner(false);
+    setCoverdiv(true);
     await axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbymainexcercise")
+      .get(
+        "https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbymainexcercise"
+      )
       .then((res) => {
         if (res.data.length > 0) {
           setNoData("");
           dataholdedr = res.data;
           setCovers(res.data);
           setfilterCover(res.data);
-          document.getElementById("spinnerdiv").style.display = "none";
-          document.getElementById("coverdiv").style.display = "block";
+          // document.getElementById("spinnerdiv").style.display = "none";
+          // document.getElementById("coverdiv").style.display = "block";
+          setspinner(true);
+          setCoverdiv(false);
 
           let searchResult = filtercover.filter(
             (post) =>
@@ -199,16 +242,25 @@ export default function MusicCoverPage(props) {
   }
 
   async function fetchData(type) {
-    document.getElementById("spinnerdiv").style.display = "block";
-    document.getElementById("coverdiv").style.display = "none";
+    // document.getElementById("spinnerdiv").style.display = "block";
+    // document.getElementById("coverdiv").style.display = "none";
+
+    setspinner(false);
+    setCoverdiv(true);
     await axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbymainexcercise")
+      .get(
+        "https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbymainexcercise"
+      )
       .then((res) => {
         dataholdedr = res.data;
         setCovers(res.data);
         setfilterCover(res.data);
-        document.getElementById("spinnerdiv").style.display = "none";
-        document.getElementById("coverdiv").style.display = "block";
+        // document.getElementById("spinnerdiv").style.display = "none";
+        // document.getElementById("coverdiv").style.display = "block";
+
+        setspinner(true);
+        setCoverdiv(false);
+
         if (type == "All") {
           setCategoryText("All");
           setCategoryCover(filtercover);
@@ -291,8 +343,8 @@ export default function MusicCoverPage(props) {
               style={{ maxHeight: "30%", overflowY: "scroll" }}
             >
               <a
-                style={{ display: "block" }}
                 id="bufferlink"
+                hidden={bufferLink}
                 href="#"
                 className="list-group-item list-group-item-action"
               >
@@ -302,7 +354,7 @@ export default function MusicCoverPage(props) {
               <a
                 href="#"
                 id="link1"
-                style={{ display: "none" }}
+                hidden={link1}
                 onClick={() => fetchData("All")}
                 className="list-group-item list-group-item-action"
               >
@@ -313,7 +365,7 @@ export default function MusicCoverPage(props) {
                   <a
                     href="#"
                     id="link"
-                    style={{ display: "block" }}
+                    hidden={link}
                     onClick={() => fetchData(post)}
                     className="list-group-item list-group-item-action"
                   >
@@ -367,6 +419,7 @@ export default function MusicCoverPage(props) {
               <center>
                 <div
                   id="spinnerdiv2"
+                  hidden={spinner2}
                   class="col-lg-8 "
                   style={{ display: "block" }}
                 >
@@ -384,7 +437,8 @@ export default function MusicCoverPage(props) {
               </center>
               <div
                 id="topcover"
-                style={{ display: "none" }}
+                hidden={topcoverdiv}
+                // style={{ display: "none" }}
                 onClick={() => {
                   props.history.push(
                     "/customer/detailedcover/" + populercover._id
@@ -417,6 +471,7 @@ export default function MusicCoverPage(props) {
             <div className="row">
               <div
                 id="spinnerdiv"
+                hidden={spinner}
                 class="col-lg-8 "
                 style={{ display: "block" }}
               >
@@ -430,7 +485,7 @@ export default function MusicCoverPage(props) {
                 </center>
               </div>
             </div>{" "}
-            <span id="coverdiv">
+            <span hidden={coverdiv} id="coverdiv">
               <div className="d-block d-sm-none">
                 <Carousel responsive={responsive}>
                   {covers.map((post, index) => (
@@ -462,7 +517,6 @@ export default function MusicCoverPage(props) {
               </div>
               <div
                 style={{ maxHeight: "870px", overflowY: "scroll" }}
-              
                 className="d-none d-sm-block"
               >
                 <div className="row">

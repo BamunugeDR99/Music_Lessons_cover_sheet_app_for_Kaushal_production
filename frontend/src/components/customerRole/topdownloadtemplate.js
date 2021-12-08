@@ -4,7 +4,9 @@ import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 
 export default function TopDownloadTemplate(props) {
   async function displayImages() {
-    const storageRef = ref(storage, `PreviewImages/${props.imageName}`);
+    if (props.imagename != null) {
+      const storageRef = ref(storage, `PreviewImages/${props.imageName}`);
+ 
 
     await getDownloadURL(storageRef)
       .then((url) => {
@@ -17,6 +19,7 @@ export default function TopDownloadTemplate(props) {
       .catch((err) => {
         console.log(err);
       });
+    }
   }
 
   return (
@@ -32,12 +35,12 @@ export default function TopDownloadTemplate(props) {
           }}
         >
           <img
-                id="temp"
-                src={"/images/imageplaceholder.png" }
-                class="card-img-top"
-                alt="..."
-                style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
-              />
+            id="temp"
+            src={"/images/imageplaceholder.png"}
+            class="card-img-top"
+            alt="..."
+            style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
+          />
           <img
             hidden
             id="image"
