@@ -4,13 +4,13 @@ import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 import Swal from "sweetalert2";
 import Modal from "react-bootstrap/Modal";
-// import { ImageGroup, Image } from 'react-fullscreen-image'
 
 export default function PurchaseHistory(props) {
   const [cover, setCover] = useState([]);
   const [searchValue, setSearchvalue] = useState([]);
   const [noData, setNoData] = useState([]);
   const [empty, setEmpty] = useState([]);
+  const [empty2, setEmpty2] = useState([]);
   const [orderDate, setOrderDate] = useState([]);
   const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
   const [modalOpenForImage, setModalOpenForImage] = useState(false);
@@ -27,9 +27,21 @@ export default function PurchaseHistory(props) {
       axios
         .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
         .then((res) => {
+          
+              
+          
+          //    if (searchResult.length == 0) {
+          //   setEmpty("No Covers available !");
+          // } else {
+          //   setEmpty("");
+          // }
           const filter = res.data.filter(
             (cus) => cus.CustomerID == localStorage.getItem("CustomerID")
           );
+
+          // if(res.data.length==0){
+          //   setEmpty2("No purchased covers yet!")
+          // }
           for(let i=0; i<filter.length;i++){
             console.log(filter[i].TransactionDateAndTime);
             setOrderDate(filter[i].TransactionDateAndTime)
@@ -44,7 +56,9 @@ export default function PurchaseHistory(props) {
             getSpecificOrderCoverDetiles(res.data);
           });
           setLoad(true)
-        })
+          }
+    
+        )
         .catch((err) => {
           alert(err);
         });
@@ -159,7 +173,7 @@ function previewPdf(covername) {
     <div className="container">
       <br />
       <br />
-         
+         <h3>{empty2}</h3>
       <div className="row">
         
         <div className="col-sm">

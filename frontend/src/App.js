@@ -27,6 +27,9 @@ import LessonAndCoversDetailed from "./components/customerRole/LessonsAndCoversD
 import Footer from "./components/customerRole/footer";
 
 //import Test Components
+import Search from "./components/testingComponents/search";
+import Search2 from "./components/testingComponents/search2";
+import SearchBar from "./components/testingComponents/searchBar";
 import TestLogin from "./components/testingComponents/LoginTest";
 import TestCustomerRegistration from "./components/testingComponents/RegisterTest";
 import JWTCustomerHeader from "./components/testingComponents/JWTTestHeader";

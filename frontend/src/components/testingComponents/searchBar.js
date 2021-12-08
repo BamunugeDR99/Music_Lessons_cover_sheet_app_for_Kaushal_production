@@ -48,11 +48,6 @@ function onChangeHandler(text){
     setText(text)
 }
 
-
-
-
-
-
 return (
 
     <div className="container">
