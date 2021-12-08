@@ -45,9 +45,6 @@ import NotFound from "./components/NotFound";
 import IdelTimer from "./components/timeRelatedComponents/IdelTimer";
 
 function App() {
-
- 
-
   return (
     <Router>
       <IdelTimer />
@@ -68,6 +65,7 @@ function App() {
               />
             </div>
           )}
+
           <Route path="/customer/login" exact component={Loginpage} />
           <Route
             path="/customer/registration"
