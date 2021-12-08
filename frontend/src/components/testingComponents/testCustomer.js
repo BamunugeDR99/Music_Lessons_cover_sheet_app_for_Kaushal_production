@@ -25,7 +25,7 @@ export default function TestCustomerUI(props){
                   console.log(refreshToken);
 
       //Pass the refresh token to refresh route
-      const res = await axios.post("http://localhost:8070/testcustomer/refreshToken", { token:refreshToken });
+      const res = await axios.post("https://kaushal-rashmika-music.herokuapp.com/testcustomer/refreshToken", { token:refreshToken });
 
       //update the user with new accessToken and new refreshToken
       setUser({
@@ -98,7 +98,7 @@ export default function TestCustomerUI(props){
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:8070/testcustomer/loginCustomer", { Username, Password });
+      const res = await axios.post("https://kaushal-rashmika-music.herokuapp.com/testcustomer/loginCustomer", { Username, Password });
       setUser(res.data);
                    console.log(res.data.accessToken);
                   console.log(res.data.refreshToken);
@@ -127,7 +127,7 @@ export default function TestCustomerUI(props){
       let refreshToken = Cookies.get("refresh");
 
       //Uses the axiosJWT instance
-      await axiosJWT.delete("http://localhost:8070/testcustomer/deleteUser/" + id, {
+      await axiosJWT.delete("https://kaushal-rashmika-music.herokuapp.com/testcustomer/deleteUser/" + id, {
         //Set the authorization token to the header
         headers: { authorization: "Bearer " + accessToken },
       }).then((res) =>{

@@ -113,7 +113,7 @@ export default function LessonsAndCoversDetailed(props) {
     }else{
       axios
       .get(
-        `http://localhost:8070/customer/checkPurchaseCovers/${localStorage.getItem(
+        `https://kaushal-rashmika-music.herokuapp.com/customer/checkPurchaseCovers/${localStorage.getItem(
           "CustomerID"
         )}/${coverID}`
       )
@@ -121,7 +121,7 @@ export default function LessonsAndCoversDetailed(props) {
         if (res.data == true) {
           axios
             .get(
-              `http://localhost:8070/feedback/checkFeedBack/${localStorage.getItem(
+              `https://kaushal-rashmika-music.herokuapp.com/feedback/checkFeedBack/${localStorage.getItem(
                 "CustomerID"
               )}/${coverID}`
             )
@@ -461,7 +461,7 @@ export default function LessonsAndCoversDetailed(props) {
 
     // console.log(newOrder);
     await axios
-      .post("http://localhost:8070/order/addOrder", newOrder)
+      .post("https://kaushal-rashmika-music.herokuapp.com/order/addOrder", newOrder)
       .then((res) => {
         let purchasedcovers = customer.PurchasedCovers;
         purchasedcovers.push(covers._id);
@@ -471,7 +471,7 @@ export default function LessonsAndCoversDetailed(props) {
         // console.log(newPurchasedCovers);
         axios
           .put(
-            "http://localhost:8070/customer/addPurchasedCover/" +
+            "https://kaushal-rashmika-music.herokuapp.com/customer/addPurchasedCover/" +
               localStorage.getItem("CustomerID"),
             newPurchasedCovers
           )
@@ -487,7 +487,7 @@ export default function LessonsAndCoversDetailed(props) {
 
             // increment noofdownloads by one
             axios
-              .put(`http://localhost:8070/covers/incrementCount/${covers._id}`)
+              .put(`https://kaushal-rashmika-music.herokuapp.com/covers/incrementCount/${covers._id}`)
               .then((res) => {
                
               })
@@ -497,7 +497,7 @@ export default function LessonsAndCoversDetailed(props) {
 
             axios
               .get(
-                `http://localhost:8070/shoppingCart/checkCartItem/${localStorage.getItem(
+                `https://kaushal-rashmika-music.herokuapp.com/shoppingCart/checkCartItem/${localStorage.getItem(
                   "CustomerID"
                 )}/${covers._id}`
               )
@@ -506,7 +506,7 @@ export default function LessonsAndCoversDetailed(props) {
                   // delete item from the cart
                   axios
                     .delete(
-                      `http://localhost:8070/shoppingCart/deleteCartCover/${covers._id}/` +
+                      `https://kaushal-rashmika-music.herokuapp.com/shoppingCart/deleteCartCover/${covers._id}/` +
                         localStorage.getItem("CustomerID")
                     )
                     .then((res) => {
@@ -562,7 +562,7 @@ export default function LessonsAndCoversDetailed(props) {
           CoverID: covers._id,
         };
         axios
-          .post("http://localhost:8070/feedback/addFeedback", newFeedBack)
+          .post("https://kaushal-rashmika-music.herokuapp.com/feedback/addFeedback", newFeedBack)
           .then((res) => {
             setFeedbackSubmitted(true);
             setModalOpenOfrFeedback(false);
@@ -609,7 +609,7 @@ export default function LessonsAndCoversDetailed(props) {
         };
         axios
           .put(
-            "http://localhost:8070/feedback//updateFeedback/" + feedbackID,
+            "https://kaushal-rashmika-music.herokuapp.com/feedback//updateFeedback/" + feedbackID,
             updatedFeedBack
           )
           .then((res) => {
@@ -642,7 +642,7 @@ export default function LessonsAndCoversDetailed(props) {
     //const CustomerID = localStorage.getItem("CustomerID");
     axios
       .get(
-        `http://localhost:8070/feedback/getOneFeedBack/${localStorage.getItem(
+        `https://kaushal-rashmika-music.herokuapp.com/feedback/getOneFeedBack/${localStorage.getItem(
           "CustomerID"
         )}/${coverID}`
       )
@@ -678,7 +678,7 @@ export default function LessonsAndCoversDetailed(props) {
         if (result.isConfirmed) {
           axios
             .delete(
-              "http://localhost:8070/feedback/deleteFeedback/" +
+              "https://kaushal-rashmika-music.herokuapp.com/feedback/deleteFeedback/" +
                 feedbackObject._id
             )
             .then((res) => {

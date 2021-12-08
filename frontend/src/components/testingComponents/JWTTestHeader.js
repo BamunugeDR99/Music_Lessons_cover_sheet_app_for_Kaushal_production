@@ -94,7 +94,7 @@ export default function JWTCustomerHeader(props) {
                   console.log(refreshToken);
 
       //Pass the refresh token to refresh route
-      const res = await axios.post("http://localhost:8070/testcustomer/refreshToken", { token:refreshToken });
+      const res = await axios.post("https://kaushal-rashmika-music.herokuapp.com/testcustomer/refreshToken", { token:refreshToken });
 
       //update the user with new accessToken and new refreshToken
       setUser({

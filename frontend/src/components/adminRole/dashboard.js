@@ -65,7 +65,7 @@ export default function DashBoard() {
     console.log(today);
     console.log(previousDay);
     axios
-      .get("http://localhost:8070/covers/getactivecovers")
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getactivecovers")
       .then((res) => {
         setCoverLength(res.data.length);
         // calculateDownloads(res.data);
@@ -80,7 +80,7 @@ export default function DashBoard() {
       });
 
     axios
-      .get("http://localhost:8070/covers/getactiveExcercices")
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getactiveExcercices")
       .then((res) => {
         setExcercisesLength(res.data.length);
         // calculateDownloads(res.data);
@@ -95,7 +95,7 @@ export default function DashBoard() {
       });
 
     axios
-      .get("http://localhost:8070/covers/getcovers")
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers")
       .then((res) => {
         // setCoverLength(res.data.length);
         calculateDownloads(res.data);
@@ -110,7 +110,7 @@ export default function DashBoard() {
       });
 
     axios
-      .get("http://localhost:8070/feedback/getAllFeedback")
+      .get("https://kaushal-rashmika-music.herokuapp.com/feedback/getAllFeedback")
       .then((res) => {
         setFeedbackLength(res.data.length);
       })
@@ -124,7 +124,7 @@ export default function DashBoard() {
       });
 
     axios
-      .get("http://localhost:8070/customer/getAll")
+      .get("https://kaushal-rashmika-music.herokuapp.com/customer/getAll")
       .then((res) => {
         setCustomersLength(res.data.length);
       })
@@ -138,7 +138,7 @@ export default function DashBoard() {
       });
 
     axios
-      .get(`http://localhost:8070/order/getbyyear/${previousDay}/${today}`)
+      .get(`https://kaushal-rashmika-music.herokuapp.com/order/getbyyear/${previousDay}/${today}`)
       .then((res) => {
         setOrders(res.data);
         // console.log(res.data);
@@ -156,7 +156,7 @@ export default function DashBoard() {
       });
 
     axios
-      .get("http://localhost:8070/order/getOrders")
+      .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
       .then((res) => {
         loadTotalIncome(res.data);
         setError("");
@@ -204,7 +204,7 @@ export default function DashBoard() {
     // console.log(orderHolder);
 
     await axios
-      .get(`http://localhost:8070/customer/get/${customerid}`)
+      .get(`https://kaushal-rashmika-music.herokuapp.com/customer/get/${customerid}`)
       .then((res) => {
         // console.log(res.data);
         customerdetails.push(res.data);
@@ -290,7 +290,7 @@ export default function DashBoard() {
       setmodelOpen(true);
 
       await axios
-        .get(`http://localhost:8070/covers/getcoverbyid/${data[k]}`)
+        .get(`https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbyid/${data[k]}`)
         .then((res) => {
           document.getElementById("spinnerdiv2").style.display = "block";
           document.getElementById("modeldiv").style.display = "none";
@@ -334,7 +334,7 @@ export default function DashBoard() {
       setspinner(false);
 
       await axios
-        .get(`http://localhost:8070/order/getbyyear/${fromDate}/${toDate}`)
+        .get(`https://kaushal-rashmika-music.herokuapp.com/order/getbyyear/${fromDate}/${toDate}`)
         .then((res) => {
           if (res.data.length > 0) {
             setOrders(res.data);
@@ -370,7 +370,7 @@ export default function DashBoard() {
     setmain(true);
     setspinner(false);
     axios
-      .get(`http://localhost:8070/order/getbyyear/${previousDay}/${today}`)
+      .get(`https://kaushal-rashmika-music.herokuapp.com/order/getbyyear/${previousDay}/${today}`)
       .then((res) => {
         setOrders(res.data);
         // console.log(res.data);
