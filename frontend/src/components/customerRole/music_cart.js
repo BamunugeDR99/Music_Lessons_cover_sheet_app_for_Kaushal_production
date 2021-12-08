@@ -38,7 +38,7 @@ export default function MusicCart(props) {
     setTotal("Loading...");
     await axios
       .get(
-        "https://kaushal-rashmika-music.herokuapp.com/shoppingCart/getOneCart/" +
+        "http://localhost:8070/shoppingCart/getOneCart/" +
           localStorage.getItem("CustomerID")
       )
       .then((res) => {
@@ -56,7 +56,12 @@ export default function MusicCart(props) {
         }
       })
       .catch((err) => {
-        alert(err.message);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
 
     async function getCustomerDetails() {
@@ -69,7 +74,12 @@ export default function MusicCart(props) {
           setCustomer(res.data);
         })
         .catch((err) => {
-          alert(err.message);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+            footer: '<p style = "color : #D0193A">Currently unavailable!',
+          });
         });
     }
 
@@ -83,7 +93,7 @@ export default function MusicCart(props) {
     if (data.length > 0) {
       for (let i = 0; i < data.length; i++) {
         await axios
-          .get(`https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbyid/${data[i]}`)
+          .get(`http://localhost:8070/covers/getcoverbyid/${data[i]}`)
           .then((res) => {
             // console.log("asd")
             if (covers == "") {
@@ -105,7 +115,12 @@ export default function MusicCart(props) {
             // console.log(cover);
           })
           .catch((err) => {
-            alert(err.message);
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+              footer: '<p style = "color : #D0193A">Currently unavailable!',
+            });
           });
       }
       console.log(coverids);
@@ -127,7 +142,7 @@ export default function MusicCart(props) {
     axios
 
       .get(
-        "https://kaushal-rashmika-music.herokuapp.com/shoppingCart/getOneCart/" +
+        "http://localhost:8070/shoppingCart/getOneCart/" +
           localStorage.getItem("CustomerID")
       )
 
@@ -161,7 +176,7 @@ export default function MusicCart(props) {
       if (result.isConfirmed) {
         axios
           .delete(
-            `https://kaushal-rashmika-music.herokuapp.com/shoppingCart/deleteCartCover/${id}/` +
+            `http://localhost:8070/shoppingCart/deleteCartCover/${id}/` +
               localStorage.getItem("CustomerID")
           )
           .then((res) => {
@@ -177,7 +192,7 @@ export default function MusicCart(props) {
             setTotal("Loading...");
             axios
               .get(
-                "https://kaushal-rashmika-music.herokuapp.com/shoppingCart/getOneCart/" +
+                "http://localhost:8070/shoppingCart/getOneCart/" +
                   localStorage.getItem("CustomerID")
               )
               .then((res) => {
@@ -285,51 +300,88 @@ export default function MusicCart(props) {
     await axios
       .post("http://localhost:8070/order/addOrder", newOrder)
       .then((res) => {
-        // let purchasedcovers = customer.PurchasedCovers;
-        // console.log(purchasedcovers);
-        // for (let l = 0; l < coverIdArray.length; l++) {
-        //   purchasedcovers.push(coverIdArray[l]);
-        //   console.log(coverIdArray[l]);
-        // }
+        let purchasedcovers = customer.PurchasedCovers;
+        console.log(purchasedcovers);
+        for (let l = 0; l < coverIdArray.length; l++) {
+          purchasedcovers.push(coverIdArray[l]);
+          console.log(coverIdArray[l]);
+        }
         const newPurchasedCovers = {
-          PurchasedCovers: ["a", "b", "c"],
+          PurchasedCovers: purchasedcovers,
         };
         // alert(newPurchasedCovers);
         console.log(newPurchasedCovers);
         axios
           .put(
-            "http://localhost:8070/customer/addPurchasedCover/" +
-              localStorage.getItem("CustomerID"),
+            "http://localhost:8070/customer/addPurchasedCover/61acc2662c5b9bd04724313e",
             newPurchasedCovers
           )
           .then((res) => {
-            // axios
-            //   .put(
-            //     "http://localhost:8070/shoppingCart/updateCartCovers/" +
-            //       localStorage.getItem("CustomerID")
-            //   )
-            //   .then((res) => {
-            //     Swal.fire({
-            //       position: "center",
-            //       icon: "success",
-            //       title: "Thank you for your purchase",
-            //       showConfirmButton: false,
-            //       timer: 1500,
-            //     });
-            //     window.location.reload(true);
-            //     // setPurchased(true);
-            //   })
-            //   .catch((err) => {
-            //     alert(err.message);
-            //   });
+            // alert("ssuccess");
+            axios
+              .put(
+                "http://localhost:8070/shoppingCart/updateCartCovers/" +
+                  localStorage.getItem("CustomerID")
+              )
+              .then((res) => {
+                incrementCover();
+
+                // setPurchased(true);
+              })
+              .catch((err) => {
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "Something went wrong!",
+                  footer: '<p style = "color : #D0193A">Currently unavailable!',
+                });
+              });
           })
           .catch((err) => {
-            alert(err.message);
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+              footer: '<p style = "color : #D0193A">Currently unavailable!',
+            });
           });
       })
       .catch((err) => {
-        alert(err.message);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
+  }
+  function incrementCover() {
+    for (let k = 0; k < coverIdArray.length; k++) {
+      axios
+        .put(`http://localhost:8070/covers/incrementCount/${coverIdArray[k]}`)
+        .then((res) => {
+          Swal.fire({
+            title: "Successfully Deleted!",
+            icon: "success",
+            showCancelButton: false,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ok!",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.reload(true);
+            }
+          });
+        })
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+            footer: '<p style = "color : #D0193A">Currently unavailable!',
+          });
+        });
+    }
   }
 
   function test() {

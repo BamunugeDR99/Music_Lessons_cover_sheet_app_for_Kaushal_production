@@ -4,6 +4,7 @@ import MusicCoverPage from "./../customerRole/musiccoverpage";
 import AdminCard from "./../adminRole/admincard";
 import Modal from "react-bootstrap/Modal";
 import $ from "jquery";
+import Swal from "sweetalert2";
 import DataTable from "datatables.net";
 import CoverTemplate from "../customerRole/covercardtemplate";
 
@@ -22,6 +23,7 @@ export default function DashBoard() {
   const [fromValue, setFromValue] = useState("");
   const [toValue, setToValue] = useState("");
   const [error, setError] = useState("");
+  const [totalIncome, setTotalIncome] = useState("");
   let [tablediv, setTablediv] = useState();
   let [spinner, setspinner] = useState(true);
   let [main, setmain] = useState(true);
@@ -31,6 +33,7 @@ export default function DashBoard() {
   let covers = [];
   let customerdetails = [];
   let tot = 0;
+  let totaltot = 0;
   let downloads = 0;
 
   let name = "";
@@ -40,6 +43,11 @@ export default function DashBoard() {
   let customerID = "";
   let coverID = [];
   let orderHolder = [];
+  let today = new Date().toISOString().split("T")[0];
+  // let previousDay = new Date(Date.now() - 86400000);
+  var previousDay = new Date(new Date().valueOf() - 1000 * 60 * 60 * 24)
+    .toISOString()
+    .split("T")[0];
 
   let dataholder = {
     name,
@@ -54,56 +62,83 @@ export default function DashBoard() {
     setmain(true);
     setspinner(false);
 
+    console.log(today);
+    console.log(previousDay);
     axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getactivecovers")
+      .get("http://localhost:8070/covers/getactivecovers")
       .then((res) => {
         setCoverLength(res.data.length);
         // calculateDownloads(res.data);
       })
       .catch((err) => {
-        alert(err.message);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
 
     axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getactiveExcercices")
+      .get("http://localhost:8070/covers/getactiveExcercices")
       .then((res) => {
         setExcercisesLength(res.data.length);
         // calculateDownloads(res.data);
       })
       .catch((err) => {
-        alert(err.message);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
 
     axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers")
+      .get("http://localhost:8070/covers/getcovers")
       .then((res) => {
         // setCoverLength(res.data.length);
         calculateDownloads(res.data);
       })
       .catch((err) => {
-        alert(err.message);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
 
     axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/feedback/getAllFeedback")
+      .get("http://localhost:8070/feedback/getAllFeedback")
       .then((res) => {
         setFeedbackLength(res.data.length);
       })
       .catch((err) => {
-        alert(err.message);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
 
     axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/customer/getAll")
+      .get("http://localhost:8070/customer/getAll")
       .then((res) => {
         setCustomersLength(res.data.length);
       })
       .catch((err) => {
-        alert(err.message);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
 
     axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
+      .get(`http://localhost:8070/order/getbyyear/${previousDay}/${today}`)
       .then((res) => {
         setOrders(res.data);
         // console.log(res.data);
@@ -112,12 +147,41 @@ export default function DashBoard() {
         setError("");
       })
       .catch((err) => {
-        alert(err.message);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
+      });
+
+    axios
+      .get("http://localhost:8070/order/getOrders")
+      .then((res) => {
+        loadTotalIncome(res.data);
+        setError("");
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
   }, []);
 
   function modalClose() {
     setmodelOpen(false);
+  }
+
+  async function loadTotalIncome(data) {
+    console.log(data.length);
+    if (data.length > 0) {
+      await data.map((post) => (totaltot = totaltot + Number(post.TotalPrice)));
+      setTotalIncome(totaltot);
+      setError("");
+    }
   }
 
   async function loadIncome(data) {
@@ -129,6 +193,7 @@ export default function DashBoard() {
         )
       );
       setTotal(tot);
+      // console.log(tot);
       setError("");
     }
   }
@@ -139,17 +204,28 @@ export default function DashBoard() {
     // console.log(orderHolder);
 
     await axios
-      .get(`https://kaushal-rashmika-music.herokuapp.com/customer/get/${customerid}`)
+      .get(`http://localhost:8070/customer/get/${customerid}`)
       .then((res) => {
         // console.log(res.data);
         customerdetails.push(res.data);
-         setContent();
+
+        assignData();
       })
       .catch((err) => {
-        alert(err.message);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
   }
   async function assignData() {
+    setTablediv(
+      <tr>
+        <td>Loading....</td>
+      </tr>
+    );
     if (customerdetails.length == orderHolder.length) {
       // console.log(customerdetails);
       // console.log(orderHolder);
@@ -197,7 +273,7 @@ export default function DashBoard() {
         //
 
         count = count + 1;
-        // await setContent()
+        $("#example2").DataTable();
       }
       console.log("Lenth " + orderHolder.length);
       setmain(false);
@@ -207,11 +283,6 @@ export default function DashBoard() {
     }
   }
 
-  async function setContent() {
-    await assignData();
-    $("#example").DataTable();
-    $("#example2").DataTable();
-  }
   async function getOrderedCovers(data) {
     console.log(data);
 
@@ -219,7 +290,7 @@ export default function DashBoard() {
       setmodelOpen(true);
 
       await axios
-        .get(`https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbyid/${data[k]}`)
+        .get(`http://localhost:8070/covers/getcoverbyid/${data[k]}`)
         .then((res) => {
           document.getElementById("spinnerdiv2").style.display = "block";
           document.getElementById("modeldiv").style.display = "none";
@@ -227,7 +298,12 @@ export default function DashBoard() {
         })
         .catch((err) => {
           console.log(err.message);
-          alert(err.message);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+            footer: '<p style = "color : #D0193A">Currently unavailable!',
+          });
         });
     }
     // testFunction();
@@ -278,7 +354,12 @@ export default function DashBoard() {
           }
         })
         .catch((err) => {
-          alert(err.message);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+            footer: '<p style = "color : #D0193A">Currently unavailable!',
+          });
         });
     }
   }
@@ -289,7 +370,7 @@ export default function DashBoard() {
     setmain(true);
     setspinner(false);
     axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
+      .get(`http://localhost:8070/order/getbyyear/${previousDay}/${today}`)
       .then((res) => {
         setOrders(res.data);
         // console.log(res.data);
@@ -301,7 +382,12 @@ export default function DashBoard() {
         // console.log(orderHolder);
       })
       .catch((err) => {
-        alert(err.message);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
   }
 
@@ -366,7 +452,7 @@ export default function DashBoard() {
             color="green"
             icon={"fas fa-dollar-sign"}
             value="Income"
-            num={total}
+            num={totalIncome}
           />
           <br />
         </div>
@@ -446,31 +532,31 @@ export default function DashBoard() {
         <h4 style={{ color: "red" }}>
           <strong>{error}</strong>
         </h4>
-        <table
-          id="example"
-          class="table table-striped table-bordered text-center"
-          style={{ width: "100%" }}
-        >
-          <thead class="thead-dark">
-            <tr>
-              <th>Customer Name</th>
-              <th>Total Price</th>
-              <th>Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          {tablediv}
-          <tfoot>
-            <tr>
-              <th>Customer Name</th>
-              <th className="text-right">Total Price :- Rs.{total}.00</th>
-              <th>Date</th>
-              <th>Actions</th>
-            </tr>
-          </tfoot>
-        </table>
+        <div style={{ overflowY: "scroll", height: "500px", width: "100%" }}>
+          <table
+            id="example"
+            class="table table-striped table-bordered text-center"
+          >
+            <thead class="thead-dark">
+              <tr>
+                <th>Customer Name</th>
+                <th>Total Price</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            {tablediv}
+            <tfoot>
+              <tr>
+                <th>Customer Name</th>
+                <th className="text-right">Total Price :- Rs.{total}.00</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
-
       <Modal show={modelOpen} size="lg">
         <Modal.Header>
           <h4>All ordered covers</h4>
@@ -536,6 +622,7 @@ export default function DashBoard() {
           <div className="row"></div>
         </Modal.Footer>
       </Modal>
+      <br /> <br />
     </div>
   );
 }
