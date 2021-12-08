@@ -1,7 +1,9 @@
 // import doms
-import React, { Component, useState} from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import  ProtectedRoute  from "./private/ProtectedRoute";
+import React, { Component, useState } from "react";
+import axios from "axios";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import ProtectedRoute from "./private/ProtectedRoute";
+import authentication from "./security/authentication";
 
 // import css
 import "./App.css";
@@ -25,12 +27,14 @@ import LessonAndCoversDetailed from "./components/customerRole/LessonsAndCoversD
 import Footer from "./components/customerRole/footer";
 
 //import Test Components
+import Search from "./components/testingComponents/search";
+import Search2 from "./components/testingComponents/search2";
+import SearchBar from "./components/testingComponents/searchBar";
 import TestLogin from "./components/testingComponents/LoginTest";
 import TestCustomerRegistration from "./components/testingComponents/RegisterTest";
 import JWTCustomerHeader from "./components/testingComponents/JWTTestHeader";
 
 // import Search from "./components/testingComponents/search";
-
 
 //import components (Admin)
 import AdminLogin from "./components/adminRole/adminLogin";
@@ -42,110 +46,109 @@ import CustomerFeedback from "./components/adminRole/CustomerFeedback";
 import AdminVwCustomer from "./components/adminRole/AdminVwCustomer";
 import EditMainCategories from "./components/adminRole/EditMainCategory";
 import NotFound from "./components/NotFound";
-import TestCustomerUI from "./components/testingComponents/testCustomer";
+import IdelTimer from "./components/timeRelatedComponents/IdelTimer";
 
-// dynamic header
 function App() {
-  const [loginStatus, setLoginStatus] = useState(true);
-
-
-
-
   return (
     <Router>
-      <div>
-        {/* Customer Routes */}
-        <Route path="/" exact component={InitialPage} />
-        {loginStatus == true ? (
-          <div>
-            <Route path="/customer" component={CustomerHeaderTemp} />
-          </div>
-        ) : (
-          <div>
-            <Route path="/customer" component={CustomerHeaderTempBeforeLogin} />
-          </div>
-        )}
-        <Route path="/customer/login" exact component={Loginpage} />
+      <IdelTimer />
 
-        <Route path="/customer/testlogin" exact component={TestLogin} />
+      <Switch>
+        <div>
+          {/* Customer Routes */}
+          <Route exact path="/" exact component={InitialPage} />
+          {sessionStorage.getItem("IsAuth") ? (
+            <div>
+              <Route path="/customer" component={CustomerHeaderTemp} />
+            </div>
+          ) : (
+            <div>
+              <Route
+                path="/customer"
+                component={CustomerHeaderTempBeforeLogin}
+              />
+            </div>
+          )}
 
-        
-        <Route path="/customer/testregister" exact component={TestCustomerRegistration} />
+          <Route path="/customer/login" exact component={Loginpage} />
+          <Route
+            path="/customer/registration"
+            exact
+            component={CustomerRegistration}
+          />
+          <Route
+            path="/customer/forgotpassword"
+            exact
+            component={CustomerForgotPassword}
+          />
+          <Route path="/customer/home" exact component={Home} />
+          <Route
+            path="/customer/dicoversmusiccovers"
+            exact
+            component={MusicCoverPage}
+          />
+          <Route
+            path="/customer/discovertechniquesandlessons"
+            exact
+            component={TechniquesAndLessons}
+          />
+          <Route
+            path="/customer/purchasehistory"
+            exact
+            component={PurchaseHistory}
+          />
+          <Route path="/customer/shoppingcart" exact component={MusicCart} />
+          <Route
+            path="/customer/detailedcover/:id"
+            exact
+            component={LessonAndCoversDetailed}
+          />
+          <Route
+            path="/customer/discovermorecover/:id"
+            exact
+            component={LessonAndCoversDetailed}
+          />
+          <Route path="/customer" component={Footer} />
+          {/* Admin Routes  */}
 
+          <ProtectedRoute path="/admin" component={AdminHeaderTemp} />
+          <Route path="/adminlogin" exact component={AdminLogin} />
+          <ProtectedRoute path="/admin/dashboard" exact component={Dashboard} />
+          <ProtectedRoute
+            path="/admin/allcovers"
+            exact
+            component={ViewCovers}
+          />
+          <ProtectedRoute
+            path="/admin/viewmorecover/:id"
+            exact
+            component={ViewDetailedCoverPage}
+          />
+          <ProtectedRoute
+            path="/admin/customerfeedbacks/:id"
+            exact
+            component={CustomerFeedback}
+          />
+          <ProtectedRoute
+            path="/admin/allcustomers"
+            exact
+            component={AdminVwCustomer}
+          />
+          <ProtectedRoute
+            path="/admin/viewcategories"
+            exact
+            component={EditMainCategories}
+          />
+          <ProtectedRoute path="/admin" component={Footer} />
 
+          {/* 404 not found route  */}
+          <Route path="/notfound" component={NotFound} />
 
-        <Route
-          path="/customer/registration"
-          exact
-          component={CustomerRegistration}
-        />
-        <Route
-          path="/customer/forgotpassword"
-          exact
-          component={CustomerForgotPassword}
-        />
-        <Route path="/customer/home" exact component={Home} />
-        <Route
-          path="/customer/dicoversmusiccovers"
-          exact
-          component={MusicCoverPage}
-        />
-        <Route
-          path="/customer/discovertechniquesandlessons"
-          exact
-          component={TechniquesAndLessons}
-        />
-        <Route
-          path="/customer/purchasehistory"
-          exact
-          component={PurchaseHistory}
-        />
-        <Route path="/customer/shoppingcart" exact component={MusicCart} />
-        <Route
-          path="/customer/detailedcover/:id"
-          exact
-          component={LessonAndCoversDetailed}
-        />
-        <Route
-          path="/customer/discovermorecover/:id"
-          exact
-          component={LessonAndCoversDetailed}
-        />
-        <Route path="/customer" component={Footer} />
-
-
-
-        {/* Admin Routes  */}
-        <ProtectedRoute path="/admin" component={AdminHeaderTemp} />
-        <Route path="/adminlogin" exact component={AdminLogin} />
-        <ProtectedRoute path="/admin/dashboard" exact component={Dashboard} />
-        <ProtectedRoute path="/admin/allcovers" exact component={ViewCovers} />
-        <ProtectedRoute
-          path="/admin/viewmorecover/:id"
-          exact
-          component={ViewDetailedCoverPage}
-        />
-        <ProtectedRoute
-          path="/admin/customerfeedbacks/:id"
-          exact
-          component={CustomerFeedback}
-        />
-        <ProtectedRoute path="/admin/allcustomers" exact component={AdminVwCustomer} />
-        <ProtectedRoute
-          path="/admin/viewcategories"
-          exact
-          component={EditMainCategories}
-        />
-        <ProtectedRoute path="/admin" component={Footer} />
-
-        {/* Testing routes  */}
-        {/* <Route path = "/search" exact component = {Search}/> */}
-        <Route path = "/test"component = {JWTCustomerHeader}/>
-        <Route path = "/test/testCusUI" exact component = {TestCustomerUI}/>
-
-        {/* <Route path = "*" component = {}/> */}
-        {/* <Route path = "*" component = {NotFound}/> */}
-      </div>
+          {/* Testing routes  */}
+          {/* <Route path = "/search" exact component = {Search2}/> */}
+          
+        </div>
+      </Switch>
     </Router>
   );
 }

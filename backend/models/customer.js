@@ -52,7 +52,7 @@ const customerSchema = new Schema({
     },
   ],
 
-  OrderIDs: [
+  PurchasedCovers : [
     {
       type: String,
       required: true,
@@ -92,8 +92,7 @@ customerSchema.pre("save", async function (next) {
   if (this.isModified("Password")) {
     var salt = bcrypt.genSaltSync(12);
     this.Password = bcrypt.hashSync(this.Password, salt);
-    console.log(this.Password);
-    // this.confirmPassword = bcrypt.hashSync(this.confirmPassword, salt);
+    
   }
 
   next();

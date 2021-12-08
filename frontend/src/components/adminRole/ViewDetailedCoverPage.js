@@ -198,8 +198,8 @@ export default function ViewDetailedCoverPage(props) {
         });
       });
   }
-  function getAllClassicalGutarMainCategories() {
-    axios
+  async function getAllClassicalGutarMainCategories() {
+    await axios
       .get("https://kaushal-rashmika-music.herokuapp.com/mainCategory/get/61936e9d9ea7c21aebd01113")
       .then((res) => {
         tempSubCategory = res.data.SubCategories;
@@ -544,8 +544,8 @@ export default function ViewDetailedCoverPage(props) {
       });
   }
 
-  function getCovers() {
-    axios
+  async function getCovers() {
+    await axios
       .get("https://kaushal-rashmika-music.herokuapp.com/covers/get/" + CoverTempID)
       .then((res) => {
         setCovers(res.data);
@@ -570,14 +570,16 @@ export default function ViewDetailedCoverPage(props) {
       });
   }
 
-  function previewPdf(pdfName) {
+  async function previewPdf(pdfName) {
     setModalOpenForPdf(true);
     const storageRef = ref(storage, `Covers(PDF)/${pdfName}`);
-    getDownloadURL(storageRef)
+    await getDownloadURL(storageRef)
       .then((url) => {
-        // setPdfUrl(url)
-        window.location.href = url;
-        //setModalOpenForPdf(false)
+        window.open(
+          url,
+          '_blank' // <- This is what makes it open in a new window.
+        );
+        setModalOpenForPdf(false)
       })
       .catch(() => {
         setModalOpenForPdf(false);

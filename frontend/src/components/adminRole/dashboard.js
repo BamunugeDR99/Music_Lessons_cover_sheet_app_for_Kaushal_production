@@ -4,6 +4,7 @@ import MusicCoverPage from "./../customerRole/musiccoverpage";
 import AdminCard from "./../adminRole/admincard";
 import Modal from "react-bootstrap/Modal";
 import $ from "jquery";
+import Swal from "sweetalert2";
 import DataTable from "datatables.net";
 import CoverTemplate from "../customerRole/covercardtemplate";
 
@@ -11,6 +12,7 @@ import CoverTemplate from "../customerRole/covercardtemplate";
 export default function DashBoard() {
   const [modelOpen, setmodelOpen] = useState(false);
   const [coverlength, setCoverLength] = useState("Loading...");
+  const [excercisesLength, setExcercisesLength] = useState("Loading...");
   const [customerlength, setCustomersLength] = useState("Loading...");
   const [orders, setOrders] = useState([]);
   const [total, setTotal] = useState("Loading...");
@@ -21,11 +23,17 @@ export default function DashBoard() {
   const [fromValue, setFromValue] = useState("");
   const [toValue, setToValue] = useState("");
   const [error, setError] = useState("");
+  const [totalIncome, setTotalIncome] = useState("");
+  let [tablediv, setTablediv] = useState();
+  let [spinner, setspinner] = useState(true);
+  let [main, setmain] = useState(true);
+  let count = 1;
 
   let tableData = [];
   let covers = [];
   let customerdetails = [];
   let tot = 0;
+  let totaltot = 0;
   let downloads = 0;
 
   let name = "";
@@ -35,6 +43,11 @@ export default function DashBoard() {
   let customerID = "";
   let coverID = [];
   let orderHolder = [];
+  let today = new Date().toISOString().split("T")[0];
+  // let previousDay = new Date(Date.now() - 86400000);
+  var previousDay = new Date(new Date().valueOf() - 1000 * 60 * 60 * 24)
+    .toISOString()
+    .split("T")[0];
 
   let dataholder = {
     name,
@@ -46,17 +59,54 @@ export default function DashBoard() {
   };
 
   useEffect(() => {
-    document.getElementById("spinnerdiv").style.display = "block";
-    document.getElementById("maindiv").style.display = "none";
+    setmain(true);
+    setspinner(false);
+
+    console.log(today);
+    console.log(previousDay);
+    axios
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getactivecovers")
+      .then((res) => {
+        setCoverLength(res.data.length);
+        // calculateDownloads(res.data);
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
+      });
+
+    axios
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getactiveExcercices")
+      .then((res) => {
+        setExcercisesLength(res.data.length);
+        // calculateDownloads(res.data);
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
+      });
 
     axios
       .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers")
       .then((res) => {
-        setCoverLength(res.data.length);
+        // setCoverLength(res.data.length);
         calculateDownloads(res.data);
       })
       .catch((err) => {
-        alert(err.message);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
 
     axios
@@ -65,7 +115,12 @@ export default function DashBoard() {
         setFeedbackLength(res.data.length);
       })
       .catch((err) => {
-        alert(err.message);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
 
     axios
@@ -74,11 +129,16 @@ export default function DashBoard() {
         setCustomersLength(res.data.length);
       })
       .catch((err) => {
-        alert(err.message);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
 
     axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
+      .get(`https://kaushal-rashmika-music.herokuapp.com/order/getbyyear/${previousDay}/${today}`)
       .then((res) => {
         setOrders(res.data);
         // console.log(res.data);
@@ -87,12 +147,41 @@ export default function DashBoard() {
         setError("");
       })
       .catch((err) => {
-        alert(err.message);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
+      });
+
+    axios
+      .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
+      .then((res) => {
+        loadTotalIncome(res.data);
+        setError("");
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
   }, []);
 
   function modalClose() {
     setmodelOpen(false);
+  }
+
+  async function loadTotalIncome(data) {
+    console.log(data.length);
+    if (data.length > 0) {
+      await data.map((post) => (totaltot = totaltot + Number(post.TotalPrice)));
+      setTotalIncome(totaltot);
+      setError("");
+    }
   }
 
   async function loadIncome(data) {
@@ -104,6 +193,7 @@ export default function DashBoard() {
         )
       );
       setTotal(tot);
+      // console.log(tot);
       setError("");
     }
   }
@@ -111,19 +201,31 @@ export default function DashBoard() {
   async function loadCovers(customerid) {
     // console.log(customerid);
 
+    // console.log(orderHolder);
+
     await axios
       .get(`https://kaushal-rashmika-music.herokuapp.com/customer/get/${customerid}`)
       .then((res) => {
         // console.log(res.data);
         customerdetails.push(res.data);
+
+        assignData();
       })
       .catch((err) => {
-        alert(err.message);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
-
-    assignData();
   }
   async function assignData() {
+    setTablediv(
+      <tr>
+        <td>Loading....</td>
+      </tr>
+    );
     if (customerdetails.length == orderHolder.length) {
       // console.log(customerdetails);
       // console.log(orderHolder);
@@ -144,14 +246,43 @@ export default function DashBoard() {
             break;
           }
         }
+        if (count == orderHolder.length) {
+          // setPaymentData(tableData);
+          await setTablediv(
+            <tbody>
+              {tableData.map((post) => (
+                <tr>
+                  <td>{post.name}</td>
+                  <td className="text-right">Rs.{post.totalprice}.00</td>
+                  <td>{post.date.substr(0, 10)}</td>
+                  <td>
+                    {" "}
+                    <button
+                      type="button"
+                      onClick={() => getOrderedCovers(post.coverID)}
+                      class="btn btn-outline-secondary waves-effect btn-sm px-2"
+                    >
+                      <i class="fas fa-eye" aria-hidden="true"></i>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          );
+        }
+        //
+
+        count = count + 1;
+        $("#example2").DataTable();
       }
-      console.log(tableData);
-      setPaymentData(tableData);
-      document.getElementById("spinnerdiv").style.display = "none";
-      document.getElementById("maindiv").style.display = "block";
-      $("#example").DataTable();
+      console.log("Lenth " + orderHolder.length);
+      setmain(false);
+      setspinner(true);
+      // await sleep(10000);
+      // console.log(tableData);
     }
   }
+
   async function getOrderedCovers(data) {
     console.log(data);
 
@@ -167,7 +298,12 @@ export default function DashBoard() {
         })
         .catch((err) => {
           console.log(err.message);
-          alert(err.message);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+            footer: '<p style = "color : #D0193A">Currently unavailable!',
+          });
         });
     }
     // testFunction();
@@ -186,14 +322,18 @@ export default function DashBoard() {
     setDownloads(downloads);
   }
 
-  function searchByDate(fromDate, toDate) {
+  function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  async function searchByDate(fromDate, toDate) {
     setFromValue(fromDate);
     setToValue(toDate);
     if (fromDate != "" && toDate != "") {
-      document.getElementById("spinnerdiv").style.display = "block";
-      document.getElementById("maindiv").style.display = "none";
+      setmain(true);
+      setspinner(false);
 
-      axios
+      await axios
         .get(`https://kaushal-rashmika-music.herokuapp.com/order/getbyyear/${fromDate}/${toDate}`)
         .then((res) => {
           if (res.data.length > 0) {
@@ -201,42 +341,59 @@ export default function DashBoard() {
             console.log(res.data);
             orderHolder = res.data;
             loadIncome(res.data);
-            document.getElementById("spinnerdiv").style.display = "none";
-            document.getElementById("maindiv").style.display = "block";
+            setmain(false);
+            setspinner(true);
           } else {
             setError("No Data available");
-            setPaymentData([]);
+
+            setTablediv();
             setTotal("0");
-            document.getElementById("spinnerdiv").style.display = "none";
-            document.getElementById("maindiv").style.display = "block";
+
+            setmain(false);
+            setspinner(true);
           }
         })
         .catch((err) => {
-          alert(err.message);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+            footer: '<p style = "color : #D0193A">Currently unavailable!',
+          });
         });
     }
   }
 
   function refresh() {
-    document.getElementById("spinnerdiv").style.display = "block";
-    document.getElementById("maindiv").style.display = "none";
+    setToValue("");
+    setFromValue("");
+    setmain(true);
+    setspinner(false);
     axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
+      .get(`https://kaushal-rashmika-music.herokuapp.com/order/getbyyear/${previousDay}/${today}`)
       .then((res) => {
         setOrders(res.data);
         // console.log(res.data);
         orderHolder = res.data;
         loadIncome(res.data);
-        document.getElementById("spinnerdiv").style.display = "none";
-        document.getElementById("maindiv").style.display = "block";
+
+        setmain(false);
+        setspinner(true);
+        // console.log(orderHolder);
       })
       .catch((err) => {
-        alert(err.message);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<p style = "color : #D0193A">Currently unavailable!',
+        });
       });
   }
+
   return (
     <div>
-      <br/>
+      <br />
       {/* {console.log(selectedCovers)} */}
       <div className="row">
         <div className="col-md-2">
@@ -255,7 +412,7 @@ export default function DashBoard() {
             color="#8B8000"
             value="Excercises"
             icon={"fa fa-file"}
-            num={coverlength}
+            num={excercisesLength}
           />
           <br />
         </div>
@@ -295,13 +452,13 @@ export default function DashBoard() {
             color="green"
             icon={"fas fa-dollar-sign"}
             value="Income"
-            num={total}
+            num={totalIncome}
           />
           <br />
         </div>
       </div>
       <hr />
-      <div id="spinnerdiv" style={{ display: "block" }}>
+      <div id="spinnerdiv" hidden={spinner}>
         <center>
           <div className=" justify-content-center">
             <div className="spinner-border" role="status">
@@ -326,7 +483,8 @@ export default function DashBoard() {
       <div
         className="container"
         id="maindiv"
-        style={{ overflowX: "scroll", display: "none" }}
+        hidden={main}
+        style={{ overflowX: "scroll" }}
       >
         <div className="row">
           <div className="col-md-4">
@@ -340,6 +498,7 @@ export default function DashBoard() {
                 onChange={(e) => searchByDate(e.target.value, toValue)}
                 aria-describedby="emailHelp"
                 placeholder="Enter email"
+                max={new Date().toISOString().split("T")[0]}
               />
             </div>{" "}
           </div>
@@ -350,6 +509,7 @@ export default function DashBoard() {
                 type="date"
                 class="form-control"
                 id="to"
+                max={new Date().toISOString().split("T")[0]}
                 value={toValue}
                 onChange={(e) => searchByDate(fromValue, e.target.value)}
                 aria-describedby="emailHelp"
@@ -372,49 +532,31 @@ export default function DashBoard() {
         <h4 style={{ color: "red" }}>
           <strong>{error}</strong>
         </h4>
-        <table
-          id="example"
-          class="table table-striped table-bordered"
-          style={{ width: "100%" }}
-        >
-          <thead>
-            <tr>
-              <th>Customer Name</th>
-              <th>Total Price</th>
-              <th>Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paymentdata.map((post) => (
+        <div style={{ overflowY: "scroll", height: "500px", width: "100%" }}>
+          <table
+            id="example"
+            class="table table-striped table-bordered text-center"
+          >
+            <thead class="thead-dark">
               <tr>
-                <td>{post.name}</td>
-                <td className="text-right">Rs.{post.totalprice}.00</td>
-                <td>{post.date.substr(0, 10)}</td>
-                <td>
-                  {" "}
-                  <button
-                    type="button"
-                    onClick={() => getOrderedCovers(post.coverID)}
-                    class="btn btn-outline-secondary waves-effect btn-sm px-2"
-                  >
-                    <i class="fas fa-eye" aria-hidden="true"></i>
-                  </button>
-                </td>
+                <th>Customer Name</th>
+                <th>Total Price</th>
+                <th>Date</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-          <tfoot>
-            <tr>
-              <th>Customer Name</th>
-              <th className="text-right">Total Price :- Rs.{total}.00</th>
-              <th>Date</th>
-              <th>Actions</th>
-            </tr>
-          </tfoot>
-        </table>
+            </thead>
+            {tablediv}
+            <tfoot>
+              <tr>
+                <th>Customer Name</th>
+                <th className="text-right">Total Price :- Rs.{total}.00</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
-
       <Modal show={modelOpen} size="lg">
         <Modal.Header>
           <h4>All ordered covers</h4>
@@ -430,7 +572,7 @@ export default function DashBoard() {
         </Modal.Header>
         <Modal.Body>
           <div className="container">
-            <div id="spinnerdiv2" style={{ display: "block" }}>
+            <div id="spinnerdiv2" hidden={true} style={{ display: "block" }}>
               <center>
                 <div class=" justify-content-center">
                   <div class="spinner-border" role="status">
@@ -445,11 +587,11 @@ export default function DashBoard() {
               className="row text-center"
             >
               <table
-                id="example"
-                class="table table-striped table-bordered"
+                id="example2"
+                class="table table-striped table-bordered text-center"
                 style={{ width: "100%" }}
               >
-                <thead>
+                <thead class="thead-dark">
                   <tr>
                     <th>Cover Name</th>
                     <th>Total Price</th>
@@ -480,6 +622,7 @@ export default function DashBoard() {
           <div className="row"></div>
         </Modal.Footer>
       </Modal>
+      <br /> <br />
     </div>
   );
 }

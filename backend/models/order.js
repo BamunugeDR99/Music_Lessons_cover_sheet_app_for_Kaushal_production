@@ -28,7 +28,7 @@ const orderSchema = new Schema({
 
   ReferenceNo: {
     type: String,
-    required: false,
+    required: true,
     default: "0000",
   },
 });

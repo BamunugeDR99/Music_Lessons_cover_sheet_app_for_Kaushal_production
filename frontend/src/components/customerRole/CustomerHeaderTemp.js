@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 
 const bcrypt = require("bcryptjs");
 export default function CustomerHeader(props) {
+  let status = 0;
   const [profilemodelOpen, setProfilemodelOpen] = useState(false);
   const [editProfilemodelOpen, setEditProfilemodelOpen] = useState(false);
   const [changePasswordmodelOpen, setchangePasswordmodelOpen] = useState(false);
@@ -23,6 +24,7 @@ export default function CustomerHeader(props) {
   let [GenderError, setGenderError] = useState("");
   let [CountryError, setCountryError] = useState("");
   let [ConfirmDeleteError, setConfirmDeleteError] = useState("");
+  let [loggedin, setLoggedIn] = useState(true);
 
   const [passwordShown, setPasswordShown] = useState(false);
   const [CpasswordShown, setCPasswordShown] = useState(false);
@@ -270,12 +272,12 @@ export default function CustomerHeader(props) {
   // let navigate = useNavigate();
 
   function validate() {
-    console.log ("Validate Running");
-    console.log(FirstName);
-    console.log(LastName);
-    console.log(Gender);
-    console.log(Country);
-    console.log(ContactNumber);
+    // console.log ("Validate Running");
+    // console.log(FirstName);
+    // console.log(LastName);
+    // console.log(Gender);
+    // console.log(Country);
+    // console.log(ContactNumber);
 
    
     if (FirstName.length == 0) {
@@ -333,7 +335,7 @@ export default function CustomerHeader(props) {
   }
 
   async function updateProfile() {
-    console.log("Password : " + Password);
+    //console.log("Password : " + Password);
 
     const newCustomer = {
       FirstName,
@@ -348,17 +350,17 @@ export default function CustomerHeader(props) {
 
 
 
-    console.log(newCustomer);
+    //console.log(newCustomer);
 
     await validate();
     checkLNamePattern(LastName);
     checkFNamePattern(FirstName);
-    console.log(`ContactNo flag : ${flagphone}`);
-    console.log(`Country flag : ${flagcountry}`);
-    console.log(`Gender flag : `);
-    console.log(flaggender);
-    console.log(`Firstname flag : ${flagfname}`);
-    console.log(`Lastname flag : ${flaglname}`);
+    // console.log(`ContactNo flag : ${flagphone}`);
+    // console.log(`Country flag : ${flagcountry}`);
+    // console.log(`Gender flag : `);
+    // console.log(flaggender);
+    // console.log(`Firstname flag : ${flagfname}`);
+    // console.log(`Lastname flag : ${flaglname}`);
     if (flagphone == 1 && flagcountry == 1 && flaggender == 1 & flagfname == 1 && flaglname == 1 && FirstName.length !== 0 && LastName.length !== 0) {
       Swal.fire({
         title: "Do you want to save the changes?",
@@ -486,6 +488,8 @@ export default function CustomerHeader(props) {
   }
 
   useEffect(() => {
+    let customerID = localStorage.getItem("CustomerID");
+    // checkCustomerID(customerID);
     function getOne() {
       axios
         .get(
@@ -514,12 +518,12 @@ export default function CustomerHeader(props) {
   }, []);
 
   useEffect(() => {
-    function getCartCount() {
+    async function getCartCount() {
       //const CoverID = props.match.params.id;
 
       const CustomerID = CustomerIDTemp;
 
-      axios
+     await axios
 
         .get(
           "https://kaushal-rashmika-music.herokuapp.com/shoppingCart/getOneCart/" +
@@ -546,6 +550,40 @@ export default function CustomerHeader(props) {
 
     getCartCount();
   }, []);
+
+  // async function checkCustomerID(customerID) {
+  //   await axios
+  //     .get("https://kaushal-rashmika-music.herokuapp.com/customer/getAll/")
+  //     .then((res) => {
+  //       for (let i = 0; i < res.data.length; i++) {
+  //         console.log(res.data[i]._id);
+  //         if (res.data[i]._id == customerID) {
+  //           console.log("Success");
+  //           status = 1;
+  //         } else {
+  //         }
+  //       }
+  //     })
+
+  //     .catch((err) => {
+  //       Swal.fire({
+  //         icon: "error",
+
+  //         title: "Oops...",
+
+  //         text: "Somethi went wrong!",
+
+  //         // footer: '<p style = "color : #D0193A">Currently unavailable!',
+  //       });
+  //     });
+
+  //   if (status == 1) {
+  //     setLoggedIn(true);
+  //   } else {
+  //     setLoggedIn(false);
+  //     // props.history.push("/customer/login")
+  //   }
+  // }
   return (
     <div className="customerHeader">
       <nav
@@ -627,7 +665,7 @@ export default function CustomerHeader(props) {
               </Link>
             </li>
           </ul>
-          <form class="form-inline my-2 my-lg-0">
+          {/* <form class="form-inline my-2 my-lg-0">
             <input
               id="searchBar"
               class="form-control mr-sm-2"
@@ -642,10 +680,10 @@ export default function CustomerHeader(props) {
             >
               Search
             </button>
-          </form>
+          </form> */}
 
           <div>
-            {statusHolder == 1 ? (
+            {loggedin == true ? (
               <div>
                 <span className="userProfileSpan" onClick={Profilemodalopen}>
                   <svg
@@ -682,8 +720,24 @@ export default function CustomerHeader(props) {
                 <span
                   className="userProfileSpan ml-1 mt-1"
                   onClick={() => {
-                    props.history.push("/customer/login");
-                    localStorage.removeItem("CustomerID");
+
+                    const updateloginStatus = {
+                      LoginStatus: false
+                    };
+                  
+                   let customerID =   localStorage.getItem("CustomerID");
+
+                    axios
+                    .put("https://kaushal-rashmika-music.herokuapp.com/customer/loginStatus/" + customerID , updateloginStatus)
+                    .then((res) => {
+                      
+                      props.history.push("/customer/login");
+                      localStorage.removeItem("CustomerID");
+                      sessionStorage.removeItem("IsAuth");
+                      window.location.reload()
+                      
+                    })
+                   
                   }}
                 >
                   <svg
@@ -940,7 +994,7 @@ export default function CustomerHeader(props) {
                     </div>
                     <select
                       required
-                      Value={Country}
+                      value={Country}
                       className="form-control"
                       id="country"
                       name="country"

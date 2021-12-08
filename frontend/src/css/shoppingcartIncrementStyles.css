@@ -1,4 +1,4 @@
-.badge {
+.customerHeader .badge {
   padding-left: 9px;
   padding-right: 9px;
   -webkit-border-radius: 9px;
@@ -6,11 +6,12 @@
   border-radius: 9px;
 }
 
-.label-warning[href],
-.badge-warning[href] {
+.customerHeader .label-warning[href],
+.customerHeader .badge-warning[href] {
   background-color: #d0193a;
 }
-#countHolder {
+
+.customerHeader #countHolder {
   font-size: 15px;
   background: #d0193a;
   color: #fff;

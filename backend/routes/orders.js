@@ -4,10 +4,9 @@ let Feedback = require("../models/order");
 
 //Add Order
 router.route("/addOrder").post(async (req, res) => {
-  const { OrderID, CoverIDs, CustomerID, TotalPrice, ReferenceNo } = req.body;
+  const { CoverIDs, CustomerID, TotalPrice, ReferenceNo } = req.body;
 
   const newOrder = new Order({
-    OrderID,
     CoverIDs,
     CustomerID,
     TotalPrice,

@@ -10,7 +10,11 @@ export default function PurchaseHistory(props) {
   const [searchValue, setSearchvalue] = useState([]);
   const [noData, setNoData] = useState([]);
   const [empty, setEmpty] = useState([]);
+  const [empty2, setEmpty2] = useState([]);
+  const [orderDate, setOrderDate] = useState([]);
   const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
+  const [modalOpenForImage, setModalOpenForImage] = useState(false);
+  const [load, setLoad] = useState(true);
   let [total, setTotal] = useState(0);
   let covers = [];
   let array2 = [];
@@ -19,14 +23,30 @@ export default function PurchaseHistory(props) {
 
   useEffect(() => {
     function getCovers() {
-      
+      setLoad(false)
       axios
         .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
         .then((res) => {
-          console.log(res.data);
+          
+              
+          
+          //    if (searchResult.length == 0) {
+          //   setEmpty("No Covers available !");
+          // } else {
+          //   setEmpty("");
+          // }
           const filter = res.data.filter(
             (cus) => cus.CustomerID == localStorage.getItem("CustomerID")
           );
+
+          // if(res.data.length==0){
+          //   setEmpty2("No purchased covers yet!")
+          // }
+          for(let i=0; i<filter.length;i++){
+            console.log(filter[i].TransactionDateAndTime);
+            setOrderDate(filter[i].TransactionDateAndTime)
+          }
+         
 
           filter.map((post) => {
             covers.push(post.CoverIDs);
@@ -35,7 +55,10 @@ export default function PurchaseHistory(props) {
           axios.get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers").then((res) => {
             getSpecificOrderCoverDetiles(res.data);
           });
-        })
+          setLoad(true)
+          }
+    
+        )
         .catch((err) => {
           alert(err);
         });
@@ -45,6 +68,7 @@ export default function PurchaseHistory(props) {
 
   function getSpecificOrderCoverDetiles(allCovers) {
     setTotal(0);
+    setNoData(0);
     TotalPrice = 0;
     for (let j = 0; j < allCovers.length; j++) {
       for (let i = 0; i < covers[0].length; i++) {
@@ -110,8 +134,11 @@ function previewPdf(covername) {
     const storageRef = ref(storage, `Covers(PDF)/${covername}`);
     getDownloadURL(storageRef)
       .then((url) => {
-        window.location.href = url;
-        setModalOpenForPdf(false)
+        window.open(
+          url,
+          "_blank" // <- This is what makes it open in a new window.
+        );
+        setModalOpenForPdf(false);
       })
       .catch(() => {
         setModalOpenForPdf(false);
@@ -123,11 +150,32 @@ function previewPdf(covername) {
       });
   }
 
+  // function previewImg(PreviewPages) {
+  //   setModalOpenForImage(true);
+  //   const storageRef = ref(storage, `PreviewImages/${PreviewPages}`);
+  //   getDownloadURL(storageRef)
+  //     .then((url) => {
+  //       window.location.href = url;
+  //       setModalOpenForImage(false)
+  //     })
+  //     .catch(() => {
+  //       setModalOpenForImage(false);
+  //       Swal.fire({
+  //         icon: "error",
+  //         title: "Oops...",
+  //         text: "Something went wrong!",
+  //       });
+  //     });
+  // }
+
+
   return (
     <div className="container">
       <br />
       <br />
+         <h3>{empty2}</h3>
       <div className="row">
+        
         <div className="col-sm">
           <h3 style={{ color: "#764A34" }}>
             {" "}
@@ -158,7 +206,7 @@ function previewPdf(covername) {
         <div className="col-sm text-right">
           
           <h6>
-            <b>No of downloads : {noData}</b>
+            <b>No of purchases : {noData}</b>
           </h6>
           <h6 style={{ display: "inline" }}>
             <b>Total : $ </b>
@@ -171,9 +219,12 @@ function previewPdf(covername) {
       <br />
       <center>
         <h3 style={{ color: "#D0193A " }}>{empty}</h3>
+        <div class="spinner-border" id="loadingBar" hidden={load} role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
       </center>
       <br />
-
+      
       {cover.map((post,index) => {
         TotalPrice += Number(post.Price);
         return (
@@ -183,10 +234,15 @@ function previewPdf(covername) {
               marginBottom: "10px", border: "2px solid sienna", }} >
             <div className="row" style={{ width: "100%", margin: "auto" }}>
               <div className="col-sm text-center">
+
+
                 <img id={index}
                   class="rounded"
-                  style={{ width: "100%", margin: "auto" }}
-                  src={ displayImages(post.PreviewPages[0], index) || "/images/imageplaceholder.png" }/>
+                  style={{ width: "100%", margin: "auto", }}
+                  src={ displayImages(post.PreviewPages[0], index) || "/images/imageplaceholder.png" }
+                  onError={(e)=>{e.target.onerror = null; e.target.src="/images/verticaLImageHolder.jpg"}}
+                  // onClick={() => { previewImg(post.PreviewPages[0]); }}
+                  />
               </div>
 
               <div className="col-sm">
@@ -233,9 +289,9 @@ function previewPdf(covername) {
               <div className="col-sm "
                 style={{ backgroundColor: "white", lineHeight: "2em" }} >
                 <div className="text-right">
-                  <span class="text-center">{post.TransactionDateAndTime}</span>
+                  <span class="text-center">{orderDate}</span>
                 </div>
-
+                <br/>
                 <span style={{ color: " #764A34" }}>
                   Original Artist&ensp;:
                 </span>
@@ -274,6 +330,26 @@ function previewPdf(covername) {
         </Modal.Body>
         <Modal.Footer></Modal.Footer>
       </Modal>
+
+      {/* <Modal show={modalOpenForImage} size="lg">
+        <Modal.Header></Modal.Header>
+
+        <Modal.Body>
+            <div class="d-flex justify-content-center">
+            <div class="spinner-grow text-dark" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <br />
+          <h1 style={{ textAlign: "center", color: "#764A34" }}>
+            Please wait!
+          </h1>
+          <h4 style={{ textAlign: "center", color: "#764A34" }}>
+            Image is Loading...
+          </h4>
+        </Modal.Body>
+        <Modal.Footer></Modal.Footer>
+      </Modal> */}
     </div>
 
     

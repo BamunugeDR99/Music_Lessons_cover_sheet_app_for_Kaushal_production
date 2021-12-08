@@ -1,11 +1,38 @@
-.home .card:hover {
-    transform: scale(1.1);
-    
-  }
+.home .hero_area {
+  position: relative;
+  min-height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.home .bg-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.home .bg-box img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+
+
+
+
+
 
 .home .card {
 
-    transition: transform 0.2s ease;
     box-shadow: 0 4px 6px 0 rgba(22, 22, 26, 0.18);
     border-radius: 0;
     border: 0;
@@ -40,11 +67,6 @@
     z-index: 2;
   }
 
-  .home  .about_section .img-box img:hover {
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
-  }
-  
   .home  .about_section .detail-box p {
     margin-top: 15px;
   }
@@ -61,8 +83,8 @@
 }
 .home .features_col
 {
-	padding-top: 69px;
-	padding-bottom: 69px;
+	padding-top: 49px;
+	padding-bottom: 49px;
 }
 .home .features_item
 {
@@ -72,23 +94,48 @@
 {
 	margin-bottom: 0px;
 }
-.home .features_button
-{
-	margin-top: 20px;
+
+
+ .home .slider_section {
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+      flex: 1;
+display: -webkit-box;
+display: -ms-flexbox;
+display: flex;
+-webkit-box-align: center;
+  -ms-flex-align: center;
+      align-items: center;
+position: relative;
+padding: 45px 0 75px 0;
 }
-.home .features_button:hover,
-.home .features_button_2:hover
-{
-	background: #452b78;
+
+.home .slider_section .row {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
-.home .features_button:hover a,
-.home .features_button_2:hover a
-{
-	color: #FFFFFF;
+
+.home .slider_section .detail-box {
+  color: #ffffff;
+  margin-bottom: 145px;
 }
-.home .features_button_2
-{
-	display: none;
+
+.home .slider_section .detail-box h1 {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.48rem;
+  font-weight: bold;
+  margin-bottom: 15px;
 }
-  
+
+
+.home .slider_section .detail-box p {
+  font-family: 'Dancing Script', cursive;
+  font-size: 28px;
+}
+
+.home .slider_section .img-box img {
+  width: 100%;
+}
+
   

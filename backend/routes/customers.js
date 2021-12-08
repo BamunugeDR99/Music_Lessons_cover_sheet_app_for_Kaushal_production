@@ -8,6 +8,27 @@ app.use(express.json());
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
+// update purchased covers
+router.route("/addPurchasedCover/:id").put(async (req, res) => {
+  let CustomerID = req.params.id;
+  const { PurchasedCovers } = req.body;
+
+  const updatedArray = {
+    PurchasedCovers,
+  };
+
+  const update = await Customer.findByIdAndUpdate(CustomerID, updatedArray)
+    .then(() => {
+      res.status(200).send({ status: "updated" });
+    })
+    .catch((err) => {
+      console.log(err);
+      res
+        .status(500)
+        .send({ status: "Error with updating data", error: err.message });
+    });
+});
+
 //Customer SignUp
 router.route("/add").post(async (req, res) => {
   const FirstName = req.body.FirstName;
@@ -204,7 +225,7 @@ router.post("/refresh", (req, res) => {
     refreshTokens.push(newRefreshToken);
 
     res.status(200).json({
-      accsessToken: newAccessToken,
+      accessToken: newAccessToken,
       refreshToken: newRefreshToken,
     });
   });
@@ -245,22 +266,22 @@ router.post("/loginCustomer", async (req, res) => {
 
         //Generate access token
 
-        const accsessToken = generateAccessToken(customerLogin);
+        const accessToken = generateAccessToken(customerLogin);
         const refreshToken = generateRefreshToken(customerLogin);
 
         refreshTokens.push(refreshToken);
 
-        res.cookie("jwt", accsessToken, {
-          expires: new Date(Date.now() + 30000),
-          httpOnly: true,
-        });
+        // res.cookie("jwt", accessToken, {
+        //   expires: new Date(Date.now() + 30000),
+        //   httpOnly: true,
+        // });
 
         // console.log(`this is the cookie ${req.cookies.jwt}`);
 
         res.json({
           customerLogin: {
             _id: customerLogin._id,
-            accsessToken: accsessToken,
+            accessToken: accessToken,
             refreshToken: refreshToken,
           },
         });
@@ -311,6 +332,11 @@ router.delete("/deleteUser/:id", verify, async (req, res) => {
   } else {
     res.status(403).json("You can not delete this profile.");
   }
+});
+
+// Protected route, can only be accessed when user is logged-in
+router.post("/protected", verify, (req, res) => {
+  return res.json({ message: "Protected content!" });
 });
 
 //Logout
@@ -407,8 +433,6 @@ router.route("/loginStatus/:id").put(async (req, res) => {
     });
 });
 
-
-
 // get email
 router.route("/getEmail/:email").get(async (req, res) => {
   let email = req.params.email;
@@ -425,5 +449,55 @@ router.route("/getEmail/:email").get(async (req, res) => {
         .send({ status: "Error with get user", error: err.message });
     });
 });
+
+// check purchased cover
+
+router
+  .route("/checkPurchaseCovers/:customerid/:coverid")
+  .get(async (req, res) => {
+    let CustomerID = req.params.customerid;
+    let CoverID = req.params.coverid;
+    let status = false;
+    const user = await Customer.find({ _id: CustomerID })
+      .then((customer) => {
+        // res.status(200).send({status:"User fetched"});
+
+        for (let i = 0; i < customer[0].PurchasedCovers.length; i++) {
+          if (CoverID == customer[0].PurchasedCovers[i]) {
+            status = true;
+          }
+        }
+        res.json(status);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        res
+          .status(500)
+          .send({ status: "Error with get user", error: err.message });
+      });
+  });
+
+// update purchased covers
+router.route("/addPurchasedCover/:id").put(async (req, res) => {
+  let CustomerID = req.params.id;
+  const { PurchasedCovers } = req.body;
+
+  const updatedArray = {
+    PurchasedCovers,
+  };
+
+  const update = await Customer.findByIdAndUpdate(CustomerID, updatedArray)
+    .then(() => {
+      res.status(200).send({ status: "updated" });
+    })
+    .catch((err) => {
+      console.log(err);
+      res
+        .status(500)
+        .send({ status: "Error with updating data", error: err.message });
+    });
+});
+
+
 
 module.exports = router;

@@ -29,6 +29,7 @@ export default function CustomerForgotPassword(props) {
   const [passwordMisMatchDiv, setPasswordMisMatchDiv] = useState(true);
   const [resendEmailBtn, setResendEmailBtn] = useState(true);
   const [genCode, setCode] = useState("");
+  const [spaceValidation,setSpaceValidation] = useState(true);
   let UserEmail = "";
 
   const [passwordFocused, setPasswordFocused] = useState(false);
@@ -40,24 +41,26 @@ export default function CustomerForgotPassword(props) {
   const isNumberRegx = /\d/;
   const specialCharacterRegx = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
 
-
   let c = "";
-  function sendEmail(e) {
+  async function sendEmail(e) {
     e.preventDefault();
     setCodeVerification("");
     setResendEmailBtn(true);
     setLoading(false);
     UserEmail = document.getElementById("userEmail").value;
 
-    axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/customer/getEmail/" + UserEmail)
+    await axios
+      .get(
+        "https://kaushal-rashmika-music.herokuapp.com/customer/getEmail/" +
+          UserEmail
+      )
       .then((res) => {
         if (res.data.length == 0) {
           setLoading(true);
           setUserNotFoundError("User not found!");
         } else if (res.data != null) {
-         // console.log(res.data[0]._id)
-          setCustomerID(res.data[0]._id); 
+          // console.log(res.data[0]._id)
+          setCustomerID(res.data[0]._id);
           setUserNotFoundError("");
           emailConfiguration();
         }
@@ -83,7 +86,7 @@ export default function CustomerForgotPassword(props) {
     return result;
   }
 
-  function emailConfiguration() {
+  async function emailConfiguration() {
     const hidEmail = hideEmail(UserEmail);
     const generatedCode = generateCode(8);
     setCode(generatedCode);
@@ -91,7 +94,7 @@ export default function CustomerForgotPassword(props) {
       email: UserEmail,
       code: generatedCode,
     };
-    emailjs
+    await emailjs
       .send(
         "service_d2vcq28", //your service id
         "template_pcwlvj6", // template id
@@ -196,7 +199,9 @@ export default function CustomerForgotPassword(props) {
     e.preventDefault();
     setLoading(false);
     const newPassword = document.getElementById("newPassword").value.trim();
-    const confirmPassword = document.getElementById("confirmPassword").value.trim();
+    const confirmPassword = document
+      .getElementById("confirmPassword")
+      .value.trim();
     if (newPassword != null || confirmPassword != null) {
       if (newPassword === confirmPassword) {
         Swal.fire({
@@ -210,12 +215,16 @@ export default function CustomerForgotPassword(props) {
         }).then((result) => {
           if (result.isConfirmed) {
             const newPasswordObject = {
-              Password: bcrypt.hashSync(newPassword.trim(), bcrypt.genSaltSync(12)),
+              Password: bcrypt.hashSync(
+                newPassword.trim(),
+                bcrypt.genSaltSync(12)
+              ),
             };
 
             axios
               .put(
-                "https://kaushal-rashmika-music.herokuapp.com/customer/updatePassword/" + customerID,
+                "https://kaushal-rashmika-music.herokuapp.com/customer/updatePassword/" +
+                  customerID,
                 newPasswordObject
               )
               .then((res) => {
@@ -224,15 +233,15 @@ export default function CustomerForgotPassword(props) {
                   "You can log back in ",
                   "success"
                 );
-                
+
                 setLoading(true);
-                props.history.push("/customer/login")
+                props.history.push("/customer/login");
                 // navigate to the login page
               })
               .catch((err) => {
                 // alert(err);
                 Swal.fire("Error has been occured please try again!", "error");
-                props.history.push("/customer/login")
+                props.history.push("/customer/login");
               });
           } else {
             setLoading(true);
@@ -242,6 +251,10 @@ export default function CustomerForgotPassword(props) {
         setLoading(true);
       }
     }
+  }
+
+  function hasWhiteSpace(s) {
+    return /\s/.test(s);
   }
   return (
     <div>
@@ -388,8 +401,7 @@ export default function CustomerForgotPassword(props) {
                 >
                   Verify Code
                 </button>
-                <br />
-                <br/>
+              <br/>
                 <button
                   type="button"
                   class="btn btn-block"
@@ -482,9 +494,22 @@ export default function CustomerForgotPassword(props) {
                         isNumberRegx.test(e.target.value) &&
                         specialCharacterRegx.test(e.target.value)
                       ) {
-                        setChangePStatus(false);
+                        if (hasWhiteSpace(e.target.value)) {
+                          setChangePStatus(true);
+                          setSpaceValidation(false);
+                        } else {
+                          setChangePStatus(false);
+                          setSpaceValidation(true);
+                        }
+                        //setChangePStatus(false);
                       } else {
-                        setChangePStatus(true);
+                        if (hasWhiteSpace(e.target.value)) {
+                          setChangePStatus(true);
+                          setSpaceValidation(false);
+                        } else {
+                          setChangePStatus(false);
+                          setSpaceValidation(true);
+                        }
                       }
                     }}
                     required
@@ -534,6 +559,7 @@ export default function CustomerForgotPassword(props) {
                   <PasswordStrengthIndicator validity={passwordValidity} />
                 )}
 
+                <p style = {{color : "#D0193A"}} hidden = {spaceValidation}>Password Cannot contain Spaces</p>
                 <br />
                 <div class="input-group">
                   {" "}

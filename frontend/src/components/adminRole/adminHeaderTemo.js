@@ -186,11 +186,29 @@ export default function AdminHeaderTemp(props) {
           <span
                   className="userProfileSpan ml-1 mt-1"
                   onClick={() => {
-                    authentication.logout(() => {
-                      props.history.push("/adminlogin")
-                      localStorage.removeItem("AdminID");
 
-                     })
+                    const updateloginStatus = {
+                      LoginStatus: false,
+                    };
+            
+                    axios
+                      .put(
+                        "https://kaushal-rashmika-music.herokuapp.com/admin/loginStatus/" + localStorage.getItem("AdminID"),
+                        updateloginStatus
+                      )
+                      .then((res) => {
+
+
+                        authentication.logout(() => {
+                          props.history.push("/adminlogin")
+                          localStorage.removeItem("AdminID");
+                          sessionStorage.removeItem("IsAuthA");
+    
+                         })
+                      }).catch((err)=>{
+            
+                      });
+
                   }}
                 >
                   <svg

@@ -15,7 +15,7 @@ export default function NotFound(props) {
   <span class="four"><span class="screen-reader-text">4</span></span>
 </section>
 <div class="link-container">
-  <Link  to = "/" class="more-link">Visit to the Main Page</Link>
+  <Link  to = "/customer/home" class="more-link">Visit to the Home Page</Link>
 </div></div>)
 }
 
