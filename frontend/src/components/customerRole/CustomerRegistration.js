@@ -237,8 +237,8 @@ export default function CustomerRegistration(props) {
    
     Country = document.getElementById("selectedCountry").value;
 
-    Password = bcrypt.hashSync(Password, bcrypt.genSaltSync(12));
-    SetPassword(bcrypt.hashSync(Password, bcrypt.genSaltSync(12)));
+    // Password = bcrypt.hashSync(Password, bcrypt.genSaltSync(12));
+    // SetPassword(bcrypt.hashSync(Password, bcrypt.genSaltSync(12)));
 
 
     const newCustomer = {
