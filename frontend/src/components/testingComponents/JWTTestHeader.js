@@ -88,7 +88,7 @@ export default function JWTCustomerHeader(props) {
     try {
 
                   //Get the Cokkies
-                  let accessToken = Cookies.get("access");
+          
                   let refreshToken = Cookies.get("refresh");
 
                   console.log(refreshToken);
