@@ -26,11 +26,12 @@ import PurchaseHistory from "./components/customerRole/purchaseHistory";
 import MusicCart from "./components/customerRole/music_cart";
 import LessonAndCoversDetailed from "./components/customerRole/LessonsAndCoversDetailed";
 import Footer from "./components/customerRole/footer";
+
+
+//import Test Components
 import Search from "./components/testingComponents/search";
 import Search2 from "./components/testingComponents/search2";
 import SearchBar from "./components/testingComponents/searchBar";
-
-//import Test Components
 import TestLogin from "./components/testingComponents/LoginTest";
 import TestCustomerRegistration from "./components/testingComponents/RegisterTest";
 
