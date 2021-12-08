@@ -43,11 +43,16 @@ export default function DashBoard() {
   let customerID = "";
   let coverID = [];
   let orderHolder = [];
-  let today = new Date().toISOString().split("T")[0];
+  let today = new Date(new Date().valueOf() + 1000 * 60 * 60 * 24)
+    .toISOString()
+    .split("T")[0];
   // let previousDay = new Date(Date.now() - 86400000);
   var previousDay = new Date(new Date().valueOf() - 1000 * 60 * 60 * 24)
     .toISOString()
     .split("T")[0];
+
+  console.log(today);
+  console.log(previousDay);
 
   let dataholder = {
     name,
@@ -60,7 +65,7 @@ export default function DashBoard() {
 
   useEffect(() => {
     setmain(true);
-    setspinner(false);
+    setspinner(true);
 
     console.log(today);
     console.log(previousDay);
@@ -144,6 +149,7 @@ export default function DashBoard() {
         // console.log(res.data);
         orderHolder = res.data;
         loadIncome(res.data);
+        console.log(res.data);
         setError("");
       })
       .catch((err) => {
@@ -253,7 +259,7 @@ export default function DashBoard() {
               {tableData.map((post) => (
                 <tr>
                   <td>{post.name}</td>
-                  <td className="text-right">Rs.{post.totalprice}.00</td>
+                  <td className="text-right">${post.totalprice}</td>
                   <td>{post.date.substr(0, 10)}</td>
                   <td>
                     {" "}
@@ -498,7 +504,7 @@ export default function DashBoard() {
                 onChange={(e) => searchByDate(e.target.value, toValue)}
                 aria-describedby="emailHelp"
                 placeholder="Enter email"
-                max={new Date().toISOString().split("T")[0]}
+                max={today}
               />
             </div>{" "}
           </div>
@@ -509,7 +515,7 @@ export default function DashBoard() {
                 type="date"
                 class="form-control"
                 id="to"
-                max={new Date().toISOString().split("T")[0]}
+                max={today}
                 value={toValue}
                 onChange={(e) => searchByDate(fromValue, e.target.value)}
                 aria-describedby="emailHelp"
@@ -549,7 +555,7 @@ export default function DashBoard() {
             <tfoot>
               <tr>
                 <th>Customer Name</th>
-                <th className="text-right">Total Price :- Rs.{total}.00</th>
+                <th className="text-right">Total Price :- ${total}</th>
                 <th>Date</th>
                 <th>Actions</th>
               </tr>
@@ -602,7 +608,7 @@ export default function DashBoard() {
                   {selectedCovers.map((post) => (
                     <tr>
                       <td>{post.Title}</td>
-                      <td className="text-right">Rs.{post.Price}.00</td>
+                      <td className="text-right">${post.Price}</td>
                       <td>{post.NoOfDownloads}</td>
                     </tr>
                   ))}
