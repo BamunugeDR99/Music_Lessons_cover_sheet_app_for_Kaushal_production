@@ -2,7 +2,7 @@ import React, { useEffect, useState, Component } from "react";
 import axios from "axios";
 import "../../css/searchBarStyles.css";
 import { TextField, validator } from "react-textfield";
-export default function Search(props) {
+export default function MainSearch(props) {
   const [searchtext, setSearchtext] = useState("");
   const [suggest, setSuggest] = useState([]);
   const [resfound, setResfound] = useState(true);
@@ -41,6 +41,7 @@ export default function Search(props) {
       }
     }
   }
+  
 
   const handleChange = (e) => {
     let searchval = e.target.value;
@@ -112,14 +113,14 @@ export default function Search(props) {
   };
 
   return (
-    <div>
-      <div className="MainSearchBar">
+    // <div>
+      <div className="MainSearchBar" style = {{marginTop: "-120px",marginBottom : "-120px"}}>
         <div class="wrapper ">
           <div class="search-input" id="searchInput">
             <a href="" target="_blank" hidden></a>
             <input
               type="text"
-              placeholder="Type to search.."
+              placeholder="Search covers..."
               value={searchtext}
               onChange={handleChange}
               style={{ color: "#000000" }}
@@ -142,6 +143,6 @@ export default function Search(props) {
           </div>
         </div>
       </div>
-    </div>
+    // </div>
   );
 }

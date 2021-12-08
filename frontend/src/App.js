@@ -145,7 +145,8 @@ function App() {
           <Route path="/notfound" component={NotFound} />
 
           {/* Testing routes  */}
-          {/* <Route path = "/search" exact component = {Search}/> */}
+          {/* <Route path = "/search" exact component = {Search2}/> */}
+          
         </div>
       </Switch>
     </Router>
