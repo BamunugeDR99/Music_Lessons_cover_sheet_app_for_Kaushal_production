@@ -98,7 +98,7 @@ export default function CustomerHeaderTempBeforeLogin(props) {
               </Link>
             </li>
           </ul>
-          <form class="form-inline my-2 my-lg-0">
+          {/* <form class="form-inline my-2 my-lg-0">
             <input
               id="searchBar"
               class="form-control mr-sm-2"
@@ -113,7 +113,7 @@ export default function CustomerHeaderTempBeforeLogin(props) {
             >
               Search
             </button>
-          </form>
+          </form> */}
 
           <div>
             <div>

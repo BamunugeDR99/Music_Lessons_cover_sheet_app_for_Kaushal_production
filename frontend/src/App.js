@@ -5,7 +5,6 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import ProtectedRoute from "./private/ProtectedRoute";
 import authentication from "./security/authentication";
 
-
 // import css
 import "./App.css";
 import "./css/DiscoverMoreCoversStyles.css";
@@ -27,16 +26,15 @@ import MusicCart from "./components/customerRole/music_cart";
 import LessonAndCoversDetailed from "./components/customerRole/LessonsAndCoversDetailed";
 import Footer from "./components/customerRole/footer";
 
-
 //import Test Components
 import Search from "./components/testingComponents/search";
 import Search2 from "./components/testingComponents/search2";
 import SearchBar from "./components/testingComponents/searchBar";
 import TestLogin from "./components/testingComponents/LoginTest";
 import TestCustomerRegistration from "./components/testingComponents/RegisterTest";
+import JWTCustomerHeader from "./components/testingComponents/JWTTestHeader";
 
 // import Search from "./components/testingComponents/search";
-
 
 //import components (Admin)
 import AdminLogin from "./components/adminRole/adminLogin";
@@ -50,43 +48,16 @@ import EditMainCategories from "./components/adminRole/EditMainCategory";
 import NotFound from "./components/NotFound";
 import IdelTimer from "./components/timeRelatedComponents/IdelTimer";
 
-// dynamic header
 function App() {
-
-  // window.onload = function gg(){
-  //     //localStorage.getItem("AdminID")
-  //     // let loginStatus = false;
-  //       if(localStorage.getItem("AdminID") != null){
-  //         axios
-  //         .get(
-  //           "https://kaushal-rashmika-music.herokuapp.com/admin/getAdminLoginStatus/61ac56a585716235690b414b"
-              
-  //         )
-  //         .then((res) => {
-  //           if(res.data){
-  //             authentication.login(()=>{});
-  //           }else{
-  //             authentication.logout(()=>{});
-  //           }
-            
-  //         })
-  //         .catch((err) => {
-  //           alert(err);
-  //         });
-  //       }else if(localStorage.getItem("AdminID") == null){
-  //           return this.authenticated
-  //       }
-  // }
-  const [loginStatus, setLoginStatus] = useState(true);
-
   return (
     <Router>
-      <IdelTimer/>
+      <IdelTimer />
+
       <Switch>
         <div>
           {/* Customer Routes */}
           <Route exact path="/" exact component={InitialPage} />
-          {loginStatus == true ? (
+          {sessionStorage.getItem("IsAuth") ? (
             <div>
               <Route path="/customer" component={CustomerHeaderTemp} />
             </div>
@@ -98,6 +69,7 @@ function App() {
               />
             </div>
           )}
+
           <Route path="/customer/login" exact component={Loginpage} />
           <Route
             path="/customer/registration"
@@ -169,17 +141,13 @@ function App() {
           />
           <ProtectedRoute path="/admin" component={Footer} />
 
-          {/* Testing routes  */}
-           <Route path = "/search" exact component = {Search}/>
-          <Route path = "/search2" exact component = {Search2}/>
-           <Route path = "/searchBar" exact component = {SearchBar}/>
-          {/* <Route path = "/search" exact component = {Search}/> */}
+          {/* 404 not found route  */}
           <Route path="/notfound" component={NotFound} />
 
-          {/* <Route path = "*" component = {}/> */}
-          {/* <Route path="/admin/*" exact component={NotFound} /> */}
-          {/* <Route path="*" exact component={NotFound} /> */}
-       </div>
+          {/* Testing routes  */}
+          {/* <Route path = "/search" exact component = {Search2}/> */}
+          
+        </div>
       </Switch>
     </Router>
   );

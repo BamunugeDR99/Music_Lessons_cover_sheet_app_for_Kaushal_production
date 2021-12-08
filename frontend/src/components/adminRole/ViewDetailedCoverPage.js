@@ -575,9 +575,11 @@ export default function ViewDetailedCoverPage(props) {
     const storageRef = ref(storage, `Covers(PDF)/${pdfName}`);
     await getDownloadURL(storageRef)
       .then((url) => {
-        // setPdfUrl(url)
-        window.location.href = url;
-        //setModalOpenForPdf(false)
+        window.open(
+          url,
+          '_blank' // <- This is what makes it open in a new window.
+        );
+        setModalOpenForPdf(false)
       })
       .catch(() => {
         setModalOpenForPdf(false);

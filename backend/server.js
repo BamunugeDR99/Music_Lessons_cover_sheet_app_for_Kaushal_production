@@ -7,7 +7,7 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 
 const PORT = process.env.PORT || 8070;
-app.use(cors());
+  app.use(cors());
 
 app.use(bodyParser.json());
 app.use(express.json());
@@ -50,6 +50,9 @@ app.use("/customer", customerRouter);
 
 const shoppingCartRouter = require("./routes/shoppingCarts.js");
 app.use("/shoppingCart",shoppingCartRouter); 
+
+const TestCustomerRouter = require("./routes/Testcustomers.js");
+app.use("/testcustomer",TestCustomerRouter )
 
 app.listen(PORT, () => {
   console.log(`Server is up and running on PORT ${PORT}`);

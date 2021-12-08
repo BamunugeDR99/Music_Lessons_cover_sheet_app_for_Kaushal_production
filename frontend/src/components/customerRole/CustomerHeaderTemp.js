@@ -272,12 +272,12 @@ export default function CustomerHeader(props) {
   // let navigate = useNavigate();
 
   function validate() {
-    console.log ("Validate Running");
-    console.log(FirstName);
-    console.log(LastName);
-    console.log(Gender);
-    console.log(Country);
-    console.log(ContactNumber);
+    // console.log ("Validate Running");
+    // console.log(FirstName);
+    // console.log(LastName);
+    // console.log(Gender);
+    // console.log(Country);
+    // console.log(ContactNumber);
 
    
     if (FirstName.length == 0) {
@@ -335,7 +335,7 @@ export default function CustomerHeader(props) {
   }
 
   async function updateProfile() {
-    console.log("Password : " + Password);
+    //console.log("Password : " + Password);
 
     const newCustomer = {
       FirstName,
@@ -350,17 +350,17 @@ export default function CustomerHeader(props) {
 
 
 
-    console.log(newCustomer);
+    //console.log(newCustomer);
 
     await validate();
     checkLNamePattern(LastName);
     checkFNamePattern(FirstName);
-    console.log(`ContactNo flag : ${flagphone}`);
-    console.log(`Country flag : ${flagcountry}`);
-    console.log(`Gender flag : `);
-    console.log(flaggender);
-    console.log(`Firstname flag : ${flagfname}`);
-    console.log(`Lastname flag : ${flaglname}`);
+    // console.log(`ContactNo flag : ${flagphone}`);
+    // console.log(`Country flag : ${flagcountry}`);
+    // console.log(`Gender flag : `);
+    // console.log(flaggender);
+    // console.log(`Firstname flag : ${flagfname}`);
+    // console.log(`Lastname flag : ${flaglname}`);
     if (flagphone == 1 && flagcountry == 1 && flaggender == 1 & flagfname == 1 && flaglname == 1 && FirstName.length !== 0 && LastName.length !== 0) {
       Swal.fire({
         title: "Do you want to save the changes?",
@@ -665,7 +665,7 @@ export default function CustomerHeader(props) {
               </Link>
             </li>
           </ul>
-          <form class="form-inline my-2 my-lg-0">
+          {/* <form class="form-inline my-2 my-lg-0">
             <input
               id="searchBar"
               class="form-control mr-sm-2"
@@ -680,7 +680,7 @@ export default function CustomerHeader(props) {
             >
               Search
             </button>
-          </form>
+          </form> */}
 
           <div>
             {loggedin == true ? (
@@ -733,6 +733,8 @@ export default function CustomerHeader(props) {
                       
                       props.history.push("/customer/login");
                       localStorage.removeItem("CustomerID");
+                      sessionStorage.removeItem("IsAuth");
+                      window.location.reload()
                       
                     })
                    
@@ -992,7 +994,7 @@ export default function CustomerHeader(props) {
                     </div>
                     <select
                       required
-                      Value={Country}
+                      value={Country}
                       className="form-control"
                       id="country"
                       name="country"

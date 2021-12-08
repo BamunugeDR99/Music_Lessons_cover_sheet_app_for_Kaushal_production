@@ -8,7 +8,7 @@ export default function ProtectedRoute({component: Component, ...rest }) {
     <Route
       {...rest}
       render={(props) => {
-        if (authentication.isAuthenticated()) {
+        if (authentication.isAuthenticated()|| sessionStorage.getItem("IsAuthA")) {
           return <Component {...props} />;
         } else {
           return (

@@ -126,8 +126,11 @@ function previewPdf(covername) {
     const storageRef = ref(storage, `Covers(PDF)/${covername}`);
     getDownloadURL(storageRef)
       .then((url) => {
-        window.location.href = url;
-        setModalOpenForPdf(false)
+        window.open(
+          url,
+          "_blank" // <- This is what makes it open in a new window.
+        );
+        setModalOpenForPdf(false);
       })
       .catch(() => {
         setModalOpenForPdf(false);

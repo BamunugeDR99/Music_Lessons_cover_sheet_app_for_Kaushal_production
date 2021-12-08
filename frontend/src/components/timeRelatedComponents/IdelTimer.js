@@ -1,32 +1,13 @@
-import React, { useState} from "react";
+import React from "react";
 import { useIdleTimer } from 'react-idle-timer'
-import axios from "axios";
-import authentication from "../../security/authentication";
+
 
 
 export default function IdelTimer(props) {
     const handleOnIdle = event => {
-        console.log('gg')
-        const updateloginStatus = {
-            LoginStatus: false,
-          };
-          // local storage prblem
-        axios
-        .put(
-          "https://kaushal-rashmika-music.herokuapp.com/admin/loginStatus/" + localStorage.getItem("AdminID"),
-          updateloginStatus
-        )
-        .then((res) => {
+      sessionStorage.removeItem("IsAuth");
+      sessionStorage.removeItem("IsAuthA");
 
-
-          authentication.logout(() => {
-            props.history.push("/adminlogin")
-            localStorage.removeItem("AdminID");
-
-           })
-        }).catch((err)=>{
-
-        });
       }
     
     //   const handleOnActive = event => {
@@ -39,7 +20,7 @@ export default function IdelTimer(props) {
     //   }
     
       const { getRemainingTime, getLastActiveTime } = useIdleTimer({
-        timeout: 555 * 1000,
+        timeout: 1800 * 10000,
         onIdle: handleOnIdle,
         // onActive: handleOnActive,
         // onAction: handleOnAction,

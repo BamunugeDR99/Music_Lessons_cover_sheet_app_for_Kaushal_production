@@ -52,7 +52,7 @@ const customerSchema = new Schema({
     },
   ],
 
-  OrderIDs: [
+  PurchasedCovers : [
     {
       type: String,
       required: true,
