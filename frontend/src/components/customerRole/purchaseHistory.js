@@ -27,21 +27,13 @@ export default function PurchaseHistory(props) {
       axios
         .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
         .then((res) => {
-          
-              
-          
-          //    if (searchResult.length == 0) {
-          //   setEmpty("No Covers available !");
-          // } else {
-          //   setEmpty("");
-          // }
+          if(res.data.length!==0){
+            setEmpty2("No purchased covers yet!")
+          }
+          // else{
           const filter = res.data.filter(
             (cus) => cus.CustomerID == localStorage.getItem("CustomerID")
           );
-
-          // if(res.data.length==0){
-          //   setEmpty2("No purchased covers yet!")
-          // }
           for(let i=0; i<filter.length;i++){
             console.log(filter[i].TransactionDateAndTime);
             setOrderDate(filter[i].TransactionDateAndTime)
@@ -57,7 +49,7 @@ export default function PurchaseHistory(props) {
           });
           setLoad(true)
           }
-    
+    // }
         )
         .catch((err) => {
           alert(err);
@@ -170,7 +162,7 @@ function previewPdf(covername) {
     <div className="container">
       <br />
       <br />
-         <h3>{empty2}</h3>
+        
       <div className="row">
         
         <div className="col-sm">
@@ -216,6 +208,7 @@ function previewPdf(covername) {
       <br />
       <center>
         <h3 style={{ color: "#D0193A " }}>{empty}</h3>
+        <h3 style={{ color: "#D0193A " }}>{empty2}</h3>
         <div class="spinner-border" id="loadingBar" hidden={load} role="status">
             <span class="sr-only">Loading...</span>
           </div>
