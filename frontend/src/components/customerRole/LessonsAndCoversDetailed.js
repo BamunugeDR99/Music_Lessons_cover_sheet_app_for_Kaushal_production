@@ -83,7 +83,7 @@ export default function LessonsAndCoversDetailed(props) {
     }
 
     async function getCustomerDetails() {
-      if(localStorage.getItem("CustomerID")===null){
+      if(localStorage.getItem("CustomerID")===null || sessionStorage.getItem('IsAuth') === null){
       }else{
         await axios
         .get(
@@ -105,7 +105,7 @@ export default function LessonsAndCoversDetailed(props) {
   }, []);
 
   function setButtons(coverID) {
-    if(localStorage.getItem("CustomerID") === null){
+    if(localStorage.getItem("CustomerID") === null || sessionStorage.getItem('IsAuth') === null){
       setPurchased(false);
       setUserlogin(true);
       setCoverStatus(true);
