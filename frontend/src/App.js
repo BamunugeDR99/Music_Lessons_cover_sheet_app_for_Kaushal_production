@@ -29,6 +29,7 @@ import Footer from "./components/customerRole/footer";
 //import Test Components
 import TestLogin from "./components/testingComponents/LoginTest";
 import TestCustomerRegistration from "./components/testingComponents/RegisterTest";
+import JWTCustomerHeader from "./components/testingComponents/JWTTestHeader";
 
 // import Search from "./components/testingComponents/search";
 
