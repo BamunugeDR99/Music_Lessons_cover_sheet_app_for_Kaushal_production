@@ -27,6 +27,7 @@ import Footer from "./components/customerRole/footer";
 //import Test Components
 import TestLogin from "./components/testingComponents/LoginTest";
 import TestCustomerRegistration from "./components/testingComponents/RegisterTest";
+import JWTCustomerHeader from "./components/testingComponents/JWTTestHeader";
 
 // import Search from "./components/testingComponents/search";
 
@@ -41,6 +42,7 @@ import CustomerFeedback from "./components/adminRole/CustomerFeedback";
 import AdminVwCustomer from "./components/adminRole/AdminVwCustomer";
 import EditMainCategories from "./components/adminRole/EditMainCategory";
 import NotFound from "./components/NotFound";
+import TestCustomerUI from "./components/testingComponents/testCustomer";
 
 // dynamic header
 function App() {
@@ -138,6 +140,8 @@ function App() {
 
         {/* Testing routes  */}
         {/* <Route path = "/search" exact component = {Search}/> */}
+        <Route path = "/test"component = {JWTCustomerHeader}/>
+        <Route path = "/test/testCusUI" exact component = {TestCustomerUI}/>
 
         {/* <Route path = "*" component = {}/> */}
         {/* <Route path = "*" component = {NotFound}/> */}
