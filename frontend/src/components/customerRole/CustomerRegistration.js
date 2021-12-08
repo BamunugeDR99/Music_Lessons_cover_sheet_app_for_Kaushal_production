@@ -612,7 +612,7 @@ export default function CustomerRegistration(props) {
 
                       <span class="input-group-append bg-white border-left-0">
                         <span class="input-group-text bg-transparent">
-                          <div hidden={eyeSlashIcon}>
+                          <div hidden={eyeSlashIcon}  style={{ color: "#764A34" }}>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="20"
@@ -630,7 +630,7 @@ export default function CustomerRegistration(props) {
                               <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z" />
                             </svg>
                           </div>
-                          <div hidden={eyeIcon}>
+                          <div hidden={eyeIcon} style={{ color: "#764A34" }}>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="20"
@@ -704,7 +704,7 @@ export default function CustomerRegistration(props) {
                       />
                       <span class="input-group-append bg-white border-left-0">
                         <span class="input-group-text bg-transparent">
-                          <div hidden={CeyeSlashIcon}>
+                          <div hidden={CeyeSlashIcon}  style={{ color: "#764A34" }}>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="20"
@@ -722,7 +722,7 @@ export default function CustomerRegistration(props) {
                               <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z" />
                             </svg>
                           </div>
-                          <div hidden={CeyeIcon}>
+                          <div hidden={CeyeIcon} style={{ color: "#764A34" }}>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="20"
