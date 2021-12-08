@@ -361,13 +361,17 @@ export default function MusicCart(props) {
         .put(`http://localhost:8070/covers/incrementCount/${coverIdArray[k]}`)
         .then((res) => {
           Swal.fire({
-            position: "center",
+            title: "Successfully Deleted!",
             icon: "success",
-            title: "Thank you for your purchase",
-            showConfirmButton: false,
-            timer: 1500,
+            showCancelButton: false,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ok!",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.reload(true);
+            }
           });
-          window.location.reload(true);
         })
         .catch((err) => {
           Swal.fire({
