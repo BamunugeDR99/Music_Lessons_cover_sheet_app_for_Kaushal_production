@@ -408,7 +408,7 @@ export default function MusicCart(props) {
       {/* <button onClick={() => test()}>test</button> */}
 
       <br />
-      <div class="row">
+      <div class="row" style={{marginBottom:"77px"}}>
         <div id="spinnerdiv" class="col-lg-8 " style={{ display: "block" }}>
           <center>
             <div class=" justify-content-center">
@@ -438,7 +438,11 @@ export default function MusicCart(props) {
           id="cartdiv"
           style={{
             overflowY: "scroll",
+            height:"680px",
+            overflow:"auto",
+            overflowY:"hidden",
             display: "none",
+
           }}
         >
           <div>
@@ -516,6 +520,8 @@ export default function MusicCart(props) {
             ))}
           </div>
         </div>
+
+       
 
         {/* Cart Calculations */}
         <div class="col-lg-4  justify-content-end">

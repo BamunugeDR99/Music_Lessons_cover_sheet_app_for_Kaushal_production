@@ -4,9 +4,10 @@ import axios from "axios";
 export default function CustomerFooter(props) {
   return (
     <div>
+
       <footer
         class="page-footer font-small  darken-3"
-        style={{ backgroundColor: "#764A34" }}
+        style={{ backgroundColor: "#764A34"}}
       >
         <div class="container">
           <div class="row">
