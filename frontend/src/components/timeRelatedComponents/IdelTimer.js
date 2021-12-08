@@ -6,6 +6,8 @@ import { useIdleTimer } from 'react-idle-timer'
 export default function IdelTimer(props) {
     const handleOnIdle = event => {
       sessionStorage.removeItem("IsAuth");
+      sessionStorage.removeItem("IsAuthA");
+
       }
     
     //   const handleOnActive = event => {
