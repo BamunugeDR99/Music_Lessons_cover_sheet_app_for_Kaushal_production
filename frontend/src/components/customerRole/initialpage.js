@@ -38,7 +38,7 @@ export default function InitialPage(props) {
           ></img>
           <h1>KAUSHAL RASHMIKA PRODUCTIONS</h1>
 
-          <Link href="#about" class="btn-get-started"  to = "/customer/registration">
+          <Link href="#about" class="btn-get-started"  to = "/customer/home">
             Get Started
           </Link>
         </div>

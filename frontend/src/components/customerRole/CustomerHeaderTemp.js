@@ -58,9 +58,13 @@ export default function CustomerHeader(props) {
     specialChar: null,
   });
 
- 
-
-  let flagcountry,flaggender,flagphone, flagpassword, flagfname, flaglname, flagcpassword = 0;
+  let flagcountry,
+    flaggender,
+    flagphone,
+    flagpassword,
+    flagfname,
+    flaglname,
+    flagcpassword = 0;
   //useStates to store user inputs
   let [Username, SetUsername] = useState("");
   let [Email, SetEmail] = useState("");
@@ -95,42 +99,35 @@ export default function CustomerHeader(props) {
   }
 
   function hasWhiteSpace(s) {
-    return (/\s/).test(s);
+    return /\s/.test(s);
   }
-
 
   function checkFNamePattern(word) {
     if (!/[^a-zA-Z]/.test(word) === false) {
       setFirstNameError("First Name can only contain letters");
       flagfname = 0;
-    
     } else {
       flagfname = 1;
-     
     }
   }
 
   function checkLNamePattern(word) {
     if (!/[^a-zA-Z]/.test(word) === false) {
       setLastNameError("Last Name can only contain letters");
-     
+
       flaglname = 0;
     } else {
-   
       flaglname = 1;
     }
   }
 
   function checkPasswords(confirmpassword) {
     if (Password.length !== 0 || confirmpassword.length !== 0) {
-
-      if(hasWhiteSpace(Password) == true ){
+      if (hasWhiteSpace(Password) == true) {
         flagpassword = 0;
-         console.log("Fired");
-         SetPasswordError("Password Cannot Contain WhiteSpaces");
-     }
-
-      else if (Password === confirmpassword) {
+        console.log("Fired");
+        SetPasswordError("Password Cannot Contain WhiteSpaces");
+      } else if (Password === confirmpassword) {
         flagpassword = 1;
         setPasswordMatchDiv(false);
         setPasswordMisMatchDiv(true);
@@ -174,13 +171,11 @@ export default function CustomerHeader(props) {
     console.log(Password.length);
     console.log(ConfirmPassword.length);
 
-      if(hasWhiteSpace(Password) == true ){
-        flagpassword = 0;
-       console.log("Fired");
-       SetPasswordError("Password Cannot Contain WhiteSpaces");
-     }
-
-    else if (CurrentPassword2.length === 0) {
+    if (hasWhiteSpace(Password) == true) {
+      flagpassword = 0;
+      console.log("Fired");
+      SetPasswordError("Password Cannot Contain WhiteSpaces");
+    } else if (CurrentPassword2.length === 0) {
       flagpassword = 0;
       SetCurrentPasswordError2("Current password is required !");
     } else if (Password.length === 0) {
@@ -214,7 +209,6 @@ export default function CustomerHeader(props) {
     console.log(flagcpassword);
     console.log(`Password Flag : `);
     console.log(flagpassword);
-
 
     if (flagpassword === 1 && flagcpassword === 1) {
       Password = bcrypt.hashSync(Password, bcrypt.genSaltSync(12));
@@ -279,58 +273,45 @@ export default function CustomerHeader(props) {
     // console.log(Country);
     // console.log(ContactNumber);
 
-   
     if (FirstName.length == 0) {
       flagfname = 0;
       setFirstNameError("First name is required ! ");
-    } 
-    else if (!/[^a-zA-Z]/.test(FirstName) === false) {
+    } else if (!/[^a-zA-Z]/.test(FirstName) === false) {
       setFirstNameError("First Name can only contain letters");
       flagfname = 0;
-    
-    }
-    else {
-   
+    } else {
       flagfname = 1;
     }
-    
-    
+
     if (LastName.length == 0) {
       flaglname = 0;
       setLastNameError("Last name is required !");
-    }
-    else if (!/[^a-zA-Z]/.test(LastName) === false) {
+    } else if (!/[^a-zA-Z]/.test(LastName) === false) {
       setLastNameError("Last Name can only contain letters");
       flaglname = 0;
-    
-    }
-    else{
+    } else {
       flaglname = 1;
-    } 
-    
-    
+    }
+
     if (ContactNumber.length == 0) {
       flagphone = 0;
       SetContactNoError("Contact number is required !");
-    } else{
+    } else {
       flagphone = 1;
-    } 
-    
-    
+    }
+
     if (Gender.length == 0) {
       flaggender = 0;
       setGenderError("Gender is required !");
-    } else{
-    
+    } else {
       flaggender = 1;
     }
-    
-    
+
     if (Country.length == 0) {
       flagcountry = 0;
       setCountryError("Country is required !");
-    } else { 
-        flagcountry = 1;
+    } else {
+      flagcountry = 1;
     }
   }
 
@@ -489,7 +470,7 @@ export default function CustomerHeader(props) {
 
   useEffect(() => {
     let customerID = localStorage.getItem("CustomerID");
-    // checkCustomerID(customerID);
+    
     function getOne() {
       axios
         .get(
@@ -523,7 +504,7 @@ export default function CustomerHeader(props) {
 
       const CustomerID = CustomerIDTemp;
 
-     await axios
+      await axios
 
         .get(
           "https://kaushal-rashmika-music.herokuapp.com/shoppingCart/getOneCart/" +
@@ -551,39 +532,6 @@ export default function CustomerHeader(props) {
     getCartCount();
   }, []);
 
-  // async function checkCustomerID(customerID) {
-  //   await axios
-  //     .get("https://kaushal-rashmika-music.herokuapp.com/customer/getAll/")
-  //     .then((res) => {
-  //       for (let i = 0; i < res.data.length; i++) {
-  //         console.log(res.data[i]._id);
-  //         if (res.data[i]._id == customerID) {
-  //           console.log("Success");
-  //           status = 1;
-  //         } else {
-  //         }
-  //       }
-  //     })
-
-  //     .catch((err) => {
-  //       Swal.fire({
-  //         icon: "error",
-
-  //         title: "Oops...",
-
-  //         text: "Somethi went wrong!",
-
-  //         // footer: '<p style = "color : #D0193A">Currently unavailable!',
-  //       });
-  //     });
-
-  //   if (status == 1) {
-  //     setLoggedIn(true);
-  //   } else {
-  //     setLoggedIn(false);
-  //     // props.history.push("/customer/login")
-  //   }
-  // }
   return (
     <div className="customerHeader">
       <nav
@@ -720,12 +668,11 @@ export default function CustomerHeader(props) {
                 <span
                   className="userProfileSpan ml-1 mt-1"
                   onClick={() => {
-
                     const updateloginStatus = {
-                      LoginStatus: false
+                      LoginStatus: false,
                     };
-                  
-                   let customerID =   localStorage.getItem("CustomerID");
+
+                    let customerID = localStorage.getItem("CustomerID");
 
                     axios
                     .put("https://kaushal-rashmika-music.herokuapp.com/customer/loginStatus/" + customerID , updateloginStatus)
@@ -812,7 +759,6 @@ export default function CustomerHeader(props) {
               <div className="col-sm-6">
                 <h6 style={{ color: "#764A34" }}>
                   <strong>Email</strong> <u>{Customer.Email}</u>
-           
                 </h6>
               </div>
             </div>
@@ -845,7 +791,7 @@ export default function CustomerHeader(props) {
                       onChange={(e) => {
                         setFirstName(e.target.value);
                         setFirstNameError("");
-                        checkFNamePattern(e.target.value)
+                        checkFNamePattern(e.target.value);
                       }}
                       Value={Customer.FirstName}
                     />
@@ -924,7 +870,6 @@ export default function CustomerHeader(props) {
                       value={Gender}
                       required
                     >
-                     
                       <option>Male</option>
                       <option>Female</option>
                       <option>Other</option>
@@ -1004,7 +949,6 @@ export default function CustomerHeader(props) {
                       }}
                       required
                     >
-                     
                       <option value="Afganistan">Afghanistan</option>
                       <option value="Albania">Albania</option>
                       <option value="Algeria">Algeria</option>
@@ -1335,7 +1279,7 @@ export default function CustomerHeader(props) {
                     />
                     <span class="input-group-append bg-white border-left-0">
                       <span class="input-group-text bg-transparent">
-                        <div hidden={CurrenteyeSlashIcon2}>
+                        <div hidden={CurrenteyeSlashIcon2}  style={{ color: "#764A34" }}>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="20"
@@ -1541,9 +1485,7 @@ export default function CustomerHeader(props) {
                   <br />
                   <div className="col-md-9 col-sm-6 input-group-append">
                     <h6 style={{ color: "#764A34" }}>
-                  
                       <strong>Email</strong> <u>{Customer.Email}</u>
-                    
                     </h6>
                   </div>
                   <br />
@@ -1742,7 +1684,7 @@ export default function CustomerHeader(props) {
                         />
                         <span class="input-group-append bg-white border-left-0">
                           <span class="input-group-text bg-transparent">
-                            <div hidden={CurrenteyeSlashIcon}>
+                            <div hidden={CurrenteyeSlashIcon}  style={{ color: "#764A34" }}>
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="20"
@@ -1760,7 +1702,7 @@ export default function CustomerHeader(props) {
                                 <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z" />
                               </svg>
                             </div>
-                            <div hidden={CurrenteyeIcon}>
+                            <div hidden={CurrenteyeIcon}  style={{ color: "#764A34" }}>
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="20"
@@ -1831,10 +1773,11 @@ export default function CustomerHeader(props) {
                           onFocus={() => setPasswordFocused(true)}
                           onBlur={() => setPasswordFocused(false)}
                           onChange={(e) => {
-                           
                             SetPasswordError("");
-                            if(hasWhiteSpace(e.target.value) === true){
-                              SetPasswordError("Password Cannot Contain White Spaces");
+                            if (hasWhiteSpace(e.target.value) === true) {
+                              SetPasswordError(
+                                "Password Cannot Contain White Spaces"
+                              );
                             }
                             SetPassword(e.target.value);
                             setExtraError("");
@@ -1856,7 +1799,7 @@ export default function CustomerHeader(props) {
 
                         <span class="input-group-append bg-white border-left-0">
                           <span class="input-group-text bg-transparent">
-                            <div hidden={eyeSlashIcon}>
+                            <div hidden={eyeSlashIcon} style={{ color: "#764A34" }}>
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="20"
@@ -1874,7 +1817,7 @@ export default function CustomerHeader(props) {
                                 <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z" />
                               </svg>
                             </div>
-                            <div hidden={eyeIcon}>
+                            <div hidden={eyeIcon}  style={{ color: "#764A34" }}>
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="20"
@@ -1961,7 +1904,7 @@ export default function CustomerHeader(props) {
                         />
                         <span class="input-group-append bg-white border-left-0">
                           <span class="input-group-text bg-transparent">
-                            <div hidden={CeyeSlashIcon}>
+                            <div hidden={CeyeSlashIcon}  style={{ color: "#764A34" }}>
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="20"
@@ -1979,7 +1922,7 @@ export default function CustomerHeader(props) {
                                 <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z" />
                               </svg>
                             </div>
-                            <div hidden={CeyeIcon}>
+                            <div hidden={CeyeIcon}  style={{ color: "#764A34" }}>
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="20"

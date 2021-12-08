@@ -13,6 +13,7 @@ export default function MusicCart(props) {
   const [customer, setCustomer] = useState([]);
   let [coverIdArray, setCoverIdArray] = useState([]);
 
+  let status = 0;
   let tot = 0;
   let coverdetails = [];
   let covers = "";
@@ -23,7 +24,7 @@ export default function MusicCart(props) {
   let author = "";
   let id = "";
   let images = [];
-
+  let customerID = 1;
   let cover = {
     id,
     price,
@@ -33,6 +34,7 @@ export default function MusicCart(props) {
   };
 
   useEffect(async () => {
+ 
     document.getElementById("spinnerdiv").style.display = "block";
     document.getElementById("cartdiv").style.display = "none";
     setTotal("Loading...");
@@ -384,10 +386,6 @@ export default function MusicCart(props) {
     }
   }
 
-  function test() {
-    let purchasedcovers = customer.PurchasedCovers;
-    console.log(purchasedcovers);
-  }
   return (
     <div className="container">
       <div
@@ -405,10 +403,9 @@ export default function MusicCart(props) {
           My Shopping Carts
         </h2>
       </div>
-      {/* <button onClick={() => test()}>test</button> */}
 
       <br />
-      <div class="row">
+      <div class="row" style={{marginBottom:"77px"}}>
         <div id="spinnerdiv" class="col-lg-8 " style={{ display: "block" }}>
           <center>
             <div class=" justify-content-center">
@@ -438,7 +435,11 @@ export default function MusicCart(props) {
           id="cartdiv"
           style={{
             overflowY: "scroll",
+            height:"680px",
+            overflow:"auto",
+            overflowY:"hidden",
             display: "none",
+
           }}
         >
           <div>
@@ -516,6 +517,8 @@ export default function MusicCart(props) {
             ))}
           </div>
         </div>
+
+       
 
         {/* Cart Calculations */}
         <div class="col-lg-4  justify-content-end">
