@@ -146,6 +146,7 @@ function App() {
 
           {/* Testing routes  */}
           {/* <Route path = "/search" exact component = {Search2}/> */}
+          <Route path = "/searchBar" exact component = {SearchBar}/>
           
         </div>
       </Switch>
