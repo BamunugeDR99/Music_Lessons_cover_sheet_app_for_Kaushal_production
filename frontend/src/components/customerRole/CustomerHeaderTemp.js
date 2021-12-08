@@ -994,7 +994,7 @@ export default function CustomerHeader(props) {
                     </div>
                     <select
                       required
-                      Value={Country}
+                      value={Country}
                       className="form-control"
                       id="country"
                       name="country"
