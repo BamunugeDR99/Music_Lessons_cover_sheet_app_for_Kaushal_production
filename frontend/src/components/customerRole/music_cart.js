@@ -405,7 +405,7 @@ export default function MusicCart(props) {
           My Shopping Carts
         </h2>
       </div>
-      <button onClick={() => test()}>test</button>
+      {/* <button onClick={() => test()}>test</button> */}
 
       <br />
       <div class="row">
@@ -451,7 +451,7 @@ export default function MusicCart(props) {
                   <div class="col-md-4 mt-3 clsImg ">
                     <img
                       id={"temp" + index}
-                      src={"/images/imageplaceholder.png"}
+                      src={"/images/verticaLImageHolder.jpg"}
                       class="card-img-top embed-responsive-item"
                       alt="..."
                       // style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
@@ -463,11 +463,11 @@ export default function MusicCart(props) {
                       id={index}
                       src={
                         displayImages(post.images[0], index) ||
-                        "/images/Imageplaceholder.png"
+                        "/images/verticaLImageHolder.jpg"
                       }
                       onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src = "/images/imageplaceholder.png";
+                        e.target.src = "/images/verticaLImageHolder.jpg";
                       }}
                     />
                   </div>
