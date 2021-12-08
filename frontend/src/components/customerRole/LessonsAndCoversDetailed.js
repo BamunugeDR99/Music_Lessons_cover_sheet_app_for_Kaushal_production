@@ -39,6 +39,9 @@ export default function LessonsAndCoversDetailed(props) {
   const [coverStauts, setCoverStatus] = useState(false);
   const [purchased, setPurchased] = useState(false);
 
+  const [userlogin,setUserlogin] = useState(false);
+  const [requirementTxt,setRequirementTxt] = useState("");
+
   useEffect(() => {
     async function getCovers() {
       const CoverTempID = props.match.params.id;
@@ -78,7 +81,9 @@ export default function LessonsAndCoversDetailed(props) {
     }
 
     async function getCustomerDetails() {
-      await axios
+      if(localStorage.getItem("CustomerID")===null){
+      }else{
+        await axios
         .get(
           "https://kaushal-rashmika-music.herokuapp.com/customer/get/" +
             localStorage.getItem("CustomerID")
@@ -89,6 +94,8 @@ export default function LessonsAndCoversDetailed(props) {
         .catch((err) => {
           alert(err.message);
         });
+      }
+    
     }
 
     getCovers();
@@ -96,7 +103,13 @@ export default function LessonsAndCoversDetailed(props) {
   }, []);
 
   function setButtons(coverID) {
-    axios
+    if(localStorage.getItem("CustomerID") === null){
+      setPurchased(false);
+      setUserlogin(true);
+      setCoverStatus(true);
+      setRequirementTxt("Please login to your account to perform these tasks!")
+    }else{
+      axios
       .get(
         `http://localhost:8070/customer/checkPurchaseCovers/${localStorage.getItem(
           "CustomerID"
@@ -132,6 +145,8 @@ export default function LessonsAndCoversDetailed(props) {
       .catch((err) => {
         console.log(err);
       });
+    }
+   
   }
   function printInstruments(instruments) {
     for (let i = 0; i < instruments.length; i++) {
@@ -961,6 +976,7 @@ export default function LessonsAndCoversDetailed(props) {
                     <div hidden={purchased}>
                       <button
                         type="button"
+                        disabled = {userlogin}
                         class="btn btn-success btn-block rounded"
                         onClick={() => addToCart(covers._id)}
                       >
@@ -982,6 +998,7 @@ export default function LessonsAndCoversDetailed(props) {
                         {/* directly going to the payment gateway */}
                         <button
                           type="button"
+                          disabled = {userlogin}
                           id="payhere-payment"
                           class="btn btn-success btn-block rounded"
                           onClick={purchasingProcess}
@@ -989,6 +1006,8 @@ export default function LessonsAndCoversDetailed(props) {
                           Buy it now
                         </button>
                       </div>
+                      <br/>
+                      <p style = {{textAlign : "center",color : "#D0193A"}}><b>{requirementTxt}</b></p>
                     </div>
 
                     {/* feedback and preview  */}
@@ -1103,7 +1122,7 @@ export default function LessonsAndCoversDetailed(props) {
                   <img
                     hidden
                     id={index}
-                    src={displayImages(covers.PreviewPages[0], index)}
+                    src={displayImages(covers.PreviewPages[0], index) || "/images/imageplaceholder.png"}
                     onError={(e) => {
                       e.target.onerror = null;
                       e.target.src = "/images/imageplaceholder.png";
