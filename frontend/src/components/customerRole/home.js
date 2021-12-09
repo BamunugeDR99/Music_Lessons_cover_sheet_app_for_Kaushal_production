@@ -6,7 +6,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 
-import k from "../../images/pre.png";
+import image2 from "../../images/pre.png";
 import z from "../../images/s.png";
 
 
@@ -539,7 +539,7 @@ export default function Home(props) {
             </div>
             <div class="col-lg-4 d-flex flex-column align-items-center order-lg-2 order-1">
               <div class="features_image">
-                <img src={k} alt="" />
+                <img src={image2 } alt="" />
               </div>
             </div>
 
