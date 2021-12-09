@@ -59,9 +59,9 @@ useEffect(()=>{
         <div class="table-title">
         <div class="row text-center">
             <div class="col-7">
-              <h2 style={{color:'#764A34'}}><b>Customer Details</b></h2>
+              <h2 style={{color:'#764A34', fontWeight:"bold", fontSize:"35px"}}>Customer Details</h2>
             </div>
-            <div className="col-5">
+            <div className="col-5" style={{marginTop:"80px"}}>
               {/* <b> */}
                <div className="row text-center" >
                 {/* <div className="col-sm text-center" style={{border:'1px solid black', borderRadius:'5px', padding:'10px'}}>
@@ -79,6 +79,7 @@ useEffect(()=>{
               </div> */}
                <div className="col-sm">
                  {/* <b> */}
+                 <br/>
                     <div class="card" style={{border:'1px solid blue' , borderRadius:'10px '}}>
                       <div class="card-body  text-left">
                         {/* <div class="col-8"> */}
@@ -92,10 +93,13 @@ useEffect(()=>{
                           {/* <div class="col-4">
                          
                           </div> */}
+                          
                       </div>
                     </div>
                     </div>
+              
                     <div className="col-sm">
+                      <br/>
                     <div class="card" style={{border:'1px solid #279B14' , borderRadius:'10px '}}>
                       <div class="card-body  text-left">
                           <div className="row" >
@@ -115,7 +119,9 @@ useEffect(()=>{
     </div>
    
     <br/>
-            <table class="table table-striped table-bordered text-center" id="example">
+    <div style={{  overflowX: "auto" }}>
+      <br/>
+            <table class="table table-striped table-bordered text-center" id="example" >
             <thead class="thead-dark">
         
                 <tr>
@@ -155,6 +161,7 @@ useEffect(()=>{
                  })}
             </tbody>
             </table>
+            </div>
 
 </div>
 
