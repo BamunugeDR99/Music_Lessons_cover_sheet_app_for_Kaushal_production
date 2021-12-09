@@ -52,7 +52,10 @@ const shoppingCartRouter = require("./routes/shoppingCarts.js");
 app.use("/shoppingCart",shoppingCartRouter); 
 
 const TestCustomerRouter = require("./routes/Testcustomers.js");
-app.use("/testcustomer",TestCustomerRouter )
+app.use("/testcustomer",TestCustomerRouter );
+
+const TestOrderRouter = require("./routes/testOrders.js");
+app.use("/testOrder",TestOrderRouter );
 
 app.listen(PORT, () => {
   console.log(`Server is up and running on PORT ${PORT}`);
