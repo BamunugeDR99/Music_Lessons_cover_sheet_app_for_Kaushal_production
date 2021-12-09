@@ -23,6 +23,7 @@ export default function DashBoard() {
   const [fromValue, setFromValue] = useState("");
   const [toValue, setToValue] = useState("");
   const [error, setError] = useState("");
+  const [error2, setError2] = useState("");
   const [totalIncome, setTotalIncome] = useState("");
   let [tablediv, setTablediv] = useState();
   let [spinner, setspinner] = useState(true);
@@ -187,6 +188,8 @@ export default function DashBoard() {
       await data.map((post) => (totaltot = totaltot + Number(post.TotalPrice)));
       setTotalIncome(totaltot);
       setError("");
+    } else {
+      setTotalIncome("0");
     }
   }
 
@@ -201,6 +204,8 @@ export default function DashBoard() {
       setTotal(tot);
       // console.log(tot);
       setError("");
+    } else {
+      setError2("No Data available");
     }
   }
 
@@ -464,6 +469,9 @@ export default function DashBoard() {
         </div>
       </div>
       <hr />
+      <h4 class="text-center" style={{ color: "red" }}>
+        <strong>{error2}</strong>
+      </h4>
       <div id="spinnerdiv" hidden={spinner}>
         <center>
           <div className=" justify-content-center">
