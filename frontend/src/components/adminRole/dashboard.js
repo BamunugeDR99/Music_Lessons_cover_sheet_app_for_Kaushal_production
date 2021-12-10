@@ -398,7 +398,7 @@ export default function DashBoard() {
   }
 
   return (
-    <div>
+    <div  style={{overflowX:"hidden", minHeight:"100vh", marginBottom:"40px", marginTop:"40px"}}>
       <br />
       {/* {console.log(selectedCovers)} */}
       <div className="row">
@@ -490,7 +490,7 @@ export default function DashBoard() {
         className="container"
         id="maindiv"
         hidden={main}
-        style={{ overflowX: "scroll" }}
+        style={{  overflowX:"hidden" }}
       >
         <div className="row">
           <div className="col-md-4">
@@ -538,7 +538,7 @@ export default function DashBoard() {
         <h4 style={{ color: "red" }}>
           <strong>{error}</strong>
         </h4>
-        <div style={{ overflowY: "scroll", height: "500px", width: "100%" }}>
+        <div style={{ overflowX:"hidden",  overflowY: "scroll", overflow:"auto", overflowY:"hidden", height: "500px", width: "100%"}}>
           <table
             id="example"
             class="table table-striped table-bordered text-center"

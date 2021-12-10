@@ -5,7 +5,16 @@ export default function Footer(props) {
     <footer
       class="page-footer font-small "
       style={{
-        backgroundColor: "#764A34"
+        backgroundColor: "#764A34",
+        
+        position:"relative",
+        bottom:"0",
+      
+        marginBottom:"0px",
+        width:"100%",
+      
+
+        
       }}
     >
       <div class="container">

@@ -290,8 +290,7 @@ export default function AdminLogin(props) {
           </div>
         </div>
       </main>
-      <br />
-      <br />
+     
 
       <Modal show={modalOpenForLoading} size="md">
         <Modal.Header></Modal.Header>

@@ -302,7 +302,7 @@ export default function MusicCoverPage(props) {
   }
 
   return (
-    <div>
+    <div style={{overflowX:"hidden"}}>
       <br />
       <div className="">
         <center>
@@ -310,7 +310,7 @@ export default function MusicCoverPage(props) {
             <input
               type="text"
               class="form-control"
-              placeholder="Search Music Covers"
+              placeholder="Search Music Technics & Lessons"
               onChange={(e) => searchByName(e.target.value)}
             />
             <div class="input-group-append">
@@ -334,13 +334,13 @@ export default function MusicCoverPage(props) {
       <div class="">
         <div className="row ">
           {/* left side of the page */}
-          <div className="col-md-1"></div>
-          <div className="col-md-3">
+         
+          <div className="col-md-4" style={{paddingLeft:"25px", paddingRight:"25px"}}>
             <br />
 
             <div
               className="list-group"
-              style={{ maxHeight: "30%", overflowY: "scroll" }}
+              style={{ height: "280px", overflowY: "scroll", overflow:"auto", overflowY:"hidden" }}
             >
               <a
                 id="bufferlink"
@@ -408,12 +408,14 @@ export default function MusicCoverPage(props) {
                   </div>
                 </div>
               </div>
+
+              <br/>
               <div className="row">
                 <br />
-                <h4 style={{ color: "#764A34" }}>
-                  <strong>
-                    <center>Most Downloaded Classical Guitar Cover</center>
-                  </strong>
+                <h4 style={{ color: "#764A34", fontSize:"20px", paddingLeft:"40px",paddingRight:"40px",fontWeight:"bold" }}>
+                 
+                    <center>Most Downloaded Classical Guitar Technic/Lesson</center>
+                 
                 </h4>
               </div>
               <center>
@@ -461,8 +463,8 @@ export default function MusicCoverPage(props) {
           </div>
           {/* right side of the page */}
           <div className="col-md-8">
-            <h4 style={{ color: "#764A34" }}>
-              <strong>Classical Guitar Covers - {categorytext}</strong>
+            <h4 style={{ color: "#764A34", fontSize:"20px", paddingLeft:"40px", paddingRight:"40px", fontWeight:"bold"}}>
+             Classical Guitar Technics & Lessons - {categorytext}
             </h4>
             <br />
             <center>
@@ -516,7 +518,7 @@ export default function MusicCoverPage(props) {
                 <br />
               </div>
               <div
-                style={{ maxHeight: "870px", overflowY: "scroll" }}
+                style={{height:"890px",  overflowX:"hidden" , overflowY: "scroll", paddingRight:"20px", paddingLeft:"20px", overflow:"auto", overflowY:"hidden"}}
                 className="d-none d-sm-block"
               >
                 <div className="row">

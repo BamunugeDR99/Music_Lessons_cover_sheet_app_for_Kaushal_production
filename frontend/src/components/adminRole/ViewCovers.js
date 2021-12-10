@@ -508,7 +508,7 @@ export default function ViewCovers(props) {
   //   console.log(val.value)
   // }
   return (
-    <div>
+    <div style={{ minHeight:"100vh", paddingTop:"40px", marginBottom:"40px"}}>
       <div className="container-xxl">
         <h1 style={{ color: "#764A34", textAlign: "center" }}>
           <b>Covers Details</b>
