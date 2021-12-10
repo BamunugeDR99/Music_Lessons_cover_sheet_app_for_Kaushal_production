@@ -28,6 +28,7 @@ export default function DashBoard() {
   let [tablediv, setTablediv] = useState();
   let [spinner, setspinner] = useState(true);
   let [main, setmain] = useState(true);
+  let [searchhide, setSearchHide] = useState(true);
   let count = 1;
 
   let tableData = [];
@@ -67,6 +68,7 @@ export default function DashBoard() {
   useEffect(() => {
     setmain(true);
     setspinner(true);
+    setSearchHide(false);
 
     console.log(today);
     console.log(previousDay);
@@ -205,7 +207,8 @@ export default function DashBoard() {
       // console.log(tot);
       setError("");
     } else {
-      setError2("No Data available");
+      setError("");
+      setError2("No orders were made in the previous 2 days");
     }
   }
 
@@ -213,6 +216,7 @@ export default function DashBoard() {
     // console.log(customerid);
 
     // console.log(orderHolder);
+    setError2("");
 
     await axios
       .get(`http://localhost:8070/customer/get/${customerid}`)
@@ -288,6 +292,7 @@ export default function DashBoard() {
       }
       console.log("Lenth " + orderHolder.length);
       setmain(false);
+      setSearchHide(false);
       setspinner(true);
       // await sleep(10000);
       // console.log(tableData);
@@ -342,6 +347,7 @@ export default function DashBoard() {
     setToValue(toDate);
     if (fromDate != "" && toDate != "") {
       setmain(true);
+      setSearchHide(true);
       setspinner(false);
 
       await axios
@@ -353,14 +359,16 @@ export default function DashBoard() {
             orderHolder = res.data;
             loadIncome(res.data);
             setmain(false);
+            setSearchHide(false);
             setspinner(true);
           } else {
             setError("No Data available");
-
+            setError2("");
             setTablediv();
             setTotal("0");
 
             setmain(false);
+            setSearchHide(false);
             setspinner(true);
           }
         })
@@ -379,6 +387,7 @@ export default function DashBoard() {
     setToValue("");
     setFromValue("");
     setmain(true);
+    setSearchHide(true);
     setspinner(false);
     axios
       .get(`http://localhost:8070/order/getbyyear/${previousDay}/${today}`)
@@ -389,6 +398,7 @@ export default function DashBoard() {
         loadIncome(res.data);
 
         setmain(false);
+        setSearchHide(false);
         setspinner(true);
         // console.log(orderHolder);
       })
@@ -494,12 +504,8 @@ export default function DashBoard() {
         <br />
         <br />
       </div>
-      <div
-        className="container"
-        id="maindiv"
-        hidden={main}
-        style={{ overflowX: "scroll" }}
-      >
+      <div hidden={searchhide} className="container">
+        {" "}
         <div className="row">
           <div className="col-md-4">
             <div class="form-group">
@@ -543,6 +549,13 @@ export default function DashBoard() {
             </button>
           </div>
         </div>
+      </div>
+      <div
+        className="container"
+        id="maindiv"
+        hidden={main}
+        style={{ overflowX: "scroll" }}
+      >
         <h4 style={{ color: "red" }}>
           <strong>{error}</strong>
         </h4>
