@@ -138,7 +138,7 @@ export default function ViewCovers(props) {
     let status = "";
     console.log(id)
     await axios
-      .get("http://localhost:8070/covers/getOneCover/" + id)
+      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getOneCover/" + id)
       .then((res) => {
         let content = "";
        // console.log(res.data)
