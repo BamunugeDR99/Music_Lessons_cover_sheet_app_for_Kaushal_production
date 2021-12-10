@@ -392,15 +392,22 @@ export default function DashBoard() {
     axios
       .get(`https://kaushal-rashmika-music.herokuapp.com/order/getbyyear/${previousDay}/${today}`)
       .then((res) => {
-        setOrders(res.data);
-        // console.log(res.data);
-        orderHolder = res.data;
-        loadIncome(res.data);
+        if (res.data.length > 0) {
+          setOrders(res.data);
+          // console.log(res.data);
+          orderHolder = res.data;
+          loadIncome(res.data);
 
-        setmain(false);
-        setSearchHide(false);
-        setspinner(true);
-        // console.log(orderHolder);
+          setmain(false);
+          setSearchHide(false);
+          setspinner(true);
+          // console.log(orderHolder);
+        } else {
+          setError("");
+          setError2("No orders were made in the previous 2 days");
+          setspinner(true);
+          setSearchHide(false);
+        }
       })
       .catch((err) => {
         Swal.fire({
