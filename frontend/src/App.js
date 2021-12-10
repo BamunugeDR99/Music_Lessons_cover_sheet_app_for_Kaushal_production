@@ -47,6 +47,7 @@ import AdminVwCustomer from "./components/adminRole/AdminVwCustomer";
 import EditMainCategories from "./components/adminRole/EditMainCategory";
 import NotFound from "./components/NotFound";
 import IdelTimer from "./components/timeRelatedComponents/IdelTimer";
+import PurchasedCoverDetailedPage from "./components/customerRole/PurchasedCoverDetailedPage";
 
 function App() {
   return (
@@ -96,6 +97,11 @@ function App() {
             path="/customer/purchasehistory"
             exact
             component={PurchaseHistory}
+          />
+          <Route
+            path="/customer/mycover/:id"
+            exact
+            component={PurchasedCoverDetailedPage}
           />
           <Route path="/customer/shoppingcart" exact component={MusicCart} />
           <Route

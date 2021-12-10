@@ -317,7 +317,7 @@ export default function PurchaseHistory(props) {
                       type="button"
                       onClick={() => {
                         props.history.push(
-                          "/customer/detailedcover/" + post._id
+                          "/customer/mycover/" + post._id
                         );
                       }}
                     >
