@@ -105,7 +105,7 @@ const CoversSchema = new Schema({
     AddedDateAndTime : {
         type : Date,
         required: false,
-        default : new Date()
+        default : new Date().toLocaleString('en-US', {timeZone : 'Asia/Colombo'}),
     }
 
 })

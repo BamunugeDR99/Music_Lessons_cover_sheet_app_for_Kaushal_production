@@ -23,7 +23,7 @@ const orderSchema = new Schema({
   TransactionDateAndTime: {
     type: Date,
     required: true,
-    default: new Date(),
+    default: new Date().toLocaleString('en-US', {timeZone : 'Asia/Colombo'}),
   },
 
   ReferenceNo: {

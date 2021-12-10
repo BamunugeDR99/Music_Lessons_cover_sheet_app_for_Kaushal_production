@@ -66,7 +66,7 @@ router.route("/updateFeedback/:id").put(async (req, res) => {
     Comment,
     CustomerID,
     CoverID,
-    UpdatedDateAndTime: new Date(),
+    UpdatedDateAndTime: new Date().toLocaleString('en-US', {timeZone : 'Asia/Colombo'}),
   };
 
   const update = await Feedback.findByIdAndUpdate(feedbackId, updateFeedback)

@@ -16,7 +16,7 @@ const SubCategorySchema = new Schema({
   AddedDateAndTime: {
     type: Date,
     required: true,
-    default: new Date(),
+    default: new Date().toLocaleString('en-US', {timeZone : 'Asia/Colombo'}),
   },
 
   UpdatedDateAndTime: {

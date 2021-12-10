@@ -68,7 +68,7 @@ router.route("/update/:id").put(async (req, res) => {
     // Name,
     SubCategories,
     Status,
-    UpdatedDateAndTime: new Date(),
+    UpdatedDateAndTime: new Date().toLocaleString('en-US', {timeZone : 'Asia/Colombo'}),
     UpdatedUser,
     // AddedDateAndTime,
   };

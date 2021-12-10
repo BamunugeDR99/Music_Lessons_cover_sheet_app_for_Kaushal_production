@@ -194,7 +194,7 @@ router.route("/update/:id").put(async (req, res) => {
     CoverPdf,
     //FeedBackIDs,
     //Status,
-    UpdatedDateAndTime: new Date(),
+    UpdatedDateAndTime: new Date().toLocaleString('en-US', {timeZone : 'Asia/Colombo'}),
     UpdatedUser,
     // AddedDateAndTime,
   };

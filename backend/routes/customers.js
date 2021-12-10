@@ -136,6 +136,8 @@ router.route("/update/:id").put(async (req, res) => {
       Country,
       Username,
       Password,
+      UpdatedDateAndTime: new Date().toLocaleString('en-US', {timeZone : 'Asia/Colombo'})
+
       // FeedBackIDs,
       // OrderIDs,
       // LoginStatus,
