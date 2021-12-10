@@ -31,26 +31,31 @@ export default function PurchaseHistory(props) {
             if (res.data.length == 0) {
               setEmpty2("No purchased covers yet!");
             } else {
-              // else{
               const filter = res.data.filter(
                 (cus) => cus.CustomerID == localStorage.getItem("CustomerID")
               );
-              for (let i = 0; i < filter.length; i++) {
-                console.log(filter[i].TransactionDateAndTime);
-                setOrderDate(filter[i].TransactionDateAndTime);
-              }
+              if (filter.length == 0) {
+                setEmpty2("No purchased covers yet!");
+                setLoad(true);
+              } else {
+                for (let i = 0; i < filter.length; i++) {
+                  console.log(filter[i].TransactionDateAndTime);
+                  setOrderDate(filter[i].TransactionDateAndTime);
+                }
 
-              filter.map((post) => {
-                covers.push(post.CoverIDs);
-              });
-
-              axios
-                .get(
-                  "https://kaushal-rashmika-music.herokuapp.com/covers/getcovers"
-                )
-                .then((res) => {
-                  getSpecificOrderCoverDetiles(res.data);
+                filter.map((post) => {
+                  covers.push(post.CoverIDs);
                 });
+
+                axios
+                  .get(
+                    "https://kaushal-rashmika-music.herokuapp.com/covers/getcovers"
+                  )
+                  .then((res) => {
+                    // console.log(res.data)
+                    getSpecificOrderCoverDetiles(res.data);
+                  });
+              }
             }
           }
           // }
@@ -79,7 +84,7 @@ export default function PurchaseHistory(props) {
     }
     document.getElementById("total").innerHTML = TotalPrice;
     setLoad(true);
-    if(array2.length == 0){
+    if (array2.length == 0) {
       setEmpty2("No purchased covers yet!");
     }
     setCover(array2);
@@ -88,7 +93,7 @@ export default function PurchaseHistory(props) {
   function searchByName(val) {
     setLoad(false);
     setTotal("");
-    setEmpty("")
+    setEmpty("");
     let searchResult = [];
     axios
       .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
@@ -101,24 +106,31 @@ export default function PurchaseHistory(props) {
           covers.push(post.CoverIDs);
         });
 
-        axios
-          .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers")
-          .then((res) => {
-            searchResult = res.data.filter(
-              (post) =>
-                post.Title.toLowerCase().includes(val.toLowerCase()) ||
-                post.MainCategory.toLowerCase().includes(val.toLowerCase()) ||
-                post.SubCategory.toLowerCase().includes(val.toLowerCase())
-            );
-            getSpecificOrderCoverDetiles(searchResult);
-            if (searchResult.length == 0) {
-              setEmpty("No Covers available !");
-            } else {
-              setEmpty("");
-            }
+        if (filter.length == 0) {
+          setEmpty2("No purchased covers yet!");
+          setLoad(true);
+        } else {
+          axios
+            .get(
+              "https://kaushal-rashmika-music.herokuapp.com/covers/getcovers"
+            )
+            .then((res) => {
+              searchResult = res.data.filter(
+                (post) =>
+                  post.Title.toLowerCase().includes(val.toLowerCase()) ||
+                  post.MainCategory.toLowerCase().includes(val.toLowerCase()) ||
+                  post.SubCategory.toLowerCase().includes(val.toLowerCase())
+              );
+              getSpecificOrderCoverDetiles(searchResult);
+              if (searchResult.length == 0) {
+                setEmpty("No Covers available !");
+              } else {
+                setEmpty("");
+              }
 
-            setLoad(true);
-          });
+              setLoad(true);
+            });
+        }
       })
       .catch((err) => {
         alert(err);
@@ -316,9 +328,7 @@ export default function PurchaseHistory(props) {
                       className="btn btn-sm btn-block"
                       type="button"
                       onClick={() => {
-                        props.history.push(
-                          "/customer/mycover/" + post._id
-                        );
+                        props.history.push("/customer/mycover/" + post._id);
                       }}
                     >
                       View
