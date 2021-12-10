@@ -186,7 +186,7 @@ export default function PurchaseHistory(props) {
   // }
 
   return (
-    <div className="container" style={{minHeight:"100vh"}}>
+    <div className="container" style={{ minHeight: "100vh" }}>
       <br />
       <br />
 
@@ -279,7 +279,6 @@ export default function PurchaseHistory(props) {
                     e.target.onerror = null;
                     e.target.src = "/images/verticaLImageHolder.jpg";
                   }}
-                  // onClick={() => { previewImg(post.PreviewPages[0]); }}
                 />
               </div>
 
