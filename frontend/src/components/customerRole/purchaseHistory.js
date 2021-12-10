@@ -174,7 +174,7 @@ export default function PurchaseHistory(props) {
   // }
 
   return (
-    <div className="container">
+    <div className="container" style={{minHeight:"100vh"}}>
       <br />
       <br />
 
