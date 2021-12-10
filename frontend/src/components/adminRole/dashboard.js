@@ -554,7 +554,7 @@ export default function DashBoard() {
         className="container"
         id="maindiv"
         hidden={main}
-        style={{ overflowX: "scroll" }}
+        style={{ overflowX: "scroll" , overflowX:"hidden", overflow:"auto"}}
       >
         <h4 style={{ color: "red" }}>
           <strong>{error}</strong>
