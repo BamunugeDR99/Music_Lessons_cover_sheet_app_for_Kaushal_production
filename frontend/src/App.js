@@ -33,6 +33,8 @@ import SearchBar from "./components/testingComponents/searchBar";
 import TestLogin from "./components/testingComponents/LoginTest";
 import TestCustomerRegistration from "./components/testingComponents/RegisterTest";
 import JWTCustomerHeader from "./components/testingComponents/JWTTestHeader";
+import TestLessonsAndCoversDetailed from "./components/testingComponents/LessonsAndCoversDetailedTest";
+import TestCustomerUI from "./components/testingComponents/testCustomer";
 
 // import Search from "./components/testingComponents/search";
 
@@ -151,8 +153,9 @@ function App() {
           <Route path="/notfound" component={NotFound} />
 
           {/* Testing routes  */}
-          {/* <Route path = "/search" exact component = {Search2}/> */}
-          
+           <Route path = "/test" component = {JWTCustomerHeader}/>
+           <Route path = "/test/testLogin" exact component = {TestCustomerUI}/>
+           <Route path = "/test/testCoverDetails" exact component = {TestLessonsAndCoversDetailed}/>
         </div>
       </Switch>
     </Router>
