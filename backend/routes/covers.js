@@ -100,7 +100,6 @@ router.route("/getcovers").get((reg, res) => {
 
 //Get all active covers
 router.route("/getactive/").get(async (req, res) => {
-  let value = "Classical Guitar Covers";
   try {
     const result = await Covers.find({ Status: 1 });
     res.status(200).json(result);

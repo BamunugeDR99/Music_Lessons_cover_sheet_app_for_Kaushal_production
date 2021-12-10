@@ -51,28 +51,21 @@ export default function Home(props) {
   useEffect(async () => {
     function test() {
       axios
-        .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers")
+        .get("https://kaushal-rashmika-music.herokuapp.com/covers/getactive")
         .then((res) => {
-
-          const AcivatedCovers = res.data.filter(
-            (post) => post.Status === "1" 
-          );
-          getTop4Downloads(AcivatedCovers);
+          getTop4Downloads(res.data);
         })
         .catch((err) => {
-          console.log(err);
+          //console.log(err);
         });
     }
 
     function getData() {
       if (myOptions.length <= 0) {
         axios
-          .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers")
+          .get("https://kaushal-rashmika-music.herokuapp.com/covers/getactive")
           .then((res) => {
-            const AcivatedCovers = res.data.filter(
-              (post) => post.Status === "1" 
-            );
-            setCovers(AcivatedCovers);
+            setCovers(res.data);
             for (var i = 0; i < res.data.length; i++) {
               setValue(res.data);
               myOptions.push(res.data[i].Title);
@@ -115,7 +108,7 @@ export default function Home(props) {
   };
 
   const suggestedText = (value) => {
-    console.log(value);
+   // console.log(value);
     setSearchtext(value);
     setSuggest([]);
   };
@@ -124,7 +117,7 @@ export default function Home(props) {
 
   let getSuggestions = () => {
     {
-      console.log(suggest.length);
+     // console.log(suggest.length);
     }
     if (suggest.length === 0 && searchtext !== "" && !resfound) {
       return (
@@ -137,7 +130,7 @@ export default function Home(props) {
     return (
       (k = suggest.slice(0, 5)),
       // setSuggest(suggest.slice(0,5)),
-      console.log(k),
+     //console.log(k),
       (
         <ul
           style={{
