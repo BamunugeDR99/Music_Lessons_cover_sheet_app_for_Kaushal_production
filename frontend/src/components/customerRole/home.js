@@ -539,7 +539,7 @@ export default function Home(props) {
             </div>
             <div class="col-lg-4 d-flex flex-column align-items-center order-lg-2 order-1">
               <div class="features_image">
-                <img src={image2 } alt="" />
+                <img class="img-fluid" src={"/images/guitar-pictures-46320.png"} alt=""/>
               </div>
             </div>
 
