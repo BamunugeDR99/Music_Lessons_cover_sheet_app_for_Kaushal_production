@@ -490,6 +490,7 @@ export default function Home(props) {
         </div>
 
         {/* <div class="col-sm">
+        responsive youtube video
             <div class="embed-responsive embed-responsive-16by9">
                 <iframe 
                     class="embed-responsive-item" 
