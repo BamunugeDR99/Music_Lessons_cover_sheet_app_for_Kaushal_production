@@ -135,9 +135,9 @@ export default function CustomerFeedback(props) {
   }
 
   return (
-    <div className="container justify-content-center">
+    <div className="container justify-content-center"  style={{ minHeight:"100vh", paddingTop:"80px"}}>
   
-      <h1>FeedBack</h1>
+      <h1 style={{color:"#764A34 ", fontWeight:"bold"}}>FeedBack</h1>
 
       <h3>{`Cover Name : ${CoverName}`}</h3>
 
@@ -146,6 +146,9 @@ export default function CustomerFeedback(props) {
       <span class="sr-only">Loading...</span>
     </div>
     </center>
+
+    <div style={{  overflowX: "auto"}}>
+    <br/>
       <table className="table table-bordered display" id="example">
         <thead>
           <tr>
@@ -173,6 +176,7 @@ export default function CustomerFeedback(props) {
           })}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

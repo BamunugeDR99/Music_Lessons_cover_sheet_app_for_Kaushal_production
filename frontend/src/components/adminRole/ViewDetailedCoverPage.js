@@ -591,7 +591,7 @@ export default function ViewDetailedCoverPage(props) {
       });
   }
   return (
-    <div>
+    <div style={{minHeight:"100vh"}}>
       <div class="card container-xxl" style={{ border: "solid #764A34" }}>
         <div class="card-body">
           <div class="container">
