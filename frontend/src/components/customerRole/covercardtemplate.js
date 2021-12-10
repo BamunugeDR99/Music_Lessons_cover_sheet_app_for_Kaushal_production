@@ -12,7 +12,7 @@ export default function CoverTemplate(props) {
     await getDownloadURL(storageRef)
       .then((url) => {
         document.getElementById(index).src = url;
-        document.getElementById(index).hidden = false;
+       // document.getElementById(index).hidden = false;
       })
       .catch((err) => {
         // ErrorhandlingTxt("Reccomended covers are not available right now!");

@@ -319,8 +319,8 @@ export default function LessonsAndCoversDetailed(props) {
       await getDownloadURL(storageRef)
         .then((url) => {
           document.getElementById(index).src = url;
-          document.getElementById("temp" + index).hidden = true;
-          document.getElementById(index).hidden = false;
+         // document.getElementById("temp" + index).hidden = true;
+          //document.getElementById(index).hidden = false;
         })
         .catch((err) => {
           setErrorhandlingTxt(
@@ -1112,7 +1112,7 @@ export default function LessonsAndCoversDetailed(props) {
                     marginLeft: "15px",
                   }}
                 >
-                  <img
+                  {/* <img
                     id={"temp" + index}
                     src={"/images/imageplaceholder.png"}
                     class="card-img-top"
@@ -1121,9 +1121,8 @@ export default function LessonsAndCoversDetailed(props) {
                       borderRadius: "15px 15px 0px 0px",
                       height: "350px",
                     }}
-                  />
+                  /> */}
                   <img
-                    hidden
                     id={index}
                     src={displayImages(covers.PreviewPages[0], index) || "/images/imageplaceholder.png"}
                     onError={(e) => {

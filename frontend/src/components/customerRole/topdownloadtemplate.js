@@ -11,8 +11,8 @@ export default function TopDownloadTemplate(props) {
     await getDownloadURL(storageRef)
       .then((url) => {
         document.getElementById("image").src = url;
-        document.getElementById("temp").hidden = true;
-        document.getElementById("image").hidden = false;
+       // document.getElementById("temp").hidden = true;
+        //document.getElementById("image").hidden = false;
 
         console.log(url);
       })
@@ -34,15 +34,15 @@ export default function TopDownloadTemplate(props) {
             marginLeft: "15px",
           }}
         >
-          <img
+          {/* <img
             id="temp"
             src={"/images/imageplaceholder.png"}
             class="card-img-top"
             alt="..."
             style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
-          />
+          /> */}
           <img
-            hidden
+           
             id="image"
             onError={(e) => {
               e.target.onerror = null;
