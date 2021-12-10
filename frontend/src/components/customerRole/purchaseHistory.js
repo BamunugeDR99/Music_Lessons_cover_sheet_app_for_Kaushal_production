@@ -9,7 +9,7 @@ export default function PurchaseHistory(props) {
   const [cover, setCover] = useState([]);
   const [searchValue, setSearchvalue] = useState([]);
   const [noData, setNoData] = useState([]);
-  const [empty, setEmpty] = useState([]);
+  const [empty, setEmpty] = useState("");
   const [empty2, setEmpty2] = useState([]);
   const [orderDate, setOrderDate] = useState([]);
   const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
@@ -23,33 +23,37 @@ export default function PurchaseHistory(props) {
 
   useEffect(() => {
     function getCovers() {
-      setLoad(false)
+      setLoad(false);
       axios
         .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
-        .then((res) => {
-          if(res.data.length!==0){
-            setEmpty2("No purchased covers yet!")
-          }
-          // else{
-          const filter = res.data.filter(
-            (cus) => cus.CustomerID == localStorage.getItem("CustomerID")
-          );
-          for(let i=0; i<filter.length;i++){
-            console.log(filter[i].TransactionDateAndTime);
-            setOrderDate(filter[i].TransactionDateAndTime)
-          }
-         
+        .then(
+          (res) => {
+            if (res.data.length == 0) {
+              setEmpty2("No purchased covers yet!");
+            } else {
+              // else{
+              const filter = res.data.filter(
+                (cus) => cus.CustomerID == localStorage.getItem("CustomerID")
+              );
+              for (let i = 0; i < filter.length; i++) {
+                console.log(filter[i].TransactionDateAndTime);
+                setOrderDate(filter[i].TransactionDateAndTime);
+              }
 
-          filter.map((post) => {
-            covers.push(post.CoverIDs);
-          });
+              filter.map((post) => {
+                covers.push(post.CoverIDs);
+              });
 
-          axios.get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers").then((res) => {
-            getSpecificOrderCoverDetiles(res.data);
-          });
-          setLoad(true)
+              axios
+                .get(
+                  "https://kaushal-rashmika-music.herokuapp.com/covers/getcovers"
+                )
+                .then((res) => {
+                  getSpecificOrderCoverDetiles(res.data);
+                });
+            }
           }
-    // }
+          // }
         )
         .catch((err) => {
           alert(err);
@@ -74,11 +78,17 @@ export default function PurchaseHistory(props) {
       }
     }
     document.getElementById("total").innerHTML = TotalPrice;
+    setLoad(true);
+    if(array2.length == 0){
+      setEmpty2("No purchased covers yet!");
+    }
     setCover(array2);
   }
 
   function searchByName(val) {
+    setLoad(false);
     setTotal("");
+    setEmpty("")
     let searchResult = [];
     axios
       .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
@@ -86,25 +96,29 @@ export default function PurchaseHistory(props) {
         console.log(res.data);
         const filter = res.data.filter(
           (cus) => cus.CustomerID == localStorage.getItem("CustomerID")
-          );
+        );
         filter.map((post) => {
           covers.push(post.CoverIDs);
         });
 
-        axios.get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers").then((res) => {
-          searchResult = res.data.filter(
-            (post) =>
-              post.Title.toLowerCase().includes(val.toLowerCase()) ||
-              post.MainCategory.toLowerCase().includes(val.toLowerCase()) ||
-              post.SubCategory.toLowerCase().includes(val.toLowerCase())
-          );
-          getSpecificOrderCoverDetiles(searchResult);
-          if (searchResult.length == 0) {
-            setEmpty("No Covers available !");
-          } else {
-            setEmpty("");
-          }
-        });
+        axios
+          .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers")
+          .then((res) => {
+            searchResult = res.data.filter(
+              (post) =>
+                post.Title.toLowerCase().includes(val.toLowerCase()) ||
+                post.MainCategory.toLowerCase().includes(val.toLowerCase()) ||
+                post.SubCategory.toLowerCase().includes(val.toLowerCase())
+            );
+            getSpecificOrderCoverDetiles(searchResult);
+            if (searchResult.length == 0) {
+              setEmpty("No Covers available !");
+            } else {
+              setEmpty("");
+            }
+
+            setLoad(true);
+          });
       })
       .catch((err) => {
         alert(err);
@@ -112,16 +126,15 @@ export default function PurchaseHistory(props) {
   }
 
   async function displayImages(coverImageName, index) {
-      const storageRef = ref(storage, `PreviewImages/${coverImageName}`);
-      await getDownloadURL(storageRef)
-        .then((url) => {
-          document.getElementById(index).src = url;
-        })
-        .catch((err) => {
-        });
-    }
+    const storageRef = ref(storage, `PreviewImages/${coverImageName}`);
+    await getDownloadURL(storageRef)
+      .then((url) => {
+        document.getElementById(index).src = url;
+      })
+      .catch((err) => {});
+  }
 
-function previewPdf(covername) {
+  function previewPdf(covername) {
     setModalOpenForPdf(true);
     const storageRef = ref(storage, `Covers(PDF)/${covername}`);
     getDownloadURL(storageRef)
@@ -160,14 +173,12 @@ function previewPdf(covername) {
   //     });
   // }
 
-
   return (
     <div className="container">
       <br />
       <br />
-        
+
       <div className="row">
-        
         <div className="col-sm">
           <h3 style={{ color: "#764A34" }}>
             {" "}
@@ -181,11 +192,24 @@ function previewPdf(covername) {
           <div className="row">
             <div className="col-md-1"></div>
             <div class="col-md-10 input-group">
-              <input type="text" class="form-control" placeholder="Search Music Covers"
-                onChange={(e) => {searchByName(e.target.value); }}/>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Search Music Covers"
+                onChange={(e) => {
+                  searchByName(e.target.value);
+                }}
+              />
               <div class="input-group-append">
                 <button className="input-group-text">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"fill="currentColor" class="bi bi-search"viewBox="0 0 16 16" >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-search"
+                    viewBox="0 0 16 16"
+                  >
                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                   </svg>
                 </button>
@@ -196,16 +220,13 @@ function previewPdf(covername) {
           <br />
         </div>
         <div className="col-sm text-right">
-          
           <h6>
             <b>No of purchases : {noData}</b>
           </h6>
           <h6 style={{ display: "inline" }}>
             <b>Total : $ </b>
           </h6>
-          <h6 id="total" style={{ display: "inline" }}>
-
-          </h6>
+          <h6 id="total" style={{ display: "inline" }}></h6>
         </div>
       </div>
       <br />
@@ -213,29 +234,41 @@ function previewPdf(covername) {
         <h3 style={{ color: "#D0193A " }}>{empty}</h3>
         <h3 style={{ color: "#D0193A " }}>{empty2}</h3>
         <div class="spinner-border" id="loadingBar" hidden={load} role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
+          <span class="sr-only">Loading...</span>
+        </div>
       </center>
       <br />
-      
-      {cover.map((post,index) => {
+
+      {cover.map((post, index) => {
         TotalPrice += Number(post.Price);
         return (
-
-          <div className="card p-3"
-            style={{boxShadow: "10px 10px 6px -6px #aaaaaa", borderRadius: "10px", width: "90%", margin: "auto",
-              marginBottom: "10px", border: "2px solid sienna", }} >
+          <div
+            className="card p-3"
+            style={{
+              boxShadow: "10px 10px 6px -6px #aaaaaa",
+              borderRadius: "10px",
+              width: "90%",
+              margin: "auto",
+              marginBottom: "10px",
+              border: "2px solid sienna",
+            }}
+          >
             <div className="row" style={{ width: "100%", margin: "auto" }}>
               <div className="col-sm text-center">
-
-
-                <img id={index}
+                <img
+                  id={index}
                   class="rounded"
-                  style={{ width: "100%", margin: "auto", }}
-                  src={ displayImages(post.PreviewPages[0], index) || "/images/imageplaceholder.png" }
-                  onError={(e)=>{e.target.onerror = null; e.target.src="/images/verticaLImageHolder.jpg"}}
+                  style={{ width: "100%", margin: "auto" }}
+                  src={
+                    displayImages(post.PreviewPages[0], index) ||
+                    "/images/imageplaceholder.png"
+                  }
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/images/verticaLImageHolder.jpg";
+                  }}
                   // onClick={() => { previewImg(post.PreviewPages[0]); }}
-                  />
+                />
               </div>
 
               <div className="col-sm">
@@ -258,20 +291,36 @@ function previewPdf(covername) {
                 <div className="row">
                   <div className="col-sm">
                     <button
-                      style={{borderRadius: "25px",backgroundColor: "#D0193A", color: "white",}}
+                      style={{
+                        borderRadius: "25px",
+                        backgroundColor: "#D0193A",
+                        color: "white",
+                      }}
                       className="btn btn-sm btn-block"
                       type="button"
-                      onClick={() => { previewPdf(post.CoverPdf); }} >
+                      onClick={() => {
+                        previewPdf(post.CoverPdf);
+                      }}
+                    >
                       Download
                     </button>
                     <br />
                   </div>
                   <div className="col-sm">
                     <button
-                      style={{ borderRadius: "25px", backgroundColor: "#279B14",color: "white",}}
+                      style={{
+                        borderRadius: "25px",
+                        backgroundColor: "#279B14",
+                        color: "white",
+                      }}
                       className="btn btn-sm btn-block"
                       type="button"
-                      onClick={() => { props.history.push("/customer/detailedcover/" + post._id) }} >
+                      onClick={() => {
+                        props.history.push(
+                          "/customer/detailedcover/" + post._id
+                        );
+                      }}
+                    >
                       View
                     </button>
                     <br />
@@ -279,12 +328,14 @@ function previewPdf(covername) {
                 </div>
               </div>
               <br />
-              <div className="col-sm "
-                style={{ backgroundColor: "white", lineHeight: "2em" }} >
+              <div
+                className="col-sm "
+                style={{ backgroundColor: "white", lineHeight: "2em" }}
+              >
                 <div className="text-right">
                   <span class="text-center">{orderDate}</span>
                 </div>
-                <br/>
+                <br />
                 <span style={{ color: " #764A34" }}>
                   Original Artist&ensp;:
                 </span>
@@ -344,7 +395,5 @@ function previewPdf(covername) {
         <Modal.Footer></Modal.Footer>
       </Modal> */}
     </div>
-
-    
   );
 }

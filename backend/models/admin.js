@@ -28,11 +28,11 @@ const adminSchema = new Schema({
     required: true,
   },
 
-  LoginStatus : {
-    type : Boolean,
-    required : true,
-    default : false
+  MerchantID : {
+    type : Number,
+    required : false
   }
+
 });
 
 const Admin = mongoose.model("Admin", adminSchema);

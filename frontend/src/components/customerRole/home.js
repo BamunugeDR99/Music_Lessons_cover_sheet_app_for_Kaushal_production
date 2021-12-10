@@ -53,7 +53,11 @@ export default function Home(props) {
       axios
         .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers")
         .then((res) => {
-          getTop4Downloads(res.data);
+
+          const AcivatedCovers = res.data.filter(
+            (post) => post.Status === "1" 
+          );
+          getTop4Downloads(AcivatedCovers);
         })
         .catch((err) => {
           console.log(err);
@@ -65,7 +69,10 @@ export default function Home(props) {
         axios
           .get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers")
           .then((res) => {
-            setCovers(res.data);
+            const AcivatedCovers = res.data.filter(
+              (post) => post.Status === "1" 
+            );
+            setCovers(AcivatedCovers);
             for (var i = 0; i < res.data.length; i++) {
               setValue(res.data);
               myOptions.push(res.data[i].Title);

@@ -245,6 +245,25 @@ router.route("/get/:id").get(async (req, res) => {
     });
 });
 
+router.route("/getOneCover/:id").get(async (req, res) => {
+  let coverID = req.params.id;
+  const covers = await Covers.findById(coverID)
+    .then((coverss) => {
+      if(coverss.Status === "1" || coverss.Status === "2"){
+        res.json(coverss);
+
+      }else{
+        res.json(null)
+      }
+    })
+    .catch((err) => {
+      console.log(err.message);
+      res
+        .status(500)
+        .send({ status: "Error with get user", error: err.message });
+    });
+});
+
 router.route("/StatusUpdate/:id").put(async (req, res) => {
   let coverID = req.params.id;
   const { Status } = req.body;

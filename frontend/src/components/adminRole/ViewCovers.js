@@ -136,10 +136,12 @@ export default function ViewCovers(props) {
   }
   async function changeCoverStatus(id, index) {
     let status = "";
+    console.log(id)
     await axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/covers/get/" + id)
+      .get("http://localhost:8070/covers/getOneCover/" + id)
       .then((res) => {
         let content = "";
+       // console.log(res.data)
         status = res.data.Status;
         if (status == "1") {
           // deactivating
@@ -200,6 +202,7 @@ export default function ViewCovers(props) {
             }
           })
           .catch((err) => {
+            //console.log(err)
             Swal.fire({
               icon: "error",
               title: "Oops...",
@@ -210,7 +213,9 @@ export default function ViewCovers(props) {
         getAllClassicalGuitarCovers();
       })
       .catch((err) => {
+        console.log(err)
         Swal.fire({
+
           icon: "error",
           title: "Oops...",
           text: "Something went wrong!",

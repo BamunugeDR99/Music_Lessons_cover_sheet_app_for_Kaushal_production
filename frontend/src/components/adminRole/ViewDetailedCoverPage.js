@@ -865,6 +865,7 @@ export default function ViewDetailedCoverPage(props) {
                       style={{ backgroundColor: "#3b5998" }}
                       href={covers.FacebookLink}
                       role="button"
+                      target = "_blank"
                     >
                       <i
                         class="fab fa-facebook-f fa-3x"

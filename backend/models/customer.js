@@ -44,14 +44,6 @@ const customerSchema = new Schema({
     required: true,
   },
 
-  FeedBackIDs: [
-    {
-      type: String,
-      required: true,
-      default: null,
-    },
-  ],
-
   PurchasedCovers : [
     {
       type: String,
