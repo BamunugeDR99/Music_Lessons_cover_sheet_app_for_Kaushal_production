@@ -57,6 +57,9 @@ app.use("/testcustomer",TestCustomerRouter );
 const TestOrderRouter = require("./routes/testOrders.js");
 app.use("/testOrder",TestOrderRouter );
 
+const JWTTestRouter = require("./routes/jwtTestRoute.js");
+app.use("/jwtTest",JWTTestRouter );
+
 app.listen(PORT, () => {
   console.log(`Server is up and running on PORT ${PORT}`);
 });

@@ -17,9 +17,9 @@ export default function TestCustomerUI(props){
   //Refresh token function
   const refreshTokens = async () => {
     try {
-
+                 console.log("Refresh Tokens running");
                   //Get the Cokkies
-                  let accessToken = Cookies.get("access");
+   
                   let refreshToken = Cookies.get("refresh");
 
                   console.log(refreshToken);
@@ -61,7 +61,7 @@ export default function TestCustomerUI(props){
   axiosJWT.interceptors.request.use(
     async (config) => {
       let currentDate = new Date();
-
+      console.log("Interceptor running");
 
             //Get the Cokkies
             let accessToken = Cookies.get("access");
@@ -100,9 +100,12 @@ export default function TestCustomerUI(props){
     try {
       const res = await axios.post("https://kaushal-rashmika-music.herokuapp.com/testcustomer/loginCustomer", { Username, Password });
       setUser(res.data);
+        console.log(res.data);
+
                    console.log(res.data.accessToken);
                   console.log(res.data.refreshToken);
-              
+                  console.log(res.data._id);
+            localStorage.setItem('CustomerID', res.data._id);
             //Setting the Cookies
             Cookies.set("access", res.data.accessToken);
             Cookies.set("refresh",res.data.refreshToken);
