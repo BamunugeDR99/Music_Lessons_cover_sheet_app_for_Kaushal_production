@@ -23,10 +23,12 @@ export default function DashBoard() {
   const [fromValue, setFromValue] = useState("");
   const [toValue, setToValue] = useState("");
   const [error, setError] = useState("");
+  const [error2, setError2] = useState("");
   const [totalIncome, setTotalIncome] = useState("");
   let [tablediv, setTablediv] = useState();
   let [spinner, setspinner] = useState(true);
   let [main, setmain] = useState(true);
+  let [searchhide, setSearchHide] = useState(true);
   let count = 1;
 
   let tableData = [];
@@ -66,6 +68,7 @@ export default function DashBoard() {
   useEffect(() => {
     setmain(true);
     setspinner(true);
+    setSearchHide(false);
 
     console.log(today);
     console.log(previousDay);
@@ -187,6 +190,8 @@ export default function DashBoard() {
       await data.map((post) => (totaltot = totaltot + Number(post.TotalPrice)));
       setTotalIncome(totaltot);
       setError("");
+    } else {
+      setTotalIncome("0");
     }
   }
 
@@ -201,6 +206,9 @@ export default function DashBoard() {
       setTotal(tot);
       // console.log(tot);
       setError("");
+    } else {
+      setError("");
+      setError2("No orders were made in the previous 2 days");
     }
   }
 
@@ -208,6 +216,7 @@ export default function DashBoard() {
     // console.log(customerid);
 
     // console.log(orderHolder);
+    setError2("");
 
     await axios
       .get(`https://kaushal-rashmika-music.herokuapp.com/customer/get/${customerid}`)
@@ -283,6 +292,7 @@ export default function DashBoard() {
       }
       console.log("Lenth " + orderHolder.length);
       setmain(false);
+      setSearchHide(false);
       setspinner(true);
       // await sleep(10000);
       // console.log(tableData);
@@ -337,6 +347,7 @@ export default function DashBoard() {
     setToValue(toDate);
     if (fromDate != "" && toDate != "") {
       setmain(true);
+      setSearchHide(true);
       setspinner(false);
 
       await axios
@@ -348,14 +359,16 @@ export default function DashBoard() {
             orderHolder = res.data;
             loadIncome(res.data);
             setmain(false);
+            setSearchHide(false);
             setspinner(true);
           } else {
             setError("No Data available");
-
+            setError2("");
             setTablediv();
             setTotal("0");
 
             setmain(false);
+            setSearchHide(false);
             setspinner(true);
           }
         })
@@ -374,6 +387,7 @@ export default function DashBoard() {
     setToValue("");
     setFromValue("");
     setmain(true);
+    setSearchHide(true);
     setspinner(false);
     axios
       .get(`https://kaushal-rashmika-music.herokuapp.com/order/getbyyear/${previousDay}/${today}`)
@@ -384,6 +398,7 @@ export default function DashBoard() {
         loadIncome(res.data);
 
         setmain(false);
+        setSearchHide(false);
         setspinner(true);
         // console.log(orderHolder);
       })
@@ -464,6 +479,9 @@ export default function DashBoard() {
         </div>
       </div>
       <hr />
+      <h4 class="text-center" style={{ color: "red" }}>
+        <strong>{error2}</strong>
+      </h4>
       <div id="spinnerdiv" hidden={spinner}>
         <center>
           <div className=" justify-content-center">
@@ -486,12 +504,8 @@ export default function DashBoard() {
         <br />
         <br />
       </div>
-      <div
-        className="container"
-        id="maindiv"
-        hidden={main}
-        style={{  overflowX:"hidden" }}
-      >
+      <div hidden={searchhide} className="container">
+        {" "}
         <div className="row">
           <div className="col-md-4">
             <div class="form-group">
@@ -535,6 +549,13 @@ export default function DashBoard() {
             </button>
           </div>
         </div>
+      </div>
+      <div
+        className="container"
+        id="maindiv"
+        hidden={main}
+        style={{ overflowX: "scroll" }}
+      >
         <h4 style={{ color: "red" }}>
           <strong>{error}</strong>
         </h4>
