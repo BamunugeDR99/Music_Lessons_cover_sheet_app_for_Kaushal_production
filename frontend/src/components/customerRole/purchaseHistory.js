@@ -27,22 +27,27 @@ export default function PurchaseHistory(props) {
       axios
         .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
         .then((res) => {
-          if(res.data.length!==0){
-            setEmpty2("No purchased covers yet!")
-          }
-          // else{
+         
           const filter = res.data.filter(
             (cus) => cus.CustomerID == localStorage.getItem("CustomerID")
           );
-          for(let i=0; i<filter.length;i++){
-            console.log(filter[i].TransactionDateAndTime);
-            setOrderDate(filter[i].TransactionDateAndTime)
-          }
-         
 
-          filter.map((post) => {
-            covers.push(post.CoverIDs);
-          });
+           if(filter==null){
+            setEmpty2("No purchased covers yet!")
+          }
+          else{
+            setEmpty2("")
+          }
+            for(let i=0; i<filter.length;i++){
+              console.log(filter[i].TransactionDateAndTime);
+              setOrderDate(filter[i].TransactionDateAndTime)
+            }
+           
+            filter.map((post) => {
+              covers.push(post.CoverIDs);
+            });
+          
+         
 
           axios.get("https://kaushal-rashmika-music.herokuapp.com/covers/getcovers").then((res) => {
             getSpecificOrderCoverDetiles(res.data);
@@ -233,7 +238,22 @@ function previewPdf(covername) {
                   class="rounded"
                   style={{ width: "100%", margin: "auto", }}
                   src={ displayImages(post.PreviewPages[0], index) || "/images/imageplaceholder.png" }
-                  onError={(e)=>{e.target.onerror = null; e.target.src="/images/verticaLImageHolder.jpg"}}
+                  // onError={(e)=>{e.target.onerror = null; e.target.src="/images/verticaLImageHolder.jpg"}}
+
+                //   onError={e => { 
+                //     if(this.state.imageLoadError) { 
+                //         this.setState({
+                //             imageLoadError: false
+                //         });
+                //         e.target.src = '/images/verticaLImageHolder.jpg';
+                //     }
+                // }}
+
+                onError={(e)=>{ if (e.target.src !== "/images/verticaLImageHolder.jpg") 
+                { e.target.onerror = null; e.target.src="/images/verticaLImageHolder.jpg"; } }}
+
+
+                  // loader="/images/verticaLImageHolder.jpg"
                   // onClick={() => { previewImg(post.PreviewPages[0]); }}
                   />
               </div>
