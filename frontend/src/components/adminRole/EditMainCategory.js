@@ -276,7 +276,7 @@ export default function EditMainCategories(props) {
 
   return (
      
-<div className="container">
+<div className="container" style={{ minHeight:"100vh"}}>
 {/* <div class="spinner-border" role="status">
   <span class="sr-only">Loading...</span>
 </div> */}

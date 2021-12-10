@@ -398,7 +398,7 @@ export default function DashBoard() {
   }
 
   return (
-    <div style={{overflowX:"hidden"}}>
+    <div  style={{overflowX:"hidden", minHeight:"100vh", marginBottom:"40px", marginTop:"40px"}}>
       <br />
       {/* {console.log(selectedCovers)} */}
       <div className="row">

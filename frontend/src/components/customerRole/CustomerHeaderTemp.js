@@ -1671,10 +1671,13 @@ export default function CustomerHeader(props) {
                           style={{
                             borderTopLeftRadius: "5px",
                             borderBottomLeftRadius: "5px",
+                           
                           }}
                           class="form-control border-right-0"
                           id="CurrentPassword"
+                          autocomplete="new-password"
                           placeholder="Current Password*"
+                         
                           onChange={(e) => {
                             SetCurrentPassword2(e.target.value);
                             SetCurrentPasswordError2("");
