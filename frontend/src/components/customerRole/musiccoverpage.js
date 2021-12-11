@@ -7,6 +7,9 @@ import InputRange from "react-input-range";
 import { data, post } from "jquery";
 import "react-multi-carousel/lib/styles.css";
 import Carousel from "react-multi-carousel";
+import { storage } from "../../Configurations/firebaseConfigurations";
+import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
+
 
 export default function MusicCoverPage(props) {
   const [modelOpen, setmodelOpen] = useState(false);
@@ -301,6 +304,24 @@ export default function MusicCoverPage(props) {
       });
   }
 
+  async function displayImages() {
+    if (populerimage != null) {
+      const storageRef = ref(storage, `PreviewImages/${populerimage}`);
+
+      await getDownloadURL(storageRef)
+        .then((url) => {
+          document.getElementById("image").src = url;
+          // document.getElementById("temp").hidden = true;
+          //document.getElementById("image").hidden = false;
+
+          console.log(url);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
+
   return (
     <div style={{ overflowX: "hidden" }}>
       <br />
@@ -334,13 +355,21 @@ export default function MusicCoverPage(props) {
       <div class="">
         <div className="row ">
           {/* left side of the page */}
-         
-          <div className="col-md-4" style={{paddingLeft:"25px", paddingRight:"25px"}}>
+
+          <div
+            className="col-md-4"
+            style={{ paddingLeft: "25px", paddingRight: "25px" }}
+          >
             <br />
 
             <div
               className="list-group"
-              style={{ height: "280px", overflowY: "scroll", overflow:"auto", overflowY:"hidden" }}
+              style={{
+                height: "280px",
+                overflowY: "scroll",
+                overflow: "auto",
+                overflowY: "hidden",
+              }}
             >
               <a
                 id="bufferlink"
@@ -376,7 +405,7 @@ export default function MusicCoverPage(props) {
             </div>
             <div>
               <br />
-              <div className="row" style={{textAlign:"center"}}>
+              <div className="row" style={{ textAlign: "center" }}>
                 <div className="col-md-5">
                   <label>Price Range </label>
                   <label>({pricerange} - 200+) </label>
@@ -407,15 +436,20 @@ export default function MusicCoverPage(props) {
                     />
                   </div>
                 </div>
-
               </div>
-              <br/>
+              <br />
               <div className="row">
                 <br />
-                <h4 style={{ color: "#764A34", fontSize:"20px", paddingLeft:"40px",paddingRight:"40px",fontWeight:"bold"}}>
-                
-                    <center>Most Downloaded Classical Guitar Cover</center>
-                 
+                <h4
+                  style={{
+                    color: "#764A34",
+                    fontSize: "20px",
+                    paddingLeft: "40px",
+                    paddingRight: "40px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  <center>Most Downloaded Classical Guitar Cover</center>
                 </h4>
               </div>
               <center>
@@ -447,7 +481,50 @@ export default function MusicCoverPage(props) {
                   );
                 }}
               >
-                <TopDownloadTemplate
+                <div
+                  class="card"
+                  style={{
+                    boxShadow: "rgba(0, 0, 0, 0.25) 0px 25px 50px -12px",
+                    borderRadius: "15px",
+                    marginRight: "15px",
+                    marginLeft: "15px",
+                  }}
+                >
+                  {/* <img
+            id="temp"
+            src={"/images/imageplaceholder.png"}
+            class="card-img-top"
+            alt="..."
+            style={{ borderRadius: "15px 15px 0px 0px", height: "350px" }}
+          /> */}
+                  <img
+                    id="image"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/images/imageplaceholder.png";
+                    }}
+                    src={displayImages()}
+                    class="card-img-top"
+                    alt="..."
+                    style={{
+                      borderRadius: "15px 15px 0px 0px",
+                      height: "350px",
+                    }}
+                  />
+                  <div class="card-body">
+                    <h4 class="card-title" style={{ fontWeight: "bold" }}>
+                      {populercover.Title}
+                    </h4>
+                    <h5>{populercover.OriginalArtistName}</h5>
+                    {/* <h5>{props.category}</h5> */}
+                    <h5>{populercover.MainCategory}</h5>
+                    <h5>{populercover.SubCategory}</h5>
+                    <h5 style={{ float: "right", color: "#764A34" }}>
+                      <b>US$ {populercover.Price}</b>
+                    </h5>
+                  </div>
+                </div>
+                {/* <TopDownloadTemplate
                   title={populercover.Title}
                   price={populercover.Price}
                   artist={populercover.OriginalArtistName}
@@ -455,7 +532,7 @@ export default function MusicCoverPage(props) {
                   subcat={populercover.SubCategory}
                   id="topcover"
                   imageName={populerimage}
-                />
+                /> */}
               </div>
             </div>
 
@@ -463,7 +540,15 @@ export default function MusicCoverPage(props) {
           </div>
           {/* right side of the page */}
           <div className="col-md-8">
-            <h4 style={{ color: "#764A34",fontSize:"20px", paddingLeft:"40px", paddingRight:"40px", fontWeight:"bold"}}>
+            <h4
+              style={{
+                color: "#764A34",
+                fontSize: "20px",
+                paddingLeft: "40px",
+                paddingRight: "40px",
+                fontWeight: "bold",
+              }}
+            >
               Classical Guitar Covers - {categorytext}
             </h4>
             <br />
@@ -518,7 +603,15 @@ export default function MusicCoverPage(props) {
                 <br />
               </div>
               <div
-                style={{ height:"890px",  overflowX:"hidden" , overflowY: "scroll", paddingRight:"20px", paddingLeft:"20px", overflow:"auto", overflowY:"hidden"}}
+                style={{
+                  height: "890px",
+                  overflowX: "hidden",
+                  overflowY: "scroll",
+                  paddingRight: "20px",
+                  paddingLeft: "20px",
+                  overflow: "auto",
+                  overflowY: "hidden",
+                }}
                 className="d-none d-sm-block"
               >
                 <div className="row">
