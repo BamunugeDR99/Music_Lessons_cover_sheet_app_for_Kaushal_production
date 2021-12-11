@@ -53,8 +53,8 @@ export default function DashBoard() {
     .toISOString()
     .split("T")[0];
 
-  console.log(today);
-  console.log(previousDay);
+  // console.log(today);
+  // console.log(previousDay);
 
   let dataholder = {
     name,
@@ -67,13 +67,15 @@ export default function DashBoard() {
 
   useEffect(() => {
     setmain(true);
-    setspinner(true);
-    setSearchHide(false);
+    setspinner(false);
+    setSearchHide(true);
 
-    console.log(today);
-    console.log(previousDay);
+    // console.log(today);
+    // console.log(previousDay);
     axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getactivecovers")
+      .get(
+        "https://kaushal-rashmika-music.herokuapp.com/covers/getactivecovers"
+      )
       .then((res) => {
         setCoverLength(res.data.length);
         // calculateDownloads(res.data);
@@ -88,7 +90,9 @@ export default function DashBoard() {
       });
 
     axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/covers/getactiveExcercices")
+      .get(
+        "https://kaushal-rashmika-music.herokuapp.com/covers/getactiveExcercices"
+      )
       .then((res) => {
         setExcercisesLength(res.data.length);
         // calculateDownloads(res.data);
@@ -118,7 +122,9 @@ export default function DashBoard() {
       });
 
     axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/feedback/getAllFeedback")
+      .get(
+        "https://kaushal-rashmika-music.herokuapp.com/feedback/getAllFeedback"
+      )
       .then((res) => {
         setFeedbackLength(res.data.length);
       })
@@ -146,7 +152,9 @@ export default function DashBoard() {
       });
 
     axios
-      .get(`https://kaushal-rashmika-music.herokuapp.com/order/getbyyear/${previousDay}/${today}`)
+      .get(
+        `https://kaushal-rashmika-music.herokuapp.com/order/getbyyear/${previousDay}/${today}`
+      )
       .then((res) => {
         setOrders(res.data);
         // console.log(res.data);
@@ -196,7 +204,7 @@ export default function DashBoard() {
   }
 
   async function loadIncome(data) {
-    console.log(data.length);
+    // console.log(data.length);
     if (data.length > 0) {
       await data.map(
         (post) => (
@@ -209,6 +217,8 @@ export default function DashBoard() {
     } else {
       setError("");
       setError2("No orders were made in the previous 2 days");
+      setspinner(true);
+      setSearchHide(false);
     }
   }
 
@@ -219,7 +229,9 @@ export default function DashBoard() {
     setError2("");
 
     await axios
-      .get(`https://kaushal-rashmika-music.herokuapp.com/customer/get/${customerid}`)
+      .get(
+        `https://kaushal-rashmika-music.herokuapp.com/customer/get/${customerid}`
+      )
       .then((res) => {
         // console.log(res.data);
         customerdetails.push(res.data);
@@ -306,7 +318,9 @@ export default function DashBoard() {
       setmodelOpen(true);
 
       await axios
-        .get(`https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbyid/${data[k]}`)
+        .get(
+          `https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbyid/${data[k]}`
+        )
         .then((res) => {
           document.getElementById("spinnerdiv2").style.display = "block";
           document.getElementById("modeldiv").style.display = "none";
@@ -343,15 +357,26 @@ export default function DashBoard() {
   }
 
   async function searchByDate(fromDate, toDate) {
+    let b = new Date(toDate);
+
     setFromValue(fromDate);
-    setToValue(toDate);
+
+    if (toDate != "") {
+      var exactDate = new Date(b.valueOf() + 1000 * 60 * 60 * 24)
+        .toISOString()
+        .split("T")[0];
+      console.log(exactDate);
+      setToValue(toDate);
+    }
     if (fromDate != "" && toDate != "") {
       setmain(true);
       setSearchHide(true);
       setspinner(false);
 
       await axios
-        .get(`https://kaushal-rashmika-music.herokuapp.com/order/getbyyear/${fromDate}/${toDate}`)
+        .get(
+          `https://kaushal-rashmika-music.herokuapp.com/order/getbyyear/${fromDate}/${exactDate}`
+        )
         .then((res) => {
           if (res.data.length > 0) {
             setOrders(res.data);
@@ -390,7 +415,9 @@ export default function DashBoard() {
     setSearchHide(true);
     setspinner(false);
     axios
-      .get(`https://kaushal-rashmika-music.herokuapp.com/order/getbyyear/${previousDay}/${today}`)
+      .get(
+        `https://kaushal-rashmika-music.herokuapp.com/order/getbyyear/${previousDay}/${today}`
+      )
       .then((res) => {
         if (res.data.length > 0) {
           setOrders(res.data);
@@ -420,7 +447,14 @@ export default function DashBoard() {
   }
 
   return (
-    <div  style={{overflowX:"hidden", minHeight:"100vh", marginBottom:"40px", marginTop:"40px"}}>
+    <div
+      style={{
+        overflowX: "hidden",
+        minHeight: "100vh",
+        marginBottom: "40px",
+        marginTop: "40px",
+      }}
+    >
       <br />
       {/* {console.log(selectedCovers)} */}
       <div className="row">
@@ -561,12 +595,21 @@ export default function DashBoard() {
         className="container"
         id="maindiv"
         hidden={main}
-        style={{ overflowX: "scroll" , overflowX:"hidden", overflow:"auto"}}
+        style={{ overflowX: "scroll", overflowX: "hidden", overflow: "auto" }}
       >
         <h4 style={{ color: "red" }}>
           <strong>{error}</strong>
         </h4>
-        <div style={{ overflowX:"hidden",  overflowY: "scroll", overflow:"auto", overflowY:"hidden", height: "500px", width: "100%"}}>
+        <div
+          style={{
+            overflowX: "hidden",
+            overflowY: "scroll",
+            overflow: "auto",
+            overflowY: "hidden",
+            height: "500px",
+            width: "100%",
+          }}
+        >
           <table
             id="example"
             class="table table-striped table-bordered text-center"
