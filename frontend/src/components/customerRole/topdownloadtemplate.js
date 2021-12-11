@@ -4,7 +4,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 
 export default function TopDownloadTemplate(props) {
   async function displayImages() {
-    if (props.imagename != null) {
+   // if (props.imagename != null) {
       const storageRef = ref(storage, `PreviewImages/${props.imageName}`);
  
 
@@ -19,7 +19,7 @@ export default function TopDownloadTemplate(props) {
       .catch((err) => {
         console.log(err);
       });
-    }
+    //}
   }
 
   return (
