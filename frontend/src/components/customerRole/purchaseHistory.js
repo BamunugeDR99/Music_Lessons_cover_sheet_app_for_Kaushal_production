@@ -91,6 +91,7 @@ export default function PurchaseHistory(props) {
     setLoad(false);
     setTotal("");
     setEmpty("");
+    setEmpty2("");
     let searchResult = [];
     axios
       .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
@@ -104,7 +105,7 @@ export default function PurchaseHistory(props) {
         });
 
         if (filter.length == 0) {
-          setEmpty2("No purchased covers yet!");
+          setEmpty("No covers available!");
           setLoad(true);
         } else {
           axios
@@ -124,6 +125,7 @@ export default function PurchaseHistory(props) {
                 setEmpty2("")
               } else {
                 setEmpty("");
+                setEmpty2("");
               }
 
               setLoad(true);
