@@ -69,6 +69,7 @@ export default function PurchaseHistory(props) {
   function getSpecificOrderCoverDetiles(allCovers) {
     setTotal(0);
     setNoData(0);
+    setEmpty("")
     TotalPrice = 0;
     for (let j = 0; j < allCovers.length; j++) {
       for (let i = 0; i < covers[0].length; i++) {
