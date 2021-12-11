@@ -573,10 +573,10 @@ export default function CustomerHeader(props) {
             to="/customer/home"
             style={{ textDecoration: "none", color: "#764A34" }}
           >
-            <font style={{ fontFamily: "Old Standard TT", fontSize: "18px" }}>
+            <font style={{ fontFamily: "Old Standard TT", fontSize: "18px"}}>
               <b>KAUSHAL</b>
             </font>{" "}
-            <font style={{ fontFamily: "Old Standard TT", fontSize: "18px" }}>
+            <font style={{ fontFamily: "Old Standard TT", fontSize: "18px"}}>
               RASHMIKA
             </font>
           </Link>

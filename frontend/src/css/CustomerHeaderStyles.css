@@ -12,7 +12,7 @@
   
 }
 .customerHeader #classicalHeader:hover{
-    opacity: 20%;
+    opacity: 80%;
 }
 
 .customerHeader #SearchBtn{
@@ -25,7 +25,7 @@
 }
 
 .customerHeader #Sicons:hover{
-    opacity: 20%;
+    opacity: 80%;
 }
 
 .customerHeader #myAccount{
@@ -38,6 +38,6 @@
 }
 
 .customerHeader .userProfileSpan:hover{
-    opacity: 20%;
+    opacity: 80%;
 }
 

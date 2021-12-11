@@ -39,7 +39,7 @@ export default function PurchaseHistory(props) {
                 setLoad(true);
               } else {
                 for (let i = 0; i < filter.length; i++) {
-                  console.log(filter[i].TransactionDateAndTime);
+                  //console.log(filter[i].TransactionDateAndTime);
                   setOrderDate(filter[i].TransactionDateAndTime);
                 }
 

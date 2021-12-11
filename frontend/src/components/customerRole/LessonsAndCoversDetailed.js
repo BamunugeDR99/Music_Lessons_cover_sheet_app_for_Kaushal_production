@@ -407,6 +407,7 @@ export default function LessonsAndCoversDetailed(props) {
       email: customer.Email,
       phone: customer.ContactNumber,
       address: "",
+      status_code : "",
       city: "",
       country: customer.Country,
       delivery_address: "",
@@ -419,16 +420,17 @@ export default function LessonsAndCoversDetailed(props) {
     // Show the payhere.js popup, when "PayHere Pay" is clicked
 
     window.payhere.startPayment(payment);
+
   }
 
   // Called when user completed the payment.
 
-  //It can be a successful payment or failure (problem)
-  window.payhere.onCompleted = function onCompleted(orderId) {
-    postOrder(orderId);
-
-    //Note: validate the payment and show success or failure page to the customer
-  };
+      //It can be a successful payment or failure (problem)
+      window.payhere.onCompleted = function onCompleted(orderId) {
+       postOrder(orderId);
+       // console.log(payment)
+        //Note: validate the payment and show success or failure page to the customer
+      };
 
   // Called when error happens when initializing payment such as invalid parameters
   window.payhere.onError = function onError(error) {
