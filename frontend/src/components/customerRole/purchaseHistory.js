@@ -25,26 +25,27 @@ export default function PurchaseHistory(props) {
     function getCovers() {
       setLoad(false);
       axios
-        .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
+        .get("https://kaushal-rashmika-music.herokuapp.com/customer/getAll")
         .then(
           (res) => {
-            if (res.data.length == 0) {
-              setEmpty2("No purchased covers yet!");
-            } else {
+           
               const filter = res.data.filter(
-                (cus) => cus.CustomerID == localStorage.getItem("CustomerID")
+                (cus) => cus._id == localStorage.getItem("CustomerID")
               );
-              if (filter.length == 0) {
+
+              if (filter[0].PurchasedCovers.length==null) {
                 setEmpty2("No purchased covers yet!");
-                setLoad(true);
               } else {
+                setEmpty2("")
+              }
+             
                 for (let i = 0; i < filter.length; i++) {
                   //console.log(filter[i].TransactionDateAndTime);
                   setOrderDate(filter[i].TransactionDateAndTime);
-                }
+                
 
                 filter.map((post) => {
-                  covers.push(post.CoverIDs);
+                  covers.push(post.PurchasedCovers);
                 });
 
                 axios
@@ -52,13 +53,11 @@ export default function PurchaseHistory(props) {
                     "https://kaushal-rashmika-music.herokuapp.com/covers/getcovers"
                   )
                   .then((res) => {
-                    // console.log(res.data)
                     getSpecificOrderCoverDetiles(res.data);
                   });
-              }
+              
             }
           }
-          // }
         )
         .catch((err) => {
           alert(err);
@@ -75,7 +74,7 @@ export default function PurchaseHistory(props) {
       for (let i = 0; i < covers[0].length; i++) {
         if (covers[0][i] == allCovers[j]._id) {
           array2.push(allCovers[j]);
-          console.log(allCovers[j].Price);
+          console.log(covers[0][i]);
           TotalPrice = TotalPrice + Number(allCovers[j].Price);
           setTotal(total + Number(allCovers[j].Price));
           setNoData(array2.length);
@@ -167,23 +166,6 @@ export default function PurchaseHistory(props) {
       });
   }
 
-  // function previewImg(PreviewPages) {
-  //   setModalOpenForImage(true);
-  //   const storageRef = ref(storage, `PreviewImages/${PreviewPages}`);
-  //   getDownloadURL(storageRef)
-  //     .then((url) => {
-  //       window.location.href = url;
-  //       setModalOpenForImage(false)
-  //     })
-  //     .catch(() => {
-  //       setModalOpenForImage(false);
-  //       Swal.fire({
-  //         icon: "error",
-  //         title: "Oops...",
-  //         text: "Something went wrong!",
-  //       });
-  //     });
-  // }
 
   return (
     <div className="container" style={{ minHeight: "100vh" }}>
@@ -383,26 +365,6 @@ export default function PurchaseHistory(props) {
         </Modal.Body>
         <Modal.Footer></Modal.Footer>
       </Modal>
-
-      {/* <Modal show={modalOpenForImage} size="lg">
-        <Modal.Header></Modal.Header>
-
-        <Modal.Body>
-            <div class="d-flex justify-content-center">
-            <div class="spinner-grow text-dark" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
-          </div>
-          <br />
-          <h1 style={{ textAlign: "center", color: "#764A34" }}>
-            Please wait!
-          </h1>
-          <h4 style={{ textAlign: "center", color: "#764A34" }}>
-            Image is Loading...
-          </h4>
-        </Modal.Body>
-        <Modal.Footer></Modal.Footer>
-      </Modal> */}
     </div>
   );
 }
