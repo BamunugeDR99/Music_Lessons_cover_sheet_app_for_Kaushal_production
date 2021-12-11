@@ -4,6 +4,10 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
+
+
+
+
 export default function DiscoverMoreCovers(props) {
   const [recommenedCovers, setRecommendedCovers] = useState([]);
   const [ErrorhandlingTxt, setErrorhandlingTxt] = useState("");
@@ -95,6 +99,7 @@ export default function DiscoverMoreCovers(props) {
           return (
             <div
               class="card"
+            
               style={{
                 boxShadow: "rgba(0, 0, 0, 0.25) 0px 25px 50px -12px",
                 borderRadius: "15px",

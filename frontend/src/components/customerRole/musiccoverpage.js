@@ -518,7 +518,7 @@ export default function MusicCoverPage(props) {
                 <br />
               </div>
               <div
-                style={{ height:"890px",  overflowX:"hidden" , overflowY: "scroll", paddingRight:"20px", paddingLeft:"20px", overflow:"auto", overflowY:"hidden"}}
+                style={{ height:"990px",  overflowX:"hidden" , overflowY: "scroll", paddingRight:"20px", paddingLeft:"20px", overflow:"auto", overflowY:"hidden"}}
                 className="d-none d-sm-block"
               >
                 <div className="row">

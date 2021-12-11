@@ -138,6 +138,7 @@ export default function CustomerFeedback(props) {
     <div className="container justify-content-center"  style={{ minHeight:"100vh", paddingTop:"80px"}}>
   
       <h1 style={{color:"#764A34 ", fontWeight:"bold"}}>FeedBack</h1>
+      <br/><br/><br/>
 
       <h3>{`Cover Name : ${CoverName}`}</h3>
 
@@ -150,7 +151,7 @@ export default function CustomerFeedback(props) {
     <div style={{  overflowX: "auto"}}>
     <br/>
       <table className="table table-bordered display" id="example">
-        <thead>
+        <thead  class="thead-dark">
           <tr>
             <th scope="col" style={{ fontWeight: "bold" }}>
               Customer Name

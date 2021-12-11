@@ -8,6 +8,8 @@ import { data, post } from "jquery";
 import "react-multi-carousel/lib/styles.css";
 import Carousel from "react-multi-carousel";
 
+
+
 export default function MusicCoverPage(props) {
   const [modelOpen, setmodelOpen] = useState(false);
   const [pricerange, setPriceRange] = useState("0");
@@ -52,6 +54,13 @@ export default function MusicCoverPage(props) {
     tablet: {
       breakpoint: { max: 1024, min: 464 },
       items: 2,
+    },
+
+    ipad: {
+
+    breakpoint: { max: 1024, min: 768},
+    items: 2,
+
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },
@@ -489,7 +498,8 @@ export default function MusicCoverPage(props) {
             </div>{" "}
             <span hidden={coverdiv} id="coverdiv">
               <div className="d-block d-sm-none">
-                <Carousel responsive={responsive}>
+
+                <Carousel responsive={responsive} >
                   {covers.map((post, index) => (
                     // console.log(post.PreviewPages[0]),
                     <div
@@ -518,7 +528,7 @@ export default function MusicCoverPage(props) {
                 <br />
               </div>
               <div
-                style={{height:"890px",  overflowX:"hidden" , overflowY: "scroll", paddingRight:"20px", paddingLeft:"20px", overflow:"auto", overflowY:"hidden"}}
+                style={{height:"1020px",  overflowX:"hidden" , overflowY: "scroll", paddingRight:"20px", paddingLeft:"20px", overflow:"auto", overflowY:"hidden"}}
                 className="d-none d-sm-block"
               >
                 <div className="row">

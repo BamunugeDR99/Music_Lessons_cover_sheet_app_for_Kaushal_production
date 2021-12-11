@@ -314,7 +314,7 @@ export default function EditMainCategories(props) {
     <div class="table-title text-left">
           <div class="row ">
               <div class="col">
-                  <h4>
+                  <h4 style={{color:"#764A34", fontWeight:"bold"}}>
                 Classical Guitar Covers
                 </h4></div>
           </div>
@@ -323,8 +323,8 @@ export default function EditMainCategories(props) {
             <table class="table table-striped table-bordered">
               <thead>
                   <tr>
-                    <th scope="col">Sub Categories</th>
-                    <th scope="col">Action</th>
+                    <th scope="col" style={{fontWeight:"bold"}}>Sub Categories</th>
+                    <th scope="col" style={{fontWeight:"bold"}}>Action</th>
                   </tr>
               </thead>
             <tbody>
@@ -362,7 +362,7 @@ export default function EditMainCategories(props) {
 <div class="table-title text-left">
       <div class="row ">
           <div class="col">
-              <h4>
+              <h4 style={{color:"#764A34", fontWeight:"bold"}}>
               Guitar Technics & Lessons
          
             </h4></div>
@@ -374,8 +374,8 @@ export default function EditMainCategories(props) {
         <thead>
             
             <tr>
-            <th scope="col">Sub Categories</th>
-            <th scope="col">Action</th>
+            <th scope="col" style={{fontWeight:"bold"}}>Sub Categories</th>
+            <th scope="col" style={{fontWeight:"bold"}}>Action</th>
             </tr>
         </thead>
         <tbody>

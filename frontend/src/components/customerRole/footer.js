@@ -9,7 +9,7 @@ export default function Footer(props) {
         
         position:"relative",
         bottom:"0",
-      
+        marginTop:"40px",
         marginBottom:"0px",
         width:"100%",
       

@@ -26,8 +26,7 @@ export default function CoverTemplate(props) {
           style={{
             boxShadow: "rgba(0, 0, 0, 0.25) 0px 25px 50px -12px",
             borderRadius: "15px",
-            marginRight: "15px",
-            marginLeft: "15px",
+           
           }}
         >
  
