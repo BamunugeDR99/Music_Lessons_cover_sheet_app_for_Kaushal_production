@@ -629,7 +629,6 @@ export default function CustomerHeader(props) {
               Search
             </button>
           </form> */}
-
           <div>
             {loggedin == true ? (
               <div>
