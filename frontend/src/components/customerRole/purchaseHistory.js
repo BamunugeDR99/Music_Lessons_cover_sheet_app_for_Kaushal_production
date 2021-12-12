@@ -40,9 +40,6 @@ export default function PurchaseHistory(props) {
               }
              
                 for (let i = 0; i < filter.length; i++) {
-                  //console.log(filter[i].TransactionDateAndTime);
-                  setOrderDate(filter[i].TransactionDateAndTime);
-                
 
                 filter.map((post) => {
                   covers.push(post.PurchasedCovers);
@@ -94,13 +91,20 @@ export default function PurchaseHistory(props) {
       }
       setCover(array2);
     }
-  
+    document.getElementById("total").innerHTML = TotalPrice;
+    setLoad(true);
+    if (array2.length == 0) {
+      setEmpty2("No purchased covers yet!");
+      // setEmpty2("")
+    }
+    setCover(array2);
   }
 
   function searchByName(val) {
     setLoad(false);
     setTotal("");
     setEmpty("");
+    setEmpty2("");
     let searchResult = [];
     axios
       .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
@@ -116,7 +120,7 @@ export default function PurchaseHistory(props) {
         console.log(filter)
 
         if (filter.length == 0) {
-          setEmpty2("No purchased covers yet!");
+          setEmpty("No covers available!");
           setLoad(true);
         } else {
           axios
@@ -132,7 +136,13 @@ export default function PurchaseHistory(props) {
               );
               console.log(searchResult)
               getSpecificOrderCoverDetiles(searchResult);
-             
+              if (searchResult.length == 0) {
+                setEmpty("No Covers available !");
+                setEmpty2("")
+              } else {
+                setEmpty("");
+                setEmpty2("");
+              }
 
               //setLoad(true);
             });
@@ -330,9 +340,6 @@ export default function PurchaseHistory(props) {
                 className="col-sm "
                 style={{ backgroundColor: "white", lineHeight: "2em" }}
               >
-                <div className="text-right">
-                  <span class="text-center">{orderDate}</span>
-                </div>
                 <br />
                 <span style={{ color: " #764A34" }}>
                   Original Artist&ensp;:
