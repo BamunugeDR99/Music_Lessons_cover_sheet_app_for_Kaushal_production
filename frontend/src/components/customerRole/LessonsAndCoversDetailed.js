@@ -59,12 +59,15 @@ export default function LessonsAndCoversDetailed(props) {
             displayPreviewImageSlider(res.data.PreviewPages);
             MainCategoryForRec = res.data.MainCategory;
             SubCategoryForRec = res.data.SubCategory;
-            setTempYoutubeLink(res.data.YoutubeLink);
+           // setTempYoutubeLink(res.data.YoutubeLink);
             getRecommendCovers(
               res.data.MainCategory,
               res.data.SubCategory,
               res.data._id
             );
+     document.getElementById("youtubeVideo").src =res.data.YoutubeLink;
+
+           //checkYouTubeVideoLink(res.data.YoutubeLink)
             setButtons(res.data._id);
           } else {
             props.history.push("/notfound");
@@ -81,6 +84,8 @@ export default function LessonsAndCoversDetailed(props) {
 
         });
     }
+
+ 
 
     async function getCustomerDetails() {
       if(localStorage.getItem("CustomerID")===null || sessionStorage.getItem('IsAuth') === null){
@@ -709,11 +714,11 @@ export default function LessonsAndCoversDetailed(props) {
   }
 
 
-  function checkYouTubeVideoLink(){
-    if(TempYoutubeLink.toLowerCase().includes("https://www.youtube.com/embed/")){
-      return covers.YoutubeLink
+  function checkYouTubeVideoLink(youtubeVideo){
+    if(youtubeVideo.toLowerCase().includes("https://www.youtube.com/embed/")){
+     document.getElementById("youtubeVideo").src = youtubeVideo;
     }else{
-      return "https://www.youtube.com/embed/"
+      document.getElementById("youtubeVideo").src = "https://www.youtube.com/embed/";
     }
   }
   return (
@@ -817,9 +822,9 @@ export default function LessonsAndCoversDetailed(props) {
                 {/* youtube video  */}
                 <div class="embed-responsive embed-responsive-16by9">
                     <iframe
+                    id = "youtubeVideo"
                       class="embed-responsive-item"
                       // need to use embeded youtube link
-                      src={checkYouTubeVideoLink()}
                       title="YouTube video player"
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
