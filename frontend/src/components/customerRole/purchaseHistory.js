@@ -71,23 +71,30 @@ export default function PurchaseHistory(props) {
     setNoData(0);
     setEmpty("")
     TotalPrice = 0;
-    for (let j = 0; j < allCovers.length; j++) {
-      for (let i = 0; i < covers[0].length; i++) {
-        if (covers[0][i] == allCovers[j]._id) {
-          array2.push(allCovers[j]);
-          console.log(covers[0][i]);
-          TotalPrice = TotalPrice + Number(allCovers[j].Price);
-          setTotal(total + Number(allCovers[j].Price));
-          setNoData(array2.length);
+    if (allCovers.length == 0) {
+      setEmpty("No Covers available !");
+      setLoad(true);
+      setCover([]);
+    } else {
+      for (let j = 0; j < allCovers.length; j++) {
+        for (let i = 0; i < covers[0].length; i++) {
+          if (covers[0][i] == allCovers[j]._id) {
+            array2.push(allCovers[j]);
+            console.log(covers[0][i]);
+            TotalPrice = TotalPrice + Number(allCovers[j].Price);
+            setTotal(total + Number(allCovers[j].Price));
+            setNoData(array2.length);
+          }
         }
       }
+      document.getElementById("total").innerHTML = TotalPrice;
+      setLoad(true);
+      if (array2.length == 0) {
+        setEmpty2("No purchased covers yet!");
+      }
+      setCover(array2);
     }
-    document.getElementById("total").innerHTML = TotalPrice;
-    setLoad(true);
-    if (array2.length == 0) {
-      setEmpty2("No purchased covers yet!");
-    }
-    setCover(array2);
+  
   }
 
   function searchByName(val) {
@@ -106,6 +113,8 @@ export default function PurchaseHistory(props) {
           covers.push(post.CoverIDs);
         });
 
+        console.log(filter)
+
         if (filter.length == 0) {
           setEmpty2("No purchased covers yet!");
           setLoad(true);
@@ -121,14 +130,11 @@ export default function PurchaseHistory(props) {
                   post.MainCategory.toLowerCase().includes(val.toLowerCase()) ||
                   post.SubCategory.toLowerCase().includes(val.toLowerCase())
               );
+              console.log(searchResult)
               getSpecificOrderCoverDetiles(searchResult);
-              if (searchResult.length == 0) {
-                setEmpty("No Covers available !");
-              } else {
-                setEmpty("");
-              }
+             
 
-              setLoad(true);
+              //setLoad(true);
             });
         }
       })

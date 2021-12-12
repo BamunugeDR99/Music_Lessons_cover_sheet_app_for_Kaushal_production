@@ -708,6 +708,14 @@ export default function LessonsAndCoversDetailed(props) {
       });
   }
 
+
+  function checkYouTubeVideoLink(){
+    if(TempYoutubeLink.toLowerCase().includes("https://www.youtube.com/embed/")){
+      return covers.YoutubeLink
+    }else{
+      return "https://www.youtube.com/embed/"
+    }
+  }
   return (
     <div>
       <div class="card container-xxl" style={{ border: "solid #764A34" }}>
@@ -807,7 +815,18 @@ export default function LessonsAndCoversDetailed(props) {
                 <br />
                 <br />
                 {/* youtube video  */}
-                {TempYoutubeLink.toLowerCase().includes(
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe
+                      class="embed-responsive-item"
+                      // need to use embeded youtube link
+                      src={checkYouTubeVideoLink()}
+                      title="YouTube video player"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                {/* {TempYoutubeLink.toLowerCase().includes(
                   "https://www.youtube.com/embed/"
                 ) == true ? (
                   <div class="embed-responsive embed-responsive-16by9">
@@ -833,7 +852,7 @@ export default function LessonsAndCoversDetailed(props) {
                       allowFullScreen
                     ></iframe>
                   </div>
-                )}
+                )} */}
                 <br />
               </div>
               <div class="col-sm">
