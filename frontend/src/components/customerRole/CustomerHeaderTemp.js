@@ -613,24 +613,8 @@ export default function CustomerHeader(props) {
               </Link>
             </li>
           </ul>
-          {/* <form class="form-inline my-2 my-lg-0">
-            <input
-              id="searchBar"
-              class="form-control mr-sm-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button
-              id="SearchBtn"
-              class="btn  my-2 my-sm-0 btn-sm"
-              type="submit"
-            >
-              Search
-            </button>
-          </form> */}
           <div>
-            {loggedin == true ? (
+       
               <div>
                 <span className="userProfileSpan" onClick={Profilemodalopen}>
                   <svg
@@ -644,8 +628,9 @@ export default function CustomerHeader(props) {
                   >
                     <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
                   </svg>
-                  <font id="myAccount" type = "text">My Account </font>
+               <font id = "myAccount">My Account</font>
                 </span>
+               
                 <svg
                   id="Sicons"
                   onClick={() => {
@@ -705,26 +690,8 @@ export default function CustomerHeader(props) {
                   </svg>
                 </span>
               </div>
-            ) : (
-              <div>
-                <button
-                  id="SearchBtn"
-                  class="btn  my-2 my-sm-0 btn-sm"
-                  type="submit"
-                  style={{ color: "white", backgroundColor: "#764A34" }}
-                >
-                  Sign In
-                </button>
-                <button
-                  id="SearchBtn"
-                  class="btn  my-2 my-sm-0 btn-sm"
-                  type="submit"
-                  style={{ color: "white", backgroundColor: "#764A34" }}
-                >
-                  Register
-                </button>
-              </div>
-            )}
+     
+            
           </div>
         </div>
       </nav>
