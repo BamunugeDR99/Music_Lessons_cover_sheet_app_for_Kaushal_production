@@ -1,156 +1,108 @@
 import React, { Component, useEffect, useState } from "react";
 import axios from "axios";
 import { storage } from "../../Configurations/firebaseConfigurations";
-import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
+import { ref,getDownloadURL } from "@firebase/storage";
 import Swal from "sweetalert2";
 import Modal from "react-bootstrap/Modal";
 
 export default function PurchaseHistory(props) {
   const [cover, setCover] = useState([]);
-  const [searchValue, setSearchvalue] = useState([]);
-  const [noData, setNoData] = useState([]);
   const [empty, setEmpty] = useState("");
-  const [empty2, setEmpty2] = useState([]);
-  const [orderDate, setOrderDate] = useState([]);
   const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
-  const [modalOpenForImage, setModalOpenForImage] = useState(false);
   const [load, setLoad] = useState(true);
-  let [total, setTotal] = useState(0);
-  let covers = [];
-  let array2 = [];
-
-  let TotalPrice = 0;
+  let purchasedCoverDetailes = [];
+  let allCovers = [];
+  const [TotalPrice, setTotalPrice] = useState(0);
+  const [noPurchased, setNoPurchased] = useState(0);
+  const[permananetCovers, setPermananentCover] = useState([]);
 
   useEffect(() => {
-    function getCovers() {
+    async function getCovers() {
       setLoad(false);
-      axios
-        .get("https://kaushal-rashmika-music.herokuapp.com/customer/getAll")
-        .then(
-          (res) => {
-           
-              const filter = res.data.filter(
-                (cus) => cus._id == localStorage.getItem("CustomerID")
-              );
-
-              if (filter[0].PurchasedCovers.length==null) {
-                setEmpty2("No purchased covers yet!");
-              } else {
-                setEmpty2("")
-              }
-             
-                for (let i = 0; i < filter.length; i++) {
-
-                filter.map((post) => {
-                  covers.push(post.PurchasedCovers);
-                });
-
-                axios
-                  .get(
-                    "https://kaushal-rashmika-music.herokuapp.com/covers/getcovers"
-                  )
-                  .then((res) => {
-                    getSpecificOrderCoverDetiles(res.data);
-                  });
-              
-            }
-          }
+      await axios
+        .get(
+          `https://kaushal-rashmika-music.herokuapp.com/customer/get/${localStorage.getItem(
+            "CustomerID"
+          )}`
         )
+        .then((res) => {
+          if (res.data.PurchasedCovers.length == 0) {
+            setEmpty("No Purchased Covers yet!");
+            setLoad(true);
+          } else {
+            getPurchasedCoverDetailes(res.data.PurchasedCovers);
+          }
+        })
         .catch((err) => {
-          alert(err);
+          console.log(err);
         });
     }
     getCovers();
   }, []);
 
-  function getSpecificOrderCoverDetiles(allCovers) {
-    setTotal(0);
-    setNoData(0);
-    setEmpty("")
-    TotalPrice = 0;
-    if (allCovers.length == 0) {
-      setEmpty("No Covers available !");
-      setLoad(true);
-      setCover([]);
-    } else {
-      for (let j = 0; j < allCovers.length; j++) {
-        for (let i = 0; i < covers[0].length; i++) {
-          if (covers[0][i] == allCovers[j]._id) {
-            array2.push(allCovers[j]);
-            console.log(covers[0][i]);
-            TotalPrice = TotalPrice + Number(allCovers[j].Price);
-            setTotal(total + Number(allCovers[j].Price));
-            setNoData(array2.length);
-          }
-        }
-      }
-      document.getElementById("total").innerHTML = TotalPrice;
-      setLoad(true);
-      if (array2.length == 0) {
-        setEmpty2("No purchased covers yet!");
-      }
-      setCover(array2);
-    }
-    document.getElementById("total").innerHTML = TotalPrice;
-    setLoad(true);
-    if (array2.length == 0) {
-      setEmpty2("No purchased covers yet!");
-      // setEmpty2("")
-    }
-    setCover(array2);
-  }
-
-  function searchByName(val) {
-    setLoad(false);
-    setTotal("");
-    setEmpty("");
-    setEmpty2("");
-    let searchResult = [];
-    axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
+  async function getPurchasedCoverDetailes(pCovers) {
+    let totalcoversPrice = 0;
+    await axios
+      .get(`https://kaushal-rashmika-music.herokuapp.com/covers/getcovers`)
       .then((res) => {
-        console.log(res.data);
-        const filter = res.data.filter(
-          (cus) => cus.CustomerID == localStorage.getItem("CustomerID")
-        );
-        filter.map((post) => {
-          covers.push(post.CoverIDs);
-        });
-
-        console.log(filter)
-
-        if (filter.length == 0) {
-          setEmpty("No covers available!");
-          setLoad(true);
+        allCovers = res.data;
+        if (allCovers.length == 0) {
+          setEmpty("No Covers Available!");
         } else {
-          axios
-            .get(
-              "https://kaushal-rashmika-music.herokuapp.com/covers/getcovers"
-            )
-            .then((res) => {
-              searchResult = res.data.filter(
-                (post) =>
-                  post.Title.toLowerCase().includes(val.toLowerCase()) ||
-                  post.MainCategory.toLowerCase().includes(val.toLowerCase()) ||
-                  post.SubCategory.toLowerCase().includes(val.toLowerCase())
-              );
-              console.log(searchResult)
-              getSpecificOrderCoverDetiles(searchResult);
-              if (searchResult.length == 0) {
-                setEmpty("No Covers available !");
-                setEmpty2("")
-              } else {
-                setEmpty("");
-                setEmpty2("");
+          for (let i = 0; i < allCovers.length; i++) {
+            for (let j = 0; j < pCovers.length; j++) {
+              if (allCovers[i]._id === pCovers[j]) {
+                purchasedCoverDetailes.push(allCovers[i]);
+                totalcoversPrice += Number(allCovers[i].Price);
               }
+            }
+          }
 
-              //setLoad(true);
-            });
+          if (purchasedCoverDetailes.length == 0) {
+            setEmpty("No Covers Availble!");
+            setLoad(true);
+          } else {
+            setCover(purchasedCoverDetailes);
+            setNoPurchased(pCovers.length);
+            setPermananentCover(purchasedCoverDetailes);
+            setTotalPrice(totalcoversPrice);
+            setLoad(true);
+          }
         }
       })
       .catch((err) => {
         alert(err);
       });
+  }
+
+  function searchByName(searchInput) {
+    setLoad(false);
+    setEmpty("");
+    let searchResult = [];
+    let STotalPrice = 0;
+    searchResult = permananetCovers.filter(
+      (post) =>
+        post.Title.toLowerCase().includes(searchInput.toLowerCase()) ||
+        post.MainCategory.toLowerCase().includes(searchInput.toLowerCase()) ||
+        post.SubCategory.toLowerCase().includes(searchInput.toLowerCase())
+    );
+
+    if(searchResult.length == 0){
+      setEmpty("No Covers Availble!");
+      setCover([]);
+      setTotalPrice(0);
+      setNoPurchased(0);
+      setLoad(true);
+    }else{
+      setNoPurchased(searchResult.length);
+      for(let i = 0; i < searchResult.length; i++){
+        STotalPrice += Number(searchResult[i].Price);
+      }
+      setTotalPrice(STotalPrice);
+      setCover(searchResult);
+      setLoad(true);
+    }
+
   }
 
   async function displayImages(coverImageName, index) {
@@ -182,7 +134,6 @@ export default function PurchaseHistory(props) {
         });
       });
   }
-
 
   return (
     <div className="container" style={{ minHeight: "100vh" }}>
@@ -232,10 +183,10 @@ export default function PurchaseHistory(props) {
         </div>
         <div className="col-sm text-right">
           <h6>
-            <b>No of purchases : {noData}</b>
+            <b>No of purchases : {noPurchased}</b>
           </h6>
           <h6 style={{ display: "inline" }}>
-            <b>Total : $ </b>
+            <b>Total : $ {TotalPrice} </b>
           </h6>
           <h6 id="total" style={{ display: "inline" }}></h6>
         </div>
@@ -243,7 +194,6 @@ export default function PurchaseHistory(props) {
       <br />
       <center>
         <h3 style={{ color: "#D0193A " }}>{empty}</h3>
-        <h3 style={{ color: "#D0193A " }}>{empty2}</h3>
         <div class="spinner-border" id="loadingBar" hidden={load} role="status">
           <span class="sr-only">Loading...</span>
         </div>
@@ -251,7 +201,7 @@ export default function PurchaseHistory(props) {
       <br />
 
       {cover.map((post, index) => {
-        TotalPrice += Number(post.Price);
+        // TotalPrice += Number(post.Price);
         return (
           <div
             className="card p-3"
