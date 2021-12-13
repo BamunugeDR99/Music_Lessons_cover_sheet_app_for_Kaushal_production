@@ -82,9 +82,8 @@ export default function CustomerHeaderTempBeforeLogin(props) {
               <Link
                 class="nav-link"
                 to="/customer/discovertechniquesandlessons"
-                tabindex="-1"
-                aria-disabled="true"
-                id="classicalHeader"
+               
+                id="classicalHeaderr"
               >
                 <font
                   style={{

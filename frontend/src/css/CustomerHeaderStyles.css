@@ -4,17 +4,45 @@
     box-shadow: 0 0 10px #764A34;
 }
 
-.customerHeader #classicalHeader{
+.customerHeader .nav-item #classicalHeader{
 
         font-family: Abel;
         font-size: 18px;
         color: #764A34;
-  
-}
-.customerHeader #classicalHeader:hover{
-    opacity: 20%;
+     
+       
 }
 
+/* .customerHeader .nav-item #classicalHeader::before{
+    content: '';
+    transition: .5s;
+    transform: scale(.9);
+    z-index: -1;
+} */
+
+/* .customerHeader .nav-item #classicalHeader:hover::before{
+    transform: scale(1.1);
+ 
+}  */
+.customerHeader .nav-item #classicalHeader:hover{
+    opacity: 80%;
+   
+    text-shadow: 0px 0px 2px   #f0d90a;
+   /* text-shadow: 0px 0px 2px   #dda488; */
+  
+}
+
+.customerHeader  .homel:hover{
+    
+   
+    text-shadow: 0px 0px 2px   #f0d90a;
+  
+}
+
+
+
+ 
+  
 .customerHeader #SearchBtn{
     outline: solid #764A34;
     color: #764A34;
@@ -25,10 +53,10 @@
 }
 
 .customerHeader #Sicons:hover{
-    opacity: 20%;
+    opacity: 60%;
 }
 
-.customerHeader #myAccount{
+.customerHeader .myAccount{
 
         font-family: Abel;
         font-size: 18px;
@@ -37,7 +65,12 @@
         margin-left: 5px;
 }
 
-.customerHeader .userProfileSpan:hover{
-    opacity: 20%;
+.customerHeader .myAccount:hover{
+    text-shadow: 0px 0px 2px   #f0d90a;
 }
+
+.customerHeader  .userProfileSpan:hover{
+    opacity: 70%;
+}
+
 
