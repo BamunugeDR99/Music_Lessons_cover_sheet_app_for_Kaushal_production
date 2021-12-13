@@ -60,6 +60,9 @@ app.use("/testOrder",TestOrderRouter );
 const JWTTestRouter = require("./routes/jwtTestRoute.js");
 app.use("/jwtTest",JWTTestRouter );
 
+const JwtCustomerRouter = require("./routes/CustomerJwt(Sonal).js");
+app.use("/JWTCustomer",JwtCustomerRouter);
+
 app.listen(PORT, () => {
   console.log(`Server is up and running on PORT ${PORT}`);
 });

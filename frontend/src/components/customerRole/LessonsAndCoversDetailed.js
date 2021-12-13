@@ -65,7 +65,7 @@ export default function LessonsAndCoversDetailed(props) {
               res.data.SubCategory,
               res.data._id
             );
-     document.getElementById("youtubeVideo").src =res.data.YoutubeLink;
+          document.getElementById("youtubeVideo").src =res.data.YoutubeLink;
 
            //checkYouTubeVideoLink(res.data.YoutubeLink)
             setButtons(res.data._id);
@@ -425,7 +425,6 @@ export default function LessonsAndCoversDetailed(props) {
     // Show the payhere.js popup, when "PayHere Pay" is clicked
 
     window.payhere.startPayment(payment);
-
   }
 
   // Called when user completed the payment.
