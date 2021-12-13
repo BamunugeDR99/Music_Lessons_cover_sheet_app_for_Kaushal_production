@@ -11,7 +11,7 @@ export default function PurchaseHistory(props) {
   const [noData, setNoData] = useState([]);
   const [empty, setEmpty] = useState("");
   const [empty2, setEmpty2] = useState([]);
-  const [orderDate, setOrderDate] = useState([]);
+  // const [orderDate, setOrderDate] = useState([]);
   const [modalOpenForPdf, setModalOpenForPdf] = useState(false);
   const [modalOpenForImage, setModalOpenForImage] = useState(false);
   const [load, setLoad] = useState(true);
@@ -20,6 +20,12 @@ export default function PurchaseHistory(props) {
   let array2 = [];
 
   let TotalPrice = 0;
+
+  let datee = "";
+  let currentDate = "";
+//  let currentTime = "";
+  let time="";
+  let newDate = ""
 
   useEffect(() => {
     function getCovers() {
@@ -61,6 +67,7 @@ export default function PurchaseHistory(props) {
         });
     }
     getCovers();
+    getOrders();
   }, []);
 
   function getSpecificOrderCoverDetiles(allCovers) {
@@ -71,7 +78,7 @@ export default function PurchaseHistory(props) {
       for (let i = 0; i < covers[0].length; i++) {
         if (covers[0][i] == allCovers[j]._id) {
           array2.push(allCovers[j]);
-          console.log(covers[0][i]);
+          // console.log(covers[0][i]);
           TotalPrice = TotalPrice + Number(allCovers[j].Price);
           setTotal(total + Number(allCovers[j].Price));
           setNoData(array2.length);
@@ -166,6 +173,42 @@ export default function PurchaseHistory(props) {
         });
       });
   }
+
+
+
+  function getOrders() {
+    axios
+      .get("https://kaushal-rashmika-music.herokuapp.com/order/getOrders")
+      .then(
+        (res) => {
+         const filter = res.data.filter(
+          (cus) => cus.CustomerID == localStorage.getItem("CustomerID")
+        );
+           for(let i=0; i<filter.length;i++){
+
+            datee=filter[i].TransactionDateAndTime
+            
+            newDate = new Date(filter[i].TransactionDateAndTime)
+            time = new Date(filter[i].TransactionDateAndTime).toLocaleTimeString('en',
+                 { timeStyle: 'short', hour12: false, timeZone: 'UTC' });         
+           }
+           currentDate=(newDate.getDate() + "/" + (newDate.getMonth() + 1) + "/" + newDate.getFullYear())
+
+           console.log(datee)
+           console.log(time)
+           console.log(currentDate)
+
+          //  currentTime=(newDate.getHours() + "h :" + newDate.getMinutes() + "mn :" + newDate.getSeconds() + "sec")
+          //  console.log(currentTime)          
+        }      
+      )   
+      .catch((err) => {
+        alert(err);
+      });
+  }
+  
+
+  
 
 
   return (
