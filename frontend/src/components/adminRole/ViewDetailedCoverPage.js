@@ -20,7 +20,6 @@ export default function ViewDetailedCoverPage(props) {
   let MainCategoryForRec = "";
   let SubCategoryForRec = "";
 
-
   //   for update
   //const [covers, setCovers] = useState([]);
   const [SubCategories, setSubCategories] = useState([]);
@@ -75,7 +74,10 @@ export default function ViewDetailedCoverPage(props) {
   useEffect(() => {
     function getCovers() {
       axios
-        .get("https://kaushal-rashmika-music.herokuapp.com/covers/get/" + CoverTempID)
+        .get(
+          "https://kaushal-rashmika-music.herokuapp.com/covers/get/" +
+            CoverTempID
+        )
         .then((res) => {
           setCovers(res.data);
           setPreviousContent(res.data);
@@ -139,10 +141,11 @@ export default function ViewDetailedCoverPage(props) {
     imageSlider += "</div>";
     document.getElementById("img").innerHTML = imageSlider;
     for (let i = 0; i < previewImages.length; i++) {
-      document.getElementById("img" + i).src = "/images/verticaLImageHolder.jpg";
+      document.getElementById("img" + i).src =
+        "/images/verticaLImageHolder.jpg";
     }
 
-    setImageSlider(true)
+    setImageSlider(true);
     previewImages.map((previewImage, index) => {
       const storageRef = ref(storage, `PreviewImages/${previewImage}`);
       getDownloadURL(storageRef).then((url) => {
@@ -184,7 +187,9 @@ export default function ViewDetailedCoverPage(props) {
 
   function GetLessonSubCategories() {
     axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/mainCategory/get/619deb0ca35d670b4e68ec3e")
+      .get(
+        "https://kaushal-rashmika-music.herokuapp.com/mainCategory/get/619deb0ca35d670b4e68ec3e"
+      )
       .then((res) => {
         tempSubCategory2 = res.data.SubCategories;
         setContent();
@@ -200,7 +205,9 @@ export default function ViewDetailedCoverPage(props) {
   }
   async function getAllClassicalGutarMainCategories() {
     await axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/mainCategory/get/61936e9d9ea7c21aebd01113")
+      .get(
+        "https://kaushal-rashmika-music.herokuapp.com/mainCategory/get/61936e9d9ea7c21aebd01113"
+      )
       .then((res) => {
         tempSubCategory = res.data.SubCategories;
         GetLessonSubCategories();
@@ -251,13 +258,14 @@ export default function ViewDetailedCoverPage(props) {
             YoutubeLink: document.getElementById("youtubeLink").value,
             FacebookLink: document.getElementById("facebookLink").value,
             PreviewPages: previewPageList,
-            UpdatedUser : "61a8d9f640c532967166aa70",
+            UpdatedUser: "61a8d9f640c532967166aa70",
             CoverPdf: updateCoverPdf,
           };
 
           axios
             .put(
-              "https://kaushal-rashmika-music.herokuapp.com/covers/update/" + CoverTempID,
+              "https://kaushal-rashmika-music.herokuapp.com/covers/update/" +
+                CoverTempID,
               updatedCover
             )
             .then(() => {
@@ -330,13 +338,14 @@ export default function ViewDetailedCoverPage(props) {
           YoutubeLink: document.getElementById("youtubeLink").value,
           FacebookLink: document.getElementById("facebookLink").value,
           PreviewPages: previewPageList,
-          UpdatedUser : "61a8d9f640c532967166aa70",
+          UpdatedUser: "61a8d9f640c532967166aa70",
           CoverPdf: updateCoverPdf,
         };
 
         axios
           .put(
-            "https://kaushal-rashmika-music.herokuapp.com/covers/update/" + CoverTempID,
+            "https://kaushal-rashmika-music.herokuapp.com/covers/update/" +
+              CoverTempID,
             updatedCover
           )
           .then(() => {
@@ -463,13 +472,14 @@ export default function ViewDetailedCoverPage(props) {
               YoutubeLink: document.getElementById("youtubeLink").value,
               FacebookLink: document.getElementById("facebookLink").value,
               PreviewPages: previewPageList,
-              UpdatedUser : "61a8d9f640c532967166aa70",
+              UpdatedUser: "61a8d9f640c532967166aa70",
               CoverPdf: updateCoverPdf,
             };
             console.log(updatedCover);
             axios
               .put(
-                "https://kaushal-rashmika-music.herokuapp.com/covers/update/" + CoverTempID,
+                "https://kaushal-rashmika-music.herokuapp.com/covers/update/" +
+                  CoverTempID,
                 updatedCover
               )
               .then(() => {
@@ -546,7 +556,9 @@ export default function ViewDetailedCoverPage(props) {
 
   async function getCovers() {
     await axios
-      .get("https://kaushal-rashmika-music.herokuapp.com/covers/get/" + CoverTempID)
+      .get(
+        "https://kaushal-rashmika-music.herokuapp.com/covers/get/" + CoverTempID
+      )
       .then((res) => {
         setCovers(res.data);
         setPreviousContent(res.data);
@@ -577,9 +589,9 @@ export default function ViewDetailedCoverPage(props) {
       .then((url) => {
         window.open(
           url,
-          '_blank' // <- This is what makes it open in a new window.
+          "_blank" // <- This is what makes it open in a new window.
         );
-        setModalOpenForPdf(false)
+        setModalOpenForPdf(false);
       })
       .catch(() => {
         setModalOpenForPdf(false);
@@ -591,13 +603,32 @@ export default function ViewDetailedCoverPage(props) {
       });
   }
   return (
-    <div style={{minHeight:"100vh"}}>
+    <div style={{ minHeight: "100vh" }}>
+  
       <div class="card container-xxl" style={{ border: "solid #764A34" }}>
         <div class="card-body">
+        <button type="button" class="btn btn-light rounded btn-sm" onClick={()=> {
+          props.history.push("/admin/allcovers")
+        }}>
+        <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="30"
+        height="30"
+        fill="currentColor"
+        class="bi bi-arrow-left"
+        viewBox="0 0 16 16"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
+        />
+      </svg>
+        </button>
+   
           <div class="container">
             <div class="row">
               <div class="col-sm">
-              <div className="d-flex justify-content-center">
+                <div className="d-flex justify-content-center">
                   <div class="spinner-grow" role="status" hidden={imageSlider}>
                     <span class="sr-only">Loading...</span>
                   </div>
@@ -605,7 +636,7 @@ export default function ViewDetailedCoverPage(props) {
                 {/* image carousel */}
                 <div
                   id="carouselExampleIndicators"
-                  hidden = {!imageSlider}
+                  hidden={!imageSlider}
                   class="carousel slide"
                   data-ride="carousel"
                 >
@@ -865,7 +896,7 @@ export default function ViewDetailedCoverPage(props) {
                       style={{ backgroundColor: "#3b5998" }}
                       href={covers.FacebookLink}
                       role="button"
-                      target = "_blank"
+                      target="_blank"
                     >
                       <i
                         class="fab fa-facebook-f fa-3x"
@@ -903,7 +934,7 @@ export default function ViewDetailedCoverPage(props) {
               <iframe
                 class="embed-responsive-item"
                 // need to use embeded youtube link
-                src={covers.YoutubeLink}
+                src={youtubeLink}
                 title="YouTube video player"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

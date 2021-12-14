@@ -361,7 +361,10 @@ export default function LessonsAndCoversDetailed(props) {
     const storageRef = ref(storage, `PreviewImages/${PreviewPages}`);
     getDownloadURL(storageRef)
       .then((url) => {
-        window.location.href = url;
+        window.open(
+          url,
+          "_blank" // <- This is what makes it open in a new window.
+        );
         setModalOpenForImage(false);
       })
       .catch(() => {
