@@ -27,7 +27,7 @@ const feedbackSchema = new Schema({
   AddedDateAndTime: {
     type: String,
     required: true,
-    default: new Date().toLocaleString('en-US', {timeZone : 'Asia/Colombo'}),
+    default: new Date().toLocaleString('si-LK', {timeZone : 'Asia/Colombo'}),
   },
 });
 

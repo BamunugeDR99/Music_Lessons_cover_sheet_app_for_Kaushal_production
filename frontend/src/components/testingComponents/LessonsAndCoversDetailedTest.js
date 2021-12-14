@@ -49,7 +49,7 @@ export default function TestLessonsAndCoversDetailed(props) {
 
   useEffect(() => {
     async function getCovers() {
-      const CoverTempID = "61a096c139983f67656949f3";
+      const CoverTempID = "61b43ef79546b5893fefd93d";
       await axios
         .get(
           "https://kaushal-rashmika-music.herokuapp.com/covers/get/" +
@@ -215,7 +215,9 @@ export default function TestLessonsAndCoversDetailed(props) {
       console.log(accessToken);
       setPaymentVerification(verification);
 
+        purchasingProcess();
         return verification;
+
       });
       
     } catch (err) {
@@ -557,11 +559,7 @@ export default function TestLessonsAndCoversDetailed(props) {
       });
   }
   
-    async  function purchasingProcess() {
-
-    await verifyToken();
-    let verification = paymentVerification;
-    console.log(`Verification At Payment Process :  ${verification}`);
+  function purchasingProcess() {
     // Put the payment variables here
     var payment = {
       // whether it is a testing environment or not
@@ -1175,7 +1173,7 @@ export default function TestLessonsAndCoversDetailed(props) {
                           disabled = {userlogin}
                           id="payhere-payment"
                           class="btn btn-success btn-block rounded"
-                          onClick={purchasingProcess}
+                          onClick={verifyToken}
                         >
                           Buy it now
                         </button>
