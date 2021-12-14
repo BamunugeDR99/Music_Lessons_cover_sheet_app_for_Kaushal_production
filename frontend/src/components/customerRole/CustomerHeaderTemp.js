@@ -573,7 +573,7 @@ export default function CustomerHeader(props) {
 
             class="homel"
             to="/customer/home"
-            style={{ textDecoration: "none", color: "#764A34" }}
+            style={{ color: "#764A34" }}
           >
             <font style={{ fontFamily: "Old Standard TT", fontSize: "18px"}}>
               <b>KAUSHAL</b>
@@ -593,7 +593,8 @@ export default function CustomerHeader(props) {
                 id="classicalHeader"
               
               >
-                <font> Guitar Covers </font>
+                <font > Guitar Covers </font>
+                
               </Link>
             </li>
             <li class="nav-item">

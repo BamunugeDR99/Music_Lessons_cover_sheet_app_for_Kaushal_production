@@ -55,8 +55,10 @@ export default function CustomerHeaderTempBeforeLogin(props) {
           />
           <span> </span>
           <Link
+
+            class="homel"
             to="/customer/home"
-            style={{ textDecoration: "none", color: "#764A34" }}
+            style={{color: "#764A34" }}
           >
             <font style={{ fontFamily: "Old Standard TT", fontSize: "18px" }}>
               <b>KAUSHAL</b>
@@ -83,15 +85,9 @@ export default function CustomerHeaderTempBeforeLogin(props) {
                 class="nav-link"
                 to="/customer/discovertechniquesandlessons"
                
-                id="classicalHeaderr"
+                id="classicalHeader"
               >
-                <font
-                  style={{
-                    fontFamily: "Abel",
-                    fontSize: "18px",
-                    color: "#764A34",
-                  }}
-                >
+                <font>
                   Guitar Technics & Lessons
                 </font>
               </Link>

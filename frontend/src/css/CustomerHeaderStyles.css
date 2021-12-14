@@ -4,7 +4,7 @@
     box-shadow: 0 0 10px #764A34;
 }
 
-.customerHeader .nav-item #classicalHeader{
+.customerHeader #classicalHeader{
 
         font-family: Abel;
         font-size: 18px;
@@ -13,32 +13,22 @@
        
 }
 
-/* .customerHeader .nav-item #classicalHeader::before{
-    content: '';
-    transition: .5s;
-    transform: scale(.9);
-    z-index: -1;
-} */
 
-/* .customerHeader .nav-item #classicalHeader:hover::before{
-    transform: scale(1.1);
- 
-}  */
-.customerHeader .nav-item #classicalHeader:hover{
-    opacity: 80%;
-   
-    text-shadow: 0px 0px 2px   #f0d90a;
-   /* text-shadow: 0px 0px 2px   #dda488; */
-  
+.customerHeader #classicalHeader:hover, .customerHeader #classicalHeader:active {
+    
+    text-decoration: underline;
+    color:#411e0c;
+
 }
-.customerHeader #classicalHeader:hover{
-    opacity: 80%;
+
+.customerHeader .homel:hover, .customerHeader .homel:active {
+    
+    text-decoration: underline;
+    color:#411e0c;
+
 }
 
 
-
- 
-  
 .customerHeader #SearchBtn{
     outline: solid #764A34;
     color: #764A34;
@@ -68,11 +58,10 @@
 }
 
 .customerHeader .userProfileSpan:hover{
-    opacity: 80%;
+    opacity: 70%;
+    text-decoration: underline;
+    color:#411e0c;
 }
 
-.customerHeader  .userProfileSpan:hover{
-    opacity: 70%;
-}
 
 
