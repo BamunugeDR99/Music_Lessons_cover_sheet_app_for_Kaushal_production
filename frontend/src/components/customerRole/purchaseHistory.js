@@ -16,6 +16,12 @@ export default function PurchaseHistory(props) {
   const [noPurchased, setNoPurchased] = useState(0);
   const[permananetCovers, setPermananentCover] = useState([]);
 
+  let datee = "";
+  let currentDate = "";
+//  let currentTime = "";
+  let time="";
+  let newDate = ""
+
   useEffect(() => {
     async function getCovers() {
       setLoad(false);
@@ -38,6 +44,7 @@ export default function PurchaseHistory(props) {
         });
     }
     getCovers();
+    getOrders();
   }, []);
 
   async function getPurchasedCoverDetailes(pCovers) {
