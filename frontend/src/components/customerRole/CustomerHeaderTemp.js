@@ -570,6 +570,8 @@ export default function CustomerHeader(props) {
           />
           <span> </span>
           <Link
+
+            class="homel"
             to="/customer/home"
             style={{ textDecoration: "none", color: "#764A34" }}
           >
@@ -589,6 +591,7 @@ export default function CustomerHeader(props) {
                 class="nav-link"
                 to="/customer/dicoversmusiccovers"
                 id="classicalHeader"
+              
               >
                 <font> Guitar Covers </font>
               </Link>
@@ -600,14 +603,9 @@ export default function CustomerHeader(props) {
                 tabindex="-1"
                 aria-disabled="true"
                 id="classicalHeader"
+               
               >
-                <font
-                  style={{
-                    fontFamily: "Abel",
-                    fontSize: "18px",
-                    color: "#764A34",
-                  }}
-                >
+                <font>
                   Guitar Technics & Lessons
                 </font>
               </Link>
@@ -694,6 +692,7 @@ export default function CustomerHeader(props) {
             
           </div>
         </div>
+        <div class="dot"></div>
       </nav>
 
       {/* user details update model */}
