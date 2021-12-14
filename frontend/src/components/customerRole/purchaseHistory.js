@@ -44,7 +44,7 @@ export default function PurchaseHistory(props) {
         });
     }
     getCovers();
-    getOrders();
+   // getOrders();
   }, []);
 
   async function getPurchasedCoverDetailes(pCovers) {
