@@ -3,6 +3,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
+import Modal from "react-bootstrap/Modal";
 
 export default function MusicCart(props) {
   let [cartCovers, setCovers] = useState([]);
@@ -11,6 +12,7 @@ export default function MusicCart(props) {
   let [dataholder, setDataholder] = useState([]);
   let [coverNames, setCoverNames] = useState("");
   const [customer, setCustomer] = useState([]);
+  const [modelOpen, setmodelOpen] = useState(false);
   let [coverIdArray, setCoverIdArray] = useState([]);
 
   let status = 0;
@@ -34,7 +36,6 @@ export default function MusicCart(props) {
   };
 
   useEffect(async () => {
- 
     document.getElementById("spinnerdiv").style.display = "block";
     document.getElementById("cartdiv").style.display = "none";
     setTotal("Loading...");
@@ -95,7 +96,9 @@ export default function MusicCart(props) {
     if (data.length > 0) {
       for (let i = 0; i < data.length; i++) {
         await axios
-          .get(`https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbyid/${data[i]}`)
+          .get(
+            `https://kaushal-rashmika-music.herokuapp.com/covers/getcoverbyid/${data[i]}`
+          )
           .then((res) => {
             // console.log("asd")
             if (covers == "") {
@@ -232,7 +235,7 @@ export default function MusicCart(props) {
     await getDownloadURL(storageRef)
       .then((url) => {
         document.getElementById(index).src = url;
-       // document.getElementById("temp" + index).hidden = true;
+        // document.getElementById("temp" + index).hidden = true;
         //document.getElementById(index).hidden = false;
       })
       .catch((err) => {
@@ -300,13 +303,16 @@ export default function MusicCart(props) {
 
     // console.log(newOrder);
     await axios
-      .post("https://kaushal-rashmika-music.herokuapp.com/order/addOrder", newOrder)
+      .post(
+        "https://kaushal-rashmika-music.herokuapp.com/order/addOrder",
+        newOrder
+      )
       .then((res) => {
         let purchasedcovers = customer.PurchasedCovers;
         console.log(purchasedcovers);
         for (let l = 0; l < coverIdArray.length; l++) {
           purchasedcovers.push(coverIdArray[l]);
-          console.log(coverIdArray[l]);
+          // console.log(coverIdArray[l]);
         }
         const newPurchasedCovers = {
           PurchasedCovers: purchasedcovers,
@@ -315,7 +321,9 @@ export default function MusicCart(props) {
         console.log(newPurchasedCovers);
         axios
           .put(
-            "https://kaushal-rashmika-music.herokuapp.com/customer/addPurchasedCover/61acc2662c5b9bd04724313e",
+            `https://kaushal-rashmika-music.herokuapp.com/customer/addPurchasedCover/${localStorage.getItem(
+              "CustomerID"
+            )}`,
             newPurchasedCovers
           )
           .then((res) => {
@@ -326,6 +334,7 @@ export default function MusicCart(props) {
                   localStorage.getItem("CustomerID")
               )
               .then((res) => {
+                console.log(localStorage.getItem("CustomerID"));
                 incrementCover();
 
                 // setPurchased(true);
@@ -358,22 +367,31 @@ export default function MusicCart(props) {
       });
   }
   function incrementCover() {
+    setmodelOpen(true);
+    let o = 0;
+    console.log(coverIdArray.length);
     for (let k = 0; k < coverIdArray.length; k++) {
       axios
-        .put(`https://kaushal-rashmika-music.herokuapp.com/covers/incrementCount/${coverIdArray[k]}`)
+        .put(
+          `https://kaushal-rashmika-music.herokuapp.com/covers/incrementCount/${coverIdArray[k]}`
+        )
         .then((res) => {
-          Swal.fire({
-            title: "Successfully Deleted!",
-            icon: "success",
-            showCancelButton: false,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Ok!",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              window.location.reload(true);
-            }
-          });
+          o++;
+          console.log(o);
+          if (o == coverIdArray.length) {
+            setmodelOpen(false);
+            Swal.fire({
+              title: "Thank you for your purchase!",
+              icon: "success",
+              showCancelButton: false,
+              confirmButtonColor: "#3085d6",
+              confirmButtonText: "Ok!",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.reload(true);
+              }
+            });
+          }
         })
         .catch((err) => {
           Swal.fire({
@@ -405,7 +423,7 @@ export default function MusicCart(props) {
       </div>
 
       <br />
-      <div class="row" style={{marginBottom:"77px"}}>
+      <div class="row" style={{ marginBottom: "77px" }}>
         <div id="spinnerdiv" class="col-lg-8 " style={{ display: "block" }}>
           <center>
             <div class=" justify-content-center">
@@ -435,11 +453,10 @@ export default function MusicCart(props) {
           id="cartdiv"
           style={{
             overflowY: "scroll",
-            height:"680px",
-            overflow:"auto",
-            overflowY:"hidden",
+            height: "680px",
+            overflow: "auto",
+            overflowY: "hidden",
             display: "none",
-
           }}
         >
           <div>
@@ -517,8 +534,6 @@ export default function MusicCart(props) {
           </div>
         </div>
 
-       
-
         {/* Cart Calculations */}
         <div class="col-lg-4  justify-content-end">
           <div class="mb-6 ">
@@ -552,6 +567,21 @@ export default function MusicCart(props) {
           </div>
         </div>
       </div>
+      <Modal show={modelOpen} size="lg">
+        <Modal.Body>
+          <div className="container">
+            <div id="spinnerdiv2">
+              <center>
+                <div class=" justify-content-center">
+                  <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
+              </center>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }
