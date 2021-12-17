@@ -8,6 +8,110 @@ app.use(express.json());
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
+
+
+//=======================================================================================================================
+//              ==JWT===
+
+let refreshTokens = [];
+//Function to create an AccessToken
+ /*Parameters ==> 1.Payload
+                  2.Secret Key
+                  3.Expiration
+                  */
+                  const generateAccessToken = (user) => {
+                    return jwt.sign({ _id: user._id }, "mySecretKey", {
+                      expiresIn:"50s"
+                    });
+                  };
+                  
+                  //Function to create a refresh token --> Calls automatically when the accesstoken is expired and generates a new acess token
+                  const generateRefreshToken = (user) => {
+                    return jwt.sign({ _id: user._id }, "myRefreshSecretKey", {
+                      expiresIn:"7d"
+                    });
+                  };
+                  
+                  
+//Token Verification Function
+const verify = (req, res, next) => {
+
+    //Check the Headers & find the authorization key & take it's value
+    const authHeader = req.headers.authorization;
+  
+    // console.log(authHeader);
+  
+    //If there is a authorization key
+    if (authHeader) {
+  
+      //Splitting the Bearer text
+      const token = authHeader.split(" ")[1];
+  
+    //   console.log(token)
+  
+  
+      //Verifying token
+      /*Parameters ==> 1.token
+                       2.secretkey
+                       3.callback */
+      jwt.verify(token, "mySecretKey", (err, user) => {
+        if (err) {
+          return res.status(403).json("Token is not valid!");
+        }
+  
+        console.log("==============Verify Function user==========================");
+        console.log(user);
+        //If there is no error assign payload to the request
+        req.user = user;
+        next();
+      });
+    } else {
+      res.status(401).json("You are not authenticated!");
+    }
+  };
+  
+  
+
+  //Refresh Token Route
+router.post("/refreshToken", (req, res) => {
+    //take the refresh token from the user
+    const refreshToken = req.body.token;
+  
+    //send error if there is no token or it's invalid
+    if (!refreshToken) return res.status(401).json("You are not authenticated!");
+  
+    //If refresh token is not inside the array
+    if (!refreshTokens.includes(refreshToken)) {
+      return res.status(403).json("Refresh token is not valid!");
+    }
+  
+    //If the refresh key exists validate it
+  
+    jwt.verify(refreshToken, "myRefreshSecretKey", (err, user) => { 
+      err && console.log(err);
+  
+      //Delete the current refresh token
+      refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
+  
+  
+      
+    //if everything is ok, create new access token, refresh token and send to 
+      console.log("######Refresh Function Verified User#####");
+      console.log(user);
+      const newAccessToken = generateAccessToken(user);
+      const newRefreshToken = generateRefreshToken(user);
+  
+      refreshTokens.push(newRefreshToken);
+  
+      res.status(200).json({
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
+      });
+    });
+  
+  });
+//=======================================================================================================================
+
 // update purchased covers
 router.route("/addPurchasedCover/:id").put(async (req, res) => {
   let CustomerID = req.params.id;
@@ -82,22 +186,30 @@ router.route("/add").post(async (req, res) => {
   }
 });
 
-//Get one customer
-router.route("/get/:id").get(async (req, res) => {
+//Get one customer --> Middleware Added
+router.get("/get/:id" , verify, async (req, res) => {
+
   let userID = req.params.id;
 
-  const user = await Customer.findById(userID)
-    .then((cutomerss) => {
-      // res.status(200).send({status:"User fetched"});
-      res.json(cutomerss);
-    })
-    .catch((err) => {
-      console.log(err.message);
-      res
-        .status(500)
-        .send({ status: "Error with get user", error: err.message });
-    });
-});
+  console.log(`User ID : ${userID}`);
+  console.log(`ID from the token : ${req.user._id}` );
+  if (req.user._id === userID){
+
+      const user = await Customer.findById(userID)
+      .then((cutomerss) => {
+        // res.status(200).send({status:"User fetched"});
+        res.json(cutomerss);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        res
+          .status(500)
+          .send({ status: "Error with get user", error: err.message });
+      });
+  }
+
+
+} )
 
 //Get all customers
 router.route("/getAll").get((req, res) => {
@@ -110,62 +222,55 @@ router.route("/getAll").get((req, res) => {
     });
 });
 
-// Update CUstomer
-router.route("/update/:id").put(async (req, res) => {
+//Update One 1  --> Middleware Added
+router.put("/update/:id", verify, async(req, res) => {
+
   let userID = req.params.id;
+  console.log(`User ID : ${userID}`);
+  console.log(`ID from the token : ${req.user._id}` );
+  if (req.user._id === userID){
 
-  const {
-    FirstName,
-    LastName,
-    Email,
-    ContactNumber,
-    Gender,
-    Country,
-    Username,
-    Password,
-  } = req.body;
 
-  //  FeedBackIDs, OrderIDs, LoginStatus, DeleteStatus, UpdatedUser
-  try {
-    const updatedCustomer = {
-      FirstName,
-      LastName,
-      Email,
-      ContactNumber,
-      Gender,
-      Country,
-      Username,
-      Password,
-      // FeedBackIDs,
-      // OrderIDs,
-      // LoginStatus,
-      // DeleteStatus,
-      // UpdatedUser
-    };
+      const {
+          FirstName,
+          LastName,
+          Email,
+          ContactNumber,
+          Gender,
+          Country,
+          Username,
+          Password,
+        } = req.body;
+      
+        //  FeedBackIDs, OrderIDs, LoginStatus, DeleteStatus, UpdatedUser
+        try {
+          const updatedCustomer = {
+            FirstName,
+            LastName,
+            Email,
+            ContactNumber,
+            Gender,
+            Country,
+            Username,
+            Password,
+      
+          };
+      
+          const update = await Customer.findByIdAndUpdate(userID, updatedCustomer);
+          res.status(200).send({ status: "User Updated" });
+        } catch (err) {
+          console.log(err);
+          res
+            .status(500)
+            .send({ status: "Error with updating data", error: err.message });
+        }
 
-    const update = await Customer.findByIdAndUpdate(userID, updatedCustomer);
-    res.status(200).send({ status: "User Updated" });
-  } catch (err) {
-    console.log(err);
-    res
-      .status(500)
-      .send({ status: "Error with updating data", error: err.message });
   }
-});
 
-// Delete CUstomer
-router.route("/delete/:id").delete(async (req, res) => {
-  let userID = req.params.id;
 
-  await Customer.findByIdAndDelete(userID)
-    .then(() => {
-      res.status(200).send({ status: "User Deleted" });
-    })
-    .catch((err) => {
-      console.log(err.message);
-      res.status(500).send({ status: "Error with delete", error: err.message });
-    });
-});
+})
+
+
 
 //Update One
 
@@ -196,50 +301,7 @@ router.route("/updateCus/:id").put(async (req, res) => {
     });
 });
 
-let refreshTokens = [];
 
-//Issue
-
-router.post("/refresh", (req, res) => {
-  //take the refresh token from the user
-
-  const refreshToken = req.body.token;
-
-  //send error if there is no token or it's invalid
-
-  if (!refreshToken) return res.status(401).json("You are not authenticated!");
-
-  if (!refreshTokens.includes(refreshToken)) {
-    return res.status(403).json("Refresh token is not valid!");
-  }
-
-  //if everything is ok, create new access token, refresh token and send to user
-
-  jwt.verify(refreshToken, "myRefreshSecretKey", (err, customerLogin) => {
-    err && console.log(err);
-    refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
-
-    const newAccessToken = generateAccessToken(customerLogin);
-    const newRefreshToken = generateRefreshToken(customerLogin);
-
-    refreshTokens.push(newRefreshToken);
-
-    res.status(200).json({
-      accessToken: newAccessToken,
-      refreshToken: newRefreshToken,
-    });
-  });
-});
-
-const generateAccessToken = (customerLogin) => {
-  return jwt.sign({ id: customerLogin._id }, "mySecretKey", {
-    expiresIn: "15m",
-  });
-};
-
-const generateRefreshToken = (customerLogin) => {
-  return jwt.sign({ id: customerLogin._id }, "myRefreshSecretKey");
-};
 
 //Login route
 
@@ -254,7 +316,7 @@ router.post("/loginCustomer", async (req, res) => {
 
     //check with database username
 
-    const customerLogin = await Customer.findOne({ Username: Username });
+    let customerLogin = await Customer.findOne({ Username: Username });
 
     if (customerLogin) {
       const isMatch = await bcrypt.compare(Password, customerLogin.Password);
@@ -265,27 +327,21 @@ router.post("/loginCustomer", async (req, res) => {
         //res.json({message: "Customer Sign In Successfully"});
 
         //Generate access token
-
         const accessToken = generateAccessToken(customerLogin);
         const refreshToken = generateRefreshToken(customerLogin);
-
-        refreshTokens.push(refreshToken);
-
-        // res.cookie("jwt", accessToken, {
-        //   expires: new Date(Date.now() + 30000),
-        //   httpOnly: true,
-        // });
 
         // console.log(`this is the cookie ${req.cookies.jwt}`);
 
         res.json({
-          customerLogin: {
+  
             _id: customerLogin._id,
             accessToken: accessToken,
             refreshToken: refreshToken,
-          },
+     
         });
 
+
+        refreshTokens.push(refreshToken);
         // console.log(accsessToken);
         // console.log(refreshToken);
       }
@@ -297,47 +353,42 @@ router.post("/loginCustomer", async (req, res) => {
   }
 });
 
-const verify = (req, res, next) => {
-  const authHeader = req.headers.authorization;
 
-  if (authHeader) {
-    const token = authHeader.split(" ")[1];
-
-    jwt.verify(token, "mySecretKey", (err, customerLogin) => {
-      if (err) {
-        return res.status(403).json("Token is Invalid!");
-      }
-
-      req.customerLogin = customerLogin;
-      next();
-    });
-  } else {
-    res.status(401).json("You are not authenticated");
-  }
-};
-
+//Delete Customer --> Middleware Added
 router.delete("/deleteUser/:id", verify, async (req, res) => {
   let userID = req.params.id;
 
-  if (req.customerLogin.id === userID) {
-    await Customer.findByIdAndDelete(userID)
+  console.log(`User ID : ${userID}`);
+  console.log(`ID from the token : ${req.user._id}` );
+  if (req.user._id === userID) {
+    // await Customer.findByIdAndDelete(userID)
 
-      .then(() => {
-        res.status(200).send({ status: "User has been Deleted" });
-      })
-      .catch((err) => {
-        console.log(err.message);
-        // res.status(500).send({status : "Error with delete", error : err.message});
-      });
+    //   .then(() => {
+    //     res.status(200).send({ status: "User has been Deleted" });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err.message);
+    //     // res.status(500).send({status : "Error with delete", error : err.message});
+    //   });
+
+    res.status(200).send({ status: "User has been Deleted" });
+    console.log("Deleted !!!!")
   } else {
     res.status(403).json("You can not delete this profile.");
   }
 });
 
+
+
+
 // Protected route, can only be accessed when user is logged-in
 router.post("/protected", verify, (req, res) => {
   return res.json({ message: "Protected content!" });
 });
+
+
+
+
 
 //Logout
 

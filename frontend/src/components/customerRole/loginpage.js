@@ -8,6 +8,7 @@ import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import "../../css/login.css";
 import Swal from "sweetalert2";
 import Modal from "react-bootstrap/Modal";
+import Cookies from "js-cookie";
 
 
 
@@ -15,27 +16,8 @@ const eye = <FontAwesomeIcon icon={faEye} />;
 const sleye = <FontAwesomeIcon icon={faEyeSlash} />;
 
 export default function Login(props) {
-  const refreshToken = async () => {
-    try {
-      const res = await axios.post("/refresh", {
-        token: customer.refreshToken,
-      });
-      setCustomer({
-        ...customer,
-        accessToken: res.data.accessToken,
-        refreshToken: res.data.refreshToken,
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  };
+ 
 
-  // axios.interceptors.request.use( async(config)=>{
-
-  //         let currentDate = new Date();
-
-  // }
-  // );
   const [modalOpenForLoading, setmodalOpenForLoading] = useState(false);
 
   //remember me
@@ -93,10 +75,21 @@ export default function Login(props) {
         loginCredentials
       )
       .then((res) => {
-        setCustomer(res.data.customerLogin);
-        localStorage.setItem("CustomerID", res.data.customerLogin._id);
+        // setCustomer(res.data.customerLogin);
+        // localStorage.setItem("CustomerID", res.data.customerLogin._id);
 
-        let customerID = res.data.customerLogin._id;
+        // let customerID = res.data.customerLogin._id;
+
+        console.log(res.data);
+        setCustomer(res.data);
+        console.log(res.data.accessToken);
+       console.log(res.data.refreshToken);
+       console.log(res.data._id);
+      localStorage.setItem('CustomerID', res.data._id);
+        //Setting the Cookies
+       Cookies.set("access", res.data.accessToken);
+        Cookies.set("refresh",res.data.refreshToken);
+
 
         const updateloginStatus = {
           LoginStatus: true,
@@ -105,7 +98,7 @@ export default function Login(props) {
         axios
           .put(
             "https://kaushal-rashmika-music.herokuapp.com/customer/loginStatus/" +
-              customerID,
+              customer._id,
             updateloginStatus
           )
           .then((res) => {
