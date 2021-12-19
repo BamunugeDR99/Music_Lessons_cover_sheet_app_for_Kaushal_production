@@ -59,7 +59,6 @@ export default function CustomerForgotPassword(props) {
           setLoading(true);
           setUserNotFoundError("User not found!");
         } else if (res.data != null) {
-          // console.log(res.data[0]._id)
           setCustomerID(res.data[0]._id);
           setUserNotFoundError("");
           emailConfiguration();

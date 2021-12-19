@@ -104,11 +104,9 @@ export default function ViewDetailedCoverPage(props) {
   }, []);
 
   function setPreviousContent(content) {
-    //console.log(content);
     tempCoverImages = content.PreviewPages;
     tempPdf = content.CoverPdf;
 
-    //console.log(tempCoverImages,tempPdf,tempInstruments)
   }
   function printInstruments(instruments) {
     for (let i = 0; i < instruments.length; i++) {
@@ -164,8 +162,7 @@ export default function ViewDetailedCoverPage(props) {
   function setContent() {
     setSubCategories(tempSubCategory);
     setLessonSubCategories(tempSubCategory2);
-    // console.log(MainCategoryForRec);
-    // console.log(SubCategoryForRec);
+    
 
     // setA(MainCategoryForRec);
     // setB(SubCategoryForRec)
@@ -176,7 +173,6 @@ export default function ViewDetailedCoverPage(props) {
       setDropSubCategory(SubCategoryForRec);
       setSubCategoryPreview(false);
       setSubCategoryPreview2(true);
-      //console.log("a")
     } else if (MainCategoryForRec === "Guitar Technics & Lessons") {
       setDropSubCategory(SubCategoryForRec);
       setSubCategoryPreview(true);
@@ -475,7 +471,6 @@ export default function ViewDetailedCoverPage(props) {
               UpdatedUser: "61a8d9f640c532967166aa70",
               CoverPdf: updateCoverPdf,
             };
-            console.log(updatedCover);
             axios
               .put(
                 "https://kaushal-rashmika-music.herokuapp.com/covers/update/" +

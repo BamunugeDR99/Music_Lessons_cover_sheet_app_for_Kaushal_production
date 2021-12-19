@@ -51,7 +51,6 @@ export default function LessonsAndCoversDetailed(props) {
             CoverTempID
         )
         .then((res) => {
-          //console.log(res.data);
           if (res.data != null) {
             setCovers(res.data);
             preview = res.data.PreviewPages;
@@ -167,7 +166,6 @@ export default function LessonsAndCoversDetailed(props) {
   }
 
   async function getRecommendCovers(MainCategory, SubCategory, ID) {
-    // console.log(MainCategory, SubCategory);
     await axios
       .get("https://kaushal-rashmika-music.herokuapp.com/covers/getCovers")
       .then((res) => {
@@ -253,10 +251,8 @@ export default function LessonsAndCoversDetailed(props) {
           customerID
       )
       .then((res) => {
-        console.log(res.data.CoverIDs);
         coverIDs = res.data.CoverIDs;
         shoppingcartId = res.data._id;
-        console.log(shoppingcartId);
         let falgs = 0;
         for (let i = 0; i < coverIDs.length; i++) {
           if (coverIDs[i] === id) {
@@ -264,12 +260,10 @@ export default function LessonsAndCoversDetailed(props) {
           }
         }
         coverIDs.push(id);
-        //console.log(coverIDs);
         const newcoverList = {
           CustomerID: customerID,
           CoverIDs: coverIDs,
         };
-        // console.log(newcoverList);
         if (falgs === 0) {
           axios
             .put(
@@ -435,7 +429,6 @@ export default function LessonsAndCoversDetailed(props) {
       //It can be a successful payment or failure (problem)
       window.payhere.onCompleted = function onCompleted(orderId) {
        postOrder(orderId);
-       // console.log(payment)
         //Note: validate the payment and show success or failure page to the customer
       };
 
@@ -468,7 +461,6 @@ export default function LessonsAndCoversDetailed(props) {
       ReferenceNo: orderID,
     };
 
-    // console.log(newOrder);
     await axios
       .post("https://kaushal-rashmika-music.herokuapp.com/order/addOrder", newOrder)
       .then((res) => {
@@ -477,7 +469,6 @@ export default function LessonsAndCoversDetailed(props) {
         const newPurchasedCovers = {
           PurchasedCovers: purchasedcovers,
         };
-        // console.log(newPurchasedCovers);
         axios
           .put(
             "https://kaushal-rashmika-music.herokuapp.com/customer/addPurchasedCover/" +
@@ -522,7 +513,6 @@ export default function LessonsAndCoversDetailed(props) {
                       let count = parseInt($("#countHolder").text());
                       $("#countHolder").html(count - 1);
                       //alert("ss")
-                      //console.log(res.data);
                     })
                     .catch((err) => {
                       // alert("gg");

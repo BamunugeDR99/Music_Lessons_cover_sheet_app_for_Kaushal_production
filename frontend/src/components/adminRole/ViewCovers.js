@@ -136,12 +136,10 @@ export default function ViewCovers(props) {
   }
   async function changeCoverStatus(id, index) {
     let status = "";
-    console.log(id)
     await axios
       .get("https://kaushal-rashmika-music.herokuapp.com/covers/getOneCover/" + id)
       .then((res) => {
         let content = "";
-       // console.log(res.data)
         status = res.data.Status;
         if (status == "1") {
           // deactivating
@@ -202,7 +200,6 @@ export default function ViewCovers(props) {
             }
           })
           .catch((err) => {
-            //console.log(err)
             Swal.fire({
               icon: "error",
               title: "Oops...",
@@ -331,7 +328,6 @@ export default function ViewCovers(props) {
           setCoverAddingStatus(true);
 
           setTotalFiles(previewPages.length + 1);
-          // console.log(previewPages.length+1)
           let dynamicSubCategory = "";
           let previewPageList = [];
           for (let i = 0; i < previewPages.length; i++) {
@@ -350,7 +346,6 @@ export default function ViewCovers(props) {
           }
           //const InstrumntArray = instruments.split(",");
           let InstrumntArray = [];
-          //console.log(instruments)
           if(instruments.length === 0){
             InstrumntArray.push("Classical Guitar");
           }
@@ -373,7 +368,6 @@ export default function ViewCovers(props) {
             PreviewPages: previewPageList,
             CoverPdf: coverPDF[0].name,
           };
-          //console.log(newCover);
          UploadPdf(newCover);
 
       
@@ -505,7 +499,6 @@ export default function ViewCovers(props) {
   }
 
   // function test(val){
-  //   console.log(val.value)
   // }
   return (
     <div style={{ minHeight:"100vh", paddingTop:"40px", marginBottom:"40px"}}>
@@ -612,8 +605,9 @@ export default function ViewCovers(props) {
                   <td>{covers.SubCategory}</td>
                   <td>{covers.Price}</td>
                   <td>
-                    Date : {covers.AddedDateAndTime.substring(0, 10)} <br />{" "}
-                    Time : {covers.AddedDateAndTime.substring(12, 19)}
+                    Date : { covers.AddedDateAndTime.substring(0, 10)} <br />{" "}
+                    Time : {new Date(covers.AddedDateAndTime).toLocaleTimeString('en',
+                 { timeStyle: 'short', hour12: true, timeZone: 'UTC' })}
                   </td>
                   <td>
                     {" "}
