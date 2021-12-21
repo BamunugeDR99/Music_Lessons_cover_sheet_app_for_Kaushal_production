@@ -39,9 +39,10 @@ export default function CustomerForgotPassword(props) {
     specialChar: null,
   });
   const isNumberRegx = /\d/;
-  const specialCharacterRegx = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+  // changed 
+  const specialCharacterRegx = /[ !@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/;
 
-  let c = "";
+
   async function sendEmail(e) {
     e.preventDefault();
     setCodeVerification("");
@@ -55,7 +56,7 @@ export default function CustomerForgotPassword(props) {
           UserEmail
       )
       .then((res) => {
-        if (res.data.length == 0) {
+        if (res.data.length === 0) {
           setLoading(true);
           setUserNotFoundError("User not found!");
         } else if (res.data != null) {
@@ -120,7 +121,7 @@ export default function CustomerForgotPassword(props) {
           });
 
           setLoading(true);
-          if (stageOneStatus == false) {
+          if (stageOneStatus === false) {
             setStageTwoStatus(false);
             setStageOneStatus(true);
           }
@@ -161,7 +162,7 @@ export default function CustomerForgotPassword(props) {
     setCodeVerification("");
 
     const UserCode = document.getElementById("userCode").value;
-    if (UserCode == genCode) {
+    if (UserCode === genCode) {
       setLoading(true);
       const Toast = Swal.mixin({
         toast: true,
@@ -185,7 +186,7 @@ export default function CustomerForgotPassword(props) {
       setStageOneStatus(true);
       setStageTwoStatus(true);
       setStageThreeStatus(false);
-    } else if (UserCode != genCode) {
+    } else if (UserCode !== genCode) {
       setLoading(true);
       setCodeVerification(
         "Code verification unsuccessful! ( Please try again! )"
@@ -584,7 +585,7 @@ export default function CustomerForgotPassword(props) {
                     onChange={(e) => {
                       if (document.getElementById("newPassword").value === "") {
                       } else if (
-                        document.getElementById("newPassword").value != ""
+                        document.getElementById("newPassword").value !== ""
                       ) {
                         if (
                           e.target.value ===

@@ -37,7 +37,8 @@ export default function IdelTimer(props) {
     //     console.log('user did something', event)
     //   }
     
-      const { getRemainingTime, getLastActiveTime } = useIdleTimer({
+    // changed
+       useIdleTimer({
         timeout: 1800 * 10000,
         onIdle: handleOnIdle,
         // onActive: handleOnActive,

@@ -12,44 +12,44 @@ import "./css/initial.css";
 import "./css/home.css";
 
 // import components (Customer)
-import InitialPage from "./components/customerRole/initialpage";
-import CustomerHeaderTemp from "./components/customerRole/CustomerHeaderTemp";
-import CustomerHeaderTempBeforeLogin from "./components/customerRole/CustomerHeaderTempBeforeLogin";
-import Loginpage from "./components/customerRole/loginpage";
-import CustomerRegistration from "./components/customerRole/CustomerRegistration";
+// import InitialPage from "./components/customerRole/initialpage";
+// import CustomerHeaderTemp from "./components/customerRole/CustomerHeaderTemp";
+// import CustomerHeaderTempBeforeLogin from "./components/customerRole/CustomerHeaderTempBeforeLogin";
+// import Loginpage from "./components/customerRole/loginpage";
+// import CustomerRegistration from "./components/customerRole/CustomerRegistration";
 import CustomerForgotPassword from "./components/customerRole/CustomerForgotPassword";
-import Home from "./components/customerRole/home";
-import MusicCoverPage from "./components/customerRole/musiccoverpage";
-import TechniquesAndLessons from "./components/customerRole/TechniquesAndLessons";
-import PurchaseHistory from "./components/customerRole/purchaseHistory";
-import MusicCart from "./components/customerRole/music_cart";
-import LessonAndCoversDetailed from "./components/customerRole/LessonsAndCoversDetailed";
-import Footer from "./components/customerRole/footer";
+// import Home from "./components/customerRole/home";
+// import MusicCoverPage from "./components/customerRole/musiccoverpage";
+// import TechniquesAndLessons from "./components/customerRole/TechniquesAndLessons";
+// import PurchaseHistory from "./components/customerRole/purchaseHistory";
+// import MusicCart from "./components/customerRole/music_cart";
+// import LessonAndCoversDetailed from "./components/customerRole/LessonsAndCoversDetailed";
+// import Footer from "./components/customerRole/footer";
 
 //import Test Components
-import Search from "./components/testingComponents/search";
-import Search2 from "./components/testingComponents/search2";
-import SearchBar from "./components/testingComponents/searchBar";
-import TestLogin from "./components/testingComponents/LoginTest";
-import TestCustomerRegistration from "./components/testingComponents/RegisterTest";
-import JWTCustomerHeader from "./components/testingComponents/JWTTestHeader";
-import TestLessonsAndCoversDetailed from "./components/testingComponents/LessonsAndCoversDetailedTest";
-import TestCustomerUI from "./components/testingComponents/testCustomer";
+// import Search from "./components/testingComponents/search";
+// import Search2 from "./components/testingComponents/search2";
+// import SearchBar from "./components/testingComponents/searchBar";
+// import TestLogin from "./components/testingComponents/LoginTest";
+// import TestCustomerRegistration from "./components/testingComponents/RegisterTest";
+// import JWTCustomerHeader from "./components/testingComponents/JWTTestHeader";
+// import TestLessonsAndCoversDetailed from "./components/testingComponents/LessonsAndCoversDetailedTest";
+// import TestCustomerUI from "./components/testingComponents/testCustomer";
 
 // import Search from "./components/testingComponents/search";
 
 //import components (Admin)
-import AdminLogin from "./components/adminRole/adminLogin";
-import AdminHeaderTemp from "./components/adminRole/adminHeaderTemo";
-import Dashboard from "./components/adminRole/dashboard";
-import ViewCovers from "./components/adminRole/ViewCovers";
-import ViewDetailedCoverPage from "./components/adminRole/ViewDetailedCoverPage";
-import CustomerFeedback from "./components/adminRole/CustomerFeedback";
-import AdminVwCustomer from "./components/adminRole/AdminVwCustomer";
-import EditMainCategories from "./components/adminRole/EditMainCategory";
-import NotFound from "./components/NotFound";
+// import AdminLogin from "./components/adminRole/adminLogin";
+// import AdminHeaderTemp from "./components/adminRole/adminHeaderTemo";
+// import Dashboard from "./components/adminRole/dashboard";
+// import ViewCovers from "./components/adminRole/ViewCovers";
+// import ViewDetailedCoverPage from "./components/adminRole/ViewDetailedCoverPage";
+// import CustomerFeedback from "./components/adminRole/CustomerFeedback";
+// import AdminVwCustomer from "./components/adminRole/AdminVwCustomer";
+// import EditMainCategories from "./components/adminRole/EditMainCategory";
+// import NotFound from "./components/NotFound";
 import IdelTimer from "./components/timeRelatedComponents/IdelTimer";
-import PurchasedCoverDetailedPage from "./components/customerRole/PurchasedCoverDetailedPage";
+// import PurchasedCoverDetailedPage from "./components/customerRole/PurchasedCoverDetailedPage";
 
 function App() {
   return (
@@ -57,106 +57,14 @@ function App() {
       <IdelTimer />
 
       <Switch>
-        <div>
-          {/* Customer Routes */}
-          <Route exact path="/" exact component={InitialPage} />
-          {sessionStorage.getItem("IsAuth") ? (
-            <div>
-              <Route path="/customer" component={CustomerHeaderTemp} />
-            </div>
-          ) : (
-            <div>
-              <Route
-                path="/customer"
-                component={CustomerHeaderTempBeforeLogin}
-              />
-            </div>
-          )}
-
-          <Route path="/customer/login" exact component={Loginpage} />
-          <Route
-            path="/customer/registration"
-            exact
-            component={CustomerRegistration}
-          />
-          <Route
-            path="/customer/forgotpassword"
+       <div>
+       <Route
+            path="/a"
             exact
             component={CustomerForgotPassword}
           />
-          <Route path="/customer/home" exact component={Home} />
-          <Route
-            path="/customer/dicoversmusiccovers"
-            exact
-            component={MusicCoverPage}
-          />
-          <Route
-            path="/customer/discovertechniquesandlessons"
-            exact
-            component={TechniquesAndLessons}
-          />
-          <Route
-            path="/customer/purchasehistory"
-            exact
-            component={PurchaseHistory}
-          />
-          <Route
-            path="/customer/mycover/:id"
-            exact
-            component={PurchasedCoverDetailedPage}
-          />
-          <Route path="/customer/shoppingcart" exact component={MusicCart} />
-          <Route
-            path="/customer/detailedcover/:id"
-            exact
-            component={LessonAndCoversDetailed}
-          />
-          <Route
-            path="/customer/discovermorecover/:id"
-            exact
-            component={LessonAndCoversDetailed}
-          />
-          <Route path="/customer" component={Footer} />
-          {/* Admin Routes  */}
 
-          <ProtectedRoute path="/admin" component={AdminHeaderTemp} />
-          <Route path="/adminlogin" exact component={AdminLogin} />
-          <ProtectedRoute path="/admin/dashboard" exact component={Dashboard} />
-          <ProtectedRoute
-            path="/admin/allcovers"
-            exact
-            component={ViewCovers}
-          />
-          <ProtectedRoute
-            path="/admin/viewmorecover/:id"
-            exact
-            component={ViewDetailedCoverPage}
-          />
-          <ProtectedRoute
-            path="/admin/customerfeedbacks/:id"
-            exact
-            component={CustomerFeedback}
-          />
-          <ProtectedRoute
-            path="/admin/allcustomers"
-            exact
-            component={AdminVwCustomer}
-          />
-          <ProtectedRoute
-            path="/admin/viewcategories"
-            exact
-            component={EditMainCategories}
-          />
-          <ProtectedRoute path="/admin" component={Footer} />
-
-          {/* 404 not found route  */}
-          <Route path="/notfound" component={NotFound} />
-
-          {/* Testing routes  */}
-           <Route path = "/test" component = {JWTCustomerHeader}/>
-           <Route path = "/test/testLogin" exact component = {TestCustomerUI}/>
-           <Route path = "/test/testCoverDetails" exact component = {TestLessonsAndCoversDetailed}/>
-        </div>
+       </div>
       </Switch>
     </Router>
   );
