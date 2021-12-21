@@ -77,7 +77,7 @@ export default function ViewCovers(props) {
   function setContent() {
     setSubCategories(tempSubCategory);
     setLessonSubCategories(tempSubCategory2);
-    setCovers(tempCovers.filter((covers) => covers.Status != "3"));
+    setCovers(tempCovers.filter((covers) => covers.Status !== "3"));
     $(document).ready(function () {
       $("#Covers").DataTable();
       //$('.js-example-basic-multiple').select2();
@@ -141,12 +141,12 @@ export default function ViewCovers(props) {
       .then((res) => {
         let content = "";
         status = res.data.Status;
-        if (status == "1") {
+        if (status === "1") {
           // deactivating
           content = {
             Status: "2",
           };
-        } else if (status == "2") {
+        } else if (status === "2") {
           // activating
           content = {
             Status: "1",
@@ -160,7 +160,7 @@ export default function ViewCovers(props) {
             content
           )
           .then((res) => {
-            if (content.Status == "1") {
+            if (content.Status ==="1") {
               document.getElementById("toggle" + index).checked = true;
               const Toast = Swal.mixin({
                 toast: true,
@@ -334,12 +334,12 @@ export default function ViewCovers(props) {
             previewPageList.push(previewPages[i].name);
           }
           if (
-            document.getElementById("MainCategory").value ==
+            document.getElementById("MainCategory").value ===
             "Guitar Technics & Lessons"
           ) {
             dynamicSubCategory = document.getElementById("subCategory2").value;
           } else if (
-            document.getElementById("MainCategory").value ==
+            document.getElementById("MainCategory").value ===
             "Classical Guitar Covers"
           ) {
             dynamicSubCategory = document.getElementById("subCategory1").value;
@@ -483,9 +483,9 @@ export default function ViewCovers(props) {
   }
 
   function checkStatus(status) {
-    if (status == "1") {
+    if (status === "1") {
       return true;
-    } else if (status == "2") {
+    } else if (status === "2") {
       return false;
     }
   }
@@ -774,7 +774,7 @@ export default function ViewCovers(props) {
                       required
                       className="form-control"
                       onChange={() => {
-                        if (subCategoryPreview == true) {
+                        if (subCategoryPreview === true) {
                           setSubCategoryPreview(false);
                         } else {
                           setSubCategoryPreview(true);
@@ -798,7 +798,7 @@ export default function ViewCovers(props) {
                       onChange={(e) => {
                         setYoutubeLink(e.target.value);
                         setYoutubeLivePriview(false);
-                        if (e.target.value == "") {
+                        if (e.target.value === "") {
                           setYoutubeLivePriview(true);
                         }
                       }}
@@ -863,7 +863,7 @@ export default function ViewCovers(props) {
                       aria-describedby="priceHelp"
                       placeholder="Default : Kaushal Rashmika"
                       onChange={(e) => {
-                        if (e.target.value.length == 0) {
+                        if (e.target.value.length === 0) {
                           setArranngedBy("Kaushal Rashmika");
                         } else {
                           setArranngedBy(e.target.value);
