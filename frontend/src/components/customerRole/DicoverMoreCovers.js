@@ -3,7 +3,7 @@ import axios from "axios";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { storage } from "../../Configurations/firebaseConfigurations";
-import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
+import { ref,  getDownloadURL } from "@firebase/storage";
 
 
 
@@ -23,11 +23,11 @@ export default function DiscoverMoreCovers(props) {
         .get("https://kaushal-rashmika-music.herokuapp.com/covers/getCovers")
         .then((res) => {
           let availableCovers = res.data.filter(
-            (recCovers) => String(recCovers.Status) != "3"
+            (recCovers) => String(recCovers.Status) !== "3"
           );
 
           availableCovers = availableCovers.filter(
-            (recCovers) => String(recCovers.Status) != "2"
+            (recCovers) => String(recCovers.Status) !== "2"
           );
 
           finalFilteredCovers = availableCovers.filter(
@@ -73,7 +73,7 @@ export default function DiscoverMoreCovers(props) {
   };
 
   async function displayImages(coverImageName, index) {
-    if (recommenedCovers.length != 0) {
+    if (recommenedCovers.length !== 0) {
       const storageRef = ref(storage, `PreviewImages/${coverImageName}`);
       await getDownloadURL(storageRef)
         .then((url) => {

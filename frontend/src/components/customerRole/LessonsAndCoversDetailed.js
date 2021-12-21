@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import CurrencySelect from "./CurrencySelect";
-import DiscoverMoreCovers from "./DicoverMoreCovers";
 import Swal from "sweetalert2";
 import { storage } from "../../Configurations/firebaseConfigurations";
-import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
-import $, { ajaxPrefilter } from "jquery";
-import { async } from "@firebase/util";
+import { ref, getDownloadURL } from "@firebase/storage";
+import $ from "jquery";
 import Carousel from "react-multi-carousel";
 import Modal from "react-bootstrap/Modal";
 import "react-multi-carousel/lib/styles.css";
@@ -122,7 +120,7 @@ export default function LessonsAndCoversDetailed(props) {
         )}/${coverID}`
       )
       .then((res) => {
-        if (res.data == true) {
+        if (res.data === true) {
           axios
             .get(
               `https://kaushal-rashmika-music.herokuapp.com/feedback/checkFeedBack/${localStorage.getItem(
@@ -130,11 +128,11 @@ export default function LessonsAndCoversDetailed(props) {
               )}/${coverID}`
             )
             .then((res) => {
-              if (res.data == true) {
+              if (res.data === true) {
                 setPurchased(true);
                 setCoverStatus(true);
                 setFeedbackSubmitted(true);
-              } else if (res.data == false) {
+              } else if (res.data === false) {
                 setPurchased(true);
                 setCoverStatus(true);
                 setFeedbackSubmitted(false);
@@ -143,7 +141,7 @@ export default function LessonsAndCoversDetailed(props) {
             .catch((err) => {
               console.log(err);
             });
-        } else if (res.data == false) {
+        } else if (res.data === false) {
           setPurchased(false);
           setCoverStatus(true);
         }
@@ -156,7 +154,7 @@ export default function LessonsAndCoversDetailed(props) {
   }
   function printInstruments(instruments) {
     for (let i = 0; i < instruments.length; i++) {
-      if (instruments.length == i + 1) {
+      if (instruments.length === i + 1) {
         instrumentsTxt += instruments[i];
       } else {
         instrumentsTxt += instruments[i] + ", ";
@@ -170,11 +168,11 @@ export default function LessonsAndCoversDetailed(props) {
       .get("https://kaushal-rashmika-music.herokuapp.com/covers/getCovers")
       .then((res) => {
         let availableCovers = res.data.filter(
-          (recCovers) => String(recCovers.Status) != "3"
+          (recCovers) => String(recCovers.Status) !== "3"
         );
 
         availableCovers = availableCovers.filter(
-          (recCovers) => String(recCovers.Status) != "2"
+          (recCovers) => String(recCovers.Status) !== "2"
         );
 
         //  availableCovers = availableCovers.filter((recCovers) => recCovers._id != covers._id);
@@ -183,7 +181,7 @@ export default function LessonsAndCoversDetailed(props) {
           (covers) =>
             covers.MainCategory === MainCategory &&
             covers.SubCategory === SubCategory &&
-            covers._id != ID
+            covers._id !== ID
         );
 
         if (finalFilteredCovers.length === 0) {
@@ -202,7 +200,7 @@ export default function LessonsAndCoversDetailed(props) {
   function displayPreviewImageSlider(previewImages) {
     let imageSlider = '<div class="carousel-inner">';
     for (let i = 0; i < previewImages.length; i++) {
-      if (i == 0) {
+      if (i === 0) {
         imageSlider +=
           '<div class="carousel-item active"><img id = "' +
           "img" +
@@ -241,7 +239,6 @@ export default function LessonsAndCoversDetailed(props) {
     //alert(id);
     setAddToCartStatus(false);
     //let customerID = localStorage.getItem("CustomerID");
-    let newItems = []; /// Change this later
     const customerID = localStorage.getItem("CustomerID");
     let coverIDs = [];
     let shoppingcartId = "";
@@ -313,7 +310,7 @@ export default function LessonsAndCoversDetailed(props) {
   }
 
   async function displayImages(coverImageName, index) {
-    if (recommenedCovers.length != 0) {
+    if (recommenedCovers.length !== 0) {
       const storageRef = ref(storage, `PreviewImages/${coverImageName}`);
       await getDownloadURL(storageRef)
         .then((url) => {
@@ -706,13 +703,13 @@ export default function LessonsAndCoversDetailed(props) {
   }
 
 
-  function checkYouTubeVideoLink(youtubeVideo){
-    if(youtubeVideo.toLowerCase().includes("https://www.youtube.com/embed/")){
-     document.getElementById("youtubeVideo").src = youtubeVideo;
-    }else{
-      document.getElementById("youtubeVideo").src = "https://www.youtube.com/embed/";
-    }
-  }
+  // function checkYouTubeVideoLink(youtubeVideo){
+  //   if(youtubeVideo.toLowerCase().includes("https://www.youtube.com/embed/")){
+  //    document.getElementById("youtubeVideo").src = youtubeVideo;
+  //   }else{
+  //     document.getElementById("youtubeVideo").src = "https://www.youtube.com/embed/";
+  //   }
+  // }
   return (
     <div>
       <div class="card container-xxl" style={{ border: "solid #764A34" }}>
@@ -800,6 +797,7 @@ export default function LessonsAndCoversDetailed(props) {
                     href={covers.FacebookLink}
                     role="button"
                     target = "_blank"
+                    rel="noreferrer"
                   >
                     <i
                       class="fab fa-facebook-f fa-3x"
