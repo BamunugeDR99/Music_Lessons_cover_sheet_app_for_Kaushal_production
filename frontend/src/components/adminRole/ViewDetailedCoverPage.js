@@ -110,7 +110,7 @@ export default function ViewDetailedCoverPage(props) {
   }
   function printInstruments(instruments) {
     for (let i = 0; i < instruments.length; i++) {
-      if (instruments.length == i + 1) {
+      if (instruments.length === i + 1) {
         instrumentsTxt += instruments[i];
       } else {
         instrumentsTxt += instruments[i] + ", ";
@@ -122,7 +122,7 @@ export default function ViewDetailedCoverPage(props) {
   function displayPreviewImageSlider(previewImages) {
     let imageSlider = '<div class="carousel-inner">';
     for (let i = 0; i < previewImages.length; i++) {
-      if (i == 0) {
+      if (i === 0) {
         imageSlider +=
           '<div class="carousel-item active"><img id = "' +
           "img" +
@@ -435,7 +435,7 @@ export default function ViewDetailedCoverPage(props) {
           }
           let InstrumentArray = [];
 
-          if (instruments.length == 0) {
+          if (instruments.length === 0) {
             InstrumentArray = document
               .getElementById("Instruments")
               .value.split(",");
@@ -494,7 +494,7 @@ export default function ViewDetailedCoverPage(props) {
                 });
               });
           } else if (
-            previewPages.length != 0 &&
+            previewPages.length !== 0 &&
             document.getElementById("pdffile").files.length === 0
           ) {
             for (let i = 0; i < previewPages.length; i++) {
@@ -509,7 +509,7 @@ export default function ViewDetailedCoverPage(props) {
             );
           } else if (
             previewPages.length === 0 &&
-            document.getElementById("pdffile").files.length != 0
+            document.getElementById("pdffile").files.length !== 0
           ) {
             updateCoverPdf = coverPDF[0].name;
             previewPageList = document
@@ -522,8 +522,8 @@ export default function ViewDetailedCoverPage(props) {
               dynamicSubCategory
             );
           } else if (
-            previewPages.length != 0 &&
-            document.getElementById("pdffile").files.length != 0
+            previewPages.length !== 0 &&
+            document.getElementById("pdffile").files.length !== 0
           ) {
             updateCoverPdf = coverPDF[0].name;
             for (let i = 0; i < previewPages.length; i++) {
@@ -983,7 +983,7 @@ export default function ViewDetailedCoverPage(props) {
                       value={dropMainCategory}
                       className="form-control"
                       onChange={(e) => {
-                        if (subCategoryPreview == true) {
+                        if (subCategoryPreview === true) {
                           setSubCategoryPreview(false);
                           setDropMainCategory(e.target.value);
                           setSubCategoryPreview2(true);
@@ -1015,7 +1015,7 @@ export default function ViewDetailedCoverPage(props) {
                       onChange={(e) => {
                         setYoutubeLink(e.target.value);
                         setYoutubeLivePriview(false);
-                        if (e.target.value == "") {
+                        if (e.target.value === "") {
                           setYoutubeLivePriview(true);
                         }
                       }}
@@ -1088,7 +1088,7 @@ export default function ViewDetailedCoverPage(props) {
                       aria-describedby="priceHelp"
                       placeholder="Default : Kaushal Rashmika"
                       onChange={(e) => {
-                        if (e.target.value.length == 0) {
+                        if (e.target.value.length ===0) {
                           setArranngedBy("Kaushal Rashmika");
                         } else {
                           setArranngedBy(e.target.value);
