@@ -50,6 +50,7 @@ import EditMainCategories from "./components/adminRole/EditMainCategory";
 import NotFound from "./components/NotFound";
 import IdelTimer from "./components/timeRelatedComponents/IdelTimer";
 import PurchasedCoverDetailedPage from "./components/customerRole/PurchasedCoverDetailedPage";
+import bootstrapTesting from "./components/testingComponents/bootstrapTesting";
 
 function App() {
   return (
@@ -153,9 +154,10 @@ function App() {
           <Route path="/notfound" component={NotFound} />
 
           {/* Testing routes  */}
-           <Route path = "/test" component = {JWTCustomerHeader}/>
+           <Route path = "/test" component = {bootstrapTesting}/>
            <Route path = "/test/testLogin" exact component = {TestCustomerUI}/>
            <Route path = "/test/testCoverDetails" exact component = {TestLessonsAndCoversDetailed}/>
+
         </div>
       </Switch>
     </Router>
