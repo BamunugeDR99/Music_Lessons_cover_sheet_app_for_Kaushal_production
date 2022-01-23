@@ -204,6 +204,7 @@ router.post("/verifyToken3", (req, res) => {
     //Splitting the Bearer text
     const token = authHeader.split(" ")[1];
  
+    console.log("GG");
        
   console.log(`Token in verify Function 3 : - ${token}`);
   console.log();
