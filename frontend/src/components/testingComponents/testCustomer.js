@@ -19,7 +19,6 @@ export default function TestCustomerUI(props){
     try {
                  console.log("Refresh Tokens running");
                   //Get the Cokkies
-   
                   let refreshToken = Cookies.get("refresh");
 
                   console.log(refreshToken);
@@ -27,14 +26,14 @@ export default function TestCustomerUI(props){
       //Pass the refresh token to refresh route
       const res = await axios.post("https://kaushal-rashmika-music.herokuapp.com/testcustomer/refreshToken", { token:refreshToken });
 
-      //update the user with new accessToken and new refreshToken
-      setUser({
-        ...user,
-        accessToken: res.data.accessToken,
-        refreshToken: res.data.refreshToken,
-      });
+      // //update the user with new accessToken and new refreshToken
+      // setUser({
+      //   ...user,
+      //   accessToken: res.data.accessToken,
+      //   refreshToken: res.data.refreshToken,
+      // });
 
-      console.log(res.data);
+      // console.log(res.data);
       //Set Cookies
       Cookies.set("access", res.data.accessToken);
       Cookies.set("refresh",res.data.refreshToken);
@@ -52,7 +51,6 @@ export default function TestCustomerUI(props){
   //Creating new axios instance
   const axiosJWT = axios.create()
 
-
   //Token expires in 50 sec , after that we need to refresh and get a new token
   //To do this automatically --> axios interceptors --> do some function before every request in this case
 
@@ -65,7 +63,7 @@ export default function TestCustomerUI(props){
 
             //Get the Cokkies
             let accessToken = Cookies.get("access");
-            let refreshToken = Cookies.get("refresh");
+            // let refreshToken = Cookies.get("refresh");
 
 
       //Decode the payload of the token and return it as an object
@@ -102,10 +100,10 @@ export default function TestCustomerUI(props){
       setUser(res.data);
         console.log(res.data);
 
-                   console.log(res.data.accessToken);
-                  console.log(res.data.refreshToken);
-                  console.log(res.data._id);
-            localStorage.setItem('CustomerID', res.data._id);
+            //        console.log(res.data.accessToken);
+            //       console.log(res.data.refreshToken);
+            //       console.log(res.data._id);
+            // localStorage.setItem('CustomerID', res.data._id);
             //Setting the Cookies
             Cookies.set("access", res.data.accessToken);
             Cookies.set("refresh",res.data.refreshToken);

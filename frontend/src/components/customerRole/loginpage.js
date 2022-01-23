@@ -71,20 +71,14 @@ export default function Login(props) {
 
     axios
       .post(
-        "https://kaushal-rashmika-music.herokuapp.com/customer/loginCustomer",
+        "http://localhost:8070/customer/loginCustomer",
         loginCredentials
       )
       .then((res) => {
-        // setCustomer(res.data.customerLogin);
-        // localStorage.setItem("CustomerID", res.data.customerLogin._id);
 
-        // let customerID = res.data.customerLogin._id;
-
-        console.log(res.data);
+ 
         setCustomer(res.data);
-        console.log(res.data.accessToken);
-       console.log(res.data.refreshToken);
-       console.log(res.data._id);
+
       localStorage.setItem('CustomerID', res.data._id);
         //Setting the Cookies
        Cookies.set("access", res.data.accessToken);
@@ -98,7 +92,7 @@ export default function Login(props) {
         axios
           .put(
             "https://kaushal-rashmika-music.herokuapp.com/customer/loginStatus/" +
-              customer._id,
+              res.data._id,
             updateloginStatus
           )
           .then((res) => {

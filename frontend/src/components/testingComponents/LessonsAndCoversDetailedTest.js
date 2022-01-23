@@ -47,6 +47,13 @@ export default function TestLessonsAndCoversDetailed(props) {
 
   let [paymentVerification, setPaymentVerification] = useState(false);
 
+
+   //Get the Cokkies
+   const decodedAccessToken = jwt_decode(Cookies.get("access"));
+   let CustomerIDTemp = decodedAccessToken._id;
+
+
+
   useEffect(() => {
     async function getCovers() {
       const CoverTempID = "61b43ef79546b5893fefd93d";
@@ -89,12 +96,12 @@ export default function TestLessonsAndCoversDetailed(props) {
 
    
     async function getCustomerDetails() {
-      if(localStorage.getItem("CustomerID")===null || sessionStorage.getItem('IsAuth') === null){
+      if(decodedAccessToken===null || sessionStorage.getItem('IsAuth') === null){
       }else{
         await axios
         .get(
           "https://kaushal-rashmika-music.herokuapp.com/customer/get/" +
-            localStorage.getItem("CustomerID")
+            decodedAccessToken._id
         )
         .then((res) => {
           setCustomer(res.data);
@@ -119,7 +126,6 @@ export default function TestLessonsAndCoversDetailed(props) {
     
                     console.log("Refreshing Cookies ");
                       //Get the Cokkies
-                      let accessToken = Cookies.get("access");
                       let refreshToken = Cookies.get("refresh");
     
     
@@ -127,15 +133,12 @@ export default function TestLessonsAndCoversDetailed(props) {
           const res = await axios.post("http://localhost:8070/jwtTest/refreshToken", { token:refreshToken });
     
         
-    
+          console.log("Response From the Refresh Tokens!!");
           console.log(res.data);
           //Set Cookies
           Cookies.set("access", res.data.accessToken);
           Cookies.set("refresh",res.data.refreshToken);
-    
-    
-    
-          console.log(res.data);
+
           //Returns a new acces token & new refresh token
           return res.data;
         } catch (err) {
@@ -193,6 +196,39 @@ export default function TestLessonsAndCoversDetailed(props) {
     
     
     //Verify Token function
+  // const verifyToken =  () => {
+
+
+  //                   //Get the Cokkies
+  //                   let accessToken = Cookies.get("access");
+     
+  //                   axiosJWT
+  //                   .post(
+  //                     "http://localhost:8070/jwtTest/verifyToken",{
+  //                         //Set the authorization token to the header
+  //                         headers: { authorization: "Bearer " + accessToken },
+  //                       }).then((res) =>{ 
+
+  //     let verification = res.data;
+  //     console.log(`Token Verification : ${verification}`);
+  //     console.log(accessToken);
+  //     // setPaymentVerification(verification);
+
+  //       // purchasingProcess();
+  //       return verification;
+
+  //     }).catch((err) => {
+
+  //       console.log(err);
+  //     });
+      
+ 
+  // };
+
+
+
+
+  //Verify Token function
   const verifyToken = async () => {
 
 
@@ -203,9 +239,9 @@ export default function TestLessonsAndCoversDetailed(props) {
       let accessToken = Cookies.get("access");
 
 
-    
+      console.log(`Access token from the cookie:- ${accessToken} `);
       //Uses the axiosJWT instance
-      await axiosJWT.post("http://localhost:8070/jwtTest/verifyToken", {
+      await axiosJWT.post("http://localhost:8070/jwtTest/verifyToken3", {
         //Set the authorization token to the header
         headers: { authorization: "Bearer " + accessToken },
       }).then((res) =>{
@@ -213,10 +249,10 @@ export default function TestLessonsAndCoversDetailed(props) {
       let verification = res.data;
       console.log(`Token Verification : ${verification}`);
       console.log(accessToken);
-      setPaymentVerification(verification);
+      // setPaymentVerification(verification);
 
-        purchasingProcess();
-        return verification;
+      //   purchasingProcess();
+      //   return verification;
 
       });
       
@@ -274,7 +310,7 @@ export default function TestLessonsAndCoversDetailed(props) {
 
 
   function setButtons(coverID) {
-    if(localStorage.getItem("CustomerID") === null || sessionStorage.getItem('IsAuth') === null){
+    if(decodedAccessToken._id === null || sessionStorage.getItem('IsAuth') === null){
       setPurchased(false);
       setUserlogin(true);
       setCoverStatus(true);
@@ -282,17 +318,13 @@ export default function TestLessonsAndCoversDetailed(props) {
     }else{
       axios
       .get(
-        `https://kaushal-rashmika-music.herokuapp.com/customer/checkPurchaseCovers/${localStorage.getItem(
-          "CustomerID"
-        )}/${coverID}`
+        `https://kaushal-rashmika-music.herokuapp.com/customer/checkPurchaseCovers/${decodedAccessToken._id}/${coverID}`
       )
       .then((res) => {
         if (res.data == true) {
           axios
             .get(
-              `https://kaushal-rashmika-music.herokuapp.com/feedback/checkFeedBack/${localStorage.getItem(
-                "CustomerID"
-              )}/${coverID}`
+              `https://kaushal-rashmika-music.herokuapp.com/feedback/checkFeedBack/${decodedAccessToken._id}/${coverID}`
             )
             .then((res) => {
               if (res.data == true) {
@@ -406,9 +438,9 @@ export default function TestLessonsAndCoversDetailed(props) {
   async function addToCart(id) {
     //alert(id);
     setAddToCartStatus(false);
-    //let customerID = localStorage.getItem("CustomerID");
+    //let customerID = decodedAccessToken._id;
     let newItems = []; /// Change this later
-    const customerID = localStorage.getItem("CustomerID");
+    const customerID = decodedAccessToken._id;
     let coverIDs = [];
     let shoppingcartId = "";
     await axios
@@ -642,7 +674,7 @@ export default function TestLessonsAndCoversDetailed(props) {
         axios
           .put(
             "https://kaushal-rashmika-music.herokuapp.com/customer/addPurchasedCover/" +
-              localStorage.getItem("CustomerID"),
+              decodedAccessToken._id,
             newPurchasedCovers
           )
           .then((res) => {
@@ -667,9 +699,7 @@ export default function TestLessonsAndCoversDetailed(props) {
 
             axios
               .get(
-                `https://kaushal-rashmika-music.herokuapp.com/shoppingCart/checkCartItem/${localStorage.getItem(
-                  "CustomerID"
-                )}/${covers._id}`
+                `https://kaushal-rashmika-music.herokuapp.com/shoppingCart/checkCartItem/${decodedAccessToken._id}/${covers._id}`
               )
               .then((res) => {
                 if (res.data) {
@@ -677,7 +707,7 @@ export default function TestLessonsAndCoversDetailed(props) {
                   axios
                     .delete(
                       `https://kaushal-rashmika-music.herokuapp.com/shoppingCart/deleteCartCover/${covers._id}/` +
-                        localStorage.getItem("CustomerID")
+                        decodedAccessToken._id
                     )
                     .then((res) => {
                       let count = parseInt($("#countHolder").text());
@@ -725,7 +755,7 @@ export default function TestLessonsAndCoversDetailed(props) {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        const CustomerID = localStorage.getItem("CustomerID");
+        const CustomerID = decodedAccessToken._id;
         const newFeedBack = {
           Comment: feedback,
           CustomerID: CustomerID,
@@ -774,7 +804,7 @@ export default function TestLessonsAndCoversDetailed(props) {
 
         const updatedFeedBack = {
           Comment: eFeedback,
-          CustomerID: localStorage.getItem("CustomerID"),
+          CustomerID: decodedAccessToken._id,
           CoverID: covers._id,
         };
         axios
@@ -809,12 +839,10 @@ export default function TestLessonsAndCoversDetailed(props) {
   }
 
   function getFeedBack(coverID) {
-    //const CustomerID = localStorage.getItem("CustomerID");
+    //const CustomerID = decodedAccessToken._id;
     axios
       .get(
-        `https://kaushal-rashmika-music.herokuapp.com/feedback/getOneFeedBack/${localStorage.getItem(
-          "CustomerID"
-        )}/${coverID}`
+        `https://kaushal-rashmika-music.herokuapp.com/feedback/getOneFeedBack/${decodedAccessToken._id}/${coverID}`
       )
       .then((res) => {
         setFeedbackObject(res.data);

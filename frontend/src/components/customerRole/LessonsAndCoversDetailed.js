@@ -11,6 +11,10 @@ import Carousel from "react-multi-carousel";
 import Modal from "react-bootstrap/Modal";
 import "react-multi-carousel/lib/styles.css";
 
+import jwt_decode from "jwt-decode";
+import Cookies from "js-cookie";
+
+
 export default function LessonsAndCoversDetailed(props) {
   const [covers, setCovers] = useState([]);
   const [TempYoutubeLink, setTempYoutubeLink] = useState("");
@@ -42,6 +46,88 @@ export default function LessonsAndCoversDetailed(props) {
   const [userlogin,setUserlogin] = useState(false);
   const [requirementTxt,setRequirementTxt] = useState("");
 
+
+    //Get the Cokkies
+    const decodedAccessToken = jwt_decode(Cookies.get("access"));
+
+    
+
+     //=======================JWT==========================================
+    //Refresh token function
+    const refreshTokens = async () => {
+      try {
+  
+                  // console.log("Refreshing Cookies ");
+                    //Get the Cokkies
+                    let refreshToken = Cookies.get("refresh");
+  
+  
+        //Pass the refresh token to refresh route
+        const res = await axios.post("http://localhost:8070/jwtTest/refreshToken", { token:refreshToken });
+  
+      
+        // console.log("Response From the Refresh Tokens!!");
+        // console.log(res.data);
+        //Set Cookies
+        Cookies.set("access", res.data.accessToken);
+        Cookies.set("refresh",res.data.refreshToken);
+
+        //Returns a new acces token & new refresh token
+        return res.data;
+      } catch (err) {
+        console.log(err);
+      }
+    };
+  
+    //Creating new axios instance
+    const axiosJWT = axios.create()
+  
+  
+    //Token expires in 50 sec , after that we need to refresh and get a new token
+    //To do this automatically --> axios interceptors --> do some function before every request in this case
+  
+  
+    //Check expiration time of the token before sending any request
+    axiosJWT.interceptors.request.use(
+      async (config) => {
+        let currentDate = new Date();
+  
+  
+              //Get the Cokkies
+              let accessToken = Cookies.get("access");
+           
+              // console.log(`Access Token At the Interceptor :- ${accessToken}`);
+  
+        //Decode the payload of the token and return it as an object
+        const decodedToken = jwt_decode(accessToken);
+  
+        // console.log(`Decoded Token :`);
+        // console.log(decodedToken)
+  
+        //Compare the expiration time with the current time
+        // console.log("Expired ? ");
+        // console.log(decodedToken.exp * 1000 < currentDate.getTime());
+        if (decodedToken.exp * 1000 < currentDate.getTime()) {
+          //Calling refresh token function
+          const data = await refreshTokens();
+  
+          // console.log("Expired & Intercepted");
+          // console.log(data);
+          //Update header
+          config.headers["authorization"] = "Bearer " + data.accessToken;
+        }
+
+        console.log(config);
+        return config;
+      },
+      (error) => {
+  
+        //If there is an error cancel everything
+        return Promise.reject(error);
+      }
+    );
+
+//========================================================================================================
   useEffect(() => {
     async function getCovers() {
       const CoverTempID = props.match.params.id;
@@ -83,12 +169,12 @@ export default function LessonsAndCoversDetailed(props) {
     }
 
     async function getCustomerDetails() {
-      if(localStorage.getItem("CustomerID")===null || sessionStorage.getItem('IsAuth') === null){
+      if(Cookies.get("access")===null || sessionStorage.getItem('IsAuth') === null){
       }else{
         await axios
         .get(
           "https://kaushal-rashmika-music.herokuapp.com/customer/get/" +
-            localStorage.getItem("CustomerID")
+             decodedAccessToken._id
         )
         .then((res) => {
           setCustomer(res.data);
@@ -105,7 +191,7 @@ export default function LessonsAndCoversDetailed(props) {
   }, []);
 
   function setButtons(coverID) {
-    if(localStorage.getItem("CustomerID") === null || sessionStorage.getItem('IsAuth') === null){
+    if(Cookies.get("access")===null || sessionStorage.getItem('IsAuth') === null){
       setPurchased(false);
       setUserlogin(true);
       setCoverStatus(true);
@@ -113,17 +199,13 @@ export default function LessonsAndCoversDetailed(props) {
     }else{
       axios
       .get(
-        `https://kaushal-rashmika-music.herokuapp.com/customer/checkPurchaseCovers/${localStorage.getItem(
-          "CustomerID"
-        )}/${coverID}`
+        `https://kaushal-rashmika-music.herokuapp.com/customer/checkPurchaseCovers/${decodedAccessToken._id}/${coverID}`
       )
       .then((res) => {
         if (res.data == true) {
           axios
             .get(
-              `https://kaushal-rashmika-music.herokuapp.com/feedback/checkFeedBack/${localStorage.getItem(
-                "CustomerID"
-              )}/${coverID}`
+              `https://kaushal-rashmika-music.herokuapp.com/feedback/checkFeedBack/${decodedAccessToken._id}/${coverID}`
             )
             .then((res) => {
               if (res.data == true) {
@@ -237,9 +319,9 @@ export default function LessonsAndCoversDetailed(props) {
   async function addToCart(id) {
     //alert(id);
     setAddToCartStatus(false);
-    //let customerID = localStorage.getItem("CustomerID");
+    //let customerID =  decodedAccessToken._id;
     let newItems = []; /// Change this later
-    const customerID = localStorage.getItem("CustomerID");
+    const customerID =  decodedAccessToken._id;
     let coverIDs = [];
     let shoppingcartId = "";
     await axios
@@ -459,9 +541,15 @@ export default function LessonsAndCoversDetailed(props) {
       ReferenceNo: orderID,
     };
 
+     //Get the Cokkies
+     let accessToken = Cookies.get("access");
+
     // console.log(newOrder);
     await axios
-      .post("https://kaushal-rashmika-music.herokuapp.com/order/addOrder", newOrder)
+      .post("https://kaushal-rashmika-music.herokuapp.com/order/addOrder", newOrder, {
+         //Set the authorization token to the header
+         headers: { authorization: "Bearer " + accessToken },
+      })
       .then((res) => {
         let purchasedcovers = customer.PurchasedCovers;
         purchasedcovers.push(covers._id);
@@ -472,7 +560,7 @@ export default function LessonsAndCoversDetailed(props) {
         axios
           .put(
             "https://kaushal-rashmika-music.herokuapp.com/customer/addPurchasedCover/" +
-              localStorage.getItem("CustomerID"),
+               decodedAccessToken._id,
             newPurchasedCovers
           )
           .then((res) => {
@@ -497,9 +585,7 @@ export default function LessonsAndCoversDetailed(props) {
 
             axios
               .get(
-                `https://kaushal-rashmika-music.herokuapp.com/shoppingCart/checkCartItem/${localStorage.getItem(
-                  "CustomerID"
-                )}/${covers._id}`
+                `https://kaushal-rashmika-music.herokuapp.com/shoppingCart/checkCartItem/${decodedAccessToken._id}/${covers._id}`
               )
               .then((res) => {
                 if (res.data) {
@@ -507,7 +593,7 @@ export default function LessonsAndCoversDetailed(props) {
                   axios
                     .delete(
                       `https://kaushal-rashmika-music.herokuapp.com/shoppingCart/deleteCartCover/${covers._id}/` +
-                        localStorage.getItem("CustomerID")
+                         decodedAccessToken._id
                     )
                     .then((res) => {
                       let count = parseInt($("#countHolder").text());
@@ -555,7 +641,7 @@ export default function LessonsAndCoversDetailed(props) {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        const CustomerID = localStorage.getItem("CustomerID");
+        const CustomerID =  decodedAccessToken._id;
         const newFeedBack = {
           Comment: feedback,
           CustomerID: CustomerID,
@@ -604,7 +690,7 @@ export default function LessonsAndCoversDetailed(props) {
 
         const updatedFeedBack = {
           Comment: eFeedback,
-          CustomerID: localStorage.getItem("CustomerID"),
+          CustomerID:  decodedAccessToken._id,
           CoverID: covers._id,
         };
         axios
@@ -639,12 +725,10 @@ export default function LessonsAndCoversDetailed(props) {
   }
 
   function getFeedBack(coverID) {
-    //const CustomerID = localStorage.getItem("CustomerID");
+    //const CustomerID =  decodedAccessToken._id;
     axios
       .get(
-        `https://kaushal-rashmika-music.herokuapp.com/feedback/getOneFeedBack/${localStorage.getItem(
-          "CustomerID"
-        )}/${coverID}`
+        `https://kaushal-rashmika-music.herokuapp.com/feedback/getOneFeedBack/${decodedAccessToken._id}/${coverID}`
       )
       .then((res) => {
         setFeedbackObject(res.data);

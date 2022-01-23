@@ -105,14 +105,14 @@ let refreshTokens = [];
                   3.Expiration
                   */
                   const generateAccessToken = (user) => {
-                    return jwt.sign({ _id: user._id }, "mySecretKey", {
+                    return jwt.sign({ _id: user._id },process.env.ACCESS_TOKEN_SECRET, {
                       expiresIn:"50s"
                     });
                   };
                   
                   //Function to create a refresh token --> Calls automatically when the accesstoken is expired and generates a new acess token
                   const generateRefreshToken = (user) => {
-                    return jwt.sign({ _id: user._id }, "myRefreshSecretKey", {
+                    return jwt.sign({ _id: user._id },process.env.REFRESH_TOKEN_SECRET , {
                       expiresIn:"7d"
                     });
                   };
@@ -124,7 +124,7 @@ const verify = (req, res, next) => {
     //Check the Headers & find the authorization key & take it's value
     const authHeader = req.headers.authorization;
   
-    // console.log(authHeader);
+    console.log(authHeader);
   
     //If there is a authorization key
     if (authHeader) {
@@ -132,14 +132,14 @@ const verify = (req, res, next) => {
       //Splitting the Bearer text
       const token = authHeader.split(" ")[1];
   
-    //   console.log(token)
+      console.log(token)
   
   
       //Verifying token
       /*Parameters ==> 1.token
                        2.secretkey
                        3.callback */
-      jwt.verify(token, "mySecretKey", (err, user) => {
+      jwt.verify(token,process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err) {
           return res.status(403).json("Token is not valid!");
         }
@@ -172,7 +172,7 @@ router.post("/refreshToken", (req, res) => {
   
     //If the refresh key exists validate it
   
-    jwt.verify(refreshToken, "myRefreshSecretKey", (err, user) => { 
+    jwt.verify(refreshToken,process.env.REFRESH_TOKEN_SECRET, (err, user) => { 
       err && console.log(err);
   
       //Delete the current refresh token

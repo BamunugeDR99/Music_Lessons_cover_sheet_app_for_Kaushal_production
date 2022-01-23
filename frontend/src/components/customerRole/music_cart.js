@@ -4,6 +4,9 @@ import Swal from "sweetalert2";
 import { storage } from "../../Configurations/firebaseConfigurations";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 
+import jwt_decode from "jwt-decode";
+import Cookies from "js-cookie";
+
 export default function MusicCart(props) {
   let [cartCovers, setCovers] = useState([]);
   let [total, setTotal] = useState("");
@@ -12,6 +15,7 @@ export default function MusicCart(props) {
   let [coverNames, setCoverNames] = useState("");
   const [customer, setCustomer] = useState([]);
   let [coverIdArray, setCoverIdArray] = useState([]);
+
 
   let tot = 0;
   let coverdetails = [];
@@ -32,6 +36,12 @@ export default function MusicCart(props) {
     images,
   };
 
+  
+    //Get the Cokkies
+    const decodedAccessToken = jwt_decode(Cookies.get("access"));
+
+
+
   useEffect(async () => {
     document.getElementById("spinnerdiv").style.display = "block";
     document.getElementById("cartdiv").style.display = "none";
@@ -39,7 +49,7 @@ export default function MusicCart(props) {
     await axios
       .get(
         "https://kaushal-rashmika-music.herokuapp.com/shoppingCart/getOneCart/" +
-          localStorage.getItem("CustomerID")
+              decodedAccessToken._id
       )
       .then((res) => {
         // console.log(res.data.CoverIDs);
@@ -68,7 +78,7 @@ export default function MusicCart(props) {
       await axios
         .get(
           "https://kaushal-rashmika-music.herokuapp.com/customer/get/" +
-            localStorage.getItem("CustomerID")
+                decodedAccessToken._id
         )
         .then((res) => {
           setCustomer(res.data);
@@ -143,7 +153,7 @@ export default function MusicCart(props) {
 
       .get(
         "https://kaushal-rashmika-music.herokuapp.com/shoppingCart/getOneCart/" +
-          localStorage.getItem("CustomerID")
+              decodedAccessToken._id
       )
 
       .then((res) => {
@@ -177,7 +187,7 @@ export default function MusicCart(props) {
         axios
           .delete(
             `https://kaushal-rashmika-music.herokuapp.com/shoppingCart/deleteCartCover/${id}/` +
-              localStorage.getItem("CustomerID")
+                  decodedAccessToken._id
           )
           .then((res) => {
             Swal.fire({
@@ -193,7 +203,7 @@ export default function MusicCart(props) {
             axios
               .get(
                 "https://kaushal-rashmika-music.herokuapp.com/shoppingCart/getOneCart/" +
-                  localStorage.getItem("CustomerID")
+                      decodedAccessToken._id
               )
               .then((res) => {
                 // console.log(res.data.CoverIDs);
@@ -321,7 +331,7 @@ export default function MusicCart(props) {
             axios
               .put(
                 "https://kaushal-rashmika-music.herokuapp.com/shoppingCart/updateCartCovers/" +
-                  localStorage.getItem("CustomerID")
+                decodedAccessToken._id
               )
               .then((res) => {
                 incrementCover();

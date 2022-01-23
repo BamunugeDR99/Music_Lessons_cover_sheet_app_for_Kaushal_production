@@ -6,6 +6,8 @@ import Swal from "sweetalert2";
 import PasswordStrengthIndicator from "./passwordStrength";
 import "../../css/shoppingcartIncrementStyles.css";
 import { Link } from "react-router-dom";
+import jwt_decode from "jwt-decode";
+import Cookies from "js-cookie";
 
 const bcrypt = require("bcryptjs");
 export default function CustomerHeader(props) {
@@ -78,8 +80,88 @@ export default function CustomerHeader(props) {
 
   let [confirmDelete, setConfirmDelete] = useState(true);
 
-  let CustomerIDTemp = localStorage.getItem("CustomerID");
+  //Get the Cokkies
+  const decodedAccessToken = jwt_decode(Cookies.get("access"));
+  let CustomerIDTemp = decodedAccessToken._id;
 
+  //====================================================================================
+  //JWT Functions
+   //Refresh token function
+   const refreshTokens = async () => {
+    try {
+
+                  //Get the Cokkies
+          
+                  let refreshToken = Cookies.get("refresh");
+
+                  // console.log(refreshToken);
+
+      //Pass the refresh token to refresh route
+      const res = await axios.post("http://localhost:8070/customer/refreshToken", { token:refreshToken });
+
+    
+      // console.log(res.data);
+      //Set Cookies
+      Cookies.set("access", res.data.accessToken);
+      Cookies.set("refresh",res.data.refreshToken);
+
+
+
+      // console.log(res.data);
+      //Returns a new acces token & new refresh token
+      return res.data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //Creating new axios instance
+  const axiosJWT = axios.create()
+
+
+  //Token expires in 50 sec , after that we need to refresh and get a new token
+  //To do this automatically --> axios interceptors --> do some function before every request in this case
+
+
+  //Check expiration time of the token before sending any request
+  axiosJWT.interceptors.request.use(
+    async (config) => {
+      let currentDate = new Date();
+
+
+            //Get the Cokkies
+            let accessToken = Cookies.get("access");
+            let refreshToken = Cookies.get("refresh");
+
+
+      //Decode the payload of the token and return it as an object
+      const decodedToken = jwt_decode(accessToken);
+
+      // console.log(`Decoded Token :`);
+      // console.log(decodedToken)
+
+      //Compare the expiration time with the current time
+      // console.log(decodedToken.exp * 1000 < currentDate.getTime());
+      if (decodedToken.exp * 1000 < currentDate.getTime()) {
+        //Calling refresh token function
+        const data = await refreshTokens();
+
+        // console.log("Intercepted");
+        // console.log(data);
+        //Update header
+        config.headers["authorization"] = "Bearer " + data.accessToken;
+      }
+      return config;
+    },
+    (error) => {
+
+      //If there is an error cancel everything
+      return Promise.reject(error);
+    }
+  );
+
+
+  //====================================================================================
   function clearErrors() {
     SetCurrentPasswordError("");
     SetCurrentPasswordError2("");
@@ -126,7 +208,7 @@ export default function CustomerHeader(props) {
 
       if(hasWhiteSpace(Password) == true ){
         flagpassword = 0;
-         console.log("Fired");
+        //  console.log("Fired");
          SetPasswordError("Password Cannot Contain WhiteSpaces");
      }
 
@@ -152,11 +234,11 @@ export default function CustomerHeader(props) {
 
   function checkCurrentPassword() {
     let nCopsw = document.getElementById("CurrentPassword").value;
-    console.log(CurrentPassword);
+    // console.log(CurrentPassword);
 
     if (nCopsw.length !== 0) {
       const isMatch = bcrypt.compareSync(nCopsw, CurrentPassword);
-      console.log("Password Match : " + isMatch);
+      // console.log("Password Match : " + isMatch);
       if (!isMatch) {
         flagcpassword = 0;
         SetCurrentPasswordError("Invalid Current Password!");
@@ -170,13 +252,13 @@ export default function CustomerHeader(props) {
   function validatePasswords() {
     let Password = document.getElementById("CPPassword").value;
     let ConfirmPassword = document.getElementById("CPConfirmPassword").value;
-    console.log(CurrentPassword2.length);
-    console.log(Password.length);
-    console.log(ConfirmPassword.length);
+    // console.log(CurrentPassword2.length);
+    // console.log(Password.length);
+    // console.log(ConfirmPassword.length);
 
       if(hasWhiteSpace(Password) == true ){
         flagpassword = 0;
-       console.log("Fired");
+      //  console.log("Fired");
        SetPasswordError("Password Cannot Contain WhiteSpaces");
      }
 
@@ -210,16 +292,18 @@ export default function CustomerHeader(props) {
     checkCurrentPassword();
     validatePasswords();
 
-    console.log(`Confirm Password Flag : `);
-    console.log(flagcpassword);
-    console.log(`Password Flag : `);
-    console.log(flagpassword);
+    // console.log(`Confirm Password Flag : `);
+    // console.log(flagcpassword);
+    // console.log(`Password Flag : `);
+    // console.log(flagpassword);
 
+    // console.log(`Password : - ${Password}`);
 
     if (flagpassword === 1 && flagcpassword === 1) {
       Password = bcrypt.hashSync(Password, bcrypt.genSaltSync(12));
       SetPassword(bcrypt.hashSync(Password, bcrypt.genSaltSync(12)));
 
+      // console.log(`Password : - ${Password}`);
       updateProfile();
     }
   }
@@ -335,7 +419,8 @@ export default function CustomerHeader(props) {
   }
 
   async function updateProfile() {
-    //console.log("Password : " + Password);
+   
+    // console.log(`Password : - ${Password}`);
 
     const newCustomer = {
       FirstName,
@@ -373,11 +458,18 @@ export default function CustomerHeader(props) {
         if (result.isConfirmed) {
           setmodalOpenForLoading(true);
 
-          axios
+            
+         //Get the Cokkies
+      let accessToken = Cookies.get("access");
+      let refreshToken = Cookies.get("refresh");
+
+          axiosJWT
             .put(
-              "https://kaushal-rashmika-music.herokuapp.com/customer/update/" +
+              "http://localhost:8070/customer/update/" +
                 CustomerIDTemp,
-              newCustomer
+              newCustomer,{   //Set the authorization token to the header
+                headers: { authorization: "Bearer " + accessToken },
+              }
             )
             .then(() => {
               setmodalOpenForLoading(false);
@@ -432,10 +524,16 @@ export default function CustomerHeader(props) {
         })
         .then((result) => {
           if (result.isConfirmed) {
-            axios
-              .delete(
-                "https://kaushal-rashmika-music.herokuapp.com/customer/delete/" +
-                  CustomerIDTemp
+
+         //Get the Cokkies
+         let accessToken = Cookies.get("access");
+         let refreshToken = Cookies.get("refresh");
+       
+                axiosJWT.delete(
+                   "http://localhost:8070/customer/deleteUser/" +
+                     CustomerIDTemp,{   //Set the authorization token to the header
+                     headers: { authorization: "Bearer " + accessToken },
+                   }
               )
               .then((res) => {
                 swalWithBootstrapButtons.fire(
@@ -464,10 +562,16 @@ export default function CustomerHeader(props) {
   }
 
   function getCustomerDetails() {
-    axios
-      .get(
-        "https://kaushal-rashmika-music.herokuapp.com/customer/get/" +
-          CustomerIDTemp
+                //Get the Cokkies
+                let accessToken = Cookies.get("access");
+                let refreshToken = Cookies.get("refresh");
+     axiosJWT
+       .get(
+         "http://localhost:8070/customer/get/" +
+           CustomerIDTemp ,{
+             //Set the authorization token to the header
+             headers: { authorization: "Bearer " + accessToken },
+           }
       )
       .then((res) => {
         SetCustomer(res.data);
@@ -488,13 +592,17 @@ export default function CustomerHeader(props) {
   }
 
   useEffect(() => {
-    let customerID = localStorage.getItem("CustomerID");
-    // checkCustomerID(customerID);
+     
     function getOne() {
-      axios
-        .get(
-          "https://kaushal-rashmika-music.herokuapp.com/customer/get/" +
-            CustomerIDTemp
+
+        //Get the Cokkies
+        let accessToken = Cookies.get("access");
+        axiosJWT
+        .get("http://localhost:8070/customer/get/" +
+        CustomerIDTemp ,{
+          //Set the authorization token to the header
+          headers: { authorization: "Bearer " + accessToken },
+        }
         )
         .then((res) => {
           SetCustomer(res.data);

@@ -20,14 +20,14 @@ let refreshTokens = [];
                   3.Expiration
                   */
                   const generateAccessToken = (user) => {
-                    return jwt.sign({ _id: user._id }, "mySecretKey", {
+                    return jwt.sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET, {
                       expiresIn:"50s"
                     });
                   };
                   
                   //Function to create a refresh token --> Calls automatically when the accesstoken is expired and generates a new acess token
                   const generateRefreshToken = (user) => {
-                    return jwt.sign({ _id: user._id }, "myRefreshSecretKey", {
+                    return jwt.sign({ _id: user._id }, process.env.REFRESH_TOKEN_SECRET, {
                       expiresIn:"7d"
                     });
                   };
@@ -54,13 +54,13 @@ const verify = (req, res, next) => {
       /*Parameters ==> 1.token
                        2.secretkey
                        3.callback */
-      jwt.verify(token, "mySecretKey", (err, user) => {
+      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err) {
           return res.status(403).json("Token is not valid!");
         }
   
-        console.log("==============Verify Function user==========================");
-        console.log(user);
+        // console.log("==============Verify Function user==========================");
+        // console.log(user);
         //If there is no error assign payload to the request
         req.user = user;
         next();
@@ -87,7 +87,7 @@ router.post("/refreshToken", (req, res) => {
   
     //If the refresh key exists validate it
   
-    jwt.verify(refreshToken, "myRefreshSecretKey", (err, user) => { 
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => { 
       err && console.log(err);
   
       //Delete the current refresh token
@@ -95,9 +95,9 @@ router.post("/refreshToken", (req, res) => {
   
   
       
-    //if everything is ok, create new access token, refresh token and send to 
-      console.log("######Refresh Function Verified User#####");
-      console.log(user);
+    // //if everything is ok, create new access token, refresh token and send to 
+    //   console.log("######Refresh Function Verified User#####");
+    //   console.log(user);
       const newAccessToken = generateAccessToken(user);
       const newRefreshToken = generateRefreshToken(user);
   
@@ -361,18 +361,18 @@ router.delete("/deleteUser/:id", verify, async (req, res) => {
   console.log(`User ID : ${userID}`);
   console.log(`ID from the token : ${req.user._id}` );
   if (req.user._id === userID) {
-    // await Customer.findByIdAndDelete(userID)
+    await Customer.findByIdAndDelete(userID)
 
-    //   .then(() => {
-    //     res.status(200).send({ status: "User has been Deleted" });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err.message);
-    //     // res.status(500).send({status : "Error with delete", error : err.message});
-    //   });
+      .then(() => {
+        res.status(200).send({ status: "User has been Deleted" });
+      })
+      .catch((err) => {
+        console.log(err.message);
+        // res.status(500).send({status : "Error with delete", error : err.message});
+      });
 
-    res.status(200).send({ status: "User has been Deleted" });
-    console.log("Deleted !!!!")
+    // res.status(200).send({ status: "User has been Deleted" });
+    // console.log("Deleted !!!!")
   } else {
     res.status(403).json("You can not delete this profile.");
   }

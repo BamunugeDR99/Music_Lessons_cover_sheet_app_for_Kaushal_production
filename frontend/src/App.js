@@ -147,7 +147,7 @@ function App() {
           <Route path="/notfound" component={NotFound} />
 
           {/* Testing routes  */}
-           <Route path = "/test" component = {JWTCustomerHeader}/>
+           {/* <Route path = "/test" component = {JWTCustomerHeader}/> */}
            <Route path = "/test/testLogin" exact component = {TestCustomerUI}/>
            <Route path = "/test/testCoverDetails" exact component = {TestLessonsAndCoversDetailed}/>
         </div>
