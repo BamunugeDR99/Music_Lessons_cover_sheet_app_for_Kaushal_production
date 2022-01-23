@@ -5,6 +5,7 @@ export default function CustomerFooter(props) {
   return (
     <div>
 
+    
       <footer
         class="page-footer font-small  darken-3"
         style={{ backgroundColor: "#764A34"}}
